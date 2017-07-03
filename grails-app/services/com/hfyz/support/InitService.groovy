@@ -53,13 +53,6 @@ class InitService {
 
 
         new Menu(name:'组织机构',code:'organization',icon:'fa-sitemap',parent:sidebar,position:'SIDE_BAR').save(flush:true)
-        /*def sysmenu = new Menu(name:'运政',code:'running',icon:'fa-bus',parent:null,position:'SIDE_BAR').save(flush:true)
-        new PermissionGroup(name:'新增',permissions:'create',menu:sysmenu).save(flush:true)
-        new PermissionGroup(name:'修改',permissions:'edit',menu:sysmenu).save(flush:true)
-        new PermissionGroup(name:'删除',permissions:'delete',menu:sysmenu).save(flush:true)
-        new PermissionGroup(name:'运维',permissions:'ops',menu:sysmenu).save(flush:true)
-        new PermissionGroup(name:'审核',permissions:'apply',menu:sysmenu).save(flush:true)
-        new PermissionGroup(name:'浏览',permissions:'view',menu:sysmenu).save(flush:true)*/
 
         LicenseType licenseTypeP=new LicenseType(name: "道路运输经营许可证", codeNum: "100", parent: null).save(flush: true)
         new LicenseType(name: "道路运输经营许可证正本", codeNum: "110", parent: licenseTypeP).save(flush: true)
