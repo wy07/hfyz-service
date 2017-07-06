@@ -2,6 +2,7 @@ package com.hfyz.support
 
 import com.commons.utils.ControllerHelper
 import com.commons.utils.NumberUtils
+import grails.converters.JSON
 
 class MenuController implements ControllerHelper {
     def supportService
@@ -17,10 +18,10 @@ class MenuController implements ControllerHelper {
         }
 
         if (!params.position) {
-            renderErrorMsg("请选择菜单位置");
+            renderErrorMsg("请选择菜单位置")
         }
 
-        def menuList = Menu.findByPositionAndCodeLike(params.position, "${params.query}%", [max: 30, sort: 'id', order: 'desc'])?.collect { Menu obj ->
+        def menuList = Menu.findAllByPositionAndCodeLike(params.position, "${params.query}%", [max: 30, sort: 'id', order: 'desc'])?.collect { Menu obj ->
             [id    : obj.id
              , name: obj.name
              , code: obj.code]
