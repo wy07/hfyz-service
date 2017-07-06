@@ -11,33 +11,38 @@ class SupportService {
     def dataSource
     def getOrgList(){
         def result = []
-        def GET_ORG_SQL = "select id,name from organization where parent_id is null order by id"
+        def GET_ORG_SQL = "select id,name,code from organization where parent_id is null order by id"
         //println GET_USER_SQL
         SQLHelper.withDataSource(dataSource) { sql ->
             sql.rows(GET_ORG_SQL.toString())
         }.each { root ->
-            result << [label:root.name
-                      ,expanded: true
-                      ,children: getOrgChild(root.id)] 
+            result << [data:[id: root.id
+                             ,name :root.name
+                             ,codeNum:root.code
+                             ,expanded: true]
+                       ,children: getOrgChild(root.id)]
         }
-       return [label:'组织机构',expanded: true,children:result]
+        return result
     }
     def getOrgChild(parentid){
         def result = []
-        def GET_ORG_SQL = "select id,name from organization where parent_id =:parentid order by id"
+        def GET_ORG_SQL = "select id,name,code from organization where parent_id =:parentid order by id"
         //println GET_USER_SQL
         SQLHelper.withDataSource(dataSource) { sql ->
             sql.rows(GET_ORG_SQL.toString(),[parentid:parentid])
         }.each { root ->
-            result << [label:root.name
-                      ,expanded: true
-                      ,children: getOrgChild(root.id)] 
+            result << [data:[id: root.id
+                             ,name: root.name
+                             ,codeNum: root.code
+                             ,expanded: true]
+                       ,chsildren: getOrgChild(root.id)]
         }
         return result
     }
+
     def getOrgForSelect(roles){
         println roles
-        def GET_ORG_SQL 
+        def GET_ORG_SQL
         if(roles){
             def roleList=Role.findAllById(roles.split(','))
             if (roleList[0].name=='平台管理员'){
@@ -49,11 +54,12 @@ class SupportService {
             GET_ORG_SQL = "select id as value,name as label from organization where parent_id is not null order by id"
         }
         println GET_ORG_SQL
-        
+
         return SQLHelper.withDataSource(dataSource) { sql ->
             sql.rows(GET_ORG_SQL.toString())
         }
     }
+
     def getMenu() {
         def result = [:]
         def GET_MENU_SQL = "select id,name,code ,style, icon,position from menu where parent_id is null and display=true and position in ('TOP_BAR','SIDE_BAR') order by id"
@@ -102,7 +108,6 @@ class SupportService {
              , leaf: !obj.hasChildren]
         }
     }
-
 
     def getSystemCodeListAndCountByType(int max, int offset, String type) {
         def parent = type ? SystemCode.findByParentIsNullAndType(type) : null
