@@ -2,7 +2,6 @@ package com.hfyz.support
 
 import com.commons.utils.ControllerHelper
 import com.commons.utils.NumberUtils
-import grails.converters.JSON
 
 class MenuController implements ControllerHelper {
     def supportService
