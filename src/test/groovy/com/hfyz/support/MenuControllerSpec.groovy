@@ -1,7 +1,7 @@
 package com.hfyz.support
 
 import grails.buildtestdata.mixin.Build
-import grails.test.mixin.Mock
+import grails.converters.JSON
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -101,4 +101,199 @@ class MenuControllerSpec extends Specification {
             query | position  | count
             'a'   | 'TOP_BAR' | 30
     }
+
+    @Unroll
+    def "save:保存菜单，当入参合法:#json，返回success"(){
+        setup:
+            Menu.build(name: 'abc', code:'abc', position:'TOP_BAR')
+            Menu.build(name: 'a',   code: 'ab', position:'TOP_BAR')
+
+        when:
+            request.method = 'POST'
+            request.JSON = json
+            controller.save()
+
+        then:
+            response.json.result == result
+            Menu.count() == 3
+
+        where:
+            json                                                  | result
+            [name: 'd', code:'d', position:'TOP_BAR', parentId:1] | 'success'
+            [name: 'd', code:'d', position:'TOP_BAR']             | 'success'
+    }
+
+    @Unroll
+    def "save:保存菜单，当入参不合法，返回提示信息:#errors"(){
+        setup:
+            Menu.build(name: 'abc', code:'abc', position:'TOP_BAR')
+            Menu.build(name: 'a',   code: 'ab', position:'TOP_BAR')
+
+        when:
+            request.method = 'POST'
+            request.JSON = json
+            controller.save()
+
+        then:
+            response.json.errors == errors
+
+        where:
+            json                                                  | errors
+            [name: 'd', code:'d', position:'TOP_BAR', parentId:3] | ['上层菜单不存在，请稍后再试！']
+    }
+
+    @Unroll
+    def "edit:编辑菜单，当入参合法:#id，返回正确结果"() {
+        setup:
+            Menu.build(name: 'c', code: 'c')
+            Menu.build(name: 'a', code: 'a', style:'a', icon:'a', position:'TOP_BAR', display:'a')
+            Menu.build(name: 'b', code: 'b', style:'b', icon:'b', position:'TOP_BAR', display:'b', parent: Menu.get(1))
+
+        when:
+            params.id = id
+            controller.edit()
+
+        then:
+            response.json.menu   == menu
+            response.json.parent == parent
+            response.json.result == result
+
+        where:
+            id | result    | parent                     | menu
+            2  | 'success' | null                       | [code:'a', display:true, name:'a', icon:'a', style:'a', position:'TOP_BAR', id:2]
+            3  | 'success' | [code:'c', name:'c', id:1] | [code:'b', display:true, name:'b', icon:'b', style:'b', position:'TOP_BAR', id:3]
+    }
+
+    @Unroll
+    def "edit:编辑菜单，当入参不合法:3，返回提示信息:#errors"() {
+        setup:
+            Menu.build(name: 'a', code:'a', style:'a', icon:'a', position:'TOP_BAR', display:'a')
+            Menu.build(name: 'b', code:'b', style:'b', icon:'b', position:'TOP_BAR', display:'b')
+
+        when:
+            params.id = id
+            controller.edit()
+
+        then:
+            response.json.errors == errors
+        where:
+            id | errors
+            3  | ['找不到您请求的数据，请查正！']
+    }
+
+    @Unroll
+    def "update:修改菜单，当入参合法时#id,#json，返回success"() {
+        setup:
+            Menu.build(name:'c', code:'c')
+            Menu.build(name:'a', code:'a', style:'a', icon:'a', position:'TOP_BAR', display:'a')
+            Menu.build(name:'b', code:'b', style:'b', icon:'b', position:'TOP_BAR', display:'b', parent: Menu.get(1))
+
+        when:
+            params.id = id
+            request.method = 'POST'
+            request.JSON = json
+            controller.update()
+
+        then:
+            println Menu.get(id) as JSON
+            response.json.result == result
+
+        where:
+            id | result    | json
+            3  | 'success' | [name: 'd', code:'d', position:'TOP_BAR', parentId:2]
+            3  | 'success' | [name: 'd', code:'d', position:'TOP_BAR']
+            2  | 'success' | [name: 'd', code:'d', position:'TOP_BAR', parentId:2]
+            2  | 'success' | [name: 'd', code:'d', position:'TOP_BAR']
+    }
+
+    @Unroll
+    def "update:修改菜单，当入参不合法时#id,#json，返回提示信息:#errors"() {
+        setup:
+            Menu.build(name:'c', code:'c')
+            Menu.build(name:'a', code:'a', style:'a', icon:'a', position:'TOP_BAR', display:'a')
+            Menu.build(name:'b', code:'b', style:'b', icon:'b', position:'TOP_BAR', display:'b', parent: Menu.get(1))
+
+        when:
+            params.id = id
+            request.method = 'POST'
+            request.JSON = json
+            controller.update()
+
+        then:
+            response.json.errors == errors
+
+        where:
+            id | errors                          | json
+            4  | ['找不到您请求的数据，请查正！'] | [name: 'd', code:'d', position:'TOP_BAR', parentId:2]
+            4  | ['找不到您请求的数据，请查正！'] | [name: 'd', code:'d', position:'TOP_BAR']
+            3  | ['上层菜单不存在，请稍后再试！'] | [name: 'd', code:'d', position:'TOP_BAR', parentId:4]
+            2  | ['上层菜单不存在，请稍后再试！'] | [name: 'd', code:'d', position:'TOP_BAR', parentId:4]
+    }
+
+    @Unroll
+    def "delete:删除菜单叶子节点，当入参合法时#id，返回success"() {
+        setup:
+            Menu.build(name:'a', code:'a', style:'a', icon:'a', position:'TOP_BAR', display:'a')
+            Menu.build(name:'b', code:'b', style:'b', icon:'b', position:'TOP_BAR', display:'b', parent: Menu.get(1))
+
+        when:
+            params.id = id
+            println '--------------delete前---------' + Menu.count()
+            println Menu.findAll() as JSON
+            controller.delete()
+            println '--------------delete后---------' + Menu.count()
+            println Menu.findAll() as JSON
+
+        then:
+            println response.json
+            println Menu.get(id) as JSON
+            response.json.result == result
+
+        where:
+            id | result
+            1  | 'success'
+            2  | 'success'
+    }
+
+    @Unroll
+    def "delete:删除菜单叶子节点，当入参不合法时#id，返回提示信息:#errors"() {
+        setup:
+            Menu.build(name:'a', code:'a', style:'a', icon:'a', position:'TOP_BAR', display:'a')
+
+        when:
+            params.id = id
+            controller.delete()
+
+        then:
+            response.json.errors == errors
+
+        where:
+            id | errors
+            2  | ['找不到您请求的数据，请查正！']
+    }
+
+//    @Unroll
+//    def "delete:删除菜单，当入参合法时#id，返回success"() {
+//        setup:
+//            Menu.build(name:'c', code:'c').save(flush:true)
+//            Menu.build(name:'a', code:'a', style:'a', icon:'a', position:'TOP_BAR', display:'a').save(flush:true)
+//            Menu.build(name:'b', code:'b', style:'b', icon:'b', position:'TOP_BAR', display:'b', parent: Menu.get(1)).save(flush:true)
+//
+//         when:
+//            params.id = id
+//            println '--------------delete前---------' + Menu.count()
+//            println Menu.findAll() as JSON
+//            controller.delete()
+//            println '--------------delete后---------' + Menu.count()
+//            println Menu.findAll() as JSON
+//
+//        then:
+//            println response.json
+//            println Menu.get(id) as JSON
+//            response.json.result == result
+//
+//        where:
+//            id | result
+//            1  | 'success'
+//    }
 }
