@@ -48,8 +48,10 @@ class InitService {
         new PermissionGroup(name:'删除',permissions:'delete',menu:menu).save(flush:true)
         new PermissionGroup(name:'浏览',permissions:'view',menu:menu).save(flush:true)
         new Menu(name:'数据字典',code:'systemcode',icon:'fa-book',parent:sidebar,position:'SIDE_BAR').save(flush:true)
-        
 
+        def monitorMenu=new Menu(name:'联网联控',code:'root-monitor',icon:'fa-eercast',parent:null,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'地图',code:'realTimeMap',icon:'fa-map-o',parent:monitorMenu,position:'SIDE_BAR').save(flush:true)
+//        new Menu(name:'历史数据',code:'historyMap',icon:'fa-map-o',parent:monitorMenu,position:'SIDE_BAR').save(flush:true)
 
 
         new Menu(name:'组织机构',code:'organization',icon:'fa-sitemap',parent:sidebar,position:'SIDE_BAR').save(flush:true)
