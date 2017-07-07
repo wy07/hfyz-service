@@ -48,6 +48,9 @@ class InitService {
         new PermissionGroup(name:'删除',permissions:'delete',menu:menu).save(flush:true)
         new PermissionGroup(name:'浏览',permissions:'view',menu:menu).save(flush:true)
         new Menu(name:'数据字典',code:'systemcode',icon:'fa-book',parent:sidebar,position:'SIDE_BAR').save(flush:true)
+
+        def logMenu=new Menu(name:'日志管理',code:'root-logManage',icon:'fa-list-alt',parent:null,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'操作日志',code:'operationLog',icon:'fa-table',parent:logMenu,position:'SIDE_BAR').save(flush:true)
         
 
 
