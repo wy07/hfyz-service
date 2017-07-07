@@ -52,7 +52,9 @@ class InitService {
         def logMenu=new Menu(name:'日志管理',code:'root-logManage',icon:'fa-list-alt',parent:null,position:'SIDE_BAR').save(flush:true)
         new Menu(name:'操作日志',code:'operationLog',icon:'fa-table',parent:logMenu,position:'SIDE_BAR').save(flush:true)
         
-
+        def monitorMenu=new Menu(name:'联网联控',code:'root-monitor',icon:'fa-eercast',parent:null,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'地图',code:'realTimeMap',icon:'fa-map-o',parent:monitorMenu,position:'SIDE_BAR').save(flush:true)
+//        new Menu(name:'历史数据',code:'historyMap',icon:'fa-map-o',parent:monitorMenu,position:'SIDE_BAR').save(flush:true)
 
 
         new Menu(name:'组织机构',code:'organization',icon:'fa-sitemap',parent:sidebar,position:'SIDE_BAR').save(flush:true)
