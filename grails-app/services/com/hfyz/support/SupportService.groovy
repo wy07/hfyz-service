@@ -9,51 +9,53 @@ import grails.transaction.Transactional
 class SupportService {
 
     def dataSource
+
     def getOrgList(){
-        def result = []
-        def GET_ORG_SQL = "select id,name from organization where parent_id is null order by id"
-        //println GET_USER_SQL
-        SQLHelper.withDataSource(dataSource) { sql ->
-            sql.rows(GET_ORG_SQL.toString())
-        }.each { root ->
-            result << [label:root.name
-                      ,expanded: true
-                      ,children: getOrgChild(root.id)] 
+        def orgList = SQLHelper.withDataSource(dataSource) { sql ->
+            sql.rows(GET_ORG_SQL)
         }
-       return [label:'组织机构',expanded: true,children:result]
+        formatOrgList(orgList, 0)
     }
-    def getOrgChild(parentid){
+
+    def formatOrgList(def data, def pid) {
         def result = []
-        def GET_ORG_SQL = "select id,name from organization where parent_id =:parentid order by id"
-        //println GET_USER_SQL
-        SQLHelper.withDataSource(dataSource) { sql ->
-            sql.rows(GET_ORG_SQL.toString(),[parentid:parentid])
-        }.each { root ->
-            result << [label:root.name
-                      ,expanded: true
-                      ,children: getOrgChild(root.id)] 
+        def list = data.findAll { obj -> obj.parentId == pid }
+        list?.each { obj ->
+            Map tMap = [:]
+            tMap = [data:[ id: obj.id
+                          ,name :obj.name
+                          ,codeNum:obj.codeNum
+                          ,expanded: true]]
+            def tFind = data.find { a -> a.parentId == obj.id }
+
+            if (tFind) {
+                tMap.children = formatOrgList(data, obj.id)
+            }
+            result << tMap
         }
         return result
     }
+
     def getOrgForSelect(roles){
         println roles
-        def GET_ORG_SQL 
+        def GET_ORG_ROLES_SQL
         if(roles){
             def roleList=Role.findAllById(roles.split(','))
             if (roleList[0].name=='平台管理员'){
-                GET_ORG_SQL="select id as value,name as label from organization where parent_id is not null order by id"
+                GET_ORG_ROLES_SQL="select id as value,name as label from organization where parent_id is not null order by id"
             }else{
-                GET_ORG_SQL="select id as value,name as label from organization org left join  role_organization roleorg on org.id=roleorg.organization_id where roleorg.role_orgs_id in (${roles})"
+                GET_ORG_ROLES_SQL="select id as value,name as label from organization org left join  role_organization roleorg on org.id=roleorg.organization_id where roleorg.role_orgs_id in (${roles})"
             }
         }else{
-            GET_ORG_SQL = "select id as value,name as label from organization where parent_id is not null order by id"
+            GET_ORG_ROLES_SQL = "select id as value,name as label from organization where parent_id is not null order by id"
         }
-        println GET_ORG_SQL
-        
+        println GET_ORG_ROLES_SQL
+
         return SQLHelper.withDataSource(dataSource) { sql ->
-            sql.rows(GET_ORG_SQL.toString())
+            sql.rows(GET_ORG_ROLES_SQL.toString())
         }
     }
+
     def getMenu() {
         def result = [:]
         def GET_MENU_SQL = "select id,name,code ,style, icon,position from menu where parent_id is null and display=true and position in ('TOP_BAR','SIDE_BAR') order by id"
@@ -102,7 +104,6 @@ class SupportService {
              , leaf: !obj.hasChildren]
         }
     }
-
 
     def getSystemCodeListAndCountByType(int max, int offset, String type) {
         def parent = type ? SystemCode.findByParentIsNullAndType(type) : null
@@ -236,5 +237,28 @@ class SupportService {
             on c.id = k.parent_id
         )
         select id,name,codeNum,type,COALESCE(parentId,0) parentId,depth,path   from withSystemCode where type='SYSTEMCODE' order by path;
+    """
+
+    private static final GET_ORG_SQL = """
+       with RECURSIVE withOrg as(
+            select a.id
+                ,a.name
+                ,a.code codeNum
+                ,a.parent_id parentId
+                ,1 AS depth
+                ,ARRAY[a.id] AS path
+            from organization a where parent_id is null
+            union all
+            select k.id
+                ,k.name
+                ,k.code codeNum
+                ,k.parent_id parentId
+                ,c.depth + 1 AS depth
+                ,(c.path || k.id ) as path
+            from organization k
+            inner join withOrg c
+            on c.id = k.parent_id
+        )
+        select id,name,codeNum,COALESCE(parentId,0) parentId,depth,path   from withOrg order by path;
     """
 }
