@@ -31,33 +31,37 @@ class MenuControllerSpec extends Specification {
 
         then:
             response.json.menuList == list
-            response.json.result   == result
+            response.json.result   == 'success'
 
         where:
-            parentId  | result    | menuList                                                                                                                          | list
-            null      | 'success' | [['data':['id':2,'code':'closeall','icon':null,'name':'关闭全部','style':null,'position':'TOP_BAR','display':true],'leaf':true]]  | [['data':['id':2,'code':'closeall','icon':null,'name':'关闭全部','style':null,'position':'TOP_BAR','display':true], 'leaf':true]]
-            3         | 'success' | [['data':['id':4,'code':'changepwd','icon':null,'name':'修改密码','style':null,'position':'TOP_BAR','display':true],'leaf':true]] | [['data':['id':4,'code':'changepwd','icon':null,'name':'修改密码','style':null,'position':'TOP_BAR','display':true],'leaf':true]]
+            parentId | menuList                                                                                                                          | list
+            null     | [['data':['id':2,'code':'closeall','icon':null,'name':'关闭全部','style':null,'position':'TOP_BAR','display':true],'leaf':true]]  | [['data':['id':2,'code':'closeall','icon':null,'name':'关闭全部','style':null,'position':'TOP_BAR','display':true], 'leaf':true]]
+            3        | [['data':['id':4,'code':'changepwd','icon':null,'name':'修改密码','style':null,'position':'TOP_BAR','display':true],'leaf':true]] | [['data':['id':4,'code':'changepwd','icon':null,'name':'修改密码','style':null,'position':'TOP_BAR','display':true],'leaf':true]]
     }
 
-    @Unroll
-    def "search:搜索菜单，当入参不合法：#query,#position，返回不同的结果"() {
+    def "search:搜索菜单，当入参不合法：query为null时，返回提示信息"() {
         when:
-            params.query = query
-            params.position = position
+            params.query = null
+            params.position = 'TOP_BAR'
             controller.search()
 
         then:
-            response.json.menuList == list
-            response.json.result   == result
-            response.json.errors   == errors
-
-        where:
-            query | position  | MenuList                                | result    | errors            | list
-            null  | null      | []                                      | 'success' | null              | []
-            'ch'  | null      | null                                    | null      | ['请选择菜单位置'] | null
-            null  | 'TOP_BAR' | []                                      | 'success' | null              | []
+            response.json.menuList == []
+            response.json.result   == 'success'
+            response.json.errors   == null
     }
 
+    def "search:搜索菜单，当入参不合法：position为null时，返回提示信息"() {
+        when:
+            params.query = 'ch'
+            params.position = null
+            controller.search()
+
+        then:
+            response.json.menuList == null
+            response.json.result   == null
+            response.json.errors   == ['请选择菜单位置']
+    }
 
     @Unroll
     def "search:搜索菜单，当入参合法：#query,#position，返回正确结果"(){
@@ -66,6 +70,7 @@ class MenuControllerSpec extends Specification {
             Menu.build(name: 'a',   code: 'ab', position:'TOP_BAR')
             Menu.build(name: 'b',   code: 'a',  position:'TOP_BAR')
             Menu.build(name: 'b',   code: 'b',  position:'TOP_BAR')
+            Menu.build(name: 'ac',   code: 'ac',  position:'SIDE_BAR')
             Menu.build(name: 'b',   code: 'bc', position:'SIDE_BAR')
             Menu.build(name: 'c',   code: 'c',  position:'SIDE_BAR')
 
@@ -81,7 +86,9 @@ class MenuControllerSpec extends Specification {
         where:
             query | position   | result    | list
             'a'   | 'TOP_BAR'  | 'success' | [[code:'a', name:'b', id:3], [code:'ab', name:'a', id:2], [code:'abc', name:'abc', id:1]]
-            'b'   | 'SIDE_BAR' | 'success' | [[code:'bc', name:'b', id:5]]
+            'b'   | 'SIDE_BAR' | 'success' | [[code:'bc', name:'b', id:6]]
+            'a'   | 'SIDE_BAR' | 'success' | [[code:'ac', name:'ac', id:5]]
+            'b'   | 'TOP_BAR'  | 'success' | [[code:'b', name:'b', id:4]]
     }
 
     def "search:搜索菜单，当入参合法，返回最多max:30条数据"(){
@@ -90,15 +97,11 @@ class MenuControllerSpec extends Specification {
                 Menu.build(name: 'abc', code: 'abc', position: 'TOP_BAR')
             }
         when:
-            params.query = query
-            params.position = position
+            params.query = 'a'
+            params.position = 'TOP_BAR'
             controller.search()
 
         then:
-            response.json.menuList.size() == count
-
-        where:
-            query | position  | count
-            'a'   | 'TOP_BAR' | 30
+            response.json.menuList.size() == 30
     }
 }
