@@ -121,7 +121,12 @@ class SystemCodeController implements ControllerHelper {
     }
 
     def getmenu() {
-        LogUtils.debug('获取菜单', params, 'web', '错误消息')
+
+        LogUtils.debug(this.getClass(), '获取菜单', params, 'web')
+
+        LogUtils.info(this.getClass(), '工单参看操作', params, '管理员', 'web', '参看操作')
+
+        LogUtils.error(this.getClass(), '工单参看操作', params, '管理员', 'web', '参看操作', '错误消息')
 
         renderSuccessesWithMap(supportService.getMenu())
 

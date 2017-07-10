@@ -48,9 +48,18 @@ class InitService {
         new PermissionGroup(name:'删除',permissions:'delete',menu:menu).save(flush:true)
         new PermissionGroup(name:'浏览',permissions:'view',menu:menu).save(flush:true)
         new Menu(name:'数据字典',code:'systemcode',icon:'fa-book',parent:sidebar,position:'SIDE_BAR').save(flush:true)
-        
 
+        def logMenu=new Menu(name:'日志管理',code:'root-logManage',icon:'fa-list-alt',parent:null,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'操作日志',code:'operationLog',icon:'fa-table',parent:logMenu,position:'SIDE_BAR').save(flush:true)
 
+        def monitorMenu=new Menu(name:'联网联控',code:'root-monitor',icon:'fa-eercast',parent:null,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'地图',code:'realTimeMap',icon:'fa-map-o',parent:monitorMenu,position:'SIDE_BAR').save(flush:true)
+//        new Menu(name:'历史数据',code:'historyMap',icon:'fa-map-o',parent:monitorMenu,position:'SIDE_BAR').save(flush:true)
+
+        def infoManage = new Menu(name:'信息管理',code:'root-infomanage',icon:'fa-laptop',parent:null,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'信息发布',code:'infoPublish',icon:'fa-bullhorn',parent:infoManage,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'信息审核',code:'infoCheck',icon:'fa-check-square',parent:infoManage,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'信息列表',code:'infoList',icon:'fa-envelope-square',parent:infoManage,position:'SIDE_BAR').save(flush:true)
 
         new Menu(name:'组织机构',code:'organization',icon:'fa-sitemap',parent:sidebar,position:'SIDE_BAR').save(flush:true)
 
