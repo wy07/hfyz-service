@@ -45,8 +45,7 @@ trait ControllerHelper {
 
     def handleException(Exception e) {
 //        log.error(this,e)
-        
-        println e
+        println e.stackTrace
         renderErrorMsg('系统忙，请稍后再试!')
 
     }
