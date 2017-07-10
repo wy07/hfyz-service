@@ -1,7 +1,6 @@
 package com.hfyz.support
 
 import grails.buildtestdata.mixin.Build
-import grails.converters.JSON
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -97,7 +96,6 @@ class MenuControllerSpec extends Specification {
     def "save:保存菜单，当入参合法:#json，返回success"(){
         setup:
             Menu.build(name: 'abc', code:'abc', position:'TOP_BAR')
-            Menu.build(name: 'a',   code: 'ab', position:'TOP_BAR')
 
         when:
             request.method = 'POST'
@@ -106,7 +104,7 @@ class MenuControllerSpec extends Specification {
 
         then:
             response.json.result == 'success'
-            Menu.count() == 3
+            Menu.count() == 2
 
         where:
             json                                                  | _
@@ -115,13 +113,9 @@ class MenuControllerSpec extends Specification {
     }
 
     def "save:保存菜单，当入参不合法，返回提示信息"(){
-        setup:
-            Menu.build(name: 'abc', code:'abc', position:'TOP_BAR')
-            Menu.build(name: 'a',   code: 'ab', position:'TOP_BAR')
-
         when:
             request.method = 'POST'
-            request.JSON = [name: 'd', code:'d', position:'TOP_BAR', parentId:3]
+            request.JSON = [name: 'd', code:'d', position:'TOP_BAR', parentId:2]
             controller.save()
 
         then:
@@ -152,11 +146,10 @@ class MenuControllerSpec extends Specification {
 
     def "edit:编辑菜单，当入参不合法:3，返回提示信息"() {
         setup:
-            Menu.build(name: 'a', code:'a', style:'a', icon:'a', position:'TOP_BAR', display:'a')
             Menu.build(name: 'b', code:'b', style:'b', icon:'b', position:'TOP_BAR', display:'b')
 
         when:
-            params.id = 3
+            params.id = 2
             controller.edit()
 
         then:
