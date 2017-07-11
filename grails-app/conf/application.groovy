@@ -44,7 +44,7 @@ grails {
                     [pattern: '/login', access: ['permitAll']],
                     [pattern: '/login/**', access: ['permitAll']],
 //                    [pattern: '/**/**', access: ['permitAll']]
-                    [pattern: '/role/**', access: 'ROLE_ADMIN']
+                    [pattern: '/**/**', access: 'ROLE_ADMIN']
 
             ]
 

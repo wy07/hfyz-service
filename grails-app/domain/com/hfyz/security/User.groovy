@@ -44,12 +44,12 @@ class User implements Serializable {
 	def beforeInsert() {
 		encodePassword()
 	}
-
-	def beforeUpdate() {
-		if (isDirty('passwordHash')) {
-			encodePassword()
-		}
-	}
+//
+//	def beforeUpdate() {
+//		if (isDirty('passwordHash')) {
+//			encodePassword()
+//		}
+//	}
 
 	protected void encodePassword() {
 		passwordHash = springSecurityService.encodePassword(passwordHash, salt)
