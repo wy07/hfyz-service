@@ -1,35 +1,74 @@
+grails {
+    plugin {
+        springsecurity {
+            userLookup {
+                userDomainClassName = 'com.hfyz.security.User'
+                authorityJoinClassName = 'com.hfyz.security.UserRole'
+                passwordPropertyName = 'passwordHash'
+            }
+            authority.className = 'com.hfyz.security.Role'
+            //配置使用hash编码的方式保存密码
+            password {
+                algorithm = 'SHA-256'
+                hash.iterations = 1
+            }
+            dao.reflectionSaltSourceProperty = 'salt'
 
 
-// Added by the Spring Security Core plugin:
-grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.hfyz.security.User'
-grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.hfyz.security.UserRole'
-grails.plugin.springsecurity.authority.className = 'com.hfyz.security.Role'
-grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-	[pattern: '/',               access: ['permitAll']],
-	[pattern: '/error',          access: ['permitAll']],
-	[pattern: '/index',          access: ['permitAll']],
-	[pattern: '/**',          access: ['permitAll']],
-	[pattern: '/index.gsp',      access: ['permitAll']],
-	[pattern: '/shutdown',       access: ['permitAll']],
-	[pattern: '/assets/**',      access: ['permitAll']],
-	[pattern: '/**/js/**',       access: ['permitAll']],
-	[pattern: '/**/css/**',      access: ['permitAll']],
-	[pattern: '/**/images/**',   access: ['permitAll']],
-	[pattern: '/**/favicon.ico', access: ['permitAll']],
-	[pattern: '/api/logout',     access: ['IS_AUTHENTICATED_FULLY']]
-	,[pattern: '/user/**',      access: ['IS_AUTHENTICATED_FULLY']]
-	,[pattern: '/logout/**',      access: ['IS_AUTHENTICATED_FULLY']]
+            filterChain.filterNames = [
+                    'securityContextPersistenceFilter', 'logoutFilter',
+                    'authenticationProcessingFilter',
+//                    , 'tokenProcessingFilter',
+                    'rememberMeAuthenticationFilter', 'anonymousAuthenticationFilter',
+                    'exceptionTranslationFilter', 'filterInvocationInterceptor'
+            ]
 
 
-]
+            providerNames = [
+                    'daoAuthenticationProvider'
+//                    , 'tokenAuthenticationProvider'
+                    , 'anonymousAuthenticationProvider'
+                    , 'rememberMeAuthenticationProvider']
 
-grails.plugin.springsecurity.filterChain.chainMap = [
-	[pattern: '/assets/**',      filters: 'none'],
-	[pattern: '/**/js/**',       filters: 'none'],
-	[pattern: '/**/css/**',      filters: 'none'],
-	[pattern: '/**/images/**',   filters: 'none'],
-	[pattern: '/**/favicon.ico', filters: 'none'],
-	[pattern: '/api/**',         filters: 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter'],
-	[pattern: '/**', filters:'JOINED_FILTERS']
-]
+            controllerAnnotations.staticRules = [
+                    [pattern: '/', access: ['permitAll']],
+                    [pattern: '/error', access: ['permitAll']],
+                    [pattern: '/index', access: ['permitAll']],
+                    [pattern: '/index.gsp', access: ['permitAll']],
+                    [pattern: '/shutdown', access: ['permitAll']],
+                    [pattern: '/assets/**', access: ['permitAll']],
+                    [pattern: '/**/js/**', access: ['permitAll']],
+                    [pattern: '/**/css/**', access: ['permitAll']],
+                    [pattern: '/**/images/**', access: ['permitAll']],
+                    [pattern: '/**/favicon.ico', access: ['permitAll']],
+                    [pattern: '/login', access: ['permitAll']],
+                    [pattern: '/login/**', access: ['permitAll']],
+                    [pattern: '/**/**', access: ['permitAll']]
+            ]
+
+            filterChain.chainMap = [
+                    [pattern: '/assets/**', filters: 'none'],
+                    [pattern: '/**/js/**', filters: 'none'],
+                    [pattern: '/**/css/**', filters: 'none'],
+                    [pattern: '/**/images/**', filters: 'none'],
+                    [pattern: '/**/favicon.ico', filters: 'none'],
+                    [pattern: '/login', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
+                    [pattern: '/login/**', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
+                    [pattern: '/auth/**', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
+                    [pattern: '/**', filters: 'none']
+            ]
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 

@@ -12,7 +12,7 @@ class InitService {
         def rootPermission=new PermissionGroup(name:'所有权限',permissions:'*:*').save(flush:true)
         def adminRole = new Role(authority: 'ROLE_ADMIN', name: '平台管理员',permissionGroups:[rootPermission]).save()
 
-        def testUser = new User(username: 'admin', password: 'admin123', name: '管理员').save()
+        def testUser = new User(username: 'admin', passwordHash: 'admin123',salt:User.getSecureRandomSalt(), name: '管理员').save(failOnError:true)
 
         UserRole.create testUser, adminRole
 
@@ -28,7 +28,7 @@ class InitService {
 
         def homemenu = new Menu(name:'首页',code:'home',icon:'fa-home',parent:null,position:'SIDE_BAR').save(flush:true)
         new PermissionGroup(name:'浏览',permissions:'view',menu:homemenu).save(flush:true)
-        
+
         def sidebar=new Menu(name:'系统管理',code:'root-syscode',icon:'fa-wrench',parent:null,position:'SIDE_BAR').save(flush:true)
         def roleMenu=new Menu(name:'角色',code:'role',icon:'fa-users',parent:sidebar,position:'SIDE_BAR').save(flush:true)
         new PermissionGroup(name:'新增',permissions:'create',menu:roleMenu).save(flush:true)
