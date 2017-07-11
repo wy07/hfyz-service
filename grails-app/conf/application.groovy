@@ -18,7 +18,7 @@ grails {
             filterChain.filterNames = [
                     'securityContextPersistenceFilter', 'logoutFilter',
                     'authenticationProcessingFilter',
-//                    , 'tokenProcessingFilter',
+                    'tokenProcessingFilter',
                     'rememberMeAuthenticationFilter', 'anonymousAuthenticationFilter',
                     'exceptionTranslationFilter', 'filterInvocationInterceptor'
             ]
@@ -26,7 +26,7 @@ grails {
 
             providerNames = [
                     'daoAuthenticationProvider'
-//                    , 'tokenAuthenticationProvider'
+                    , 'tokenAuthenticationProvider'
                     , 'anonymousAuthenticationProvider'
                     , 'rememberMeAuthenticationProvider']
 
@@ -43,7 +43,9 @@ grails {
                     [pattern: '/**/favicon.ico', access: ['permitAll']],
                     [pattern: '/login', access: ['permitAll']],
                     [pattern: '/login/**', access: ['permitAll']],
-                    [pattern: '/**/**', access: ['permitAll']]
+//                    [pattern: '/**/**', access: ['permitAll']]
+                    [pattern: '/role/**', access: 'ROLE_ADMIN']
+
             ]
 
             filterChain.chainMap = [
@@ -52,10 +54,11 @@ grails {
                     [pattern: '/**/css/**', filters: 'none'],
                     [pattern: '/**/images/**', filters: 'none'],
                     [pattern: '/**/favicon.ico', filters: 'none'],
-                    [pattern: '/login', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
-                    [pattern: '/login/**', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
-                    [pattern: '/auth/**', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
-                    [pattern: '/**', filters: 'none']
+                    [pattern: '/login', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-tokenProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
+                    [pattern: '/login/**', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-tokenProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
+                    [pattern: '/auth/**', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-tokenProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
+//                    [pattern: '/**', filters: 'none']
+                    [pattern: '/**', filters: 'JOINED_FILTERS']
             ]
         }
     }

@@ -19,6 +19,7 @@ class LogInterceptor {
             agent = "Pc Browser"
         }
         session.setAttribute('agent', agent)
+        params.operatorId = request.JSON?.token?.id
         true
     }
 

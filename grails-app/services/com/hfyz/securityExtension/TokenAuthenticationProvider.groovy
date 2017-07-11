@@ -1,4 +1,4 @@
-package com.securityExtension
+package com.hfyz.securityExtension
 
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken

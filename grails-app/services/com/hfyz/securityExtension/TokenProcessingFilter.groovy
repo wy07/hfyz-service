@@ -1,4 +1,4 @@
-package com.securityExtension
+package com.hfyz.securityExtension
 
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
