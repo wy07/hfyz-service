@@ -47,7 +47,7 @@ class SystemCodeControllerSpec extends Specification {
         response.json.result == 'success'
     }
 
-    def 'list:clazzObj为空,返回错误信息'() {
+    def 'list:clazzObj为空,返回错误消息'() {
         when:
         params.type = null
         controller.list()
