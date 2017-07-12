@@ -19,26 +19,18 @@ class SystemCodeControllerSpec extends Specification {
     def cleanup() {
     }
 
-//    void "test something"() {
-//        expect:"fix me"
-//            true == false}
-//    }
-
     @Unroll
-    def "验证数据字典列表查询，传入type，当type为空或者为空字符串时：返回提示信息"() {
+    def "list:验证数据字典列表查询，传入type，当type为空或者为空字符串时：返回提示信息"() {
         when:
-        params.type =type
+        params.type = type
         controller.list()
         then:
         response.status == 400
-//        response.json.systemCodeList == null
         response.json.errors == ['请求参数不合法，请查证！']
-     where:
-//        type |_
-//        null |_
-//        ''    |_
-       type <<[null,'']
+        where:
+        type << [null, '']
     }
+
     def "list:输入相应的parentId和type,返回list"() {
         setup:
         controller.supportService = [getSystemCodeListByParent: { parentId, type ->
@@ -50,26 +42,16 @@ class SystemCodeControllerSpec extends Specification {
         params.type = 'unit'
         controller.list()
         then:
-//        println "========== " + response.json
-//        println SystemCodeType.instance.systemCodeTypes
         response.status == 200
         response.json.systemCodeList == ['id': 1, 'codeNum': 2, 'name': 'aa', 'type': '1', parentId: '1']
         response.json.result == 'success'
-   }
-    def '让clazzObj为空,返回错误信息'(){
-//        setup:
-//        SystemCodeType.instance.types = [unit: [name: 'unit', clazz: 'clazzObj', type: 'unit']]
+    }
+
+    def 'list:clazzObj为空,返回错误信息'() {
         when:
-//       params.type = 'unit'
-        params.type=null
+        params.type = null
         controller.list()
         then:
         response.json.errors == ['请求参数不合法，请查证！']
-//        where:
-//        type|_
-//          1 |_
     }
-
-
-
 }
