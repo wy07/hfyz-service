@@ -31,7 +31,7 @@ class SystemCodeControllerSpec extends Specification {
         type << [null, '']
     }
 
-    def "list:输入相应的parentId和type,返回list"() {
+    def "list:验证数据字典列表查询，输入合法的参数，返回正确结果"() {
         setup:
         controller.supportService = [getSystemCodeListByParent: { parentId, type ->
             ['id': 1, 'codeNum': 2, 'name': 'aa', 'type': '1', 'parentId': '1']
@@ -42,19 +42,16 @@ class SystemCodeControllerSpec extends Specification {
         params.type = 'unit'
         controller.list()
         then:
-
         response.status == 200
         response.json.systemCodeList == ['id': 1, 'codeNum': 2, 'name': 'aa', 'type': '1', parentId: '1']
         response.json.result == 'success'
     }
-
-    def 'list:让clazzObj为空,返回错误信息'() {
+    def 'list:验证clazzObj为空,返回错误消息'() {
         when:
         params.type = null
         controller.list()
         then:
         response.json.errors == ['请求参数不合法，请查证！']
-
     }
 
 
