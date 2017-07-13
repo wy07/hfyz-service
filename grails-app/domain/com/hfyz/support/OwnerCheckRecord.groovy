@@ -1,6 +1,7 @@
 package com.hfyz.support
 
 import com.hfyz.security.User
+
 class OwnerCheckRecord {
 
     boolean auto=false
