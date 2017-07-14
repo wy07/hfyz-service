@@ -13,7 +13,7 @@ class OwnerCheckRecord {
     User operator
     Date responseDate
     String responseContent
-    Date responseTime
+    Integer responseTime
 
     static constraints = {
         companyCode nullable: false, blank: false, maxSize: 20
@@ -26,6 +26,6 @@ class OwnerCheckRecord {
                 errors.rejectValue('operator', 'ownerCheckRecord.operator.invalid.validator.message','手动查岗必须有查岗人员！')
             }
         }
-        responseTime nullable: true
+        responseTime nullable: true, max:300
     }
 }
