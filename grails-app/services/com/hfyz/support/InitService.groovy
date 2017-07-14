@@ -5,6 +5,7 @@ import com.hfyz.security.User
 import com.hfyz.security.Role
 import com.hfyz.security.UserRole
 import com.hfyz.security.PermissionGroup
+
 @Transactional
 class InitService {
 
@@ -115,5 +116,28 @@ class InitService {
         organizationP=new Organization(name: '运营企业',code: '300',parent: null).save(flush: true)
         new Organization(name: '客运',code: '310',parent: organizationP).save(flush: true)
         new Organization(name: '货运',code: '320',parent: organizationP).save(flush: true)
+
+        def platForm=new Menu(name:'平台管理',code:'root-pluponForm',icon:'fa-cog',parent:null,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'查岗信息',code:'ownerCheckRecord',icon:'fa-hand-o-right',parent:platForm,position:'SIDE_BAR').save(flush:true)
+        new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true,
+                            operator: testUser, responseDate: new Date(), responseContent: '5', responseTime: 50).save(flush: true)
+        new OwnerCheckRecord(auto: true, companyCode: '9578', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: '2464', question: '10-1=?', answer: '9', responsed: true,
+                operator: testUser, responseDate: new Date(), responseContent: '9', responseTime: 30).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: '1934', question: '2x3=?', answer: '6', responsed: true,
+                operator: testUser, responseDate: new Date(), responseContent: '6', responseTime: 27).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: '6427', question: '10÷5=?', answer: '2', responsed: true,
+                operator: testUser, responseDate: new Date(), responseContent: '2', responseTime: 15).save(flush: true)
+        new OwnerCheckRecord(auto: true, companyCode: '7294', question: '1x10=?', answer: '10', responsed: false).save(flush: true)
+        new OwnerCheckRecord(auto: true, companyCode: '6729', question: '2x2=?', answer: '4', responsed: true,
+                responseDate: new Date(), responseContent: '4', responseTime: 18).save(flush: true)
+        new OwnerCheckRecord(auto: true, companyCode: '1759', question: '1+8=?', answer: '9', responsed: true,
+                responseDate: new Date(), responseContent: '9', responseTime: 19).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: '7294', question: '1x10=?', answer: '10', responsed: false,
+                operator: testUser,).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true,
+                operator: testUser, responseDate: new Date(), responseContent: '7', responseTime: 59).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: '3427', question: '12÷3=?', answer: '4', responsed: true,
+                operator: testUser, responseDate: new Date(), responseContent: '4', responseTime: 120).save(flush: true)
     }
 }
