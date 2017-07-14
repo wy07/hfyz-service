@@ -18,8 +18,8 @@ class PlatformManage {
         code nullable: false, blank: false, maxSize: 20
         contactName nullable: false, blank: false, maxSize: 30
         contactPhone nullable: false, blank: false, maxSize: 11
-        draftPeople nullable: false,blank: false,maxSize: 30
-        status nullable: false,blank: false, maxSize: 4
+        draftPeople nullable: true,blank: true,maxSize: 30
+        status nullable: true,blank: true, maxSize: 4
     }
 
 }
