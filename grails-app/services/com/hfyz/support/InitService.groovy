@@ -29,6 +29,12 @@ class InitService {
 
         def homemenu = new Menu(name:'首页',code:'home',icon:'fa-home',parent:null,position:'SIDE_BAR').save(flush:true)
         new PermissionGroup(name:'浏览',permissions:'view',menu:homemenu).save(flush:true)
+
+
+        def infomanage = new Menu(name:'信息管理',code:'root-infomanage',icon:'fa-laptop',parent:null,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'信息发布',code:'infoPublish',icon:'fa-bullhorn',parent:infomanage,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'信息审核',code:'infoCheck',icon:'fa-check-square',parent:infomanage,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'信息列表',code:'infoList',icon:'fa-envelope-square',parent:infomanage,position:'SIDE_BAR').save(flush:true)
         
         def sidebar=new Menu(name:'系统管理',code:'root-syscode',icon:'fa-wrench',parent:null,position:'SIDE_BAR').save(flush:true)
         def roleMenu=new Menu(name:'角色',code:'role',icon:'fa-users',parent:sidebar,position:'SIDE_BAR').save(flush:true)
@@ -60,7 +66,8 @@ class InitService {
         def infoManage = new Menu(name:'信息管理',code:'root-infomanage',icon:'fa-laptop',parent:null,position:'SIDE_BAR').save(flush:true)
         new Menu(name:'信息发布',code:'infoPublish',icon:'fa-bullhorn',parent:infoManage,position:'SIDE_BAR').save(flush:true)
         new Menu(name:'信息审核',code:'infoCheck',icon:'fa-check-square',parent:infoManage,position:'SIDE_BAR').save(flush:true)
-        new Menu(name:'信息列表',code:'infoList',icon:'fa-envelope-square',parent:infoManage,position:'SIDE_BAR').save(flush:true)
+        new Menu(name:'信息查询',code:'infoList',icon:'fa-envelope-square',parent:infoManage,position:'SIDE_BAR').save(flush:true)
+
 
         new Menu(name:'组织机构',code:'organization',icon:'fa-sitemap',parent:sidebar,position:'SIDE_BAR').save(flush:true)
 

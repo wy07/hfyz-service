@@ -1,0 +1,79 @@
+package com.hfyz.infoManage
+
+import com.commons.utils.ControllerHelper
+import grails.transaction.Transactional
+
+@Transactional(readOnly = true)
+class InfoauditController implements ControllerHelper {
+
+    def infoauditService
+
+    def list() {
+        println params
+        def publishList = infoauditService.getPublishList(params.long('parentId'))
+        renderSuccessesWithMap([publishList: publishList])
+    }
+
+    def save() {
+        println request.JSON
+        Infoaudit infoaudit = new Infoaudit(request.JSON)
+        infoaudit.save(flush: true, failOnError: true)
+        renderSuccess()
+    }
+
+    def edit() {
+        println params
+        withInfoaudit(params.long('id')) { infoaudit ->
+            renderSuccessesWithMap([infoaudit: [id           : infoaudit.id
+                                                , type       : infoaudit.type
+                                                , title      : infoaudit.title
+                                                , dateCreated: infoaudit.dateCreated
+                                                , content    : infoaudit.content
+                                                , vimTime    : infoaudit.vimTime?.format('yyyy-MM-dd HH:mm:ss ')
+                                                , username   : infoaudit.publisher.name
+                                                , status     : infoaudit.status.type]
+            ])
+        }
+    }
+
+    def update() {
+        withInfoaudit(params.long('id')) { infoauditInstance ->
+            println request.JSON.vimTime.class
+            println request.JSON
+            request.JSON.remove('vimTime')
+            request.JSON.remove('dateCreated')
+            infoauditInstance.type = request.JSON.type
+            infoauditInstance.title = request.JSON.title
+            infoauditInstance.content = request.JSON.content
+            infoauditInstance.vimTime = new Date()
+            infoauditInstance.save(flush: true, failOnError: true)
+            renderSuccess()
+        }
+    }
+
+    def delete() {
+        withInfoaudit(params.long('id')) { infoauditInstance ->
+            infoauditInstance.delete(flush: true)
+            renderSuccess()
+        }
+    }
+
+    def search() {
+        def publishList = infoauditService.getSearchList(params.textTitle, params.dateBegin, params.dateEnd)
+        renderSuccessesWithMap([publishList: publishList])
+
+    }
+
+    private withInfoaudit(Long id, Closure c) {
+        print id
+        Infoaudit infoauditInstance = id ? Infoaudit.get(id) : null
+        if (infoauditInstance) {
+            c.call infoauditInstance
+        } else {
+            renderNoTFoundError()
+        }
+    }
+
+
+}
+
