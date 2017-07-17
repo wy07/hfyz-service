@@ -16,7 +16,7 @@ class InitService {
         def rootPermission = new PermissionGroup(name: '所有权限', permissions: '*:*').save(flush: true)
         def adminRole = new Role(authority: 'ROLE_ADMIN', name: '平台管理员', permissionGroups: [rootPermission]).save()
 
-        def testUser = new User(username: 'admin', password: 'admin123', name: '管理员').save()
+        def testUser = new User(username: 'admin', passwordHash: 'admin123',salt:User.getSecureRandomSalt(), name: '管理员').save(failOnError:true)
 
         UserRole.create testUser, adminRole
 
@@ -24,7 +24,7 @@ class InitService {
             it.flush()
             it.clear()
         }
-
+            
         new Menu(name: '关闭全部', code: 'closeall', position: 'TOP_BAR', parent: null).save(flush: true)
         def topbar = new Menu(name: '个人中心', code: 'profile', style: 'hoverdown', position: 'TOP_BAR', parent: null).save(flush: true)
         new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
