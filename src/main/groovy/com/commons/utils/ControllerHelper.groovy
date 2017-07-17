@@ -6,6 +6,13 @@ import org.springframework.validation.Errors
 
 
 trait ControllerHelper {
+
+    def springSecurityService
+
+    def getCurrentUser() {
+        springSecurityService.currentUser
+    }
+
     def renderSuccess() {
         response.setStatus(200)
         def map = [result: 'success']
@@ -14,7 +21,7 @@ trait ControllerHelper {
 
     def renderSuccessesWithMap(Map model) {
         response.setStatus(200)
-        model+=[result: 'success']
+        model += [result: 'success']
         render(model as JSON)
     }
 
@@ -25,9 +32,9 @@ trait ControllerHelper {
         render map as JSON
     }
 
-    def renderParamsIllegalErrorMsg(msg=null) {
+    def renderParamsIllegalErrorMsg(msg = null) {
         response.setStatus(400)
-        def map = [errors: [msg?:'请求参数不合法，请查证！']]
+        def map = [errors: [msg ?: '请求参数不合法，请查证！']]
         render map as JSON
     }
 
@@ -45,7 +52,7 @@ trait ControllerHelper {
 
     def handleException(Exception e) {
 //        log.error(this,e)
-        println e.stackTrace
+        println e.printStackTrace()
         renderErrorMsg('系统忙，请稍后再试!')
 
     }
