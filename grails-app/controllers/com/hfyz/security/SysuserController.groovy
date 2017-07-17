@@ -52,7 +52,8 @@ class SysuserController implements ControllerHelper{
             userInstance.properties = request.JSON
             //userInstance.password = request.JSON.password
             if(request.JSON.password!=oldpwd){
-                userInstance.password = encodePassword(request.JSON.password)
+                userInstance.salt = User.getSecureRandomSalt()
+                userInstance.password = encodePassword(request.JSON.password,userInstance.salt)
             }
 
             userInstance.save(flush: true, failOnError: true)
@@ -142,8 +143,8 @@ class SysuserController implements ControllerHelper{
         println result
         render result as JSON
     }
-    protected String encodePassword(password) {
-		return springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
+    protected String encodePassword(password,salt) {
+		return springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password,salt) : password
 	}
     protected void notFound() {
         def map=['result':'error','errors':['找不到该数据！']]  
