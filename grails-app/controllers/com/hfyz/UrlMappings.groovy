@@ -5,15 +5,15 @@ import com.commons.utils.URIUtils
 class UrlMappings {
 
     static mappings = {
-        "/$controller/$action?/$id?(.$format)?" {
-            constraints {
-                // apply constraints here
-            }
-        }
+//        "/$controller/$action?/$id?(.$format)?" {
+//            constraints {
+//                // apply constraints here
+//            }
+//        }
 
-        "/"(view: "/index")
-        "500"(view: '/error')
-        "404"(view: '/notFound')
+//        "/"(view: "/index")
+//        "500"(view: '/error')
+//        "404"(view: '/notFound')
 
         "/$resource/$actionStr" {
             controller = { URIUtils.parseResourceToControllerName(params.resource) }
@@ -50,6 +50,8 @@ class UrlMappings {
                 actionStr matches: /\S+[^s]$/        //不以s结尾的单词,和普通的resource区分开
             }
         }
+
+        "/login"(controller: "auth", action: 'singIn')
 
 //        //SystemCode
 //        "/system-codes/$className/$actionStr" {

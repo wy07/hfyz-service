@@ -5,10 +5,10 @@ import com.commons.utils.ControllerHelper
 class PermissionGroupController implements ControllerHelper{
     def roleService
     def list() {
-        renderSuccessesWithMap([menuList:roleService.getMenu(params.roles)])
+        renderSuccessesWithMap([menuList:roleService.getMenu(request.JSON.roles)])
     }
     def getPermission(){
-        renderSuccessesWithMap([menuList:roleService.getPermission(params.menuid)])
+        renderSuccessesWithMap([menuList:roleService.getPermission(request.JSON.menuid)])
     }
     def save(){
         println params
