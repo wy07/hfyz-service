@@ -12,24 +12,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lms.security
+package com.hfyz.security
 
 import org.springframework.security.access.annotation.Secured
 import org.springframework.security.web.RedirectStrategy
 
 import javax.servlet.http.HttpServletResponse
 import grails.converters.JSON
-import grails.plugin.springsecurity.rest.token.storage.TokenStorageService
+//import grails.plugin.springsecurity.rest.token.storage.TokenStorageService
 
-import grails.plugin.springsecurity.rest.token.AccessToken
-import grails.plugin.springsecurity.rest.token.reader.TokenReader
+//import grails.plugin.springsecurity.rest.token.AccessToken
+//import grails.plugin.springsecurity.rest.token.reader.TokenReader
 @Secured('IS_AUTHENTICATED_FULLY')
 class LogoutController {
 
 	/** Dependency injection for RedirectStrategy. */
 	RedirectStrategy redirectStrategy
-	TokenStorageService tokenStorageService
-	TokenReader tokenReader
+//	TokenStorageService tokenStorageService
+//	TokenReader tokenReader
 	/**
 	 * Index action. Redirects to the Spring security logout uri.
 	 */

@@ -23,28 +23,28 @@ class SystemCodeController implements ControllerHelper {
     }
 
     def list() {
-        def clazzObj = getClazzObj(params.type)
+        def clazzObj = getClazzObj(request.JSON.type)
         if (!clazzObj) {
             renderParamsIllegalErrorMsg()
             return
         }
-        def systemCodeList = supportService.getSystemCodeListByParent(params.long('parentId'), clazzObj.type)
+        def systemCodeList = supportService.getSystemCodeListByParent(NumberUtils.toLong(request.JSON.parentId), clazzObj.type)
 
         renderSuccessesWithMap([systemCodeList: systemCodeList])
     }
 
     def search() {
-        if (!params.query) {
+        if (!request.JSON.query) {
             renderSuccessesWithMap([systemCodeList: []])
         }
 
-        def clazzObj = getClazzObj(params.type)
+        def clazzObj = getClazzObj(request.JSON.type)
         if (!clazzObj) {
             renderParamsIllegalErrorMsg()
             return
         }
 
-        def systemCodeList = clazzObj.clazz.findAllByCodeNumLike("${params.query}%", [max: 30, sort: 'id', order: 'desc'])?.collect { obj ->
+        def systemCodeList = clazzObj.clazz.findAllByCodeNumLike("${request.JSON.query}%", [max: 30, sort: 'id', order: 'desc'])?.collect { obj ->
             [
                     id       : obj.id
                     , name   : obj.name
@@ -54,7 +54,7 @@ class SystemCodeController implements ControllerHelper {
     }
 
     def save() {
-        def clazz = getClazzObj(params.type)?.clazz
+        def clazz = getClazzObj(request.JSON.type)?.clazz
         if (!clazz) {
             renderParamsIllegalErrorMsg()
             return
@@ -77,7 +77,7 @@ class SystemCodeController implements ControllerHelper {
     }
 
     def edit() {
-        withSystemCode(params.long('id'), params.type) { sys, clazz ->
+        withSystemCode(params.long('id'), request.JSON.type) { sys, clazz ->
             renderSuccessesWithMap([systemCode: [name     : sys.name
                                                  , codeNum: sys.codeNum
                                                  , id     : sys.id]
@@ -90,7 +90,7 @@ class SystemCodeController implements ControllerHelper {
     }
 
     def update() {
-        withSystemCode(params.long('id'), params.type) { systemCodeInstance, clazz ->
+        withSystemCode(params.long('id'), request.JSON.type) { systemCodeInstance, clazz ->
 
             systemCodeInstance.properties = request.JSON
 
@@ -114,7 +114,7 @@ class SystemCodeController implements ControllerHelper {
     }
 
     def delete() {
-        withSystemCode(params.long('id'), params.type) { systemCodeInstance, clazz ->
+        withSystemCode(params.long('id'), request.JSON.type) { systemCodeInstance, clazz ->
             systemCodeInstance.delete(flush: true)
             renderSuccess()
         }
@@ -132,7 +132,7 @@ class SystemCodeController implements ControllerHelper {
     }
 
     private withSystemCode(Long id, String type, Closure c) {
-        def clazz = getClazzObj(params.type)?.clazz
+        def clazz = getClazzObj(type)?.clazz
         if (!clazz) {
             renderParamsIllegalErrorMsg()
             return

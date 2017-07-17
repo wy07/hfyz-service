@@ -5,7 +5,6 @@ class LicenseType extends SystemCode{
 
     static constraints = {
         parent nullable: true
-        codeNum unique: 'class'
     }
 
     static mapping = {
