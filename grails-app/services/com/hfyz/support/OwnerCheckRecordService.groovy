@@ -21,12 +21,12 @@ class OwnerCheckRecordService {
             like ("companyCode", "${company}%")
             if (!sd && ed) {
                 or {
-                    le("responseDate", ed)
+                    le("dateCreated", ed)
                 }
             }
             if (sd && ed) {
                 or {
-                    between('responseDate', sd, ed)
+                    between('dateCreated', sd, ed)
                 }
             }
         }
@@ -34,12 +34,12 @@ class OwnerCheckRecordService {
             like ("companyCode", "${company}%")
             if (!sd && ed) {
                 or {
-                    le("responseDate", ed)
+                    le("dateCreated", ed)
                 }
             }
             if (sd && ed) {
                 or {
-                    between('responseDate', sd, ed)
+                    between('dateCreated', sd, ed)
                 }
             }
         }?.collect(){ OwnerCheckRecord recordObj ->
@@ -53,7 +53,7 @@ class OwnerCheckRecordService {
              ,operator: recordObj.operator?.name
              ,responseDate: recordObj.responseDate ? recordObj.responseDate.format("yyyy-MM-dd HH:mm:ss") : null
              ,responseContent: recordObj.responseContent
-             ,responseTime: recordObj.responseTime ]
+             ,responseTime: recordObj.responseTime ? ((recordObj.responseDate.getTime() - recordObj.dateCreated.getTime())/1000).setScale(2,BigDecimal.ROUND_HALF_UP) : null]
         }
 
         result << [checkRecordList: checkRecordList]
