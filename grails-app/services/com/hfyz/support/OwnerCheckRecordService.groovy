@@ -65,19 +65,19 @@ class OwnerCheckRecordService {
         def date = [:]
         Date sd
         Date ed
-        if (startDate !='null' && endDate !='null') {
+        if (startDate !='null' && endDate != null) {
             sd = new Date().parse('yyyy-MM-dd', startDate)
             ed = new Date().parse('yyyy-MM-dd', endDate)
             date << [sd: sd, ed: ed]
             return date
         }
-        if (startDate =='null' && endDate !='null') {
+        if (startDate =='null' && endDate != null) {
             sd =  null
             ed = new Date().parse('yyyy-MM-dd', endDate)
             date << [sd: sd, ed: ed]
             return date
         }
-        if (startDate !='null' && endDate =='null') {
+        if (startDate !='null' && endDate == null) {
             sd = new Date().parse('yyyy-MM-dd', startDate)
             ed = new Date()
             date << [sd: sd, ed: ed]
