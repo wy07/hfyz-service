@@ -1,6 +1,7 @@
 package com.hfyz.support
 
 import com.commons.utils.ControllerHelper
+import com.commons.utils.PageUtils
 
 class OwnerCheckRecordController implements ControllerHelper{
 
@@ -8,7 +9,7 @@ class OwnerCheckRecordController implements ControllerHelper{
 
     def list() {
         def total = OwnerCheckRecord.count()
-        def checkRecordList = OwnerCheckRecord.list( [max: params.max, offset: params.offset])?.collect{recordObj->
+        def checkRecordList = OwnerCheckRecord.list( [max: PageUtils.getMax(request.JSON.max,10,100), offset: PageUtils.getOffset(request.JSON.offset)])?.collect{ recordObj->
             [id: recordObj.id
              ,auto: recordObj.auto
              ,companyCode: recordObj.companyCode

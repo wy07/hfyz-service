@@ -31,11 +31,11 @@ class User implements Serializable {
 	Organization org
 	int  operator  //操作员id
 
-	User(String username, String password) {
-		this()
-		this.username = username
-		this.password = password
-	}
+//	User(String username, String password) {
+//		this()
+//		this.username = username
+//		this.password = password
+//	}
 
 	Set<Role> getAuthorities() {
 		UserRole.findAllByUser(this)*.role

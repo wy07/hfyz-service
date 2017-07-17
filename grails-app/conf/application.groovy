@@ -43,9 +43,8 @@ grails {
                     [pattern: '/**/favicon.ico', access: ['permitAll']],
                     [pattern: '/login', access: ['permitAll']],
                     [pattern: '/login/**', access: ['permitAll']],
-//                    [pattern: '/**/**', access: ['permitAll']]
-                    [pattern: '/**/**', access: 'ROLE_ADMIN']
-
+                    [pattern: '/**/**', access: ['permitAll']]
+//                    [pattern: '/**/**', access: 'ROLE_ADMIN']
             ]
 
             filterChain.chainMap = [

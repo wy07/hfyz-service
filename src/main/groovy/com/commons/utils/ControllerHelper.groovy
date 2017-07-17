@@ -1,5 +1,6 @@
 package com.commons.utils
 
+import com.hfyz.security.User
 import grails.converters.JSON
 import grails.validation.ValidationException
 import org.springframework.validation.Errors
@@ -10,7 +11,21 @@ trait ControllerHelper {
     def springSecurityService
 
     def getCurrentUser() {
-        springSecurityService.currentUser
+        long userId = getCurrentUserId()
+        if (!userId) {
+            return null
+        }
+        User.get(userId)
+    }
+
+    Long getCurrentUserId() {
+
+        def userId = params.jwtToken?.id
+
+        if (!userId) {
+            return null
+        }
+        return userId as long
     }
 
     def renderSuccess() {

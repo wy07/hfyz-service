@@ -1,6 +1,7 @@
 package com.hfyz.security
 
 import com.commons.utils.ControllerHelper
+import com.commons.utils.LogUtils
 import grails.converters.JSON
 import org.springframework.security.authentication.*
 import org.springframework.security.core.userdetails.UserDetails
@@ -12,6 +13,7 @@ class AuthController implements ControllerHelper {
     def singIn() {
         def username = request.JSON?.username
         def password = request.JSON?.password
+
         if (!username || !password) {
 
             renderErrorMsg(message(code: 'login.usernamePwd.null.label', default: '用户名密码不能为空'))
