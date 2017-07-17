@@ -18,7 +18,6 @@ class AuthController implements ControllerHelper {
         } else {
             try {
                 UserDetails userDetails = loginService.signIn(username, password)
-                println "====" + [sub: userDetails.username, role: userDetails.authorities.authority.join(","), id: userDetails.id]
                 render(([sub: userDetails.username, role: userDetails.authorities.authority.join(","), id: userDetails.id]) as JSON)
             } catch (BadCredentialsException e) {
                 renderErrorMsg(message(code: 'login.BadCredentials.label', default: '您的用户名和密码不匹配，请重新输入'))
