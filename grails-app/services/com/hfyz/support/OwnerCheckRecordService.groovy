@@ -8,7 +8,7 @@ class OwnerCheckRecordService {
     def list(def max, def offset, def company, def startDate, def endDate) {
 
         def sd = startDate == 'null'? null : new Date().parse('yyyy-MM-dd', startDate)
-        def ed = endDate == null ? new Date() : new Date().parse('yyyy-MM-dd', endDate)
+        def ed = endDate == null || endDate == 'null' ? new Date() : new Date().parse('yyyy-MM-dd', endDate)
         def total = OwnerCheckRecord.createCriteria().get {
             projections {
                 count()
