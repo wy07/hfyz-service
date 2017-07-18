@@ -37,8 +37,8 @@ class SystemCodeControllerSpec extends Specification {
         null                                                    | null   | null
         [unit: [name: 'unit', clazz: 'clazzObj', type: 'unit']] | 'unit' | ['id': 1, 'codeNum': 2, 'name': 'aa', 'type': '1', 'parentId': null]
     }
+    def "list:验证数据字典列表查询，传入type，当type为空或者为空字符串时：返回提示信息"() {
 
-    def "list:验证数据字典列表查询，传入type，type为空或为空字符串时：返回提示信息"() {
         when:
         params.type = type
         controller.list()
@@ -82,13 +82,13 @@ class SystemCodeControllerSpec extends Specification {
         response.json.systemCodeList == []
         response.json.result == 'success'
     }
-    def "search:数据正确 返回保存成功的提示 "(){
+    def "search:搜索数据字典，当入参合法时, 返回保存成功的提示 "(){
         setup:
         def licenseType1 = LicenseType.build(codeNum: 'aa', name: 'aa')
         when:
         SystemCodeType.instance.types=[LICENSE_TYPE: [name: 'LicenseType', clazz: LicenseType, type: 'LICENSE_TYPE']]
         request.JSON.type='LICENSE_TYPE'
-        request.JSON=[query:'aa']
+        request.JSON.query='aa'
         controller.search()
         then:
         response.status==200
@@ -100,12 +100,12 @@ class SystemCodeControllerSpec extends Specification {
         request.JSON.query='1'
         controller.search()
         then:
-
         response.status == 400
         response.json.errors == ['请求参数不合法，请查证！']
         where:
         type << [null, '']
     }
+
     def "save:验证数据字典保存，传入type，当type为空或者为空字符串时：返回提示信息"() {
         when:
         params.type = type
@@ -197,6 +197,7 @@ class SystemCodeControllerSpec extends Specification {
         def licenseType1 = LicenseType.build(codeNum: 'aaa', name: 'aa')
         when:
         request.JSON.type= 'LICENSE_TYPE'
+        params.type = 'LICENSE_TYPE'
         params.id =licenseType1.id
         controller.edit()
         then:
