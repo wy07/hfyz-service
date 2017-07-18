@@ -91,7 +91,7 @@ class SystemCodeControllerSpec extends Specification {
         response.json.systemCodeList == []
         response.json.result == 'success'
     }
-    def "search:搜索数据字典，输入正确的参数 返回保存成功的提示 "(){
+    def "search:搜索数据字典，输入正确的参数， 返回保存成功的提示 "(){
         setup:
         def licenseType1 = LicenseType.build(codeNum: 'aa', name: 'aa')
         when:
