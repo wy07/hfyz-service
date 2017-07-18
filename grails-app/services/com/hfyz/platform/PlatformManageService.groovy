@@ -11,9 +11,7 @@ class PlatformManageService {
     def getPlatformList() {
         def result = []
         def GET_PLATFORM_SQL = "select * from platform_manage"
-        def platform = SQLHelper.withDataSource(dataSource) { sql ->
-            sql.rows(GET_PLATFORM_SQL.toString())
-        }
+        SQLHelper.withDataSource(dataSource) { sql -> sql.rows(GET_PLATFORM_SQL.toString()) }
         def platformList = PlatformManage.list(sort: "id")
         platformList.each {
             result << [id            : it.id
@@ -25,7 +23,12 @@ class PlatformManageService {
                        , contactPhone: it.contactPhone
                        , draftPeople : it.draftPeople
                        , contactPhone: it.contactPhone
-                       , status      : it.status]
+                       , status      : it.status
+                       , carNum      : it.carNum
+                       , onLineNum   : it.onLineNum
+                       , allOnLineNum: it.allOnLineNum
+                       , illegalNum  : it.illegalNum
+                       , outLineNum  : it.outLineNum]
         }
         return result
     }
@@ -33,11 +36,9 @@ class PlatformManageService {
     def getPlatformByNameCode(String name, String code) {
         def paltformList = PlatformManage.createCriteria().list {
             if (name) {
-//                println "==============================name="+name
                 like("name", "${name}%")
             }
             if (code) {
-//                println "==============================code="+code
                 like("code", "${code}%")
             }
 
@@ -51,7 +52,11 @@ class PlatformManageService {
              , contactPhone: it.contactPhone
              , draftPeople : it.draftPeople
              , contactPhone: it.contactPhone
-             , status      : it.status]
+             , status      : it.status
+             , carNum      : it.carNum
+             , onLineNum   : it.onLineNum
+             , allOnLineNum: it.allOnLineNum
+             , illegalNum  : it.illegalNum]
 
         }
         return paltformList

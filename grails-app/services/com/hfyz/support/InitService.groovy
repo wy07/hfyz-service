@@ -3,6 +3,7 @@ package com.hfyz.support
 import com.hfyz.platform.PlatformManage
 import com.hfyz.car.CarBasicInfo
 import com.hfyz.car.CarBasicOperate
+import com.hfyz.warning.Warning
 import grails.transaction.Transactional
 import com.hfyz.security.User
 import com.hfyz.security.Role
@@ -62,9 +63,15 @@ class InitService {
         new Menu(name: '实时监控', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '历史轨迹', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 //        new Menu(name: '其他地图', code: 'otherMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
-        new PlatformManage(ip: '61.123.1.15', port: '2001', name: '合肥客运平台', code: 'K002', contactName: '王平', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
+        new Menu(name: '报警信息', code: 'warning', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        new Warning(frameNo: 'LDC92839882929345', carLicenseNo: '皖A-2329J', carColor: '白色', warningSource: 1, warningType: '驾驶员身份验证失败', warningTime: new Date(), warningTimes: 1).save(flush: true)
+        new Warning(frameNo: 'LDC32552378754654', carLicenseNo: '皖A-2934W', carColor: '黑色', warningSource: 2, warningType: '疲劳驾驶', warningTime: new Date(), warningTimes: 1).save(flush: true)
+        new Warning(frameNo: 'LDC43657563453234', carLicenseNo: '皖A-2239Q', carColor: '银色', warningSource: 3, warningType: '车辆非法移位', warningTime: new Date(), warningTimes: 1).save(flush: true)
+        new Warning(frameNo: 'LDC62324346329643', carLicenseNo: '皖A-2149C', carColor: '红色', warningSource: 9, warningType: '车辆非法点火', warningTime: new Date(), warningTimes: 1).save(flush: true)
+
+
+//        new Warning(frameNo:'LDC23234134143134',carLicenseNo:'皖A-k2353',carColor:'黑色',warningSource:2,warningType:'疲劳驾驶',warningTime: new Date(),warningTimes:2)
+//        new Warning(frameNo:'LDC13413512545655',carLicenseNo:'皖A-a2441',carColor:'银色',warningSource:3,warningType:'紧急报警',warningTime: new Date(),warningTimes:3)
 
         def infoManage = new Menu(name: '信息管理', code: 'root-infomanage', icon: 'fa-laptop', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
@@ -235,5 +242,11 @@ class InitService {
                 operator: testUser, responseDate: new Date(), responseContent: '7', responseTime: 59).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '3427', question: '12÷3=?', answer: '4', responsed: true,
                 operator: testUser, responseDate: new Date(), responseContent: '4', responseTime: 120).save(flush: true)
+
+        new Menu(name: '平台配置管理', code: 'platformManage', icon: 'fa-columns', parent: platForm, position: 'SIDE_BAR').save(flush: true)
+        new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
+        new PlatformManage(ip: '61.123.1.15', port: '2001', name: '合肥客运平台', code: 'K002', contactName: '王平', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
+
+
     }
 }
