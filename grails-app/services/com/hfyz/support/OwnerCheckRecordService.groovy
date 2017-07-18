@@ -6,36 +6,35 @@ import grails.transaction.Transactional
 class OwnerCheckRecordService {
 
     def list(def max, def offset, def company, def startDate, def endDate) {
-
-        def sd = startDate == 'null'? null : new Date().parse('yyyy-MM-dd', startDate)
-        def ed = endDate == null || endDate == 'null' ? new Date() : new Date().parse('yyyy-MM-dd', endDate)
+        def sd = startDate ? new Date().parse('yyyy-MM-dd HH:mm', startDate) : null
+        def ed = endDate ? new Date().parse('yyyy-MM-dd HH:mm', endDate) : new Date()
         def total = OwnerCheckRecord.createCriteria().get {
             projections {
                 count()
             }
-            like ("companyCode", "${company}%")
-            if (!sd && ed) {
-                and {
-                    le("dateCreated", ed)
-                }
+            if(company){
+                like ("companyCode", "${company}%")
             }
-            if (sd && ed) {
-                and {
-                    between('dateCreated', sd, ed)
-                }
+
+            if(sd){
+                ge("dateCreated", sd)
+            }
+
+            if(ed){
+                le("dateCreated", ed)
             }
         }
         def checkRecordList = OwnerCheckRecord.createCriteria().list([max:max, offset:offset]){
-            like ("companyCode", "${company}%")
-            if (!sd && ed) {
-                or {
-                    le("dateCreated", ed)
-                }
+            if(company){
+                like ("companyCode", "${company}%")
             }
-            if (sd && ed) {
-                or {
-                    between('dateCreated', sd, ed)
-                }
+
+            if(sd){
+                ge("dateCreated", sd)
+            }
+
+            if(ed){
+                le("dateCreated", ed)
             }
         }?.collect(){ OwnerCheckRecord recordObj ->
             [id: recordObj.id
