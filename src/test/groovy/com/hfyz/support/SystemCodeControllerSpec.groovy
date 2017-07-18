@@ -21,11 +21,7 @@ class SystemCodeControllerSpec extends Specification {
 
     @Unroll
 
-    def "index:根据SystemCodeType为null，返回结果 "() {
-        setup:
-        controller.supportService = [getSystemCodeListByParent: { parentId, type ->
-            ['id': 1, 'codeNum': 2, 'name': 'aa', 'type': '1', 'parentId': null]
-        }]
+    def "index:当type为null，返回结果 "() {
         when:
         SystemCodeType.instance.types = null
         controller.index()
@@ -34,7 +30,7 @@ class SystemCodeControllerSpec extends Specification {
         response.json.type == null
 
     }
-    def "index:根据SystemCodeType的状态存在，返回相应结果 "() {
+    def "index:当type存在时，返回相应结果"() {
         setup:
         controller.supportService = [getSystemCodeListByParent: { parentId, type ->
             ['id': 1, 'codeNum': 2, 'name': 'aa', 'type': '1', 'parentId': null]
