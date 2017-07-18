@@ -38,7 +38,7 @@ class SystemCodeControllerSpec extends Specification {
         [unit: [name: 'unit', clazz: 'clazzObj', type: 'unit']] | 'unit' | ['id': 1, 'codeNum': 2, 'name': 'aa', 'type': '1', 'parentId': null]
     }
 
-    def "list:验证数据字典列表查询，传入type，当type为空或者为空字符串时：返回提示信息"() {
+    def "list:验证数据字典列表查询，传入type，type为空或为空字符串时：返回提示信息"() {
         when:
         params.type = type
         controller.list()
