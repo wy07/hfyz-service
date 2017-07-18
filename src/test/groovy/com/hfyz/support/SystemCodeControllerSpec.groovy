@@ -82,7 +82,18 @@ class SystemCodeControllerSpec extends Specification {
         response.json.systemCodeList == []
         response.json.result == 'success'
     }
-
+    def "search:数据正确 返回保存成功的提示 "(){
+        setup:
+        def licenseType1 = LicenseType.build(codeNum: 'aa', name: 'aa')
+        when:
+        SystemCodeType.instance.types=[LICENSE_TYPE: [name: 'LicenseType', clazz: LicenseType, type: 'LICENSE_TYPE']]
+        request.JSON.type='LICENSE_TYPE'
+        request.JSON=[query:'aa']
+        controller.search()
+        then:
+        response.status==200
+        response.json.result=="success"
+    }
     def "Search:搜索数据字典，传入type，当type为空或者为空字符串时：返回提示信息"() {
         when:
         request.JSON.type=type
