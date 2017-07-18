@@ -217,31 +217,31 @@ class InitService {
         def platForm = new Menu(name: '查岗', code: 'root-pluponForm', icon: 'fa-cog', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: platForm, position: 'SIDE_BAR').save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 30*1000), responseContent: '5', responseTime: 1).save(flush: true)
+                operator: testUser, responseDate: new Date(new Date().getTime() + 30*1000), responseContent: '5', responseTime: 30).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '9578', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '2464', question: '10-1=?', answer: '9', responsed: true,
                 operator: testUser, responseDate: new Date(new Date().getTime() + 200*1000),
-                responseContent: '9', responseTime: 1).save(flush: true)
+                responseContent: '9', responseTime: 200).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '1934', question: '2x3=?', answer: '6', responsed: true,
                 operator: testUser, responseDate: new Date(new Date().getTime() + 20*1000),
-                responseContent: '6', responseTime: 1).save(flush: true)
+                responseContent: '6', responseTime: 20).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '6427', question: '10÷5=?', answer: '2', responsed: true,
                 operator: testUser, responseDate: new Date(new Date().getTime() + 76*1000),
-                responseContent: '2', responseTime: 1).save(flush: true)
+                responseContent: '2', responseTime: 76).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '7294', question: '1x10=?', answer: '10', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '6729', question: '2x2=?', answer: '4', responsed: true,
                 responseDate: new Date(new Date().getTime() + 100*1000),
-                responseContent: '4', responseTime: 1).save(flush: true)
+                responseContent: '4', responseTime: 100).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '1759', question: '1+8=?', answer: '9', responsed: true,
                 responseDate: new Date(new Date().getTime() + 121*1000),
-                responseContent: '9', responseTime: 1).save(flush: true)
+                responseContent: '9', responseTime: 121).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '7394', question: '1x10=?', answer: '10', responsed: false,
                 operator: testUser,).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true,
                 operator: testUser, responseDate: new Date(new Date().getTime() + 190*1000),
-                responseContent: '7', responseTime: 1).save(flush: true)
+                responseContent: '7', responseTime: 190).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '3427', question: '12÷3=?', answer: '4', responsed: true,
                 operator: testUser, responseDate: new Date(new Date().getTime() + 75*1000),
-                responseContent: '4', responseTime: 1).save(flush: true)
+                responseContent: '4', responseTime: 75).save(flush: true)
     }
 }
