@@ -21,23 +21,31 @@ class SystemCodeControllerSpec extends Specification {
 
     @Unroll
 
-    def "index:根据SystemCodeType的状态返回相应结果 "() {
+    def "index:根据SystemCodeType为null，返回结果 "() {
         setup:
         controller.supportService = [getSystemCodeListByParent: { parentId, type ->
             ['id': 1, 'codeNum': 2, 'name': 'aa', 'type': '1', 'parentId': null]
         }]
         when:
-        SystemCodeType.instance.types = types
+        SystemCodeType.instance.types = null
         controller.index()
         then:
-        response.json.systemCodeList == list
-        response.json.type == type
-        where:
-        types                                                   | type   | list
-        null                                                    | null   | null
-        [unit: [name: 'unit', clazz: 'clazzObj', type: 'unit']] | 'unit' | ['id': 1, 'codeNum': 2, 'name': 'aa', 'type': '1', 'parentId': null]
-    }
+        response.json.systemCodeList == null
+        response.json.type == null
 
+    }
+    def "index:根据SystemCodeType的状态，返回相应结果 "() {
+        setup:
+        controller.supportService = [getSystemCodeListByParent: { parentId, type ->
+            ['id': 1, 'codeNum': 2, 'name': 'aa', 'type': '1', 'parentId': null]
+        }]
+        when:
+        SystemCodeType.instance.types =  [unit: [name: 'unit', clazz: 'clazzObj', type: 'unit']]
+        controller.index()
+        then:
+        response.json.systemCodeList ==['id': 1, 'codeNum': 2, 'name': 'aa', 'type': '1', 'parentId': null]
+        response.json.type ==  'unit'
+    }
     def "list:验证数据字典列表查询，传入type，type为空或为空字符串时：返回提示信息"() {
         when:
         params.type = type
@@ -82,7 +90,7 @@ class SystemCodeControllerSpec extends Specification {
         response.json.systemCodeList == []
         response.json.result == 'success'
     }
-    def "search:数据正确 返回保存成功的提示 "(){
+    def "search:搜索数据字典，输入正确的参数 返回保存成功的提示 "(){
         setup:
         def licenseType1 = LicenseType.build(codeNum: 'aa', name: 'aa')
         when:
@@ -158,7 +166,7 @@ class SystemCodeControllerSpec extends Specification {
 
     }
 
-    def "edit:验证数据字典保存，传入合理参数，当type为空或者为空字符串时：返回提示信息"() {
+    def "edit:验证数据字典保存，当type为空或者为空字符串时：返回提示信息"() {
         setup:
         SystemCodeType.instance.types = [LICENSE_TYPE: [name: 'LicenseType', clazz: LicenseType, type: 'LICENSE_TYPE']]
         when:
@@ -174,7 +182,7 @@ class SystemCodeControllerSpec extends Specification {
         null | null           | 400    | ['请求参数不合法，请查证！']
 
     }
-    def "edit:验证数据字典保存，传入合理参数，当id为空或者为空字符串时：返回提示信息"() {
+    def "edit:验证数据字典保存，当id为空或者为空字符串时：返回提示信息"() {
         setup:
         SystemCodeType.instance.types = [LICENSE_TYPE: [name: 'LicenseType', clazz: LicenseType, type: 'LICENSE_TYPE']]
         when:
@@ -205,7 +213,7 @@ class SystemCodeControllerSpec extends Specification {
         response.json.result == 'success'
     }
 
-    def "edit:  参数正确,编辑一个子类 返回编辑成功提示 "() {
+    def "edit: 验证编辑，传入参数正确,编辑一个子类 返回编辑成功提示 "() {
         setup:
         SystemCodeType.instance.types = [LICENSE_TYPE: [name: 'LicenseType', clazz: LicenseType, type: 'LICENSE_TYPE']]
         def licenseType1 = LicenseType.build(codeNum: 'aa', name: 'aa')
