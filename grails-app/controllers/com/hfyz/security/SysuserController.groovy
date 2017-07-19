@@ -1,5 +1,6 @@
 package com.hfyz.security
 
+import com.commons.utils.NumberUtils
 import com.commons.utils.SQLHelper
 import grails.converters.JSON
 import java.text.SimpleDateFormat
@@ -10,7 +11,7 @@ class SysuserController implements ControllerHelper{
     def roleService
     def springSecurityService
     def list() {
-        renderSuccessesWithMap([userList: roleService.getUserList(params.int("operatorId"))])
+        renderSuccessesWithMap([userList: roleService.getUserList(NumberUtils.toInteger(request.JSON.operatorId))])
     }
    def save(){
        println request.JSON
@@ -38,7 +39,6 @@ class SysuserController implements ControllerHelper{
             renderSuccessesWithMap([user    : [name   : user.name
                                                , username : user.username
                                                , rights: user.rights
-                                               , password:user.password
                                                ,id:user.id
                                                ,roles:user.authorities.id
             ],
@@ -50,10 +50,11 @@ class SysuserController implements ControllerHelper{
             String oldpwd=userInstance.password
             
             userInstance.properties = request.JSON
-            //userInstance.password = request.JSON.password
-            if(request.JSON.password!=oldpwd){
-                userInstance.password = encodePassword(request.JSON.password)
-            }
+//            //userInstance.password = request.JSON.password
+//            if(request.JSON.password!=oldpwd){
+//                userInstance.salt = User.getSecureRandomSalt()
+//                userInstance.password = encodePassword(request.JSON.password,userInstance.salt)
+//            }
 
             userInstance.save(flush: true, failOnError: true)
             println request.JSON
@@ -90,13 +91,26 @@ class SysuserController implements ControllerHelper{
     def getUserByName(){
         println params
         def result=[:]
-        def GET_USER_SQL="select suser.id,suser.date_created,suser.last_updated,suser.password,suser.name,suser.username,suser.tel,role.id role_id,role.name role_name from sys_user suser, user_role ur,role where ur.user_id=suser.id and ur.role_id=role.id  and  suser.username=:username"
+        def GET_USER_SQL="""
+            select suser.id
+                ,suser.date_created
+                ,suser.last_updated
+                ,suser.name
+                ,suser.username
+                ,suser.tel
+                ,role.id role_id
+                ,role.name role_name
+            from sys_user suser, user_role ur,role
+            where ur.user_id=suser.id
+                and ur.role_id=role.id
+                and  suser.username=:username
+        """
         //println GET_USER_SQLde
         def userList=[:]  
         def roleRights=[]  
         def roleList =[:]   
         SQLHelper.withDataSource(dataSource) { sql ->
-            sql.rows(GET_USER_SQL.toString(),[username:params.name])
+            sql.rows(GET_USER_SQL.toString(),[username:request.JSON.name])
         }.eachWithIndex{ user,index->
             
             Role.findById(user.role_id).permissionGroups.each{
@@ -114,7 +128,6 @@ class SysuserController implements ControllerHelper{
                 userList["${user.username}"]=[id:user.id
                         ,name:user.name
                         ,username:user.username
-                        ,password:user.password
                         ,dateCreated:user.date_created
                         ,lastUpdated:user.last_updated
                         ,tel:user.tel
@@ -142,8 +155,8 @@ class SysuserController implements ControllerHelper{
         println result
         render result as JSON
     }
-    protected String encodePassword(password) {
-		return springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password) : password
+    protected String encodePassword(password,salt) {
+		return springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password,salt) : password
 	}
     protected void notFound() {
         def map=['result':'error','errors':['找不到该数据！']]  

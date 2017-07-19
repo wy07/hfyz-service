@@ -12,8 +12,9 @@ class PlatformManageController implements ControllerHelper {
     }
 
 //    条件查询
-    def search() {
-        def platformList = platformManageService.getPlatformByNameCode(params.name, params.code)
+    def search(){
+//        println request.JSON.name+'--------------------------'+request.JSON.code
+        def platformList = platformManageService.getPlatformByNameCode(request.JSON.name,request.JSON.code)
         renderSuccessesWithMap([platformList: platformList])
 
     }
@@ -50,9 +51,7 @@ class PlatformManageController implements ControllerHelper {
 
         }
     }
-
-    def update() {
-        println params
+    def update(){
         withPlatform(params.long('id')) { platformInstance ->
             platformInstance.properties = request.JSON
             platformInstance.save(flush: true, failOnError: true)

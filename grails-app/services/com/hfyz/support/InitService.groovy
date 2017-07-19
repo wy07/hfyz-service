@@ -17,7 +17,7 @@ class InitService {
         def rootPermission = new PermissionGroup(name: '所有权限', permissions: '*:*').save(flush: true)
         def adminRole = new Role(authority: 'ROLE_ADMIN', name: '平台管理员', permissionGroups: [rootPermission]).save()
 
-        def testUser = new User(username: 'admin', password: 'admin123', name: '管理员').save()
+        def testUser = new User(username: 'admin', passwordHash: 'admin123',salt:User.getSecureRandomSalt(), name: '管理员').save(failOnError:true)
 
         UserRole.create testUser, adminRole
 
@@ -25,7 +25,7 @@ class InitService {
             it.flush()
             it.clear()
         }
-
+            
         new Menu(name: '关闭全部', code: 'closeall', position: 'TOP_BAR', parent: null).save(flush: true)
         def topbar = new Menu(name: '个人中心', code: 'profile', style: 'hoverdown', position: 'TOP_BAR', parent: null).save(flush: true)
         new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
@@ -63,15 +63,11 @@ class InitService {
         new Menu(name: '实时监控', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '历史轨迹', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 //        new Menu(name: '其他地图', code: 'otherMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '报警信息', code: 'warning', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '报警信息', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Warning(frameNo: 'LDC92839882929345', carLicenseNo: '皖A-2329J', carColor: '白色', warningSource: 1, warningType: '驾驶员身份验证失败', warningTime: new Date(), warningTimes: 1).save(flush: true)
         new Warning(frameNo: 'LDC32552378754654', carLicenseNo: '皖A-2934W', carColor: '黑色', warningSource: 2, warningType: '疲劳驾驶', warningTime: new Date(), warningTimes: 1).save(flush: true)
         new Warning(frameNo: 'LDC43657563453234', carLicenseNo: '皖A-2239Q', carColor: '银色', warningSource: 3, warningType: '车辆非法移位', warningTime: new Date(), warningTimes: 1).save(flush: true)
         new Warning(frameNo: 'LDC62324346329643', carLicenseNo: '皖A-2149C', carColor: '红色', warningSource: 9, warningType: '车辆非法点火', warningTime: new Date(), warningTimes: 1).save(flush: true)
-
-
-//        new Warning(frameNo:'LDC23234134143134',carLicenseNo:'皖A-k2353',carColor:'黑色',warningSource:2,warningType:'疲劳驾驶',warningTime: new Date(),warningTimes:2)
-//        new Warning(frameNo:'LDC13413512545655',carLicenseNo:'皖A-a2441',carColor:'银色',warningSource:3,warningType:'紧急报警',warningTime: new Date(),warningTimes:3)
 
         def infoManage = new Menu(name: '信息管理', code: 'root-infomanage', icon: 'fa-laptop', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
@@ -220,28 +216,36 @@ class InitService {
 //        new VehicleType(name: '轮式自行机械车',code: 'M',parent: null).save(flush: true)
 //        new VehicleType(name: '无轨电车',code: 'N',parent: null).save(flush: true)
 //        new VehicleType(name: '有轨电车',code: 'P',parent: null).save(flush: true)
-        def platForm = new Menu(name: '平台管理', code: 'root-pluponForm', icon: 'fa-cog', parent: null, position: 'SIDE_BAR').save(flush: true)
+
+        def platForm = new Menu(name: '查岗', code: 'root-pluponForm', icon: 'fa-cog', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: platForm, position: 'SIDE_BAR').save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true,
-                operator: testUser, responseDate: new Date(), responseContent: '5', responseTime: 50).save(flush: true)
+                operator: testUser, responseDate: new Date(new Date().getTime() + 30*1000), responseContent: '5', responseTime: 30).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '9578', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '2464', question: '10-1=?', answer: '9', responsed: true,
-                operator: testUser, responseDate: new Date(), responseContent: '9', responseTime: 30).save(flush: true)
+                operator: testUser, responseDate: new Date(new Date().getTime() + 200*1000),
+                responseContent: '9', responseTime: 200).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '1934', question: '2x3=?', answer: '6', responsed: true,
-                operator: testUser, responseDate: new Date(), responseContent: '6', responseTime: 27).save(flush: true)
+                operator: testUser, responseDate: new Date(new Date().getTime() + 20*1000),
+                responseContent: '6', responseTime: 20).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '6427', question: '10÷5=?', answer: '2', responsed: true,
-                operator: testUser, responseDate: new Date(), responseContent: '2', responseTime: 15).save(flush: true)
+                operator: testUser, responseDate: new Date(new Date().getTime() + 76*1000),
+                responseContent: '2', responseTime: 76).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '7294', question: '1x10=?', answer: '10', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '6729', question: '2x2=?', answer: '4', responsed: true,
-                responseDate: new Date(), responseContent: '4', responseTime: 18).save(flush: true)
+                responseDate: new Date(new Date().getTime() + 100*1000),
+                responseContent: '4', responseTime: 100).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '1759', question: '1+8=?', answer: '9', responsed: true,
-                responseDate: new Date(), responseContent: '9', responseTime: 19).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '7294', question: '1x10=?', answer: '10', responsed: false,
+                responseDate: new Date(new Date().getTime() + 121*1000),
+                responseContent: '9', responseTime: 121).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: '7394', question: '1x10=?', answer: '10', responsed: false,
                 operator: testUser,).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true,
-                operator: testUser, responseDate: new Date(), responseContent: '7', responseTime: 59).save(flush: true)
+                operator: testUser, responseDate: new Date(new Date().getTime() + 190*1000),
+                responseContent: '7', responseTime: 190).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '3427', question: '12÷3=?', answer: '4', responsed: true,
-                operator: testUser, responseDate: new Date(), responseContent: '4', responseTime: 120).save(flush: true)
+                operator: testUser, responseDate: new Date(new Date().getTime() + 75*1000),
+                responseContent: '4', responseTime: 75).save(flush: true)
 
         new Menu(name: '平台配置管理', code: 'platformManage', icon: 'fa-columns', parent: platForm, position: 'SIDE_BAR').save(flush: true)
         new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)

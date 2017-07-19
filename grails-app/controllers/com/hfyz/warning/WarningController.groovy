@@ -14,7 +14,7 @@ class WarningController implements ControllerHelper {
     }
 
     def search() {
-        renderSuccessesWithMap([warningList: warningService.getWarningByCondition(params.frameNo, params.carLicenseNo, params.warningType)])
+        renderSuccessesWithMap([warningList: warningService.getWarningByCondition(request.JSON.frameNo, request.JSON.carLicenseNo, request.JSON.warningType)])
     }
 
     def view() {
@@ -23,7 +23,7 @@ class WarningController implements ControllerHelper {
                                               , frameNo        : warning.frameNo
                                               , carLicenseNo   : warning.carLicenseNo
                                               , carColor       : warning.carColor
-                                              , warningSource  : getWarningSourceName(warning.warningSource)
+                                              , warningSource  : warningService.getWarningSourceName(warning.warningSource)
                                               , warningType    : warning.warningType
                                               , warningTime    : warning.warningTime
                                               , warningTimes   : warning.warningTimes
@@ -34,13 +34,6 @@ class WarningController implements ControllerHelper {
                                               , supervisePhone : warning.supervisePhone
                                               , superviseEmail : warning.superviseEmail]])
         }
-    }
-
-    def final warningSourceNameMap = ['1'  : '车载终端', '2': '企业监控', '3': '政府监管', '9': '其他']
-
-    def getWarningSourceName(warningSource) {
-
-        warningSourceNameMap['${warningSource}']
     }
 
     private withWarning(Long id, Closure c) {

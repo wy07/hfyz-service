@@ -18,7 +18,7 @@ class WarningService {
                        , frameNo        : it.frameNo
                        , carLicenseNo   : it.carLicenseNo
                        , carColor       : it.carColor
-                       , warningSource  : it.warningSource
+                       , warningSource  : getWarningSourceName(it.warningSource)
                        , warningType    : it.warningType
                        , warningTime    : it.warningTime
                        , warningTimes   : it.warningTimes
@@ -49,7 +49,7 @@ class WarningService {
              , frameNo        : it.frameNo
              , carLicenseNo   : it.carLicenseNo
              , carColor       : it.carColor
-             , warningSource  : it.warningSource
+             , warningSource  : getWarningSourceName(it.warningSource)
              , warningType    : it.warningType
              , warningTime    : it.warningTime
              , warningTimes   : it.warningTimes
@@ -62,6 +62,12 @@ class WarningService {
 
         }
         return warningList
+    }
+
+    def final warningSourceNameMap = ['1'  : '车载终端', '2': '企业监控', '3': '政府监管', '9': '其他']
+
+    def getWarningSourceName(warningSource) {
+        return warningSourceNameMap["${warningSource}"]
     }
 
 }
