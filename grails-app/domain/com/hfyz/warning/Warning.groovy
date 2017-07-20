@@ -16,22 +16,19 @@ class Warning {
     String supervisePhone         //督办联系电话
     String superviseEmail         //督办联系电子邮箱
 
-
     static constraints = {
-        frameNo unique: true, nullable: false, blank: false, maxSize: 17
-        carLicenseNo unique: false, nullable: false, blank: false, maxSize: 8
-        carColor unique: false, nullable: false, blank: false, maxSize: 10
-        warningSource unique: false, nullable: false, blank: false
-        warningType nullable: false, blank: false, maxSize: 50
-        warningTime unique: false, nullable: false, blank: false
-        warningTimes unique: false, nullable: false, blank: false, maxSize: 10
-        superviseId unique: false, nullable: true, blank: true, maxSize: 4
-        endTime unique: false, nullable: true, blank: true
-        superviseLevel unique: false, nullable: true, blank: true,maxSize: 10
-        supervisePeople unique: false, nullable: true, blank: true, maxSize: 16
-        supervisePhone unique: false, nullable: true, blank: true, maxSize: 20
-        superviseEmail unique: false, nullable: true, blank: true, maxSize: 30
-
-
+        frameNo unique: true, blank: false, maxSize: 17
+        carLicenseNo blank: false, maxSize: 8
+        carColor blank: false, maxSize: 10
+        warningSource blank: false, inList: [1, 2, 3, 9]
+        warningType blank: false, maxSize: 50
+        warningTime blank: false
+        warningTimes nullable: false, blank: false, maxSize: 10
+        superviseId nullable: true, maxSize: 4
+        endTime nullable: true
+        superviseLevel nullable: true, maxSize: 10, inList: [0, 1]
+        supervisePeople nullable: true, maxSize: 16
+        supervisePhone nullable: true, maxSize: 20
+        superviseEmail nullable: true, maxSize: 30
     }
 }

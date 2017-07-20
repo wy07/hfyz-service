@@ -10,11 +10,7 @@ class WarningController implements ControllerHelper {
     def warningService
 
     def list() {
-        renderSuccessesWithMap([warningList: warningService.getWarningmList()])
-    }
-
-    def search() {
-        renderSuccessesWithMap([warningList: warningService.getWarningByCondition(request.JSON.frameNo, request.JSON.carLicenseNo, request.JSON.warningType)])
+        renderSuccessesWithMap([warningList: warningService.getWarningList(request.JSON.max, request.JSON.offset, request.JSON.frameNo, request.JSON.carLicenseNo)])
     }
 
     def view() {
