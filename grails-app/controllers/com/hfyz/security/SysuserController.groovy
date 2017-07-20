@@ -87,7 +87,7 @@ class SysuserController implements ControllerHelper {
     def changePwd() {
         def currentUser = getCurrentUser()
         loginService.changePwd(currentUser, request.JSON.originPwd, request.JSON.newPwd)
-        renderSuccessesWithMap([message: message(code: 'password.updateSuccess.message', default: '密码修改成功!')])
+        renderSuccessesWithMap([message: '密码修改成功!'])
     }
 
     private withUser(Long id, Closure c) {
