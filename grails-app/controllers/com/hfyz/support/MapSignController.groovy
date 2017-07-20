@@ -13,7 +13,7 @@ class MapSignController implements ControllerHelper{
              , mapSignType: obj.mapSignType.name
              , longitude: obj.longitude
              , latitude: obj.latitude
-             , display: obj.display]
+             , display: obj.display ? '显示':'隐藏']
         }
         renderSuccessesWithMap([mapSignList: mapSignList, total: MapSign.count()])
     }
