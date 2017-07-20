@@ -1,5 +1,7 @@
 package com.hfyz.support
 
+import com.commons.utils.PageUtils
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 import com.commons.utils.ControllerHelper
@@ -11,13 +13,14 @@ class OrganizationController implements ControllerHelper{
         renderSuccessesWithMap([orgList: supportService.getOrgList()])
     }
     def listForSelect(){
-        println params.roles
+        println request.JSON.roles
 
-        renderSuccessesWithMap([orgList: supportService.getOrgForSelect(params.roles)])
+        renderSuccessesWithMap([orgList: supportService.getOrgForSelect(request.JSON.roles)])
     }
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Organization.list(params), model:[organizationCount: Organization.count()]
+    def index() {
+        int max = PageUtils.getMax(request.JSON.max,10,100)
+        int offset = PageUtils.getOffset(request.JSON.offset)
+        respond Organization.list([max:max,offset:offset]), model:[organizationCount: Organization.count()]
     }
 
     def show(Organization organization) {
