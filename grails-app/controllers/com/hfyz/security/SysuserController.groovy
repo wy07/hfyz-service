@@ -5,17 +5,23 @@ import com.commons.utils.SQLHelper
 import grails.converters.JSON
 import java.text.SimpleDateFormat
 import com.commons.utils.ControllerHelper
+//import com.commons.utils.ValidationUtils
 
 class SysuserController implements ControllerHelper{
     def dataSource
     def roleService
     def springSecurityService
+    def defaultPassword = '666666'
     def list() {
         renderSuccessesWithMap([userList: roleService.getUserList(NumberUtils.toInteger(request.JSON.operatorId))])
     }
    def save(){
        println request.JSON
+       println '=========================save=======request.JSON=================='
        User user = new User(request.JSON)
+//       user.salt = ValidationUtils.secureRandomSalt
+       user.salt = '123456'
+       user.passwordHash = defaultPassword
        user.save(flush: true, failOnError: true)
        if(request.JSON.roles){
             Role.findAllByIdInList(request.JSON.roles).eachWithIndex{ role,index->
