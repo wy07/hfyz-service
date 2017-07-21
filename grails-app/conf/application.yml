@@ -1,8 +1,10 @@
 #zookeeper.ip: 10.37.8.163:2181
 zookeeper.ip: localhost:2181
 group.id: location
-kafka.consumer.topic: ygc-location
-kafka.consumer.partitions: 24
+kafka.consumer.topic.location: ygc-location
+kafka.consumer.topic.warn: ygc-warn
+kafka.consumer.partitions.location: 24
+kafka.consumer.partitions.warn: 24
 
 
 ---

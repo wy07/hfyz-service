@@ -1,5 +1,7 @@
 package hfyz
 
+import com.commons.utils.KafkaDataUtils
+import com.commons.utils.LogUtils
 import grails.core.GrailsApplication
 import com.commons.support.CustomKafkaConsumer
 
@@ -12,11 +14,20 @@ class BootStrap {
 
         String zooKeeper = grailsApplication.config.zookeeper.ip
         String groupId = grailsApplication.config.group.id
-        String topic = grailsApplication.config.kafka.consumer.topic
-        def partitions = grailsApplication.config.kafka.consumer.partitions as int
+        String topicLocation = grailsApplication.config.kafka.consumer.topic.location
+        def partitionsLocation = grailsApplication.config.kafka.consumer.partitions.location as int
+        String topicWarn = grailsApplication.config.kafka.consumer.topic.warn
+        def partitionsWarn = grailsApplication.config.kafka.consumer.partitions.warn as int
 
-        CustomKafkaConsumer example = new CustomKafkaConsumer(zooKeeper, groupId, topic)
-        example.run(partitions)
+        try{
+            CustomKafkaConsumer locationConsumer = new CustomKafkaConsumer(zooKeeper, groupId, topicLocation)
+            locationConsumer.run(partitionsLocation,'location')
+
+            CustomKafkaConsumer warnConsumer = new CustomKafkaConsumer(zooKeeper, groupId, topicWarn)
+            warnConsumer.run(partitionsWarn,'warn')
+        }catch (Exception e){
+            LogUtils.debug(this.class, e.message)
+        }
     }
     def destroy = {
     }
