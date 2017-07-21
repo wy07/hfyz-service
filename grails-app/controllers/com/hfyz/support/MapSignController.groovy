@@ -30,8 +30,8 @@ class MapSignController implements ControllerHelper{
             if (request.JSON.display != mapSignInstance.display) {
                 mapSignInstance.display = request.JSON.display
                 mapSignInstance.save(flush: true, failOnError: true)
-                renderSuccess()
             }
+            renderSuccess()
         }
     }
     private withMapSign(Long id, Closure c) {
