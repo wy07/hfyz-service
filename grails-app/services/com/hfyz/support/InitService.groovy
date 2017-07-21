@@ -1,5 +1,12 @@
 package com.hfyz.support
 
+import com.hfyz.people.PeopleBasicInfo
+import com.hfyz.people.WorkerCheckMember
+import com.hfyz.people.WorkerCoach
+import com.hfyz.people.WorkerDriver
+import com.hfyz.people.WorkerManager
+import com.hfyz.people.WorkerTechnology
+import com.hfyz.people.WorkerWaiter
 import com.hfyz.platform.PlatformManage
 import com.hfyz.car.CarBasicInfo
 import com.hfyz.car.CarBasicOperate
@@ -63,6 +70,14 @@ class InitService {
         new Menu(name: '实时监控', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '历史轨迹', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 //        new Menu(name: '其他地图', code: 'otherMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+
+        new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+
+
+        new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
+        new PlatformManage(ip: '61.123.1.15', port: '2001', name: '合肥客运平台', code: 'K002', contactName: '王平', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
+
         new Menu(name: '报警信息', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Warning(frameNo: 'LDC92839882929345', carLicenseNo: '皖A-2329J', carColor: '白色', warningSource: 1, warningType: '驾驶员身份验证失败', warningTime: new Date(), warningTimes: 1).save(flush: true)
         new Warning(frameNo: 'LDC32552378754654', carLicenseNo: '皖A-2934W', carColor: '黑色', warningSource: 2, warningType: '疲劳驾驶', warningTime: new Date(), warningTimes: 1).save(flush: true)
@@ -80,6 +95,16 @@ class InitService {
         new Warning(frameNo: 'WQW32534626547688', carLicenseNo: '皖A-R3423', carColor: '红色', warningSource: 1, warningType: '驾驶员身份验证失败', warningTime: new Date(), warningTimes: 1).save(flush: true)
         new Warning(frameNo: 'LCD23532453467573', carLicenseNo: '皖A-H3432', carColor: '白色', warningSource: 3, warningType: '疲劳驾驶', warningTime: new Date(), warningTimes: 1).save(flush: true)
         new Warning(frameNo: 'DEQ23525446672457', carLicenseNo: '皖A-GF333', carColor: '红色', warningSource: 9, warningType: '车辆非法点火', warningTime: new Date(), warningTimes: 1).save(flush: true)
+
+
+        new PeopleBasicInfo(name: '张敏', gender: '女', IDCardNo: '34212519870314673x', picture: '', nation: '汉', nativePlace: '安徽合肥', phoneNo: '15105512743', address: '', email: 'test1@163.com', postCode: '340101', educationLevel: '大专', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
+        new PeopleBasicInfo(name: '吴珊', gender: '男', IDCardNo: '34132519870314222x', picture: '', nation: '汉', nativePlace: '安徽巢湖', phoneNo: '15703272743', address: '', email: 'test2@163.com', postCode: '340001', educationLevel: '本科', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
+        new WorkerCheckMember(IDCardNo: '34212519870314673x', workLicenseType: '货运', workLicenseNo: 'AH2016', workLicenseGrantTime: new Date(), workLicenseGetTime: new Date(), endTime: new Date(), licenseGrantOrg: '合肥XXX运输有限公司', licenseSituation: '可用', licenseChangeTimes: 2, trainTimes: 2, checkType: '1').save(flush: true)
+        new WorkerManager(IDCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '押运装卸', ownerName: '合肥市汽车客运XXX', driveCarType: '中小型客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), licenseGrantOrg: '合肥市交通xxx').save(flush: true)
+        new WorkerTechnology(IDCardNo: '34212519870314673x', ownerName: '合肥市汽车客运XXX').save(flush: true)
+        new WorkerWaiter(IDCardNo: '34132519870314222x', jobName: '后勤管理', jobLicenseNo: 'xxxx', grantTime: new Date(), beginWorkTime: new Date()).save(flush: true)
+        new WorkerCoach(IDCardNo: '34212519870314673x', workLicenseType: '教练', workLicenseNo: 'CAH1234', workLicenseGetTime: new Date(), workLicenseGrantTime: new Date(), endTime: new Date(), driveLicenseNo: '34212519870314673x', driveCarType: '小汽车', driveLicenseGetTime: new Date(), licenseGrantOrga: '合肥市新亚驾校', licenseSituation: '可用', workSituation: '中级教练', ownerName: '合肥市新亚驾校', businessPermitCharacter: '3', businessPermitNo: '34xxx', changeTimes: 0, trainTimes: 1, inspectDealSituation: '', teachType: 'C照', driveLicenseSituation: '可用').save(flush: true)
+        new WorkerDriver(IDCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '驾驶员', ownerName: '合肥市汽车客运XXX', driveCarType: '客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), driveLicenseNo: '34132519870314222x', businessPermitCharacter: 'x').save(flush: true)
 
         def infoManage = new Menu(name: '信息管理', code: 'root-infomanage', icon: 'fa-laptop', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
