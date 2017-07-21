@@ -35,12 +35,7 @@ class PlatformManageController implements ControllerHelper {
                                                , name        : platform.name
                                                , code        : platform.code
                                                , contactName : platform.contactName
-                                               , contactPhone: platform.contactPhone
-                                               , carNum      : platform.carNum
-                                               , onLineNum   : platform.onLineNum
-                                               , allOnLineNum: platform.allOnLineNum
-                                               , illegalNum  : platform.illegalNum
-                                               , outLineNum  : platform.outLineNum]])
+                                               , contactPhone: platform.contactPhone]])
 
         }
     }
