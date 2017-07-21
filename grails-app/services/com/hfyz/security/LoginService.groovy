@@ -8,6 +8,7 @@ import com.commons.exception.ParamsIllegalException
 import com.commons.utils.ValidationUtils
 
 
+
 @Transactional
 class LoginService {
 
@@ -21,13 +22,6 @@ class LoginService {
         return authentication.getPrincipal()
     }
 
-    def getCurrentUserId(Long userId) {
-        User user = userId ? User.get(userId) : null
-        if (!user) {
-            throw new RecordNotFoundException()
-        }
-        user
-    }
 
     def changePwd(User user, String originPwd, String newPwd) {
         if (!user) {
@@ -44,4 +38,6 @@ class LoginService {
         user.salt = ValidationUtils.secureRandomSalt
         user.save(flush: true, failOnError: true)
     }
+
+
 }
