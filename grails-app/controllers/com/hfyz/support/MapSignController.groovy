@@ -13,7 +13,7 @@ class MapSignController implements ControllerHelper{
              , mapSignType: obj.mapSignType.name
              , longitude: obj.longitude
              , latitude: obj.latitude
-             , display: obj.display ? '显示':'隐藏']
+             , display: obj.display ]
         }
         renderSuccessesWithMap([mapSignList: mapSignList, total: MapSign.count()])
     }
@@ -27,9 +27,11 @@ class MapSignController implements ControllerHelper{
 
     def changeDisplay() {
         withMapSign(params.long('id')) { mapSignInstance ->
-            mapSignInstance.properties = request.JSON
-            mapSignInstance.save(flush: true, failOnError: true)
-            renderSuccess()
+            if (request.JSON.display != mapSignInstance.display) {
+                mapSignInstance.display = request.JSON.display
+                mapSignInstance.save(flush: true, failOnError: true)
+                renderSuccess()
+            }
         }
     }
     private withMapSign(Long id, Closure c) {
