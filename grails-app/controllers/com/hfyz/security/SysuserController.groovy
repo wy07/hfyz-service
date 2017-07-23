@@ -17,8 +17,6 @@ class SysuserController implements ControllerHelper {
         renderSuccessesWithMap([userList: roleService.getUserList(NumberUtils.toInteger(request.JSON.operatorId))])
     }
    def save(){
-       println request.JSON
-       println '=========================save=======request.JSON=================='
        User user = new User(request.JSON)
        user.salt = ValidationUtils.secureRandomSalt
        user.passwordHash = defaultPassword
