@@ -53,12 +53,7 @@ trait ControllerHelper {
         def map = [errors: [msg ?: '请求参数不合法，请查证！']]
         render map as JSON
     }
-
-    def renderDomainInvalidatedErrorMsg(msg = null) {
-        response.setStatus(400)
-        def map = [errors: [msg ?: '请求错误，请查证！']]
-        render map as JSON
-    }
+    
 
     def renderValidationErrors(Errors errors) {
         response.setStatus(400)
