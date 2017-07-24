@@ -12,14 +12,14 @@ class SysuserController implements ControllerHelper {
     def roleService
     def springSecurityService
     def loginService
-    def defaultPassword = '666666'
+    def DEFAULT_PASSWORD = '666666'
     def list() {
         renderSuccessesWithMap([userList: roleService.getUserList(NumberUtils.toInteger(request.JSON.operatorId))])
     }
    def save(){
        User user = new User(request.JSON)
        user.salt = ValidationUtils.secureRandomSalt
-       user.passwordHash = defaultPassword
+       user.passwordHash = DEFAULT_PASSWORD
        user.save(flush: true, failOnError: true)
        if(request.JSON.roles){
             Role.findAllByIdInList(request.JSON.roles).eachWithIndex{ role,index->
