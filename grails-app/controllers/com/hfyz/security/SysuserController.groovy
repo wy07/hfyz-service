@@ -12,7 +12,7 @@ class SysuserController implements ControllerHelper {
     def roleService
     def springSecurityService
     def UserService
-    def static final DEFAULT_PASSWORD = '666666'
+    static final String DEFAULT_PASSWORD = '666666'
 
     def list() {
         renderSuccessesWithMap([userList: roleService.getUserList(NumberUtils.toInteger(request.JSON.operatorId))])
