@@ -1,5 +1,6 @@
 package com.commons.utils
 
+import com.commons.exception.ParamsIllegalException
 import com.hfyz.security.User
 import grails.converters.JSON
 import grails.validation.ValidationException
@@ -52,6 +53,7 @@ trait ControllerHelper {
         def map = [errors: [msg ?: '请求参数不合法，请查证！']]
         render map as JSON
     }
+    
 
     def renderValidationErrors(Errors errors) {
         response.setStatus(400)
@@ -66,11 +68,15 @@ trait ControllerHelper {
     }
 
     def handleException(Exception e) {
-//        log.error(this,e)
         println e.printStackTrace()
         renderErrorMsg('系统忙，请稍后再试!')
-
     }
+
+    def handleParamsIllegalException(ParamsIllegalException e) {
+        renderParamsIllegalErrorMsg(e.message)
+    }
+
+
 
     def handleValidationException(ValidationException e) {
         renderValidationErrors(e.errors)
