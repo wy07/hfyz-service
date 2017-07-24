@@ -1,6 +1,8 @@
 package com.commons.support
 
+import com.commons.utils.KafkaDataUtils
 import com.commons.utils.LogUtils
+import groovy.json.JsonSlurper
 
 //import com.commons.utils.ConsumerTest
 import kafka.consumer.ConsumerConfig
@@ -35,7 +37,7 @@ class CustomKafkaConsumer {
         }
     }
 
-    void run(int numThreads) {
+    void run(int numThreads, String topicName) {
         Map<String, Integer> topicCountMap = new HashMap<String, Integer>()
         topicCountMap.put(topic, new Integer(numThreads))
         Map<String, List<KafkaStream<byte[], byte[]>>> consumerMap = consumer.createMessageStreams(topicCountMap)
@@ -47,7 +49,7 @@ class CustomKafkaConsumer {
         // now create an object to consume the messages
         int threadNumber = 0
         for (final KafkaStream stream : streams) {
-            executor.submit(new Consumer(stream, threadNumber))
+            executor.submit(new Consumer(stream, threadNumber, topicName))
             threadNumber++
         }
     }
@@ -64,39 +66,28 @@ class CustomKafkaConsumer {
     }
 }
 
-//class Consumer implements Runnable {
-//    private KafkaStream stream
-//    private int threadNumber
-//
-//    Consumer(KafkaStream stream, int threadNumber) {
-//        threadNumber = threadNumber
-//        stream = stream
-//    }
-//
-//    void run() {
-//        ConsumerIterator<byte[], byte[]> it = stream.iterator()
-//        while (it.hasNext()){
-//            println "Thread " + threadNumber + ": " + new String(it.next().message())
-//        }
-//        println "Shutting down Thread: " + threadNumber
-//    }
-//}
-
 class Consumer implements Runnable {
     private KafkaStream m_stream
     private int m_threadNumber
+    private String m_topicName
 
-    Consumer(KafkaStream stream, int threadNumber) {
+    Consumer(KafkaStream stream, int threadNumber, String topicName) {
         m_threadNumber = threadNumber
         m_stream = stream
+        m_topicName = topicName
     }
 
     void run() {
-        ConsumerIterator<byte[], byte[]> it = m_stream.iterator()
-        while (it.hasNext()){
-            LogUtils.debug(this.class, new String(it.next().message()))
-//            println "Thread " + m_threadNumber + ": " + new String(it.next().message())
+        ConsumerIterator<byte[], byte[]> consumerMap = m_stream.iterator()
+        while (consumerMap.hasNext()) {
+            def data = new String(consumerMap.next().message())
+            try{
+                KafkaDataUtils.set(m_topicName, data)
+                LogUtils.debug(this.class, KafkaDataUtils.get(m_topicName).toString())
+                LogUtils.debug(this.class, data)
+            }catch (Exception e){
+                LogUtils.debug(this.class, e.message)
+            }
         }
-        println "Shutting down Thread: " + m_threadNumber
     }
 }
