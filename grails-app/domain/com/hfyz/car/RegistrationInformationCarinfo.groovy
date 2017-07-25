@@ -9,6 +9,7 @@ class RegistrationInformationCarinfo {
     String terminalModelType   //车载终端型号
     String terminalId          //车载终端编号，大写字母和数字组成
     String terminalSimcode     //车载终端SIM卡电话号码
+    String frameNo     //车架号
 
     static constraints = {
     }
