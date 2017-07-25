@@ -25,7 +25,7 @@ class InitService {
         def rootPermission = new PermissionGroup(name: '所有权限', permissions: '*:*').save(flush: true)
         def adminRole = new Role(authority: 'ROLE_ADMIN', name: '平台管理员', permissionGroups: [rootPermission]).save()
 
-        def testUser = new User(username: 'admin', passwordHash: 'admin123',salt:User.getSecureRandomSalt(), name: '管理员').save(failOnError:true)
+        def testUser = new User(username: 'admin', passwordHash: 'admin123', salt: User.getSecureRandomSalt(), name: '管理员').save(failOnError: true)
 
         UserRole.create testUser, adminRole
 
@@ -33,7 +33,7 @@ class InitService {
             it.flush()
             it.clear()
         }
-            
+
         new Menu(name: '关闭全部', code: 'closeall', position: 'TOP_BAR', parent: null).save(flush: true)
         def topbar = new Menu(name: '个人中心', code: 'profile', style: 'hoverdown', position: 'TOP_BAR', parent: null).save(flush: true)
         new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
@@ -258,34 +258,34 @@ class InitService {
         def platForm = new Menu(name: '查岗', code: 'root-pluponForm', icon: 'fa-cog', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: platForm, position: 'SIDE_BAR').save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 30*1000), responseContent: '5', responseTime: 30).save(flush: true)
+                operator: testUser, responseDate: new Date(new Date().getTime() + 30 * 1000), responseContent: '5', responseTime: 30).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '9578', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '2464', question: '10-1=?', answer: '9', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 200*1000),
+                operator: testUser, responseDate: new Date(new Date().getTime() + 200 * 1000),
                 responseContent: '9', responseTime: 200).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '1934', question: '2x3=?', answer: '6', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 20*1000),
+                operator: testUser, responseDate: new Date(new Date().getTime() + 20 * 1000),
                 responseContent: '6', responseTime: 20).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '6427', question: '10÷5=?', answer: '2', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 76*1000),
+                operator: testUser, responseDate: new Date(new Date().getTime() + 76 * 1000),
                 responseContent: '2', responseTime: 76).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '7294', question: '1x10=?', answer: '10', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '6729', question: '2x2=?', answer: '4', responsed: true,
-                responseDate: new Date(new Date().getTime() + 100*1000),
+                responseDate: new Date(new Date().getTime() + 100 * 1000),
                 responseContent: '4', responseTime: 100).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '1759', question: '1+8=?', answer: '9', responsed: true,
-                responseDate: new Date(new Date().getTime() + 121*1000),
+                responseDate: new Date(new Date().getTime() + 121 * 1000),
                 responseContent: '9', responseTime: 121).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '7394', question: '1x10=?', answer: '10', responsed: false,
                 operator: testUser,).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 190*1000),
+                operator: testUser, responseDate: new Date(new Date().getTime() + 190 * 1000),
                 responseContent: '7', responseTime: 190).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '3427', question: '12÷3=?', answer: '4', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 75*1000),
+                operator: testUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
                 responseContent: '4', responseTime: 75).save(flush: true)
 
-        new Menu(name: '平台配置管理', code: 'platformManage', icon: 'fa-columns', parent: platForm, position: 'SIDE_BAR').save(flush: true)
+//        new Menu(name: '平台配置管理', code: 'platformManage', icon: 'fa-columns', parent: platForm, position: 'SIDE_BAR').save(flush: true)
         new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
         new PlatformManage(ip: '61.123.1.15', port: '2001', name: '合肥客运平台', code: 'K002', contactName: '王平', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
         new PlatformManage(ip: '62.23.1.15', port: '2011', name: '合肥汽车客运有限公司', code: 'K003', contactName: '张敏', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
@@ -302,29 +302,29 @@ class InitService {
         new PlatformManage(ip: '614.17.1.42', port: '2301', name: '平安四方有限公司', code: 'K502', contactName: '郑磊国', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
 
         new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        def MapSignType1 = new MapSignType(name: "国企", codeNum: "100", parent: null).save(flush:true)
-        def childMapType1 = new MapSignType(name: "银行部门", codeNum: "101", parent: MapSignType1).save(flush:true)
+        def MapSignType1 = new MapSignType(name: "国企", codeNum: "100", parent: null).save(flush: true)
+        def childMapType1 = new MapSignType(name: "银行部门", codeNum: "101", parent: MapSignType1).save(flush: true)
         new MapSign(name: '中国农业银行', mapSignType: childMapType1, longitude: 110.4578914, latitude: 30.7542289, display: true).save(flush: true)
         new MapSign(name: '中国工商银行', mapSignType: childMapType1, longitude: 112.6458796, latitude: 28.1578542, display: false).save(flush: true)
         new MapSign(name: '中国建设银行', mapSignType: childMapType1, longitude: 135.7851562, latitude: 19.9425723, display: true).save(flush: true)
-        def childMapType2 = new MapSignType(name: "政府部门", codeNum: "102", parent: MapSignType1).save(flush:true)
+        def childMapType2 = new MapSignType(name: "政府部门", codeNum: "102", parent: MapSignType1).save(flush: true)
         new MapSign(name: '税务局', mapSignType: childMapType2, longitude: 120.4578914, latitude: 27.7542289, display: true).save(flush: true)
         new MapSign(name: '法院', mapSignType: childMapType2, longitude: 127.6458796, latitude: 39.1578542, display: true).save(flush: true)
         new MapSign(name: '教育局', mapSignType: childMapType2, longitude: 119.7851562, latitude: 25.9425723, display: true).save(flush: true)
-        def childMapType3 = new MapSignType(name: "能源部门", codeNum: "103", parent: MapSignType1).save(flush:true)
+        def childMapType3 = new MapSignType(name: "能源部门", codeNum: "103", parent: MapSignType1).save(flush: true)
         new MapSign(name: '中国石油', mapSignType: childMapType3, longitude: 135.8546758, latitude: 28.6497285, display: true).save(flush: true)
         new MapSign(name: '中国电网', mapSignType: childMapType3, longitude: 109.7548964, latitude: 50.1785436, display: false).save(flush: true)
         new MapSign(name: '中国矿业', mapSignType: childMapType3, longitude: 119.3586457, latitude: 32.9427851, display: true).save(flush: true)
 
-        def MapSignType2 = new MapSignType(name: "私企", codeNum: "200", parent: null).save(flush:true)
-        def childMapType4 = new MapSignType(name: "有限公司", codeNum: "201", parent: MapSignType2).save(flush:true)
+        def MapSignType2 = new MapSignType(name: "私企", codeNum: "200", parent: null).save(flush: true)
+        def childMapType4 = new MapSignType(name: "有限公司", codeNum: "201", parent: MapSignType2).save(flush: true)
         new MapSign(name: '兴乐集团有限公司', mapSignType: childMapType4, longitude: 100.4578914, latitude: 30.1937586, display: true).save(flush: true)
         new MapSign(name: '星月集团有限公司', mapSignType: childMapType4, longitude: 117.6458796, latitude: 28.1578572, display: true).save(flush: true)
         new MapSign(name: '森马企业有限公司', mapSignType: childMapType4, longitude: 135.4824311, latitude: 19.7896541, display: false).save(flush: true)
         new MapSign(name: '兴乐集团有限公司', mapSignType: childMapType4, longitude: 110.9435725, latitude: 30.3571598, display: true).save(flush: true)
         new MapSign(name: '苏宁电器连锁集团股份有限公司', mapSignType: childMapType4, longitude: 114.6458796, latitude: 29.1578542, display: true).save(flush: true)
         new MapSign(name: '澄星实业集团公司', mapSignType: childMapType4, longitude: 125.7851562, latitude: 30.9425723, display: true).save(flush: true)
-        def childMapType5 = new MapSignType(name: "集团", codeNum: "202", parent: MapSignType2).save(flush:true)
+        def childMapType5 = new MapSignType(name: "集团", codeNum: "202", parent: MapSignType2).save(flush: true)
         new MapSign(name: '正泰集团', mapSignType: childMapType5, longitude: 100.1578914, latitude: 31.1937586, display: false).save(flush: true)
         new MapSign(name: '新希望集团', mapSignType: childMapType5, longitude: 118.6458796, latitude: 19.1578572, display: false).save(flush: true)
         new MapSign(name: '报喜鸟集团', mapSignType: childMapType5, longitude: 135.8424311, latitude: 29.7896541, display: true).save(flush: true)
@@ -332,7 +332,7 @@ class InitService {
 
         25.times { val ->
             new RegistrationInformationCarinfo(
-                      vehicleNo: "陕A-CK" + "${val}".padLeft(4, '0')
+                    vehicleNo: "陕A-CK" + "${val}".padLeft(4, '0')
                     , vehicleColor: '白色'
                     , plateformId: "plateform${val}"
                     , producerId: "producer${val}"
@@ -340,6 +340,42 @@ class InitService {
                     , terminalId: "terminal${val}"
                     , terminalSimcode: "136458736" + "${val}".padLeft(2, '0')
                     , frameNo: "frameNo${val}").save(flush: true)
-            }
-       }
+        }
+        initAlarmType()
+    }
+
+
+    private  initAlarmType(){
+
+        new AlarmType(name: "超速驾驶", codeNum: "101", parent: null).save(flush: true)
+        new AlarmType(name: "疲劳驾驶", codeNum: "102", parent: null).save(flush: true)
+        new AlarmType(name: "偏离路线", codeNum: "103", parent: null).save(flush: true)
+        new AlarmType(name: "企业营运资质到期", codeNum: "201", parent: null).save(flush: true)
+        new AlarmType(name: "企业营运资质过期", codeNum: "202", parent: null).save(flush: true)
+        new AlarmType(name: "企业营运资质锁定", codeNum: "203", parent: null).save(flush: true)
+        new AlarmType(name: "专职监控人员配置不达标", codeNum: "204", parent: null).save(flush: true)
+        new AlarmType(name: "运营企业内部管理制度未上传", codeNum: "205", parent: null).save(flush: true)
+        new AlarmType(name: "车辆营运资格到期", codeNum: "206", parent: null).save(flush: true)
+        new AlarmType(name: "车辆营运资格过期", codeNum: "207", parent: null).save(flush: true)
+        new AlarmType(name: "车辆营运资格锁定", codeNum: "208", parent: null).save(flush: true)
+        new AlarmType(name: "从业人员营运资格到期", codeNum: "209", parent: null).save(flush: true)
+        new AlarmType(name: "从业人员营运资格过期", codeNum: "210", parent: null).save(flush: true)
+        new AlarmType(name: "从业人员营运资格锁定", codeNum: "211", parent: null).save(flush: true)
+        new AlarmType(name: "从业人员营运资格和企业申请的运营服务范围不一致", codeNum: "212", parent: null).save(flush: true)
+        new AlarmType(name: "营运车辆和从业人员不匹配", codeNum: "213", parent: null).save(flush: true)
+        new AlarmType(name: "平台查岗未响应", codeNum: "214", parent: null).save(flush: true)
+        new AlarmType(name: "车辆超时未上报数据", codeNum: "215", parent: null).save(flush: true)
+        new AlarmType(name: "车辆离线", codeNum: "216", parent: null).save(flush: true)
+        new AlarmType(name: "凌晨2~5点未停运", codeNum: "217", parent: null).save(flush: true)
+        new AlarmType(name: "车辆超员/超载", codeNum: "218", parent: null).save(flush: true)
+        new AlarmType(name: "入网率不达标", codeNum: "219", parent: null).save(flush: true)
+        new AlarmType(name: "上线率不达标", codeNum: "220", parent: null).save(flush: true)
+        new AlarmType(name: "数据不合格率不达标", codeNum: "221", parent: null).save(flush: true)
+        new AlarmType(name: "查岗响应率不达标", codeNum: "222", parent: null).save(flush: true)
+        new AlarmType(name: "车辆在线时长不达标", codeNum: "223", parent: null).save(flush: true)
+        new AlarmType(name: "超速车辆率不达标", codeNum: "224", parent: null).save(flush: true)
+        new AlarmType(name: "超速车辆处理率不达标", codeNum: "225", parent: null).save(flush: true)
+        new AlarmType(name: "疲劳驾驶车辆率不达标", codeNum: "226", parent: null).save(flush: true)
+        new AlarmType(name: "疲劳驾驶处理率不达标", codeNum: "227", parent: null).save(flush: true)
+    }
 }
