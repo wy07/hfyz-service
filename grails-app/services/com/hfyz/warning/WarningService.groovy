@@ -21,7 +21,7 @@ class WarningService {
              , carColor       : it.carColor
              , warningSource  : getWarningSourceName(it.warningSource)
              , warningType    : it.warningType
-             , warningTime    : it.warningTime
+             , warningTime    : it.warningTime?.format("yyyy-MM-dd HH:mm:ss")
              , warningTimes   : it.warningTimes
              , superviseId    : it.superviseId
              , endTime        : it.endTime

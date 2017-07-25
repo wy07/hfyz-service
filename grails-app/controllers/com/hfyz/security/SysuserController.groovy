@@ -5,23 +5,25 @@ import com.commons.utils.SQLHelper
 import grails.converters.JSON
 import java.text.SimpleDateFormat
 import com.commons.utils.ControllerHelper
+import com.commons.utils.ValidationUtils
 
 class SysuserController implements ControllerHelper {
     def dataSource
     def roleService
     def springSecurityService
-    def loginService
+    def UserService
+    static final String DEFAULT_PASSWORD = '666666'
 
     def list() {
         renderSuccessesWithMap([userList: roleService.getUserList(NumberUtils.toInteger(request.JSON.operatorId))])
     }
-
-    def save() {
-        println request.JSON
-        User user = new User(request.JSON)
-        user.save(flush: true, failOnError: true)
-        if (request.JSON.roles) {
-            Role.findAllByIdInList(request.JSON.roles).eachWithIndex { role, index ->
+   def save(){
+       User user = new User(request.JSON)
+       user.salt = ValidationUtils.secureRandomSalt
+       user.passwordHash = DEFAULT_PASSWORD
+       user.save(flush: true, failOnError: true)
+       if(request.JSON.roles){
+            Role.findAllByIdInList(request.JSON.roles).eachWithIndex{ role,index->
                 UserRole.create user, role
                 UserRole.withSession {
                     it.flush()
@@ -84,9 +86,20 @@ class SysuserController implements ControllerHelper {
         }
     }
 
+    def resetPassword() {
+        def userInstance = request.JSON.id ? User.findById(request.JSON.id) : null
+        if (!userInstance) {
+            renderNoTFoundError()
+            return
+        }
+
+        def newPassword = UserService.resetPassword(userInstance)
+        renderSuccessesWithMap([newPassword: newPassword])
+    }
+
     def changePwd() {
         def currentUser = getCurrentUser()
-        loginService.changePwd(currentUser, request.JSON.originPwd, request.JSON.newPwd)
+        UserService.changePwd(currentUser, request.JSON.originPwd, request.JSON.newPwd)
         renderSuccessesWithMap([message: '密码修改成功!'])
     }
 
