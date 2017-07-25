@@ -329,5 +329,41 @@ class InitService {
         new MapSign(name: '报喜鸟集团', mapSignType: childMapType5, longitude: 135.8424311, latitude: 29.7896541, display: true).save(flush: true)
         new MapSign(name: '金州集团', mapSignType: childMapType5, longitude: 111.9435725, latitude: 33.3571598, display: true).save(flush: true)
 
+        initAlarmType()
+    }
+
+
+    private  initAlarmType(){
+
+        new AlarmType(name: "超速驾驶", codeNum: "101", parent: null).save(flush: true)
+        new AlarmType(name: "疲劳驾驶", codeNum: "102", parent: null).save(flush: true)
+        new AlarmType(name: "偏离路线", codeNum: "103", parent: null).save(flush: true)
+        new AlarmType(name: "企业营运资质到期", codeNum: "201", parent: null).save(flush: true)
+        new AlarmType(name: "企业营运资质过期", codeNum: "202", parent: null).save(flush: true)
+        new AlarmType(name: "企业营运资质锁定", codeNum: "203", parent: null).save(flush: true)
+        new AlarmType(name: "专职监控人员配置不达标", codeNum: "204", parent: null).save(flush: true)
+        new AlarmType(name: "运营企业内部管理制度未上传", codeNum: "205", parent: null).save(flush: true)
+        new AlarmType(name: "车辆营运资格到期", codeNum: "206", parent: null).save(flush: true)
+        new AlarmType(name: "车辆营运资格过期", codeNum: "207", parent: null).save(flush: true)
+        new AlarmType(name: "车辆营运资格锁定", codeNum: "208", parent: null).save(flush: true)
+        new AlarmType(name: "从业人员营运资格到期", codeNum: "209", parent: null).save(flush: true)
+        new AlarmType(name: "从业人员营运资格过期", codeNum: "210", parent: null).save(flush: true)
+        new AlarmType(name: "从业人员营运资格锁定", codeNum: "211", parent: null).save(flush: true)
+        new AlarmType(name: "从业人员营运资格和企业申请的运营服务范围不一致", codeNum: "212", parent: null).save(flush: true)
+        new AlarmType(name: "营运车辆和从业人员不匹配", codeNum: "213", parent: null).save(flush: true)
+        new AlarmType(name: "平台查岗未响应", codeNum: "214", parent: null).save(flush: true)
+        new AlarmType(name: "车辆超时未上报数据", codeNum: "215", parent: null).save(flush: true)
+        new AlarmType(name: "车辆离线", codeNum: "216", parent: null).save(flush: true)
+        new AlarmType(name: "凌晨2~5点未停运", codeNum: "217", parent: null).save(flush: true)
+        new AlarmType(name: "车辆超员/超载", codeNum: "218", parent: null).save(flush: true)
+        new AlarmType(name: "入网率不达标", codeNum: "219", parent: null).save(flush: true)
+        new AlarmType(name: "上线率不达标", codeNum: "220", parent: null).save(flush: true)
+        new AlarmType(name: "数据不合格率不达标", codeNum: "221", parent: null).save(flush: true)
+        new AlarmType(name: "查岗响应率不达标", codeNum: "222", parent: null).save(flush: true)
+        new AlarmType(name: "车辆在线时长不达标", codeNum: "223", parent: null).save(flush: true)
+        new AlarmType(name: "超速车辆率不达标", codeNum: "224", parent: null).save(flush: true)
+        new AlarmType(name: "超速车辆处理率不达标", codeNum: "225", parent: null).save(flush: true)
+        new AlarmType(name: "疲劳驾驶车辆率不达标", codeNum: "226", parent: null).save(flush: true)
+        new AlarmType(name: "疲劳驾驶处理率不达标", codeNum: "227", parent: null).save(flush: true)
     }
 }
