@@ -3,7 +3,7 @@ package com.hfyz.people
  * 从业人员--营运驾驶员
  */
 class WorkerDriver {
-    String IDCardNo //身份证号
+    String idCardNo //身份证号
     String workLicenseType //从业资格类别
     String workLicenseNo //从业资格证号
     Date workLicenseGetTime //从业资格初领时间
@@ -24,21 +24,21 @@ class WorkerDriver {
     Integer trafficAccidentRecordNo //交通事故次数
 
     static constraints = {
-        "IDCardNo" maxSize: 18, unique: true
-        workLicenseType maxSize: 30, nullable: true, blank: true
-        workLicenseNo maxSize: 12, nullable: true, blank: true
+        idCardNo maxSize: 18, unique: true
+        workLicenseType maxSize: 30, nullable: true, blank: false
+        workLicenseNo maxSize: 12, nullable: true, blank: false
         workLicenseGetTime nullable: true
         workLicenseGrantTime nullable: true
         endTime nullable: true
-        driveLicenseNo maxSize: 18, nullable: true, blank: true
-        driveCarType maxSize: 14, nullable: true, blank: true
+        driveLicenseNo maxSize: 18, nullable: true, blank: false
+        driveCarType maxSize: 14, nullable: true, blank: false
         driveLicenseGetTime nullable: true
-        licenseGrantOrg maxSize: 50, nullable: true, blank: true
-        licenseSituation maxSize: 4, nullable: true, blank: true
-        workSituation maxSize: 8, nullable: true, blank: true
-        ownerName maxSize: 50, nullable: true, blank: true
-        businessPermitCharacter maxSize: 2, nullable: true, blank: true
-        businessPermitNo maxSize: 12, nullable: true, blank: true
+        licenseGrantOrg maxSize: 50, nullable: true, blank: false
+        licenseSituation maxSize: 4, nullable: true, blank: false
+        workSituation maxSize: 8, nullable: true, blank: false
+        ownerName maxSize: 50, nullable: true, blank: false
+        businessPermitCharacter maxSize: 2, nullable: true, blank: false
+        businessPermitNo maxSize: 12, nullable: true, blank: false
         changeTimes nullable: true
         trainTimes nullable: true
         inspectDealSituation nullable: true

@@ -3,7 +3,7 @@ package com.hfyz.people
  * 从业人员-教练员
  */
 class WorkerCoach {
-    String IDCardNo //身份证号
+    String idCardNo //身份证号
     String workLicenseType //从业资格类别
     String workLicenseNo //从业资格证号
     Date workLicenseGetTime //从业资格初领时间
@@ -26,7 +26,7 @@ class WorkerCoach {
     String driveLicenseSituation //证照状态
 
     static constraints = {
-        "IDCardNo" maxSize: 18, unique: true
+        idCardNo maxSize: 18, unique: true
         workLicenseType maxSize: 30, nullable: true
         workLicenseNo maxSize: 12, nullable: true
         workLicenseGetTime nullable: true

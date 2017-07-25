@@ -1,5 +1,6 @@
 package com.hfyz.people
 
+import com.sun.xml.internal.bind.v2.model.core.ID
 import grails.transaction.Transactional
 
 @Transactional
@@ -14,61 +15,85 @@ class PeopleBasicInfoService {
      * @param offset
      * @return
      */
-    def getPeopleList(name, phoneNo, IDCardNo, max, offset) {
-        def total = PeopleBasicInfo.count()
-        def resultList = PeopleBasicInfo.createCriteria().list(max: max, offset: offset) {
+    def getPeopleList(name, phoneNo, idCardNo, max, offset) {
+        def total = PeopleBasicInfo.createCriteria().get {
+            projections {
+                count()
+            }
             if (name) {
-                like("name", "%${name}%")
+                like("name", "${name}")
             }
             if (phoneNo) {
                 like("phoneNo", "${phoneNo}")
             }
-            if (IDCardNo) {
-                like("IDCardNo", "${IDCardNo}")
+            if (idCardNo) {
+                like("idCardNo", "${idCardNo}")
+            }
+        }
+        def resultList = PeopleBasicInfo.createCriteria().list(max: max, offset: offset) {
+            if (name) {
+                like("name", "${name}")
+            }
+            if (phoneNo) {
+                like("phoneNo", "${phoneNo}")
+            }
+            if (idCardNo) {
+                like("idCardNo", "${idCardNo}")
             }
         }?.collect({ PeopleBasicInfo info ->
             [
                     name           : info.name,
                     gender         : info.gender,
-                    IDCardNo       : info.IDCardNo,
+                    IDCardNo       : info.idCardNo,
                     birthday       : info.birthday?.format("yyyy-MM-dd"),
                     nation         : info.nation,
                     nativePlace    : info.nativePlace,
                     technologyTitle: info.technologyTitle,
                     phoneNo        : info.phoneNo,
-
             ]
         })
-
-        println(resultList.size())
 
         return [resultList: resultList, total: total]
     }
 
     /**
      * 查看详情
-     * @param IDCardNo
+     * @param idCardNo
      */
-    def getDetailInfo(IDCardNo) {
+    def getDetailInfo(idCardNo) {
         def result = [:]
-        def checkMember = WorkerCheckMember.createCriteria().get {
-            eq("IDCardNo", IDCardNo)
-        }
-        def coach = WorkerCoach.createCriteria().get {
-            eq("IDCardNo", IDCardNo)
-        }
-        def driver = WorkerDriver.createCriteria().get {
-            eq("IDCardNo", IDCardNo)
-        }
-        def manager = WorkerManager.createCriteria().get {
-            eq("IDCardNo", IDCardNo)
-        }
-        def tech = WorkerTechnology.createCriteria().get {
-            eq("IDCardNo", IDCardNo)
-        }
-        def waiter = WorkerWaiter.createCriteria().get {
-            eq("IDCardNo", IDCardNo)
-        }
+
+        def checkMember = WorkerCheckMember.findByIdCardNo(idCardNo)
+        checkMember?.workLicenseGrantTime?.format("yyyy-MM-dd HH:mm:ss")
+        checkMember?.workLicenseGetTime?.format("yyyy-MM-dd HH:mm:ss")
+        checkMember?.endTime?.format("yyyy-MM-dd HH:mm:ss")
+
+        def coach = WorkerCoach.findByIdCardNo(idCardNo)
+        coach?.workLicenseGrantTime?.format("yyyy-MM-dd HH:mm:ss")
+        coach?.workLicenseGetTime?.format("yyyy-MM-dd HH:mm:ss")
+        coach?.endTime?.format("yyyy-MM-dd HH:mm:ss")
+        coach?.driveLicenseGetTime?.format("yyyy-MM-dd HH:mm:ss")
+
+        def driver = WorkerDriver.findByIdCardNo(idCardNo)
+        driver?.workLicenseGetTime?.format("yyyy-MM-dd HH:mm:ss")
+        driver?.workLicenseGrantTime?.format("yyyy-MM-dd HH:mm:ss")
+        driver?.endTime?.format("yyyy-MM-dd HH:mm:ss")
+        driver?.driveLicenseGetTime?.format("yyyy-MM-dd HH:mm:ss")
+
+        def manager = WorkerManager.findByIdCardNo(idCardNo)
+        manager?.workLicenseGetTime?.format("yyyy-MM-dd HH:mm:ss")
+        manager?.workLicenseGrantTime?.format("yyyy-MM-dd HH:mm:ss")
+        manager?.endTime?.format("yyyy-MM-dd HH:mm:ss")
+
+        def tech = WorkerTechnology.findByIdCardNo(idCardNo)
+        tech?.workLicenseGetTime?.format("yyyy-MM-dd HH:mm:ss")
+        tech?.workLicenseGrantTime?.format("yyyy-MM-dd HH:mm:ss")
+        tech?.endTime?.format("yyyy-MM-dd HH:mm:ss")
+        tech?.technologyLicenseGrantTime?.format("yyyy-MM-dd HH:mm:ss")
+
+        def waiter = WorkerWaiter.findByIdCardNo(idCardNo)
+        waiter?.beginWorkTime?.format("yyyy-MM-dd HH:mm:ss")
+        waiter?.grantTime?.format("yyyy-MM-dd HH:mm:ss")
 
         result["checkMember"] = checkMember
         result["coach"] = coach
@@ -79,4 +104,15 @@ class PeopleBasicInfoService {
 
         return result
     }
+
+    /**
+     * 从业人员资格巡检
+     */
+    def licenseInspection() {
+        //获取当前时间
+        def currentTime = new Date()
+
+        
+    }
+
 }

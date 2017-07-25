@@ -24,8 +24,6 @@ class PeopleBasicInfoController implements ControllerHelper {
      */
     def more() {
         def result = peopleBasicInfoService.getDetailInfo(request.JSON.IDCardNo)
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        JSON.registerObjectMarshaller(java.sql.Timestamp) { o -> sdf.format(o) }
         renderSuccessesWithMap(result)
     }
 }

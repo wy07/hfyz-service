@@ -6,7 +6,7 @@ class PeopleBasicInfo {
     String name //姓名
     String gender //性别
     Date birthday //出生日期
-    String IDCardNo //身份证号码
+    String idCardNo //身份证号码
     String picture //照片
     String nation //民族
     String nativePlace //籍贯
@@ -18,20 +18,20 @@ class PeopleBasicInfo {
     String technologyTitle //技术职称
     String healthState //健康状况
     static constraints = {
-        name maxSize: 30, nullable: true, blank: true
-        gender maxSize: 12, nullable: true, blank: true
+        name maxSize: 30, nullable: true, blank: false
+        gender maxSize: 12, nullable: true, blank: false
         birthday nullable: true
-        "IDCardNo" maxSize: 18, unique: true
+        idCardNo maxSize: 18, unique: true
         picture nullable: true
-        nation maxSize: 10, nullable: true, blank: true
-        nativePlace maxSize: 50, nullable: true, blank: true
-        phoneNo maxSize: 30, nullable: true, blank: true
-        address maxSize: 100, nullable: true, blank: true
-        email maxSize: 50, nullable: true, blank: true
-        postCode maxSize: 6, nullable: true, blank: true
-        educationLevel maxSize: 20, nullable: true, blank: true
-        technologyTitle maxSize: 20, nullable: true, blank: true
-        healthState maxSize: 10, nullable: true, blank: true
+        nation maxSize: 10, nullable: true, blank: false
+        nativePlace maxSize: 50, nullable: true, blank: false
+        phoneNo maxSize: 30, nullable: true, blank: false
+        address maxSize: 100, nullable: true, blank: false
+        email maxSize: 50, nullable: true, blank: false
+        postCode maxSize: 6, nullable: true, blank: false
+        educationLevel maxSize: 20, nullable: true, blank: false
+        technologyTitle maxSize: 20, nullable: true, blank: false
+        healthState maxSize: 10, nullable: true, blank: false
     }
     static mapping = {
         table "PEOPLE_BASICINFO_PUBLIC"
