@@ -10,6 +10,7 @@ import com.hfyz.people.WorkerWaiter
 import com.hfyz.platform.PlatformManage
 import com.hfyz.car.CarBasicInfo
 import com.hfyz.car.CarBasicOperate
+import com.hfyz.car.RegistrationInformationCarinfo
 import com.hfyz.warning.Warning
 import grails.transaction.Transactional
 import com.hfyz.security.User
@@ -329,5 +330,16 @@ class InitService {
         new MapSign(name: '报喜鸟集团', mapSignType: childMapType5, longitude: 135.8424311, latitude: 29.7896541, display: true).save(flush: true)
         new MapSign(name: '金州集团', mapSignType: childMapType5, longitude: 111.9435725, latitude: 33.3571598, display: true).save(flush: true)
 
-    }
+        25.times { val ->
+            new RegistrationInformationCarinfo(
+                      vehicleNo: "陕A-CK" + "${val}".padLeft(4, '0')
+                    , vehicleColor: '白色'
+                    , plateformId: "plateform${val}"
+                    , producerId: "producer${val}"
+                    , terminalModelType: "ACRII型号"
+                    , terminalId: "terminal${val}"
+                    , terminalSimcode: "136458736" + "${val}".padLeft(2, '0')
+                    , frameNo: "frameNo${val}").save(flush: true)
+            }
+       }
 }

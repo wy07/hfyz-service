@@ -2,6 +2,7 @@ package com.hfyz
 
 import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
+import com.hfyz.car.*
 
 class CarController implements ControllerHelper {
     def carService
@@ -11,5 +12,12 @@ class CarController implements ControllerHelper {
         int offset = PageUtils.getOffset(request.JSON.offset)
         def result = carService.search(request.JSON.businessType, request.JSON.licenseNo, max, offset)
         renderSuccessesWithMap([carList: result.carList, carCount: result.carCount])
+    }
+
+    def networkRate() {
+        def BasicOperateCarCount = CarBasicOperate.count()
+        def RegistrationInformationCarCount = RegistrationInformationCarinfo.count()
+        println BasicOperateCarCount + '-----count------' + RegistrationInformationCarCount
+        render ''
     }
 }
