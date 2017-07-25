@@ -21,7 +21,7 @@ class WarningController implements ControllerHelper {
                                               , carColor       : warning.carColor
                                               , warningSource  : warningService.getWarningSourceName(warning.warningSource)
                                               , warningType    : warning.warningType
-                                              , warningTime    : warning.warningTime
+                                              , warningTime    : warning.warningTime.format("yyyy-MM-dd HH:mm:ss")
                                               , warningTimes   : warning.warningTimes
                                               , superviseId    : warning.superviseId
                                               , endTime        : warning.endTime
