@@ -2,6 +2,7 @@ package com.hfyz.support
 
 import com.commons.support.SystemCodeType
 import com.commons.utils.ControllerHelper
+import com.commons.utils.KafkaDataUtils
 import com.commons.utils.LogUtils
 import com.commons.utils.NumberUtils
 
@@ -122,14 +123,13 @@ class SystemCodeController implements ControllerHelper {
 
     def getmenu() {
 
-        LogUtils.debug(this.getClass(), '获取菜单', request.JSON, 'web')
+        LogUtils.debug(this.class, params, request)
 
-        LogUtils.info(this.getClass(), '工单参看操作', request.JSON, '管理员', 'web', '参看操作')
+        LogUtils.info(this.class, params, request, '菜单', '管理员', session, '获取菜单列表')
 
-        LogUtils.error(this.getClass(), '工单参看操作', request.JSON, '管理员', 'web', '参看操作', '错误消息')
+        LogUtils.error(this.class, params, request, '菜单', '管理员', session, '获取菜单列表', '获取菜单列表出错')
 
         renderSuccessesWithMap(supportService.getMenu())
-
     }
 
     private withSystemCode(Long id, String type, Closure c) {
