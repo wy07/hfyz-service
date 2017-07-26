@@ -2,7 +2,11 @@ package com.hfyz
 
 import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
-import com.hfyz.car.*
+import com.hfyz.support.AlarmType
+import com.hfyz.warning.Alarm
+import com.hfyz.warning.AlarmLevel
+import com.hfyz.warning.SourceType
+import com.hfyz.workOrder.WorkOrder
 
 class CarController implements ControllerHelper {
     def carService
@@ -15,9 +19,22 @@ class CarController implements ControllerHelper {
     }
 
     def networkRate() {
-        def BasicOperateCarCount = CarBasicOperate.count()
-        def RegistrationInformationCarCount = RegistrationInformationCarinfo.count()
-        println BasicOperateCarCount + '-----count------' + RegistrationInformationCarCount
-        render ''
+        def resultList = carService.networkRate(50)
+        Date  date = new Date()
+        resultList.each { result ->
+            new Alarm(alarmType:  AlarmType.findByCodeNum('219')
+                    , alarmLevel: AlarmLevel.NORMAL
+                    , sourceType: SourceType.COMPANY
+                    , sourceCode: result.ownerName
+                    , alarmTime:  date-1
+                    , updateTime: date-1).save(flush: true)
+            new WorkOrder(sn:      result.ownerName + result.rate
+                    , alarmType:   AlarmType.findByCodeNum('219')
+                    , alarmLevel:  AlarmLevel.NORMAL
+                    , companyCode: result.ownerName
+                    , checkTime:   date-1
+                    , rectificationTime: date).save(flush: true)
+        }
+        renderSuccess()
     }
 }
