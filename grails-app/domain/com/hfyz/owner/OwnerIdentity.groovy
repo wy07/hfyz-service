@@ -27,23 +27,24 @@ class OwnerIdentity {
     String website                    //网址
 
     static constraints = {
-        ownerName unique: true, blank: false, maxSize: 100                //业户名称
-        companyCode unique: true, blank: false, size: 10          //业户编码(组织机构代码）
-        parentCompanyName nullable: true, blank: false, maxSize: 100      //上级企业名称
-        ownerAddress nullable: true, blank: false, maxSize: 100       //业户地址
-        postCode nullable: true, size: 6               //邮政编码
-        administrativeDivisionName nullable: true, blank: false, maxSize: 50//行政区划名称
-        administrativeDivisionCode nullable: true, size: 6//行政区划代码
-        economicType nullable: true, blank: false, maxSize: 30   //经济类型
-        legalRepresentative nullable: true, blank: false, maxSize: 30  //法人代表
-        idCardType nullable: true, blank: false, maxSize: 30    //法人代表身份证类型
-        idCardNo nullable: true, blank: false, maxSize: 30    //法人代表身份证号
-        operateManager nullable: true, blank: false, maxSize: 30   //经营负责人
-        phone nullable: true, blank: false, maxSize: 30   //电话
-        fax nullable: true, blank: false, maxSize: 30     //传真号码
-        telephone nullable: true, blank: false, maxSize: 11          //手机号码
-        email nullable: true, blank: false, maxSize: 50     //电子邮箱
-        website nullable: true, blank: false, maxSize: 50       //网址
+        ownerName unique: true, blank: false, maxSize: 100                   //业户名称
+        companyCode unique: true, blank: false, size: 10..10                     //业户编码(组织机构代码）
+        parentCompanyName nullable: true, blank: false, maxSize: 100         //上级企业名称
+        ownerAddress nullable: true, blank: false, maxSize: 100              //业户地址
+        postCode nullable: true, size: 6..6                                     //邮政编码
+        administrativeDivisionName nullable: true, blank: false, maxSize: 50 //行政区划名称
+        administrativeDivisionCode nullable: true, size: 6..6                   //行政区划代码
+        economicType nullable: true, blank: false, maxSize: 30               //经济类型
+        legalRepresentative nullable: true, blank: false, maxSize: 30        //法人代表
+        idCardType nullable: true, blank: false, maxSize: 30                 //法人代表身份证类型
+        idCardNo nullable: true, blank: false, maxSize: 30                   //法人代表身份证号
+        picture nullable: true                                               //法人代表照片
+        operateManager nullable: true, blank: false, maxSize: 30             //经营负责人
+        phone nullable: true, blank: false, maxSize: 30                      //电话
+        fax nullable: true, blank: false, maxSize: 30                        //传真号码
+        telephone nullable: true, blank: false, maxSize: 11                  //手机号码
+        email nullable: true, blank: false, maxSize: 50                      //电子邮箱
+        website nullable: true, blank: false, maxSize: 50                    //网址
 
     }
 }
