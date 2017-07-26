@@ -1,5 +1,7 @@
 package com.hfyz.support
 
+import com.hfyz.owner.CompanyRegulation
+import com.hfyz.owner.OwnerIdentity
 import com.hfyz.people.PeopleBasicInfo
 import com.hfyz.people.WorkerCheckMember
 import com.hfyz.people.WorkerCoach
@@ -329,6 +331,15 @@ class InitService {
         new MapSign(name: '报喜鸟集团', mapSignType: childMapType5, longitude: 135.8424311, latitude: 29.7896541, display: true).save(flush: true)
         new MapSign(name: '金州集团', mapSignType: childMapType5, longitude: 111.9435725, latitude: 33.3571598, display: true).save(flush: true)
 
+//        公司（经营业户）
+        new OwnerIdentity(companyCode: 'C000000001', ownerName: '企业0', operateManager: '李四', phone: '010-89765722').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000002', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000003', ownerName: '企业2', operateManager: '王五', phone: '010-76737823').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000004', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
+//        公司内部制度
+        new CompanyRegulation(companyCode: 'C001').save(flush: true)
+        new CompanyRegulation(companyCode: 'C002').save(flush: true)
+
         initAlarmType()
     }
 
@@ -337,7 +348,7 @@ class InitService {
 
         new AlarmType(name: "超速驾驶", codeNum: "101", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶", codeNum: "102", parent: null).save(flush: true)
-        new AlarmType(name: "偏离路线", codeNum: "103", parent: null).save(flush: true)
+        new AlarmType(name: "偏离路线", codeNum: "111", parent: null).save(flush: true)
         new AlarmType(name: "企业营运资质到期", codeNum: "201", parent: null).save(flush: true)
         new AlarmType(name: "企业营运资质过期", codeNum: "202", parent: null).save(flush: true)
         new AlarmType(name: "企业营运资质锁定", codeNum: "203", parent: null).save(flush: true)

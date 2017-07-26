@@ -50,6 +50,13 @@ class UrlMappings {
                 actionStr matches: /\S+[^s]$/        //不以s结尾的单词,和普通的resource区分开
             }
         }
+        "/roles/$id/permission-groups" {
+            controller = "permissionGroup"
+            action = [POST: "save"]
+            constraints {
+                id matches: /\d+/
+            }
+        }
 
         "/login"(controller: "auth", action: 'singIn')
 
