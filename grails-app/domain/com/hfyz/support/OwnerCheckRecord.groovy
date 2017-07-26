@@ -26,6 +26,10 @@ class OwnerCheckRecord {
                 errors.rejectValue('operator', 'ownerCheckRecord.operator.invalid.validator.message','手动查岗必须有查岗人员！')
             }
         }
-        responseTime nullable: true, max:300
+        responseTime nullable: true, max:310
+    }
+
+    static mapping = {
+        id generator:'native', params:[sequence:'owner_check_record_seq'], defaultValue: "nextval('owner_check_record_seq')"
     }
 }
