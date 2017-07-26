@@ -7,11 +7,8 @@ import grails.transaction.Transactional
 class InfoauditController implements ControllerHelper {
 
     def infoauditService
-
     def list() {
-        println params
-        def publishList = infoauditService.getPublishList(params.long('parentId'))
-        renderSuccessesWithMap([publishList: publishList])
+        renderSuccessesWithMap([publishList: infoauditService.getPublishList(request.JSON.max, request.JSON.offset)])
     }
 
     def save() {
@@ -27,7 +24,7 @@ class InfoauditController implements ControllerHelper {
             renderSuccessesWithMap([infoaudit: [id           : infoaudit.id
                                                 , type       : infoaudit.type
                                                 , title      : infoaudit.title
-                                                , dateCreated: infoaudit.dateCreated
+                                                , dateCreated: infoaudit.dateCreated?.format('yyyy-MM-dd HH:mm:ss ')
                                                 , content    : infoaudit.content
                                                 , vimTime    : infoaudit.vimTime?.format('yyyy-MM-dd HH:mm:ss ')
                                                 , username   : infoaudit.publisher.name
@@ -59,10 +56,15 @@ class InfoauditController implements ControllerHelper {
     }
 
     def search() {
-        def publishList = infoauditService.getSearchList(params.textTitle, params.dateBegin, params.dateEnd)
-        renderSuccessesWithMap([publishList: publishList])
+        renderSuccessesWithMap([publishList:infoauditService.getSearchList(request.JSON.textTitle,
+                request.JSON.dateBegin, request.JSON.dateEnd, request.JSON.max, request.JSON.offset)])
+    }
+
+    def select() {
+        renderSuccessesWithMap([publishList:infoauditService.getSearchListN(request.JSON.type, request.JSON.max, request.JSON.offset)])
 
     }
+
 
     private withInfoaudit(Long id, Closure c) {
         print id
@@ -73,7 +75,6 @@ class InfoauditController implements ControllerHelper {
             renderNoTFoundError()
         }
     }
-
 
 }
 
