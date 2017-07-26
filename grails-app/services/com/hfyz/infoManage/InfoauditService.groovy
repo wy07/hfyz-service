@@ -4,7 +4,6 @@ import grails.transaction.Transactional
 
 @Transactional
 class InfoauditService {
-
     /*********** 信息发布、信息查询的信息列表初始化****************/
     def getPublishList( max, offset) {
         def publishList = Infoaudit.createCriteria().list([max: max, offset: offset]) {

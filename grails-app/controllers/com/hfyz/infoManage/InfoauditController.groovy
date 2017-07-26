@@ -7,9 +7,8 @@ import grails.transaction.Transactional
 class InfoauditController implements ControllerHelper {
 
     def infoauditService
-
     def list() {
-        renderSuccessesWithMap([publishList: infoauditService.getPublishList(params.long('max'), params.long('offset'))])
+        renderSuccessesWithMap([publishList: infoauditService.getPublishList(request.JSON.max, request.JSON.offset)])
     }
 
     def save() {
@@ -57,13 +56,12 @@ class InfoauditController implements ControllerHelper {
     }
 
     def search() {
-        renderSuccessesWithMap([publishList:infoauditService.getSearchList(params.textTitle,
-                                              params.dateBegin, params.dateEnd, params.long('max'), params.long('offset'))])
+        renderSuccessesWithMap([publishList:infoauditService.getSearchList(request.JSON.textTitle,
+                request.JSON.dateBegin, request.JSON.dateEnd, request.JSON.max, request.JSON.offset)])
     }
 
     def select() {
-
-        renderSuccessesWithMap([publishList:infoauditService.getSearchListN(params.type, params.long('max'), params.long('offset'))])
+        renderSuccessesWithMap([publishList:infoauditService.getSearchListN(request.JSON.type, request.JSON.max, request.JSON.offset)])
 
     }
 
