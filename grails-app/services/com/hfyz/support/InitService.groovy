@@ -332,10 +332,10 @@ class InitService {
         new MapSign(name: '金州集团', mapSignType: childMapType5, longitude: 111.9435725, latitude: 33.3571598, display: true).save(flush: true)
 
 //        公司（经营业户）
-        new OwnerIdentity(companyCode: 'C001', ownerName: '企业0', operateManager: '李四', phone: '010-89765722').save(flush: true)
-        new OwnerIdentity(companyCode: 'C002', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
-        new OwnerIdentity(companyCode: 'C003', ownerName: '企业2', operateManager: '王五', phone: '010-76737823').save(flush: true)
-        new OwnerIdentity(companyCode: 'C004', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000001', ownerName: '企业0', operateManager: '李四', phone: '010-89765722').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000002', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000003', ownerName: '企业2', operateManager: '王五', phone: '010-76737823').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000004', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
 //        公司内部制度
         new CompanyRegulation(companyCode: 'C001').save(flush: true)
         new CompanyRegulation(companyCode: 'C002').save(flush: true)
