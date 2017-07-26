@@ -1,6 +1,6 @@
 package com.hfyz.support
 
-import com.hfyz.owner.CompanyRegulation
+//import com.hfyz.owner.CompanyRegulation
 import com.hfyz.owner.OwnerIdentity
 import com.hfyz.people.PeopleBasicInfo
 import com.hfyz.people.WorkerCheckMember
@@ -345,10 +345,10 @@ class InitService {
         }
 
 //        公司（经营业户）
-        new OwnerIdentity(companyCode: 'C001', ownerName: '企业0', operateManager: '李四', phone: '010-89765722').save(flush: true)
-        new OwnerIdentity(companyCode: 'C002', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
-        new OwnerIdentity(companyCode: 'C003', ownerName: '企业2', operateManager: '王五', phone: '010-76737823').save(flush: true)
-        new OwnerIdentity(companyCode: 'C004', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
+        new OwnerIdentity(ownerName: '企业0', companyCode: 'C001', operateManager: '李四', phone: '010-89765722').save(flush: true)
+        new OwnerIdentity(ownerName: '企业1', companyCode: 'C002', operateManager: '张三', phone: '010-32425722').save(flush: true)
+        new OwnerIdentity(ownerName: '企业2', companyCode: 'C003', operateManager: '王五', phone: '010-76737823').save(flush: true)
+        new OwnerIdentity(ownerName: '企业3', companyCode: 'C004', operateManager: '王五', phone: '010-76737823').save(flush: true)
 //        公司内部制度
 //        new CompanyRegulation(companyCode: 'C001').save(flush: true)
 //        new CompanyRegulation(companyCode: 'C002').save(flush: true)
