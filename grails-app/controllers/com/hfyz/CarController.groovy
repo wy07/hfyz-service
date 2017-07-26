@@ -22,7 +22,6 @@ class CarController implements ControllerHelper {
         def resultList = carService.networkRate()
         def date = new Date().parse('yyyy-MM-dd HH:mm:ss'
                                     , new Date().format("yyyy-MM-dd HH:mm:ss"))
-
         resultList.each { result ->
             new Alarm(alarmType:  AlarmType.findByCodeNum('219')
                     , alarmLevel: AlarmLevel.NORMAL
@@ -30,7 +29,9 @@ class CarController implements ControllerHelper {
                     , sourceCode: result.companyCode
                     , alarmTime:  date
                     , updateTime: date).save(flush: true)
-            new WorkOrder(sn:      result.companyCode + '-' +result.rate
+            new WorkOrder(sn:     System.currentTimeMillis() + ""
+                    + System.nanoTime().toString().toString()[-6..-1]
+                    + new Random().nextInt(100000).toString().padLeft(5, '0')
                     , alarmType:   AlarmType.findByCodeNum('219')
                     , alarmLevel:  AlarmLevel.NORMAL
                     , companyCode: result.companyCode
