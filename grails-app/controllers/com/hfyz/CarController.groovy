@@ -19,22 +19,24 @@ class CarController implements ControllerHelper {
     }
 
     def networkRate() {
-        def resultList = carService.networkRate(50)
-        Date  date = new Date()
+        def resultList = carService.networkRate()
+        def date = new Date().parse('yyyy-MM-dd HH:mm:ss'
+                                    , new Date().format("yyyy-MM-dd HH:mm:ss"))
+
         resultList.each { result ->
             new Alarm(alarmType:  AlarmType.findByCodeNum('219')
                     , alarmLevel: AlarmLevel.NORMAL
                     , sourceType: SourceType.COMPANY
-                    , sourceCode: result.ownerName
-                    , alarmTime:  date-1
-                    , updateTime: date-1).save(flush: true)
-            new WorkOrder(sn:      result.ownerName + result.rate
+                    , sourceCode: result.companyCode
+                    , alarmTime:  date
+                    , updateTime: date).save(flush: true)
+            new WorkOrder(sn:      result.companyCode + '-' +result.rate
                     , alarmType:   AlarmType.findByCodeNum('219')
                     , alarmLevel:  AlarmLevel.NORMAL
-                    , companyCode: result.ownerName
-                    , checkTime:   date-1
-                    , rectificationTime: date).save(flush: true)
+                    , companyCode: result.companyCode
+                    , checkTime:   date
+                    , rectificationTime: date.plus(5)).save(flush: true)
         }
-        renderSuccess()
+        renderSuccessesWithMap([resultList: resultList])
     }
 }

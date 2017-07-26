@@ -46,27 +46,18 @@ class CarService {
         [carList: carList.get(), carCount: carCount.get()]
     }
 
-    def networkRate(BigDecimal rate) {
-        def sqlParams = [:]
-        if (rate) {
-            sqlParams.rate = rate
+    def networkRate(rate = 100) {
+        SQLHelper.withDataSource(dataSource) { sql ->
+           def networkRateList = sql.rows(getNetworkRateListSql(),[rate:rate])
+        }?.collect { obj ->
+            [companyCode     : obj.companyCode
+             , operateCount: obj.operateCount
+             , carinfoCount: obj.carinfoCount
+             , rate        : obj.rate.setScale(2,BigDecimal.ROUND_HALF_UP)]
         }
-
-        Promise networkRateList = task {
-            SQLHelper.withDataSource(dataSource) { sql ->
-                sql.rows(getNetworkRateListSql(rate),[sqlParams])
-            }?.collect { obj ->
-                [ownerName     : obj.ownerName
-                 , operateCount: obj.operateCount
-                 , carinfoCount: obj.carinfoCount
-                 , rate        : obj.rate.setScale(2,BigDecimal.ROUND_HALF_UP)]
-            }
-        }
-
-        networkRateList.get()
     }
 
-    private static String getNetworkRateListSql(BigDecimal rate) {
+    private static String getNetworkRateListSql() {
         String sqlStr = """
             with result as(
                 select owner_name ownerName
@@ -76,14 +67,12 @@ class CarService {
                 from runcar_basicoperate operate
                 left join registration_infornation_carinfo carinfo on  carinfo.frame_no = operate.frame_no
                 group by owner_name)
-            select * from result
+                
+                select company_code companyCode, operateCount, carinfoCount, rate
+                from result, owner_identity iden
+                where ownerName = iden.owner_name and rate <= :rate
+                order by company_code
         """
-
-        if (rate) {
-            sqlStr += ' where rate <= :rate'
-        }
-        sqlStr += ' order by ownerName'
-
         return sqlStr
     }
 
