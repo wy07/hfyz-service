@@ -125,7 +125,6 @@ class SystemCodeController implements ControllerHelper {
     def getmenu() {
 
 //        LogUtils.debug(this.class, params, request)
-
 //
 //        LogUtils.info(this.class, params, request, '菜单', '管理员', session, '获取菜单列表')
 //
