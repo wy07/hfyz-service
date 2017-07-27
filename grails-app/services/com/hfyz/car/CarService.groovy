@@ -46,6 +46,7 @@ class CarService {
         [carList: carList.get(), carCount: carCount.get()]
     }
 
+
     def networkRate(rate = 100) {
         SQLHelper.withDataSource(dataSource) { sql ->
            def networkRateList = sql.rows(getNetworkRateListSql(),[rate:rate])
