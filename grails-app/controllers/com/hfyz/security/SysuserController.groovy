@@ -11,7 +11,7 @@ class SysuserController implements ControllerHelper {
     def dataSource
     def roleService
     def springSecurityService
-    def UserService
+    def userService
     static final String DEFAULT_PASSWORD = '666666'
 
     def list() {
@@ -93,13 +93,13 @@ class SysuserController implements ControllerHelper {
             return
         }
 
-        def newPassword = UserService.resetPassword(userInstance)
+        def newPassword = userService.resetPassword(userInstance)
         renderSuccessesWithMap([newPassword: newPassword])
     }
 
     def changePwd() {
         def currentUser = getCurrentUser()
-        UserService.changePwd(currentUser, request.JSON.originPwd, request.JSON.newPwd)
+        userService.changePwd(currentUser, request.JSON.originPwd, request.JSON.newPwd)
         renderSuccessesWithMap([message: '密码修改成功!'])
     }
 
