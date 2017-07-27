@@ -1,5 +1,6 @@
 package com.hfyz.security
 
+import com.commons.utils.NumberUtils
 import com.commons.utils.SQLHelper
 import grails.converters.JSON
 import java.text.SimpleDateFormat
@@ -10,11 +11,11 @@ class RoleController implements ControllerHelper{
     def roleService
     def supportService
     def list() {
-        renderSuccessesWithMap([roleList: roleService.getRoleList(params.int("operatorId"))])
+        renderSuccessesWithMap([roleList: roleService.getRoleList(NumberUtils.toInteger(request.JSON.operatorId))])
     }
     def listForSelect(){ 
-        renderSuccessesWithMap([roleList: roleService.getRoleListForSelect(params.roles,params.int("operatorId")),
-                                orgList: supportService.getOrgForSelect(params.roles)])
+        renderSuccessesWithMap([roleList: roleService.getRoleListForSelect(request.JSON.roles,NumberUtils.toInteger(request.JSON.operatorId)),
+                                orgList: supportService.getOrgForSelect(request.JSON.roles)])
     }
    def save(){
        println request.JSON
@@ -29,7 +30,7 @@ class RoleController implements ControllerHelper{
                                                , orgs: role.orgs.id
                                                , id:role.id
                                     ],
-                                    orgList:supportService.getOrgForSelect(params.roles)])
+                                    orgList:supportService.getOrgForSelect(request.JSON.roles)])
         }
    }
    def update(){
@@ -58,7 +59,7 @@ class RoleController implements ControllerHelper{
     def getUsersByRoleId(){
         def GET_USERS_SQL="select * from sys_user sysuser where exists (select user_id from user_role ur where ur.user_id=sysuser.id and ur.role_id=:roleId)"
         def result=SQLHelper.withDataSource(dataSource) { sql ->
-            sql.rows(GET_USERS_SQL.toString(), [ roleId: params.int('roleId')])
+            sql.rows(GET_USERS_SQL.toString(), [ roleId: NumberUtils.toInteger('roleId')])
         }
         render result as JSON
     }
@@ -128,13 +129,12 @@ class RoleController implements ControllerHelper{
         }
     }
     def getUserByName(){
-        println params
         def result
         def userlist
         def GET_USER_SQL="select suser.id,suser.date_created,suser.last_updated,suser.password,suser.name,suser.username,suser.tel,role.id role_id,role.name role_name,array(select jsonb_array_elements(suser.rights)->>'value') rights,array(select jsonb_array_elements(role.rights)->>'value') role_rights from sys_user suser, user_role ur,role where ur.user_id=suser.id and ur.role_id=role.id  and  suser.username=:username"
         //println GET_USER_SQL
         userlist=SQLHelper.withDataSource(dataSource) { sql ->
-            sql.rows(GET_USER_SQL.toString(),[username:params.name])
+            sql.rows(GET_USER_SQL.toString(),[username:request.JSON.name])
         }
         if(userlist?.size()>0){
             def roleRights=[]
