@@ -1,6 +1,6 @@
 package com.hfyz.support
 
-//import com.hfyz.owner.CompanyRegulation
+import com.hfyz.owner.CompanyRegulation
 import com.hfyz.owner.OwnerIdentity
 import com.hfyz.people.PeopleBasicInfo
 import com.hfyz.people.WorkerCheckMember
@@ -360,8 +360,8 @@ class InitService {
         new OwnerIdentity(companyCode: 'C000000004', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
 //        公司内部制度
 
-//        new CompanyRegulation(companyCode: 'C001').save(flush: true)
-//        new CompanyRegulation(companyCode: 'C002').save(flush: true)
+        new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
+        new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
 
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
 
