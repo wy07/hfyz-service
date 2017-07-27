@@ -1,4 +1,4 @@
-package com.hfyz
+package com.hfyz.car
 
 import com.commons.utils.ConfigUtil
 import com.commons.utils.ControllerHelper
