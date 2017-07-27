@@ -75,6 +75,7 @@ class InitService {
 //        new Menu(name: '其他地图', code: 'otherMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 
         new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '业户', code: 'ownerIdentity', icon: 'fa-building', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 
 
@@ -349,6 +350,29 @@ class InitService {
         new OwnerIdentity(companyCode: 'C000000002', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
         new OwnerIdentity(companyCode: 'C000000003', ownerName: '企业2', operateManager: '王五', phone: '010-76737823').save(flush: true)
         new OwnerIdentity(companyCode: 'C000000004', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
+//        class OwnerIdentity {
+//            String ownerName                  //业户名称*
+//            String companyCode                //业户编码(组织机构代码）*
+//            String parentCompanyName          //上级企业名称
+//            String ownerAddress               //业户地址
+//            Number postCode                   //邮政编码
+//            String administrativeDivisionName //行政区划名称
+//            Number administrativeDivisionCode //行政区划代码
+//            String economicType               //经济类型
+//            String legalRepresentative        //法人代表
+//            String idCardType                 //法人代表身份证类型
+//            String idCardNo                   //法人代表身份证号
+//            Blob picture                      //法人代表照片
+//            String operateManager             //经营负责人 *
+//            String phone                      //电话  *
+//            String fax                        //传真号码
+//            String telephone                  //手机号码
+//            String email                      //电子邮箱
+//            String website                    //网址
+//            String parentOwner                //母公司
+//            String shortName                  //业户简称
+//            String ownerCode                  //企业单位代码
+
 //        公司内部制度
         new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
         new CompanyRegulation(companyCode: 'C000000002').save(flush: true)

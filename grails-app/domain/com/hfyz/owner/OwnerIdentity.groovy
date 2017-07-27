@@ -7,8 +7,8 @@ import java.sql.Blob
  */
 
 class OwnerIdentity {
-    String ownerName                  //业户名称
-    String companyCode                //业户编码(组织机构代码）
+    String ownerName                  //业户名称*
+    String companyCode                //业户编码(组织机构代码）*
     String parentCompanyName          //上级企业名称
     String ownerAddress               //业户地址
     Number postCode                   //邮政编码
@@ -19,8 +19,8 @@ class OwnerIdentity {
     String idCardType                 //法人代表身份证类型
     String idCardNo                   //法人代表身份证号
     Blob picture                      //法人代表照片
-    String operateManager             //经营负责人
-    String phone                      //电话
+    String operateManager             //经营负责人 *
+    String phone                      //电话  *
     String fax                        //传真号码
     String telephone                  //手机号码
     String email                      //电子邮箱
