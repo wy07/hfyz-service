@@ -361,7 +361,7 @@ class InitService {
 
         new AlarmType(name: "超速驾驶", codeNum: "101", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶", codeNum: "102", parent: null).save(flush: true)
-        new AlarmType(name: "偏离路线", codeNum: "103", parent: null).save(flush: true)
+        new AlarmType(name: "偏离路线", codeNum: "111", parent: null).save(flush: true)
         new AlarmType(name: "企业营运资质到期", codeNum: "201", parent: null).save(flush: true)
         new AlarmType(name: "企业营运资质过期", codeNum: "202", parent: null).save(flush: true)
         new AlarmType(name: "企业营运资质锁定", codeNum: "203", parent: null).save(flush: true)

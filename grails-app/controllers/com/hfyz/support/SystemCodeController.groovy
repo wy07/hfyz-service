@@ -5,6 +5,7 @@ import com.commons.utils.ControllerHelper
 import com.commons.utils.KafkaDataUtils
 import com.commons.utils.LogUtils
 import com.commons.utils.NumberUtils
+import com.hfyz.workOrder.WorkOrder
 
 class SystemCodeController implements ControllerHelper {
 
@@ -123,7 +124,7 @@ class SystemCodeController implements ControllerHelper {
 
     def getmenu() {
 
-        LogUtils.debug(this.class, params, request)
+//        LogUtils.debug(this.class, params, request)
 //
 //        LogUtils.info(this.class, params, request, '菜单', '管理员', session, '获取菜单列表')
 //
