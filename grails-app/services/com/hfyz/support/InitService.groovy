@@ -353,14 +353,7 @@ class InitService {
 //        new CompanyRegulation(companyCode: 'C001').save(flush: true)
 //        new CompanyRegulation(companyCode: 'C002').save(flush: true)
 
-        new Configure(configKey: 'carRateAlarm100', configValue:'100', name:'车辆入网率告警阈值为100%')
-        new Configure(configKey: 'carRateAlarm95', configValue:'95', name:'车辆入网率告警阈值为95%')
-        new Configure(configKey: 'carRateAlarm90', configValue:'90', name:'车辆入网率告警阈值为90%')
-        new Configure(configKey: 'carRateAlarm85', configValue:'85', name:'车辆入网率告警阈值为85%')
-        new Configure(configKey: 'carRateAlarm80', configValue:'80', name:'车辆入网率告警阈值为80%')
-        new Configure(configKey: 'carRateAlarm75', configValue:'75', name:'车辆入网率告警阈值为75%')
-        new Configure(configKey: 'carRateAlarm70', configValue:'70', name:'车辆入网率告警阈值为70%')
-        new Configure(configKey: 'carRateAlarm50', configValue:'50', name:'车辆入网率告警阈值为50%')
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
 
         initAlarmType()
     }

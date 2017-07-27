@@ -1,5 +1,6 @@
 package com.hfyz
 
+import com.commons.utils.ConfigUtil
 import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
 import com.hfyz.support.AlarmType
@@ -19,7 +20,7 @@ class CarController implements ControllerHelper {
     }
 
     def networkRate() {
-        def resultList = carService.networkRate()
+        def resultList = carService.networkRate(ConfigUtil.instance.carRateAlarm as BigDecimal)
         def date = new Date().parse('yyyy-MM-dd HH:mm:ss'
                                     , new Date().format("yyyy-MM-dd HH:mm:ss"))
         resultList.each { result ->
