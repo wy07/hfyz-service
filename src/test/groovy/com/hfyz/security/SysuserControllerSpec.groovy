@@ -9,19 +9,11 @@ import spock.lang.Unroll
 @Build([User])
 class SysuserControllerSpec extends Specification{
 
-    def setup(){
-
-    }
-
-    def cleanup(){
-
-    }
 
     def "resetPassword:重置密码；当参数为空时，返回错误状态"(){
 
         when:
             request.JSON.id = null
-            println '===params.id====' + params.id + "===="
             controller.resetPassword()
 
         then:
@@ -32,9 +24,8 @@ class SysuserControllerSpec extends Specification{
 
     def "resetPassword:重置密码；当参数不为空时，返回重置之后的密码"(){
         setup:
-            def newpwd = "666666"
             controller.userService = [resetPassword:{userInstanc->
-                    return newpwd }]
+                    return '666666' }]
         def userInstanc = User.build(id:1,passwordHash: '333333' )
 
         when:
@@ -43,7 +34,7 @@ class SysuserControllerSpec extends Specification{
 
         then:
             response.status == 200
-            response.json.newPassword == newpwd
+            response.json.newPassword == '666666'
 
     }
 }

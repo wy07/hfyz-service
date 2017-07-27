@@ -12,13 +12,6 @@ import spock.lang.Specification
 @Mock(SpringSecurityService)
 class UserServiceSpec extends Specification {
 
-    def setup(){
-
-    }
-
-    def cleanup(){
-
-    }
 
     def "resetPassword:修改密码，返回随机生成的生成的6为数密码"(){
         setup:
@@ -27,8 +20,6 @@ class UserServiceSpec extends Specification {
         service.springSecurityService = [encodePassword:{String pass,String alt  -> return '123456'}]
 
         when:
-        println("user"+user.salt)
-        println "${NumberUtils.genRandomCode(6)}"
         def password = service.resetPassword(user)
 
         then:
