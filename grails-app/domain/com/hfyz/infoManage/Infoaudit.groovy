@@ -4,7 +4,6 @@ import com.hfyz.security.User
 
 
 class Infoaudit {
-    //int id
     String type          //发布类型
     User publisher      //发布者
     User receiver       //接收者
@@ -18,7 +17,6 @@ class Infoaudit {
     Date auditTime     //审核时间
 
     static constraints = {
-        //id blank: false, unique: true,maxSize:20
         type nullable:false,blank: false,maxSize:11
         publisher nullable:false,blank: false
         receiver nullable:true,blank: true

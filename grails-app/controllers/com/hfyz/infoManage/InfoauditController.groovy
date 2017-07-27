@@ -12,7 +12,6 @@ class InfoauditController implements ControllerHelper {
     }
 
     def save() {
-        print request.JSON
         Infoaudit infoaudit = new Infoaudit(request.JSON)
         infoaudit.save(flush: true, failOnError: true)
         renderSuccess()

@@ -6,7 +6,7 @@ import grails.transaction.Transactional
 class InfoauditService {
     /*********** 信息发布、信息查询的信息列表初始化****************/
     def getPublishList( max, offset) {
-        def publishList = Infoaudit.createCriteria().list([max: max, offset: offset]) {
+        def publishList = Infoaudit.list([max: max, offset: offset]) {
         }?.collect { Infoaudit infoaudit->
             [id:infoaudit.id
              ,type:infoaudit.type
@@ -16,11 +16,7 @@ class InfoauditService {
              ,status:infoaudit.status.type]
         }
 
-        def total = Infoaudit.createCriteria().get {
-            projections {
-                count()
-            }
-        }
+        def total = Infoaudit.count()
         return [publishList: publishList, total: total]
     }
 
@@ -70,7 +66,6 @@ class InfoauditService {
         return [publishList: publishList, total: total]
     }
 
-
    /*********** 信息查询树形列表项搜索****************/
     def getListByType(type, max, offset){
         def publishList = Infoaudit.findAllByType("${type}", [max: max, sort: "type", order: "desc" ,offset: offset]) {
@@ -86,30 +81,4 @@ class InfoauditService {
         def total = Infoaudit.countByType("${type}")
         return [publishList: publishList, total: total]
     }
-
-    /*def getSearchListN(type, max, offset){
-        def publishList = Infoaudit.createCriteria().list([max: max, offset: offset]) {
-            if(type){
-                like("type", "${type}%")
-            }
-        }?.collect{ Infoaudit infoaudit->
-            [id:infoaudit.id
-             ,type:infoaudit.type
-             ,title:infoaudit.title
-             ,dateCreated:infoaudit.dateCreated?.format('yyyy-MM-dd HH:mm:ss ')
-             ,username:infoaudit.publisher.name
-             ,status:infoaudit.status.type]
-        }
-
-        def total = Infoaudit.createCriteria().get {
-            projections {
-                count()
-            }
-            if(type){
-                like("type", "${type}%")
-            }
-        }
-        return [publishList: publishList, total: total]
-    }*/
-
 }
