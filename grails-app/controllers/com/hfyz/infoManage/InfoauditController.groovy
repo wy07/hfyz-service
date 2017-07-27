@@ -12,14 +12,13 @@ class InfoauditController implements ControllerHelper {
     }
 
     def save() {
-        println request.JSON
+        print request.JSON
         Infoaudit infoaudit = new Infoaudit(request.JSON)
         infoaudit.save(flush: true, failOnError: true)
         renderSuccess()
     }
 
     def edit() {
-        println params
         withInfoaudit(params.long('id')) { infoaudit ->
             renderSuccessesWithMap([infoaudit: [id           : infoaudit.id
                                                 , type       : infoaudit.type
@@ -35,8 +34,6 @@ class InfoauditController implements ControllerHelper {
 
     def update() {
         withInfoaudit(params.long('id')) { infoauditInstance ->
-            println request.JSON.vimTime.class
-            println request.JSON
             request.JSON.remove('vimTime')
             request.JSON.remove('dateCreated')
             infoauditInstance.type = request.JSON.type
@@ -61,13 +58,12 @@ class InfoauditController implements ControllerHelper {
     }
 
     def select() {
-        renderSuccessesWithMap([publishList:infoauditService.getSearchListN(request.JSON.type, request.JSON.max, request.JSON.offset)])
+        renderSuccessesWithMap([publishList:infoauditService.getListByType(request.JSON.type, request.JSON.max, request.JSON.offset)])
 
     }
 
 
     private withInfoaudit(Long id, Closure c) {
-        print id
         Infoaudit infoauditInstance = id ? Infoaudit.get(id) : null
         if (infoauditInstance) {
             c.call infoauditInstance

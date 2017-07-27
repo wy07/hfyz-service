@@ -72,7 +72,22 @@ class InfoauditService {
 
 
    /*********** 信息查询树形列表项搜索****************/
-    def getSearchListN(type, max, offset){
+    def getListByType(type, max, offset){
+        def publishList = Infoaudit.findAllByType("${type}", [max: max, sort: "type", order: "desc" ,offset: offset]) {
+        }?.collect{ Infoaudit infoaudit->
+            [id:infoaudit.id
+             ,type:infoaudit.type
+             ,title:infoaudit.title
+             ,dateCreated:infoaudit.dateCreated?.format('yyyy-MM-dd HH:mm:ss ')
+             ,username:infoaudit.publisher.name
+             ,status:infoaudit.status.type]
+        }
+
+        def total = Infoaudit.countByType("${type}")
+        return [publishList: publishList, total: total]
+    }
+
+    /*def getSearchListN(type, max, offset){
         def publishList = Infoaudit.createCriteria().list([max: max, offset: offset]) {
             if(type){
                 like("type", "${type}%")
@@ -95,6 +110,6 @@ class InfoauditService {
             }
         }
         return [publishList: publishList, total: total]
-    }
+    }*/
 
 }

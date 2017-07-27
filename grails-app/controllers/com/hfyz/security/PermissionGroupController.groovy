@@ -5,17 +5,14 @@ import com.commons.utils.ControllerHelper
 class PermissionGroupController implements ControllerHelper{
     def roleService
     def list() {
-        renderSuccessesWithMap([menuList:roleService.getMenu(params.roles)])
+        renderSuccessesWithMap([menuList:roleService.getMenu(request.JSON.roles)])
     }
     def getPermission(){
-        renderSuccessesWithMap([menuList:roleService.getPermission(params.menuid)])
+        renderSuccessesWithMap([menuList:roleService.getPermission(request.JSON.menuid)])
     }
     def save(){
-        println params
-        def permission=request.JSON
-        println permission
-        def role=Role.findById(params.id)
-        println PermissionGroup.findAllByIdInList(permission)
+        def permission=request.JSON.permissions
+        def role=Role.findById(request.JSON.id)
         if(role){
             role.permissionGroups=PermissionGroup.findAllByIdInList(permission)
             role.save(flush: true, failOnError: true)

@@ -1,11 +1,34 @@
 package com.commons.utils
 
+import com.commons.exception.ParamsIllegalException
+import com.hfyz.security.User
 import grails.converters.JSON
 import grails.validation.ValidationException
 import org.springframework.validation.Errors
 
 
 trait ControllerHelper {
+
+    def springSecurityService
+
+    def getCurrentUser() {
+        long userId = getCurrentUserId()
+        if (!userId) {
+            return null
+        }
+        User.get(userId)
+    }
+
+    Long getCurrentUserId() {
+
+        def userId = params.jwtToken?.id
+
+        if (!userId) {
+            return null
+        }
+        return userId as long
+    }
+
     def renderSuccess() {
         response.setStatus(200)
         def map = [result: 'success']
@@ -14,7 +37,7 @@ trait ControllerHelper {
 
     def renderSuccessesWithMap(Map model) {
         response.setStatus(200)
-        model+=[result: 'success']
+        model += [result: 'success']
         render(model as JSON)
     }
 
@@ -25,11 +48,12 @@ trait ControllerHelper {
         render map as JSON
     }
 
-    def renderParamsIllegalErrorMsg(msg=null) {
+    def renderParamsIllegalErrorMsg(msg = null) {
         response.setStatus(400)
-        def map = [errors: [msg?:'请求参数不合法，请查证！']]
+        def map = [errors: [msg ?: '请求参数不合法，请查证！']]
         render map as JSON
     }
+    
 
     def renderValidationErrors(Errors errors) {
         response.setStatus(400)
@@ -44,11 +68,15 @@ trait ControllerHelper {
     }
 
     def handleException(Exception e) {
-//        log.error(this,e)
-        println e.stackTrace
+        println e.printStackTrace()
         renderErrorMsg('系统忙，请稍后再试!')
-
     }
+
+    def handleParamsIllegalException(ParamsIllegalException e) {
+        renderParamsIllegalErrorMsg(e.message)
+    }
+
+
 
     def handleValidationException(ValidationException e) {
         renderValidationErrors(e.errors)

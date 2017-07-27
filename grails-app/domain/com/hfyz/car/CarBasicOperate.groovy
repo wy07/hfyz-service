@@ -37,7 +37,7 @@ class CarBasicOperate {  //营运车辆_基本信息_营运信息
     Integer locator                 //是否安装定位系统
     String driveRecorderSituation   //行车记录仪安装状态
     String locatorSituation         //定位系统安装状态
-    String frameNo     //车架号
+    String frameNo                  //车架号
 
     static constraints = {
     }
