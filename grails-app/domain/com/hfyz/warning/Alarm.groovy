@@ -25,4 +25,5 @@ class Alarm {
     static mapping = {
         id generator:'native', params:[sequence:'alarm_seq'], defaultValue: "nextval('alarm_seq')"
     }
+
 }
