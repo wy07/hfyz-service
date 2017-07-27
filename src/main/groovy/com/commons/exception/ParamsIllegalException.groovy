@@ -5,3 +5,4 @@ class ParamsIllegalException extends RuntimeException{
         super(msg)
     }
 }
+

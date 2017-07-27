@@ -60,6 +60,8 @@ class UrlMappings {
 
         "/login"(controller: "auth", action: 'singIn')
 
+        "/login"(controller: "auth", action: 'singIn')
+
 //        //SystemCode
 //        "/system-codes/$className/$actionStr" {
 //            controller = 'systemCode'

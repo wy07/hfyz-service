@@ -28,7 +28,9 @@ class WorkOrder {
         note nullable: true,blank: false,maxSize: 300
         status nullable: false
     }
+
     static  mapping = {
         id generator:'native', params:[sequence:'work_order_seq'], defaultValue: "nextval('work_order_seq')"
     }
+
 }

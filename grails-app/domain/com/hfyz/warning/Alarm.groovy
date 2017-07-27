@@ -21,8 +21,8 @@ class Alarm {
         updateTime nullable: false
         note nullable: true, blank: false, maxSize: 300
     }
-
     static mapping = {
         id generator:'native', params:[sequence:'alarm_seq'], defaultValue: "nextval('alarm_seq')"
     }
+
 }
