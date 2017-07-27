@@ -11,11 +11,8 @@ class PermissionGroupController implements ControllerHelper{
         renderSuccessesWithMap([menuList:roleService.getPermission(request.JSON.menuid)])
     }
     def save(){
-        println params
-        def permission=request.JSON
-        println permission
-        def role=Role.findById(params.id)
-        println PermissionGroup.findAllByIdInList(permission)
+        def permission=request.JSON.permissions
+        def role=Role.findById(request.JSON.id)
         if(role){
             role.permissionGroups=PermissionGroup.findAllByIdInList(permission)
             role.save(flush: true, failOnError: true)

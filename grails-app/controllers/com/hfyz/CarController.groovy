@@ -20,11 +20,12 @@ class CarController implements ControllerHelper {
     }
 
     def networkRate() {
+        Date date = new Date()
+        AlarmType alarmType = AlarmType.findByCodeNum('219')
+        
         def resultList = carService.networkRate(ConfigUtil.instance.carRateAlarm as BigDecimal)
-        def date = new Date().parse('yyyy-MM-dd HH:mm:ss'
-                                    , new Date().format("yyyy-MM-dd HH:mm:ss"))
         resultList.each { result ->
-            new Alarm(alarmType:  AlarmType.findByCodeNum('219')
+            new Alarm(alarmType:  alarmType
                     , alarmLevel: AlarmLevel.NORMAL
                     , sourceType: SourceType.COMPANY
                     , sourceCode: result.companyCode
@@ -33,7 +34,7 @@ class CarController implements ControllerHelper {
             new WorkOrder(sn:     System.currentTimeMillis() + ""
                     + System.nanoTime().toString().toString()[-6..-1]
                     + new Random().nextInt(100000).toString().padLeft(5, '0')
-                    , alarmType:   AlarmType.findByCodeNum('219')
+                    , alarmType:   alarmType
                     , alarmLevel:  AlarmLevel.NORMAL
                     , companyCode: result.companyCode
                     , checkTime:   date
