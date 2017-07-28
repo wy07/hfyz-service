@@ -14,14 +14,15 @@ class OwnerIdentityService {
 //        企业名称、组织机构代码 查询时间
         def ownerList = OwnerIdentity.createCriteria().list([max: max, offset: offset]) {
             if (ownerName) {
-                like("name", "%${ownerName}%")
+                like("ownerName", "%${ownerName}%")
             }
             if (companyCode) {
-                like("code", "%${companyCode}%")
+                like("companyCode", "%${companyCode}%")
             }
 
         }?.collect { OwnerIdentity it ->
-            [ownerName                   : it.ownerName     //业户名称*
+            [id                          : it.id
+             , ownerName                 : it.ownerName     //业户名称*
              , shortName                 : it.shortName     //业户简称
              , companyCode               : it.companyCode   //业户编码(组织机构代码）*
              , ownerCode                 : it.ownerCode     //企业单位代码
@@ -50,10 +51,10 @@ class OwnerIdentityService {
                 count()
             }
             if (ownerName) {
-                like("name", "%${ownerName}%")
+                like("ownerName", "%${ownerName}%")
             }
             if (companyCode) {
-                like("code", "%${companyCode}%")
+                like("companyCode", "%${companyCode}%")
             }
         }
         return [ownerList: ownerList, total: total]
