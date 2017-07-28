@@ -6,8 +6,8 @@ import grails.transaction.Transactional
 class InfoauditService {
     /*********** 信息发布、信息查询的信息列表初始化****************/
     def getPublishList( max, offset) {
-        def publishList = Infoaudit.list([max: max, offset: offset]) {
-        }?.collect { Infoaudit infoaudit->
+
+        def publishList = Infoaudit.list([max: max, offset: offset])?.collect { Infoaudit infoaudit->
             [id:infoaudit.id
              ,type:infoaudit.type
              ,title:infoaudit.title
@@ -68,8 +68,7 @@ class InfoauditService {
 
    /*********** 信息查询树形列表项搜索****************/
     def getListByType(type, max, offset){
-        def publishList = Infoaudit.findAllByType("${type}", [max: max, sort: "type", order: "desc" ,offset: offset]) {
-        }?.collect{ Infoaudit infoaudit->
+        def publishList = Infoaudit.findAllByType("${type}", [max: max, sort: "type", order: "desc" ,offset: offset]) ?.collect{ Infoaudit infoaudit->
             [id:infoaudit.id
              ,type:infoaudit.type
              ,title:infoaudit.title
