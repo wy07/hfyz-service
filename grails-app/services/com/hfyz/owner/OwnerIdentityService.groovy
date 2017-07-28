@@ -23,27 +23,12 @@ class OwnerIdentityService {
         }?.collect { OwnerIdentity it ->
             [id                          : it.id
              , ownerName                 : it.ownerName     //业户名称*
-             , shortName                 : it.shortName     //业户简称
              , companyCode               : it.companyCode   //业户编码(组织机构代码）*
              , ownerCode                 : it.ownerCode     //企业单位代码
-             , ownerAddress              : it.ownerAddress
-             , postCode                  : it.postCode
-             , administrativeDivisionName: it.administrativeDivisionName
-             , administrativeDivisionCode: it.administrativeDivisionCode
              , economicType              : it.economicType
              , legalRepresentative       : it.legalRepresentative
-             , idCardType                : it.idCardType
-             , idCardNo                  : it.idCardNo
-             , picture                   : it.picture        //法人代表照片
              , operateManager            : it.operateManager
-             , phone                     : it.phone
-             , fax                       : it.fax
-             , telephone                 : it.telephone
-             , email                     : it.email
-             , website                   : it.website
-             , parentCompanyName         : it.parentCompanyName   //企业单位代码
-             , parentOwner               : it.parentOwner]    //母公司
-
+             , phone                     : it.phone]
         }
 
         def total = OwnerIdentity.createCriteria().get {
