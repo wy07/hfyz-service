@@ -356,15 +356,17 @@ class InitService {
 
 
 //        公司（经营业户）
-        new OwnerIdentity(companyCode: 'C000000001', ownerName: '企业0', operateManager: '李四', phone: '010-89765722').save(flush: true)
-        new OwnerIdentity(companyCode: 'C000000002', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
-        new OwnerIdentity(companyCode: 'C000000003', ownerName: '企业2', operateManager: '王五', phone: '010-76737823').save(flush: true)
-        new OwnerIdentity(companyCode: 'C000000004', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
-//        公司内部制度
+        new OwnerIdentity(companyCode: 'C000000000', ownerName: '企业0', operateManager: '李四', phone: '010-89765722').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000001', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000002', ownerName: '企业2', operateManager: '王五', phone: '010-76737823').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000003', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
+
+        new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note:'触发告警为小于等于该阈值').save(flush: true)
+        new Configure(configKey: 'carRateAlarm1', configValue: '100', name: '车辆入网率告警阈值1', note:'触发告警为小于等于该阈值').save(flush: true)
+
         new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
         new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
-
-        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
 
         initAlarmType()
     }
