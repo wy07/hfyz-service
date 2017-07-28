@@ -30,6 +30,7 @@ class User implements Serializable {
 	boolean passwordExpired
 	Organization org
 	int  operator  //操作员id
+	String companyCode
 
 //	User(String username, String password) {
 //		this()
@@ -67,12 +68,12 @@ class User implements Serializable {
 		rights nullable:true
 		org nullable:true
 		operator nullable:true
+		companyCode nullable: true, blank: false, maxSize: 10
 	}
 
 	static mapping = {
 		table 'sys_user'
 		id generator:'native', params:[sequence:'user_seq'], defaultValue: "nextval('user_seq')"
-		password column: '`password`'
 		rights   type: JsonbListType,sqlType: 'jsonb'
 	}
 
