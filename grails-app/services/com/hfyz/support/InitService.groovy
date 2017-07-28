@@ -1,6 +1,8 @@
 package com.hfyz.support
 
 import com.hfyz.owner.CompanyRegulation
+
+//import com.hfyz.owner.CompanyRegulation
 import com.hfyz.owner.OwnerIdentity
 import com.hfyz.people.PeopleBasicInfo
 import com.hfyz.people.WorkerCheckMember
@@ -365,8 +367,6 @@ class InitService {
 
         new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
         new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
-
-        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
 
         initAlarmType()
     }
