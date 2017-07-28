@@ -14,10 +14,12 @@ class MenuController implements ControllerHelper {
     def search() {
         if (!request.JSON.query) {
             renderSuccessesWithMap([menuList: []])
+            return
         }
 
         if (!request.JSON.position) {
             renderErrorMsg("请选择菜单位置")
+            return
         }
 
         def menuList = Menu.findAllByPositionAndCodeLike(request.JSON.position, "${request.JSON.query}%", [max: 30, sort: 'id', order: 'desc'])?.collect { Menu obj ->

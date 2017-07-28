@@ -26,7 +26,7 @@ class CustomUserDetailsService implements GrailsUserDetailsService {
         return loadUserByUsername(username)
     }
 
-    @Transactional(readOnly=true, noRollbackFor=[IllegalArgumentException, UsernameNotFoundException])
+    @Transactional(readOnly = true, noRollbackFor = [IllegalArgumentException, UsernameNotFoundException])
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         def securityConfig = ReflectionUtils.getSecurityConfig()
         def userDomainClass = securityConfig.userLookup.userDomainClassName
@@ -42,10 +42,16 @@ class CustomUserDetailsService implements GrailsUserDetailsService {
             new SimpleGrantedAuthority(it."${securityConfig.authority.nameField}")
         }
 
-        return new CustomUserDetails(user.username, user.passwordHash, user.enabled,
-                !user.accountExpired, !user.passwordExpired,
-                !user.accountLocked, authorities ?: NO_ROLES, user.id,
-                user.salt)
+        return new CustomUserDetails(user.username
+                , user.passwordHash
+                , user.enabled
+                , !user.accountExpired
+                , !user.passwordExpired
+                , !user.accountLocked
+                , authorities ?: NO_ROLES
+                , user.id
+                , user.salt
+                , user.companyCode)
     }
 
 

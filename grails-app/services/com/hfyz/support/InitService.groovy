@@ -1,6 +1,8 @@
 package com.hfyz.support
 
 import com.hfyz.owner.CompanyRegulation
+
+//import com.hfyz.owner.CompanyRegulation
 import com.hfyz.owner.OwnerIdentity
 import com.hfyz.people.PeopleBasicInfo
 import com.hfyz.people.WorkerCheckMember
@@ -380,11 +382,12 @@ class InitService {
         }
 
 //        公司内部制度
+        new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note:'触发告警为小于等于该阈值').save(flush: true)
+        new Configure(configKey: 'carRateAlarm1', configValue: '100', name: '车辆入网率告警阈值1', note:'触发告警为小于等于该阈值').save(flush: true)
 
         new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
         new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
-
-        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
 
         initAlarmType()
     }
