@@ -52,9 +52,12 @@ class CarService {
            def networkRateList = sql.rows(getNetworkRateListSql(),[rate:rate])
         }?.collect { obj ->
             [companyCode     : obj.companyCode
-             , operateCount: obj.operateCount
-             , carinfoCount: obj.carinfoCount
-             , rate        : obj.rate.setScale(2,BigDecimal.ROUND_HALF_UP)]
+             , ownerName     : obj.ownerName
+             , operateManager: obj.operateManager
+             , phone         : obj.phone
+             , operateCount  : obj.operateCount
+             , carinfoCount  : obj.carinfoCount
+             , rate          : obj.rate.setScale(2,BigDecimal.ROUND_HALF_UP)]
         }
     }
 
@@ -69,7 +72,7 @@ class CarService {
                 left join registration_infornation_carinfo carinfo on  carinfo.frame_no = operate.frame_no
                 group by owner_name)
                 
-                select company_code companyCode, operateCount, carinfoCount, rate
+                select company_code companyCode, ownerName, operate_manager operateManager, phone, operateCount, carinfoCount, rate
                 from result, owner_identity iden
                 where ownerName = iden.owner_name and rate <= :rate
                 order by company_code
