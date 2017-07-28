@@ -52,8 +52,8 @@ class MenuControllerSpec extends Specification {
 
     def "search:搜索菜单，当入参不合法：position为null时，返回提示信息"() {
         when:
-        params.query = 'ch'
-        params.position = null
+        request.JSON.query = 'ch'
+        request.JSON.position = null
         controller.search()
 
         then:
@@ -74,8 +74,8 @@ class MenuControllerSpec extends Specification {
         Menu.build(name: 'c',   code: 'c',  position:'SIDE_BAR')
 
         when:
-        params.query = query
-        params.position = position
+        request.JSON.query = query
+        request.JSON.position = position
         controller.search()
 
         then:
@@ -97,8 +97,8 @@ class MenuControllerSpec extends Specification {
             Menu.build(name: 'abc', code: 'abc', position: 'TOP_BAR')
         }
         when:
-        params.query = 'a'
-        params.position = 'TOP_BAR'
+        request.JSON.query = 'a'
+        request.JSON.position = 'TOP_BAR'
         controller.search()
 
         then:
