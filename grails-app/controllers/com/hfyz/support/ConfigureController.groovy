@@ -2,11 +2,14 @@ package com.hfyz.support
 
 import com.commons.utils.ControllerHelper
 import com.commons.utils.ConfigUtil
+import com.commons.utils.PageUtils
 
 class ConfigureController implements ControllerHelper{
 
     def list(){
-        def configureList = Configure.list([max:request.JSON.max, offset:request.JSON.offset, sort: "id"])?.collect { Configure obj ->
+        int max = PageUtils.getMax(request.JSON.max, 10, 100)
+        int offset = PageUtils.getOffset(request.JSON.offset)
+        def configureList = Configure.list([max:max, offset:offset, sort: 'id'])?.collect { Configure obj ->
             [ id  : obj.id
               , name: obj.name
               , configValue: obj.configValue

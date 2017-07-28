@@ -37,6 +37,9 @@ class CarController implements ControllerHelper {
                     , alarmType:   alarmType
                     , alarmLevel:  AlarmLevel.NORMAL
                     , companyCode: result.companyCode
+                    , ownerName     : result.ownerName
+                    , operateManager: result.operateManager
+                    , phone         : result.phone
                     , checkTime:   date
                     , rectificationTime: date.plus(5)).save(flush: true)
         }
