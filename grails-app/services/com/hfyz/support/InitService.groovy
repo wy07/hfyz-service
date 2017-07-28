@@ -1,7 +1,8 @@
 package com.hfyz.support
 
-import com.hfyz.cases.FinisherReport
 import com.hfyz.cases.RegisterReport
+import com.hfyz.owner.CompanyRegulation
+import com.hfyz.owner.OwnerIdentity
 import com.hfyz.people.PeopleBasicInfo
 import com.hfyz.people.WorkerCheckMember
 import com.hfyz.people.WorkerCoach
@@ -12,6 +13,7 @@ import com.hfyz.people.WorkerWaiter
 import com.hfyz.platform.PlatformManage
 import com.hfyz.car.CarBasicInfo
 import com.hfyz.car.CarBasicOperate
+import com.hfyz.car.RegistrationInformationCarinfo
 import com.hfyz.warning.Warning
 import grails.transaction.Transactional
 import com.hfyz.security.User
@@ -23,10 +25,14 @@ import com.hfyz.security.PermissionGroup
 class InitService {
 
     def initData() {
+      /*  if(User.count()>0){
+            return
+        }*/
+
         def rootPermission = new PermissionGroup(name: '所有权限', permissions: '*:*').save(flush: true)
         def adminRole = new Role(authority: 'ROLE_ADMIN', name: '平台管理员', permissionGroups: [rootPermission]).save()
-
         def testUser = new User(username: 'admin', passwordHash: 'admin123', salt: User.getSecureRandomSalt(), name: '管理员').save(failOnError: true)
+
 
         UserRole.create testUser, adminRole
 
@@ -258,8 +264,7 @@ class InitService {
 
         def platForm = new Menu(name: '查岗', code: 'root-pluponForm', icon: 'fa-cog', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: platForm, position: 'SIDE_BAR').save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 30 * 1000), responseContent: '5', responseTime: 30).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true, operator: testUser, responseDate: new Date(new Date().getTime() + 30 * 1000), responseContent: '5', responseTime: 30).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '9578', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '2464', question: '10-1=?', answer: '9', responsed: true,
                 operator: testUser, responseDate: new Date(new Date().getTime() + 200 * 1000),
@@ -279,8 +284,7 @@ class InitService {
                 responseContent: '9', responseTime: 121).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '7394', question: '1x10=?', answer: '10', responsed: false,
                 operator: testUser,).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 190 * 1000),
+        new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true, operator: testUser, responseDate: new Date(new Date().getTime() + 190 * 1000),
                 responseContent: '7', responseTime: 190).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '3427', question: '12÷3=?', answer: '4', responsed: true,
                 operator: testUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
@@ -325,6 +329,7 @@ class InitService {
         new MapSign(name: '兴乐集团有限公司', mapSignType: childMapType4, longitude: 110.9435725, latitude: 30.3571598, display: true).save(flush: true)
         new MapSign(name: '苏宁电器连锁集团股份有限公司', mapSignType: childMapType4, longitude: 114.6458796, latitude: 29.1578542, display: true).save(flush: true)
         new MapSign(name: '澄星实业集团公司', mapSignType: childMapType4, longitude: 125.7851562, latitude: 30.9425723, display: true).save(flush: true)
+
         def childMapType5 = new MapSignType(name: "集团", codeNum: "202", parent: MapSignType2).save(flush: true)
         new MapSign(name: '正泰集团', mapSignType: childMapType5, longitude: 100.1578914, latitude: 31.1937586, display: false).save(flush: true)
         new MapSign(name: '新希望集团', mapSignType: childMapType5, longitude: 118.6458796, latitude: 19.1578572, display: false).save(flush: true)
@@ -335,6 +340,31 @@ class InitService {
         new RegisterReport(caseRegisterNo: "test", companyCode: "changcheng", idCardNo: "2345").save(flush: true)
         new PeopleBasicInfo(idCardNo: "421553").save(flush: true)
 
+        25.times { val ->
+            new RegistrationInformationCarinfo(
+                    vehicleNo: "陕A-CK" + "${val}".padLeft(4, '0')
+                    , vehicleColor: '白色'
+                    , plateformId: "plateform${val}"
+                    , producerId: "producer${val}"
+                    , terminalModelType: "ACRII型号"
+                    , terminalId: "terminal${val}"
+                    , terminalSimcode: "136458736" + "${val}".padLeft(2, '0')
+                    , frameNo: "frameNo${val}").save(flush: true)
+        }
+
+
+//        公司（经营业户）
+        new OwnerIdentity(companyCode: 'C000000001', ownerName: '企业0', operateManager: '李四', phone: '010-89765722').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000002', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000003', ownerName: '企业2', operateManager: '王五', phone: '010-76737823').save(flush: true)
+        new OwnerIdentity(companyCode: 'C000000004', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
+//        公司内部制度
+
+        new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
+        new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
+
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
+
         initAlarmType()
     }
 
@@ -343,7 +373,7 @@ class InitService {
 
         new AlarmType(name: "超速驾驶", codeNum: "101", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶", codeNum: "102", parent: null).save(flush: true)
-        new AlarmType(name: "偏离路线", codeNum: "103", parent: null).save(flush: true)
+        new AlarmType(name: "偏离路线", codeNum: "111", parent: null).save(flush: true)
         new AlarmType(name: "企业营运资质到期", codeNum: "201", parent: null).save(flush: true)
         new AlarmType(name: "企业营运资质过期", codeNum: "202", parent: null).save(flush: true)
         new AlarmType(name: "企业营运资质锁定", codeNum: "203", parent: null).save(flush: true)

@@ -51,6 +51,14 @@ class UrlMappings {
             }
         }
 
+        "/roles/$id/permission-groups" {
+            controller = "permissionGroup"
+            action = [POST: "save"]
+            constraints {
+                id matches: /\d+/
+            }
+        }
+
         "/login"(controller: "auth", action: 'singIn')
 
 //        //SystemCode
