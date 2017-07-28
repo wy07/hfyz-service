@@ -1,3 +1,4 @@
+
 package com.commons.exception
 
 class ParamsIllegalException extends RuntimeException{
