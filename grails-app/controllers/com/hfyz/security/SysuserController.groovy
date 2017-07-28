@@ -37,7 +37,7 @@ class SysuserController implements ControllerHelper {
 
     def edit() {
         println params
-        withUser(params.long('id')) { user ->
+        withUser(params.long('id')) {User user ->
             def result = []
             Role.list(sort: "id").each {
                 result << [value: it.id, label: it.name]
@@ -47,6 +47,7 @@ class SysuserController implements ControllerHelper {
                                                , rights  : user.rights
                                                , id      : user.id
                                                , roles   : user.authorities.id
+                                               , companyCode: user.companyCode
             ],
                                     roleList: result])
         }
