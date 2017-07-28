@@ -197,11 +197,10 @@ class PeopleBasicInfoService {
     private illegalInspection() {
         String sqlStr = """
             WITH cases AS (
-                SELECT id_card_no,company_code
+                SELECT DISTINCT id_card_no,company_code
                 FROM case_register_registerreport reg 
                 LEFT JOIN case_finshcase_finishreport fin ON reg.case_register_no = fin.case_register_no
-                WHERE fin.case_register_no IS NULL
-                GROUP BY id_card_no,company_code)
+                WHERE fin.case_register_no IS NULL)
             SELECT cases.id_card_no idCardNo,cases.company_code companyCode
             FROM cases
             INNER JOIN people_basicinfo_public pub ON cases.id_card_no=pub.id_card_no"""
