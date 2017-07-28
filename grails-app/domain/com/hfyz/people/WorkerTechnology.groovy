@@ -2,6 +2,7 @@ package com.hfyz.people
 
 class WorkerTechnology {
     String idCardNo //身份证号
+    String companyCode //业户编码
     String workLicenseType //从业资格类别
     String workLicenseNo //从业资格证号
     Date workLicenseGetTime //从业资格初领时间
@@ -21,6 +22,7 @@ class WorkerTechnology {
 
     static constraints = {
         idCardNo maxSize: 18, unique: true
+        companyCode nullable: false, blank: false
         workLicenseType maxSize: 30, nullable: true, blank: false
         workLicenseNo maxSize: 12, nullable: true, blank: false
         workLicenseGetTime nullable: true

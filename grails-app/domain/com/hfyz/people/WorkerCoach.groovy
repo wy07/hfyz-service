@@ -4,6 +4,7 @@ package com.hfyz.people
  */
 class WorkerCoach {
     String idCardNo //身份证号
+    String companyCode //业户编码
     String workLicenseType //从业资格类别
     String workLicenseNo //从业资格证号
     Date workLicenseGetTime //从业资格初领时间
@@ -26,27 +27,28 @@ class WorkerCoach {
     String driveLicenseSituation //证照状态
 
     static constraints = {
-        idCardNo maxSize: 18, unique: true
-        workLicenseType maxSize: 30, nullable: true
-        workLicenseNo maxSize: 12, nullable: true
+        idCardNo maxSize: 18, unique: true, blank: false
+        companyCode nullable: false, blank: false
+        workLicenseType maxSize: 30, nullable: true, blank: false
+        workLicenseNo maxSize: 12, nullable: true, blank: false
         workLicenseGetTime nullable: true
         workLicenseGrantTime nullable: true
         endTime nullable: true
-        driveLicenseNo maxSize: 18, nullable: true
-        driveCarType maxSize: 14, nullable: true
+        driveLicenseNo maxSize: 18, nullable: true, blank: false
+        driveCarType maxSize: 14, nullable: true, blank: false
         driveLicenseGetTime nullable: true
-        licenseGrantOrga nullable: true, maxSize: 50
-        licenseSituation maxSize: 4, nullable: true
-        workSituation maxSize: 8, nullable: true
-        ownerName maxSize: 50, nullable: true
-        businessPermitCharacter maxSize: 2, nullable: true
-        businessPermitNo maxSize: 12, nullable: true
+        licenseGrantOrga nullable: true, maxSize: 50, blank: false
+        licenseSituation maxSize: 4, nullable: true, blank: false
+        workSituation maxSize: 8, nullable: true, blank: false
+        ownerName maxSize: 50, nullable: true, blank: false
+        businessPermitCharacter maxSize: 2, nullable: true, blank: false
+        businessPermitNo maxSize: 12, nullable: true, blank: false
         changeTimes nullable: true
         trainTimes nullable: true
         inspectDealSituation nullable: true
-        teachType maxSize: 8, nullable: true
-        teachCarType maxSize: 14, nullable: true
-        driveLicenseSituation maxSize: 4, nullable: true
+        teachType maxSize: 8, nullable: true, blank: false
+        teachCarType maxSize: 14, nullable: true, blank: false
+        driveLicenseSituation maxSize: 4, nullable: true, blank: false
     }
 
     static mapping = {

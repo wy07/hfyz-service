@@ -1,5 +1,7 @@
 package com.hfyz.support
 
+import com.hfyz.cases.FinisherReport
+import com.hfyz.cases.RegisterReport
 import com.hfyz.people.PeopleBasicInfo
 import com.hfyz.people.WorkerCheckMember
 import com.hfyz.people.WorkerCoach
@@ -24,7 +26,7 @@ class InitService {
         def rootPermission = new PermissionGroup(name: '所有权限', permissions: '*:*').save(flush: true)
         def adminRole = new Role(authority: 'ROLE_ADMIN', name: '平台管理员', permissionGroups: [rootPermission]).save()
 
-        def testUser = new User(username: 'admin', passwordHash: 'admin123',salt:User.getSecureRandomSalt(), name: '管理员').save(failOnError:true)
+        def testUser = new User(username: 'admin', passwordHash: 'admin123', salt: User.getSecureRandomSalt(), name: '管理员').save(failOnError: true)
 
         UserRole.create testUser, adminRole
 
@@ -32,7 +34,7 @@ class InitService {
             it.flush()
             it.clear()
         }
-            
+
         new Menu(name: '关闭全部', code: 'closeall', position: 'TOP_BAR', parent: null).save(flush: true)
         def topbar = new Menu(name: '个人中心', code: 'profile', style: 'hoverdown', position: 'TOP_BAR', parent: null).save(flush: true)
         new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
@@ -99,12 +101,12 @@ class InitService {
 
         new PeopleBasicInfo(name: '张敏', gender: '女', idCardNo: '34212519870314673x', picture: '', nation: '汉', nativePlace: '安徽合肥', phoneNo: '15105512743', address: '', email: 'test1@163.com', postCode: '340101', educationLevel: '大专', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
         new PeopleBasicInfo(name: '吴珊', gender: '男', idCardNo: '34132519870314222x', picture: '', nation: '汉', nativePlace: '安徽巢湖', phoneNo: '15703272743', address: '', email: 'test2@163.com', postCode: '340001', educationLevel: '本科', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
-        new WorkerCheckMember(idCardNo: '34212519870314673x', workLicenseType: '货运', workLicenseNo: 'AH2016', workLicenseGrantTime: new Date(), workLicenseGetTime: new Date(), endTime: new Date(), licenseGrantOrg: '合肥XXX运输有限公司', licenseSituation: '可用', licenseChangeTimes: 2, trainTimes: 2, checkType: '1').save(flush: true)
-        new WorkerManager(idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '押运装卸', ownerName: '合肥市汽车客运XXX', driveCarType: '中小型客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), licenseGrantOrg: '合肥市交通xxx').save(flush: true)
-        new WorkerTechnology(idCardNo: '34212519870314673x', ownerName: '合肥市汽车客运XXX').save(flush: true)
+        new WorkerCheckMember(companyCode: 'changcheng', idCardNo: '34212519870314673x', workLicenseType: '货运', workLicenseNo: 'AH2016', workLicenseGrantTime: new Date(), workLicenseGetTime: new Date(), endTime: new Date(), licenseGrantOrg: '合肥XXX运输有限公司', licenseSituation: '可用', licenseChangeTimes: 2, trainTimes: 2, checkType: '1').save(flush: true)
+        new WorkerManager(companyCode: 'changcheng', idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '押运装卸', ownerName: '合肥市汽车客运XXX', driveCarType: '中小型客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), licenseGrantOrg: '合肥市交通xxx').save(flush: true)
+        new WorkerTechnology(companyCode: 'changcheng', idCardNo: '34212519870314673x', ownerName: '合肥市汽车客运XXX').save(flush: true)
         new WorkerWaiter(idCardNo: '34132519870314222x', jobName: '后勤管理', jobLicenseNo: 'xxxx', grantTime: new Date(), beginWorkTime: new Date()).save(flush: true)
-        new WorkerCoach(idCardNo: '34212519870314673x', workLicenseType: '教练', workLicenseNo: 'CAH1234', workLicenseGetTime: new Date(), workLicenseGrantTime: new Date(), endTime: new Date(), driveLicenseNo: '34212519870314673x', driveCarType: '小汽车', driveLicenseGetTime: new Date(), licenseGrantOrga: '合肥市新亚驾校', licenseSituation: '可用', workSituation: '中级教练', ownerName: '合肥市新亚驾校', businessPermitCharacter: '3', businessPermitNo: '34xxx', changeTimes: 0, trainTimes: 1, inspectDealSituation: '', teachType: 'C照', driveLicenseSituation: '可用').save(flush: true)
-        new WorkerDriver(idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '驾驶员', ownerName: '合肥市汽车客运XXX', driveCarType: '客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), driveLicenseNo: '34132519870314222x', businessPermitCharacter: 'x').save(flush: true)
+        new WorkerCoach(companyCode: 'changcheng', idCardNo: '34212519870314673x', workLicenseType: '教练', workLicenseNo: 'CAH1234', workLicenseGetTime: new Date(), workLicenseGrantTime: new Date(), endTime: new Date(), driveLicenseNo: '34212519870314673x', driveCarType: '小汽车', driveLicenseGetTime: new Date(), licenseGrantOrga: '合肥市新亚驾校', licenseSituation: '可用', workSituation: '中级教练', ownerName: '合肥市新亚驾校', businessPermitCharacter: '3', businessPermitNo: '34xxx', changeTimes: 0, trainTimes: 1, inspectDealSituation: '', teachType: 'C照', driveLicenseSituation: '可用').save(flush: true)
+        new WorkerDriver(companyCode: 'changcheng', idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '驾驶员', ownerName: '合肥市汽车客运XXX', driveCarType: '客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), driveLicenseNo: '34132519870314222x', businessPermitCharacter: 'x').save(flush: true)
 
         def infoManage = new Menu(name: '信息管理', code: 'root-infomanage', icon: 'fa-laptop', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
@@ -257,31 +259,31 @@ class InitService {
         def platForm = new Menu(name: '查岗', code: 'root-pluponForm', icon: 'fa-cog', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: platForm, position: 'SIDE_BAR').save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 30*1000), responseContent: '5', responseTime: 30).save(flush: true)
+                operator: testUser, responseDate: new Date(new Date().getTime() + 30 * 1000), responseContent: '5', responseTime: 30).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '9578', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '2464', question: '10-1=?', answer: '9', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 200*1000),
+                operator: testUser, responseDate: new Date(new Date().getTime() + 200 * 1000),
                 responseContent: '9', responseTime: 200).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '1934', question: '2x3=?', answer: '6', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 20*1000),
+                operator: testUser, responseDate: new Date(new Date().getTime() + 20 * 1000),
                 responseContent: '6', responseTime: 20).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '6427', question: '10÷5=?', answer: '2', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 76*1000),
+                operator: testUser, responseDate: new Date(new Date().getTime() + 76 * 1000),
                 responseContent: '2', responseTime: 76).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '7294', question: '1x10=?', answer: '10', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '6729', question: '2x2=?', answer: '4', responsed: true,
-                responseDate: new Date(new Date().getTime() + 100*1000),
+                responseDate: new Date(new Date().getTime() + 100 * 1000),
                 responseContent: '4', responseTime: 100).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '1759', question: '1+8=?', answer: '9', responsed: true,
-                responseDate: new Date(new Date().getTime() + 121*1000),
+                responseDate: new Date(new Date().getTime() + 121 * 1000),
                 responseContent: '9', responseTime: 121).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '7394', question: '1x10=?', answer: '10', responsed: false,
                 operator: testUser,).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 190*1000),
+                operator: testUser, responseDate: new Date(new Date().getTime() + 190 * 1000),
                 responseContent: '7', responseTime: 190).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '3427', question: '12÷3=?', answer: '4', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 75*1000),
+                operator: testUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
                 responseContent: '4', responseTime: 75).save(flush: true)
 
 //        new Menu(name: '平台配置管理', code: 'platformManage', icon: 'fa-columns', parent: platForm, position: 'SIDE_BAR').save(flush: true)
@@ -301,39 +303,42 @@ class InitService {
         new PlatformManage(ip: '614.17.1.42', port: '2301', name: '平安四方有限公司', code: 'K502', contactName: '郑磊国', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
 
         new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        def MapSignType1 = new MapSignType(name: "国企", codeNum: "100", parent: null).save(flush:true)
-        def childMapType1 = new MapSignType(name: "银行部门", codeNum: "101", parent: MapSignType1).save(flush:true)
+        def MapSignType1 = new MapSignType(name: "国企", codeNum: "100", parent: null).save(flush: true)
+        def childMapType1 = new MapSignType(name: "银行部门", codeNum: "101", parent: MapSignType1).save(flush: true)
         new MapSign(name: '中国农业银行', mapSignType: childMapType1, longitude: 110.4578914, latitude: 30.7542289, display: true).save(flush: true)
         new MapSign(name: '中国工商银行', mapSignType: childMapType1, longitude: 112.6458796, latitude: 28.1578542, display: false).save(flush: true)
         new MapSign(name: '中国建设银行', mapSignType: childMapType1, longitude: 135.7851562, latitude: 19.9425723, display: true).save(flush: true)
-        def childMapType2 = new MapSignType(name: "政府部门", codeNum: "102", parent: MapSignType1).save(flush:true)
+        def childMapType2 = new MapSignType(name: "政府部门", codeNum: "102", parent: MapSignType1).save(flush: true)
         new MapSign(name: '税务局', mapSignType: childMapType2, longitude: 120.4578914, latitude: 27.7542289, display: true).save(flush: true)
         new MapSign(name: '法院', mapSignType: childMapType2, longitude: 127.6458796, latitude: 39.1578542, display: true).save(flush: true)
         new MapSign(name: '教育局', mapSignType: childMapType2, longitude: 119.7851562, latitude: 25.9425723, display: true).save(flush: true)
-        def childMapType3 = new MapSignType(name: "能源部门", codeNum: "103", parent: MapSignType1).save(flush:true)
+        def childMapType3 = new MapSignType(name: "能源部门", codeNum: "103", parent: MapSignType1).save(flush: true)
         new MapSign(name: '中国石油', mapSignType: childMapType3, longitude: 135.8546758, latitude: 28.6497285, display: true).save(flush: true)
         new MapSign(name: '中国电网', mapSignType: childMapType3, longitude: 109.7548964, latitude: 50.1785436, display: false).save(flush: true)
         new MapSign(name: '中国矿业', mapSignType: childMapType3, longitude: 119.3586457, latitude: 32.9427851, display: true).save(flush: true)
 
-        def MapSignType2 = new MapSignType(name: "私企", codeNum: "200", parent: null).save(flush:true)
-        def childMapType4 = new MapSignType(name: "有限公司", codeNum: "201", parent: MapSignType2).save(flush:true)
+        def MapSignType2 = new MapSignType(name: "私企", codeNum: "200", parent: null).save(flush: true)
+        def childMapType4 = new MapSignType(name: "有限公司", codeNum: "201", parent: MapSignType2).save(flush: true)
         new MapSign(name: '兴乐集团有限公司', mapSignType: childMapType4, longitude: 100.4578914, latitude: 30.1937586, display: true).save(flush: true)
         new MapSign(name: '星月集团有限公司', mapSignType: childMapType4, longitude: 117.6458796, latitude: 28.1578572, display: true).save(flush: true)
         new MapSign(name: '森马企业有限公司', mapSignType: childMapType4, longitude: 135.4824311, latitude: 19.7896541, display: false).save(flush: true)
         new MapSign(name: '兴乐集团有限公司', mapSignType: childMapType4, longitude: 110.9435725, latitude: 30.3571598, display: true).save(flush: true)
         new MapSign(name: '苏宁电器连锁集团股份有限公司', mapSignType: childMapType4, longitude: 114.6458796, latitude: 29.1578542, display: true).save(flush: true)
         new MapSign(name: '澄星实业集团公司', mapSignType: childMapType4, longitude: 125.7851562, latitude: 30.9425723, display: true).save(flush: true)
-        def childMapType5 = new MapSignType(name: "集团", codeNum: "202", parent: MapSignType2).save(flush:true)
+        def childMapType5 = new MapSignType(name: "集团", codeNum: "202", parent: MapSignType2).save(flush: true)
         new MapSign(name: '正泰集团', mapSignType: childMapType5, longitude: 100.1578914, latitude: 31.1937586, display: false).save(flush: true)
         new MapSign(name: '新希望集团', mapSignType: childMapType5, longitude: 118.6458796, latitude: 19.1578572, display: false).save(flush: true)
         new MapSign(name: '报喜鸟集团', mapSignType: childMapType5, longitude: 135.8424311, latitude: 29.7896541, display: true).save(flush: true)
         new MapSign(name: '金州集团', mapSignType: childMapType5, longitude: 111.9435725, latitude: 33.3571598, display: true).save(flush: true)
 
+        new RegisterReport(caseRegisterNo: "tx123", companyCode: "changcheng", idCardNo: "421553").save(flush: true)
+        new PeopleBasicInfo(idCardNo: "421553").save(flush: true)
+
         initAlarmType()
     }
 
 
-    private  initAlarmType(){
+    private initAlarmType() {
 
         new AlarmType(name: "超速驾驶", codeNum: "101", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶", codeNum: "102", parent: null).save(flush: true)
