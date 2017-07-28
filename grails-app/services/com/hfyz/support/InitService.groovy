@@ -79,6 +79,7 @@ class InitService {
 //        new Menu(name: '其他地图', code: 'otherMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 
         new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '业户', code: 'ownerIdentity', icon: 'fa-building', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 
 
@@ -354,10 +355,30 @@ class InitService {
 
 
 //        公司（经营业户）
-        new OwnerIdentity(companyCode: 'C000000001', ownerName: '企业0', operateManager: '李四', phone: '010-89765722').save(flush: true)
-        new OwnerIdentity(companyCode: 'C000000002', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
-        new OwnerIdentity(companyCode: 'C000000003', ownerName: '企业2', operateManager: '王五', phone: '010-76737823').save(flush: true)
-        new OwnerIdentity(companyCode: 'C000000004', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
+        4.times{it ->
+            new OwnerIdentity(ownerName: "企业${it}"
+                    , companyCode:"C00000000${it}"
+                    , ownerCode: "dwcode00${it}"
+                    , parentCompanyName: '企业1'
+                    , parentOwner: '企业1'
+                    , ownerAddress: "合肥市怀宁路1${it}6号"
+                    , postCode: 23002+"${it}"
+                    , administrativeDivisionName: '蜀山区'
+                    , administrativeDivisionCode: 34010+"${it}"
+                    , economicType: '私营经济'
+                    , legalRepresentative: '张敏'
+                    , idCardType: '居民身份证'
+                    , idCardNo: "${it}4212519870314673x"
+                    , picture: ''
+                    , operateManager: '吴珊'
+                    , phone: "010-${it}2425722"
+                    , fax: ''
+                    , telephone: "1${it}387673452"
+                    , email: "wushan${it}@163.com"
+                    , website: "http://www.${it}xiaojukeji.com"
+                    , shortName: '企业0').save(flush: true)
+        }
+
 //        公司内部制度
 
         new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
@@ -369,7 +390,7 @@ class InitService {
     }
 
 
-    private  initAlarmType(){
+    private initAlarmType() {
 
         new AlarmType(name: "超速驾驶", codeNum: "101", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶", codeNum: "102", parent: null).save(flush: true)
