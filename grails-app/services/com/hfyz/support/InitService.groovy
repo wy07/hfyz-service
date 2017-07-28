@@ -352,8 +352,9 @@ class InitService {
 //        公司内部制度
 //        new CompanyRegulation(companyCode: 'C001').save(flush: true)
 //        new CompanyRegulation(companyCode: 'C002').save(flush: true)
-
-        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
+        new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note:'触发告警为小于等于该阈值').save(flush: true)
+        new Configure(configKey: 'carRateAlarm1', configValue: '100', name: '车辆入网率告警阈值1', note:'触发告警为小于等于该阈值').save(flush: true)
 
         initAlarmType()
     }
