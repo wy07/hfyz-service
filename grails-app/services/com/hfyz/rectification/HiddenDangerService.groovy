@@ -7,19 +7,19 @@ class HiddenDangerService {
 
     def getHiddenDangerList(def max, def offset) {
         def total = HiddenDanger.count()
-        def hiddenDangerList = HiddenDanger.createCriteria().list([max:max,offset:offset])?.collect{
-            HiddenDanger it ->
+        def hiddenDangerList = HiddenDanger.list([max:max,offset:offset])?.collect{
+            HiddenDanger obj ->
                 [
-                        id : it.id,
-                        billNo : it.billNo,
-                        enterpirse : it.enterpirse,
-                        examiner : it.examiner,
-                        inspectionDate : it.inspectionDate,
-                        dealineDate : it.dealineDate,
-                        insPosition : it.insPosition,
-                        insDesc : it.insDesc,
-                        insQuestion : it.insQuestion,
-                        proPosal : it.proPosal
+                        id : obj.id,
+                        billNo : obj.billNo,
+                        enterpirse : obj.enterpirse,
+                        examiner : obj.examiner,
+                        inspectionDate : obj.inspectionDate,
+                        dealineDate : obj.dealineDate,
+                        insPosition : obj.insPosition,
+                        insDesc : obj.insDesc,
+                        insQuestion : obj.insQuestion,
+                        proPosal : obj.proPosal
                 ]
         }
 

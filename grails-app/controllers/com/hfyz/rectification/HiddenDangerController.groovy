@@ -7,7 +7,9 @@ class HiddenDangerController implements ControllerHelper {
     def hiddenDangerService
 
     def list() {
-        renderSuccessesWithMap([hiddenDangerList:hiddenDangerService.getHiddenDangerList(request.JSON.max,request.JSON.offset)])
+        int max = PageUtils.getMax(request.JSON.max, 10, 100)
+        int offset = PageUtils.getOffset(request.JSON.offset)
+        renderSuccessesWithMap([hiddenDangerList:hiddenDangerService.getHiddenDangerList(max,offset)])
     }
 
     def save(){
