@@ -367,7 +367,7 @@ class InitService {
 
         new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
         new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
-        
+
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
 
         def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
