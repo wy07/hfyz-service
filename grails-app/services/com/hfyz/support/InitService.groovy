@@ -19,6 +19,7 @@ import com.hfyz.security.User
 import com.hfyz.security.Role
 import com.hfyz.security.UserRole
 import com.hfyz.security.PermissionGroup
+import com.hfyz.rectification.HiddenDanger
 
 @Transactional
 class InitService {
@@ -354,6 +355,13 @@ class InitService {
 //        new CompanyRegulation(companyCode: 'C002').save(flush: true)
 
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
+        def parentMenu = new Menu(name: '整改', code: 'rectification', icon: 'a-yelpr', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '隐患', code: 'hiddenDanger', icon: 'fa-bell-slash', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
+        new HiddenDanger(billNo: '20170730001', enterpirse:'zhangsan', examiner:'lisi', inspectionDate:new Date(), dealineDate:new Date()+5, insPosition:'chejian', insDesc:'jiqi', insQuestion:'anquanwenti', proPosal:'限期整改', status:'xiugaizhong').save(flush: true)
+        new HiddenDanger(billNo: '20170730002', enterpirse:'zhangsan', examiner:'lisi', inspectionDate:new Date(), dealineDate:new Date()+6, insPosition:'chejian', insDesc:'jiqi', insQuestion:'anquanwenti', proPosal:'限期整改', status:'xiugaizhong').save(flush: true)
+        new HiddenDanger(billNo: '20170730003', enterpirse:'zhangsan', examiner:'lisi', inspectionDate:new Date(), dealineDate:new Date()+7, insPosition:'chejian', insDesc:'jiqi', insQuestion:'anquanwenti', proPosal:'限期整改', status:'xiugaizhong').save(flush: true)
+        new HiddenDanger(billNo: '20170730004', enterpirse:'zhangsan', examiner:'lisi', inspectionDate:new Date(), dealineDate:new Date()+8, insPosition:'chejian', insDesc:'jiqi', insQuestion:'anquanwenti', proPosal:'限期整改', status:'xiugaizhong').save(flush: true)
+        new HiddenDanger(billNo: '20170730005', enterpirse:'zhangsan', examiner:'lisi', inspectionDate:new Date(), dealineDate:new Date()+9, insPosition:'chejian', insDesc:'jiqi', insQuestion:'anquanwenti', proPosal:'限期整改', status:'xiugaizhong').save(flush: true)
 
         initAlarmType()
     }
