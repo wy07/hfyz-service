@@ -20,15 +20,7 @@ class WarningService {
              , carLicenseNo   : it.carLicenseNo
              , carColor       : it.carColor
              , warningSource  : getWarningSourceName(it.warningSource)
-             , warningType    : it.warningType
-             , warningTime    : it.warningTime?.format("yyyy-MM-dd HH:mm:ss")
-             , warningTimes   : it.warningTimes
-             , superviseId    : it.superviseId
-             , endTime        : it.endTime
-             , superviseLevel : it.superviseLevel
-             , supervisePeople: it.supervisePeople
-             , supervisePhone : it.supervisePhone
-             , superviseEmail : it.superviseEmail]
+             , warningType    : it.warningType]
         }
 
         def total = Warning.createCriteria().get {
