@@ -7,6 +7,8 @@ grails {
                 passwordPropertyName = 'passwordHash'
             }
             authority.className = 'com.hfyz.security.Role'
+            requestMap.className = 'com.hfyz.security.PermissionGroup'
+            securityConfigType = 'Requestmap'       //将权限字符串保存在数据库中，修改时需要显示的刷新。
             //配置使用hash编码的方式保存密码
             password {
                 algorithm = 'SHA-256'
@@ -52,12 +54,14 @@ grails {
                     [pattern: '/**/js/**', filters: 'none'],
                     [pattern: '/**/css/**', filters: 'none'],
                     [pattern: '/**/images/**', filters: 'none'],
+                    [pattern: '/favicon.ico', filters: 'none'],
                     [pattern: '/**/favicon.ico', filters: 'none'],
                     [pattern: '/login', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-tokenProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
                     [pattern: '/login/**', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-tokenProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
                     [pattern: '/auth/**', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-tokenProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
-//                    [pattern: '/**', filters: 'none']
-                    [pattern: '/**', filters: 'JOINED_FILTERS']
+                    [pattern: '/system-codes/getmenu', filters: 'none'],
+                    [pattern: '/systemCode/getmenu', filters: 'none'],
+//                    [pattern: '/**', filters: 'JOINED_FILTERS']
             ]
         }
     }

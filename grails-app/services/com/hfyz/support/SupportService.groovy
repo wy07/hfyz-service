@@ -58,7 +58,7 @@ class SupportService {
 
     def getMenu() {
         def result = [:]
-        def GET_MENU_SQL = "select id,name,code ,style, icon,position from menu where parent_id is null and display=true and position in ('TOP_BAR','SIDE_BAR') order by id"
+        def GET_MENU_SQL = "select id,name,code ,style, icon,position,permission_code from menu where parent_id is null and display=true and position in ('TOP_BAR','SIDE_BAR') order by id"
         //println GET_USER_SQL
         SQLHelper.withDataSource(dataSource) { sql ->
             sql.rows(GET_MENU_SQL.toString())
@@ -147,7 +147,7 @@ class SupportService {
         return result
     }
     private static final SYSTEM_CODE_LIST_BY_MENU = """
-        select id,name,code ,style, icon,display from menu where display=true and parent_id=:parentId order by id
+        select id,name,code ,style, icon,display,permission_code from menu where display=true and parent_id=:parentId order by id
     """
     private static final SYSTEM_CODE_LIST_BY_PARENT_AND_TYPE = """
         select sc.id

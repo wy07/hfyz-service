@@ -1,23 +1,22 @@
 package com.hfyz.security
 
-import com.hfyz.support.Menu
 import org.springframework.http.HttpMethod
 
 class PermissionGroup {
 
+    String category
     String name
-    String permissions
-    Menu menu
-//    String configAttribute
-//    HttpMethod httpMethod
-//    String url
+    String code
+    String configAttribute
+    HttpMethod httpMethod
+    String url
 
     static constraints = {
-        name nullable:false,unique:'menu',blank:false,maxSize:20
-        permissions nullable:false,unique:'menu',blank:false,maxSize:20
-        menu nullable:true,blank:false
-//        configAttribute blank: false
-//        httpMethod nullable: true
-//        url blank: false, unique: 'httpMethod'
+        category nullable: false, blank: false, maxSize: 50
+        name nullable: false, blank: false, maxSize: 20
+        code nullable: false, blank: false, maxSize: 50
+        configAttribute blank: false, nullable: false, maxSize: 200
+        httpMethod nullable: true, maxSize: 50
+        url blank: false, unique: 'httpMethod', maxSize: 100
     }
 }

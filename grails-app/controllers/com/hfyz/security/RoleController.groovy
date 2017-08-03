@@ -11,7 +11,20 @@ class RoleController implements ControllerHelper{
     def roleService
     def supportService
     def list() {
-        renderSuccessesWithMap([roleList: roleService.getRoleList(NumberUtils.toInteger(request.JSON.operatorId))])
+        def roleList=Role.list().collect{Role role->
+            [id:role.id
+             ,name:role.name
+             ,authority:role.authority
+             ,org:role.org?.name]
+        }
+
+//        id:it.id
+//        ,name:it.name
+//        ,rights:it.permissionGroups.collect{it.menu?"${it.name}${it.menu.name}":it.name}
+//        ,users:UserRole.findAllByRole(it).user.name
+//        ,orgs:it.orgs.name
+
+        renderSuccessesWithMap([roleList: roleList])
     }
     def listForSelect(){ 
         renderSuccessesWithMap([roleList: roleService.getRoleListForSelect(request.JSON.roles,NumberUtils.toInteger(request.JSON.operatorId)),
