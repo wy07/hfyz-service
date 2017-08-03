@@ -1,7 +1,7 @@
 package com.hfyz.rectification
 
 
-class HiddenDanger {
+class HiddenRectificationOrder {
 
     String billNo
     String area
@@ -15,7 +15,7 @@ class HiddenDanger {
     String proPosal
     Date   replyDate
     String replyDesc
-    HiddenStatus status
+    HiddenRectificationOrderStatus status
 
 
     static constraints = {

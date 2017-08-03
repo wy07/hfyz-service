@@ -15,14 +15,14 @@ import com.hfyz.platform.PlatformManage
 import com.hfyz.car.CarBasicInfo
 import com.hfyz.car.CarBasicOperate
 import com.hfyz.car.RegistrationInformationCarinfo
-import com.hfyz.rectification.HiddenStatus
 import com.hfyz.warning.Warning
 import grails.transaction.Transactional
 import com.hfyz.security.User
 import com.hfyz.security.Role
 import com.hfyz.security.UserRole
 import com.hfyz.security.PermissionGroup
-import com.hfyz.rectification.HiddenDanger
+import com.hfyz.rectification.HiddenRectificationOrder
+import com.hfyz.rectification.HiddenRectificationOrderStatus
 
 
 @Transactional
@@ -392,13 +392,20 @@ class InitService {
         new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
         new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
 
+
         def parentMenu = new Menu(name: '整改', code: 'root-rectification', icon: 'fa-hand-o-up', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '隐患整改', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
-        new HiddenDanger(billNo: '20170730001', enterpirse:'a公司', examiner:'李四', inspectionDate:new Date(), dealineDate:new Date()+5, insPosition:'车间', insDesc:'机器', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenStatus.QC).save(flush: true)
-        new HiddenDanger(billNo: '20170730002', enterpirse:'b公司', examiner:'王五', inspectionDate:new Date(), dealineDate:new Date()+6, insPosition:'工厂', insDesc:'线路', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenStatus.QC).save(flush: true)
-        new HiddenDanger(billNo: '20170730003', enterpirse:'c公司', examiner:'赵六', inspectionDate:new Date(), dealineDate:new Date()+7, insPosition:'工厂', insDesc:'压缩机', insQuestion:'无验证', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenStatus.QC).save(flush: true)
-        new HiddenDanger(billNo: '20170730004', enterpirse:'d公司', examiner:'tony', inspectionDate:new Date(), dealineDate:new Date()+8, insPosition:'车间', insDesc:'发动机', insQuestion:'无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenStatus.QC).save(flush: true)
-        new HiddenDanger(billNo: '20170730005', enterpirse:'f公司', examiner:'kobe', inspectionDate:new Date(), dealineDate:new Date()+9, insPosition:'工厂', insDesc:'jiqi', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730001', enterpirse:'a公司', examiner:'李四', inspectionDate:new Date(), dealineDate:new Date()+5, insPosition:'车间', insDesc:'机器', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730002', enterpirse:'b公司', examiner:'王五', inspectionDate:new Date(), dealineDate:new Date()+6, insPosition:'工厂', insDesc:'线路', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730003', enterpirse:'c公司', examiner:'赵六', inspectionDate:new Date(), dealineDate:new Date()+7, insPosition:'工厂', insDesc:'压缩机', insQuestion:'无验证', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730004', enterpirse:'d公司', examiner:'tony', inspectionDate:new Date(), dealineDate:new Date()+8, insPosition:'车间', insDesc:'发动机', insQuestion:'无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730005', enterpirse:'f公司', examiner:'kobe', inspectionDate:new Date(), dealineDate:new Date()+9, insPosition:'工厂', insDesc:'jiqi', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
+
+        def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
+
 
         initAlarmType()
     }

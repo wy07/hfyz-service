@@ -3,12 +3,12 @@ package com.hfyz.rectification
 import grails.transaction.Transactional
 
 @Transactional
-class HiddenDangerService {
+class HiddenRectificationOrderService {
 
     def getHiddenDangerList(def max, def offset ,def company ,def startDate, def endDate) {
         def sd = startDate ? new Date().parse('yyyy-MM-dd HH:mm',startDate) : null
         def ed = endDate ? new Date().parse('yyyy-MM-dd HH:mm',endDate) : null
-        def total = HiddenDanger.createCriteria().get{
+        def total = HiddenRectificationOrder.createCriteria().get{
             projections {
                 count()
             }
@@ -24,7 +24,7 @@ class HiddenDangerService {
                 le("inspectionDate", ed)
             }
         }
-        def hiddenDangerList = HiddenDanger.createCriteria().list([max:max,offset:offset,sort:'id']){
+        def hiddenRectificationOrderList = HiddenRectificationOrder.createCriteria().list([max:max, offset:offset, sort:'id']){
             if(company){
                 like('enterpirse',"${company}%")
             }
@@ -35,7 +35,7 @@ class HiddenDangerService {
                 le("inspectionDate", ed)
             }
         }?.collect{
-            HiddenDanger obj ->
+            HiddenRectificationOrder obj ->
                 [
                         id : obj.id,
                         billNo : obj.billNo,
@@ -46,7 +46,7 @@ class HiddenDangerService {
                         status : obj.status.type
                 ]
         }
-        return [hiddenDangerList:hiddenDangerList,total:total]
+        return [hiddenRectificationOrderList:hiddenRectificationOrderList,total:total]
     }
 
 }
