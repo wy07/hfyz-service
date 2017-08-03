@@ -1,6 +1,7 @@
 package com.commons.utils
 
 import com.commons.exception.ParamsIllegalException
+import com.commons.exception.RecordNotFoundException
 import com.hfyz.security.User
 import grails.converters.JSON
 import grails.validation.ValidationException
@@ -76,7 +77,9 @@ trait ControllerHelper {
         renderParamsIllegalErrorMsg(e.message)
     }
 
-
+    def handleRecordNotFoundException(RecordNotFoundException e) {
+        renderErrorMsg('数据错误')
+    }
 
     def handleValidationException(ValidationException e) {
         renderValidationErrors(e.errors)
