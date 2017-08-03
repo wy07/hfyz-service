@@ -1,7 +1,7 @@
 package com.hfyz.workOrder
 
 class WorkOrderService {
-    def list(max, offset){
+    def findListAndTotal(max, offset){
         def workOrderList = WorkOrder.list([max: max, offset: offset, sort: 'id'])?.collect { WorkOrder obj ->
             [ id: obj.id
               , sn: obj.sn
