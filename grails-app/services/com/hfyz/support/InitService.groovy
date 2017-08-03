@@ -34,7 +34,7 @@ class InitService {
           }*/
 
         def rootPermission = new PermissionGroup(name: '所有权限', permissions: '*:*').save(flush: true)
-        def adminRole = new Role(authority: 'ROLE_ADMIN', name: '平台管理员', permissionGroups: [rootPermission]).save()
+        def adminRole = new Role(authority: 'ROLE_ADMIN', name: '平台管理', permissionGroups: [rootPermission]).save()
         def testUser = new User(username: 'admin', passwordHash: 'admin123', salt: User.getSecureRandomSalt(), name: '管理员').save(failOnError: true)
 
 
