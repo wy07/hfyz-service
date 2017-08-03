@@ -1,10 +1,20 @@
 package com.hfyz.roster
 
+import com.commons.exception.ParamsIllegalException
+import com.commons.exception.RecordNotFoundException
 import com.hfyz.car.CarBasicInfo
 import grails.transaction.Transactional
 
 @Transactional
 class WhiteListService {
+
+    WhiteList getWhiteList(Long id) {
+        WhiteList whiteList = id ? WhiteList.get(id) : null
+        if (!whiteList) {
+            throw new RecordNotFoundException()
+        }
+        return whiteList
+    }
 
     /**
      * 列表查询
@@ -38,20 +48,14 @@ class WhiteListService {
     /**
      * 查看详情
      */
-    def more(id) {
-        def instance = id ? WhiteList.get(id) : null
-        def vehicle = CarBasicInfo.findByLicenseNo(instance.vehicleNo)
-        if (instance && vehicle) {
-            def result = [
-                    id           : instance.id,
-                    vehicleNo    : instance.vehicleNo,
-                    carType      : vehicle.carType,
-                    carPlateColor: vehicle.carPlateColor,
-                    carColor     : vehicle.carColor
-            ]
-            return result
-        }
-        return null
+    def more(Long id) {
+        WhiteList instance = getWhiteList(id)
+        CarBasicInfo vehicle = CarBasicInfo.findByLicenseNo(instance.vehicleNo)
+        return [id           : instance.id,
+                vehicleNo    : instance.vehicleNo,
+                carType      : vehicle?.carType,
+                carPlateColor: vehicle?.carPlateColor,
+                carColor     : vehicle?.carColor]
     }
 
     /**
