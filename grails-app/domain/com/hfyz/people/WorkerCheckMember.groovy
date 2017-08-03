@@ -38,4 +38,26 @@ class WorkerCheckMember {
         table "PEOPLE_WORKER_CHECKMEMBER"
         version false
     }
+
+    Object asType(Class c) {
+        if (c == Map.class) {
+            Map map = [
+                    idCardNo            : this.idCardNo,
+                    companyCode         : this.companyCode,
+                    workLicenseType     : this.workLicenseType,
+                    workLicenseNo       : this.workLicenseNo,
+                    workLicenseGetTime  : this.workLicenseGetTime?.format('yyyy-MM-dd'),
+                    workLicenseGrantTime: this.workLicenseGrantTime?.format('yyyy-MM-dd'),
+                    endTime             : this.endTime?.format('yyyy-MM-dd'),
+                    licenseGrantOrg     : this.licenseGrantOrg,
+                    licenseSituation    : this.licenseSituation,
+                    licenseChangeTimes  : this.licenseChangeTimes,
+                    trainTimes          : this.trainTimes,
+                    checkType           : this.checkType
+            ]
+            return map;
+        }
+        return null;
+    }
+
 }

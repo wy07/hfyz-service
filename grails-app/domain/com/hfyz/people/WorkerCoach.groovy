@@ -56,4 +56,35 @@ class WorkerCoach {
         version false
         inspectDealSituation sqlType: char, length: 1
     }
+
+    Object asType(Class c) {
+        if (c == Map.class) {
+            Map map = [
+                    idCardNo               : this.idCardNo,
+                    companyCode            : this.companyCode,
+                    workLicenseType        : this.workLicenseType,
+                    workLicenseNo          : this.workLicenseNo,
+                    workLicenseGetTime     : this.workLicenseGetTime?.format('yyyy-MM-dd'),
+                    workLicenseGrantTime   : this.workLicenseGrantTime?.format('yyyy-MM-dd'),
+                    endTime                : this.endTime?.format('yyyy-MM-dd'),
+                    driveLicenseNo         : this.driveLicenseNo,
+                    driveCarType           : this.driveCarType,
+                    driveLicenseGetTime    : this.driveLicenseGetTime?.format('yyyy-MM-dd'),
+                    licenseGrantOrga       : this.licenseGrantOrga,
+                    licenseSituation       : this.licenseSituation,
+                    workSituation          : this.workSituation,
+                    ownerName              : this.ownerName,
+                    businessPermitCharacter: this.businessPermitCharacter,
+                    businessPermitNo       : this.businessPermitNo,
+                    changeTimes            : this.changeTimes,
+                    trainTimes             : this.trainTimes,
+                    inspectDealSituation   : this.inspectDealSituation,
+                    teachType              : this.teachCarType,
+                    teachCarType           : this.teachType,
+                    driveLicenseSituation  : this.driveLicenseSituation
+            ]
+            return map;
+        }
+        return null;
+    }
 }

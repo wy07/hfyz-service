@@ -21,4 +21,18 @@ class WorkerWaiter {
         table "PEOPLE_WORKER_WAITER"
         version false
     }
+
+    Object asType(Class c) {
+        if (c == Map.class) {
+            Map map = [
+                    idCardNo     : this.idCardNo,
+                    jobName      : this.jobName,
+                    jobLicenseNo : this.jobLicenseNo,
+                    grantTime    : this.grantTime?.format('yyyy-MM-dd'),
+                    beginWorkTime: this.beginWorkTime?.format('yyyy-MM-dd')
+            ]
+            return map;
+        }
+        return null;
+    }
 }

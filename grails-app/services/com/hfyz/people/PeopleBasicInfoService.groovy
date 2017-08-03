@@ -70,43 +70,18 @@ class PeopleBasicInfoService {
         def result = [:]
 
         def checkMember = WorkerCheckMember.findByIdCardNo(idCardNo)
-        checkMember?.workLicenseGrantTime?.format("yyyy-MM-dd")
-        checkMember?.workLicenseGetTime?.format("yyyy-MM-dd")
-        checkMember?.endTime?.format("yyyy-MM-dd")
-
         def coach = WorkerCoach.findByIdCardNo(idCardNo)
-        coach?.workLicenseGrantTime?.format("yyyy-MM-dd")
-        coach?.workLicenseGetTime?.format("yyyy-MM-dd")
-        coach?.endTime?.format("yyyy-MM-dd")
-        coach?.driveLicenseGetTime?.format("yyyy-MM-dd")
-
         def driver = WorkerDriver.findByIdCardNo(idCardNo)
-        driver?.workLicenseGetTime?.format("yyyy-MM-dd")
-        driver?.workLicenseGrantTime?.format("yyyy-MM-dd")
-        driver?.endTime?.format("yyyy-MM-dd")
-        driver?.driveLicenseGetTime?.format("yyyy-MM-dd")
-
         def manager = WorkerManager.findByIdCardNo(idCardNo)
-        manager?.workLicenseGetTime?.format("yyyy-MM-dd")
-        manager?.workLicenseGrantTime?.format("yyyy-MM-dd")
-        manager?.endTime?.format("yyyy-MM-dd")
-
         def tech = WorkerTechnology.findByIdCardNo(idCardNo)
-        tech?.workLicenseGetTime?.format("yyyy-MM-dd")
-        tech?.workLicenseGrantTime?.format("yyyy-MM-dd")
-        tech?.endTime?.format("yyyy-MM-dd")
-        tech?.technologyLicenseGrantTime?.format("yyyy-MM-dd")
-
         def waiter = WorkerWaiter.findByIdCardNo(idCardNo)
-        waiter?.beginWorkTime?.format("yyyy-MM-dd")
-        waiter?.grantTime?.format("yyyy-MM-dd")
 
-        result["checkMember"] = checkMember
-        result["coach"] = coach
-        result["driver"] = driver
-        result["manager"] = manager
-        result["tech"] = tech
-        result["waiter"] = waiter
+        result["checkMember"] = checkMember.asType(Map)
+        result["coach"] = coach.asType(Map)
+        result["driver"] = driver.asType(Map)
+        result["manager"] = manager.asType(Map)
+        result["tech"] = tech.asType(Map)
+        result["waiter"] = waiter.asType(Map)
 
         return result
     }
@@ -209,7 +184,7 @@ class PeopleBasicInfoService {
             sql.rows(sqlStr)
         }?.collect({ obj ->
             [
-                    idCardNo: obj.idCardNo,
+                    idCardNo   : obj.idCardNo,
                     companyCode: obj.companyCode
             ]
         })

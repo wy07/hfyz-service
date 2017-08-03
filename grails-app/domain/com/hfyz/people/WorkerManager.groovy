@@ -47,4 +47,30 @@ class WorkerManager {
         version false
         inspectDealSituation sqlType: char, length: 1
     }
+
+    Object asType(Class c) {
+        if (c == Map.class) {
+            Map map = [
+                    idCardNo               : this.idCardNo,
+                    companyCode            : this.companyCode,
+                    workLicenseType        : this.workLicenseType,
+                    workLicenseNo          : this.workLicenseNo,
+                    workLicenseGetTime     : this.workLicenseGetTime?.format('yyyy-MM-dd'),
+                    workLicenseGrantTime   : this.workLicenseGrantTime?.format('yyyy-MM-dd'),
+                    endTime                : this.endTime?.format('yyyy-MM-dd'),
+                    licenseGrantOrg        : this.licenseGrantOrg,
+                    licenseSituation       : this.licenseSituation,
+                    workSituation          : this.workSituation,
+                    ownerName              : this.ownerName,
+                    businessPermitCharacter: this.businessPermitCharacter,
+                    businessPermitNo       : this.businessPermitNo,
+                    changeTimes            : this.changeTimes,
+                    trainTimes             : this.trainTimes,
+                    inspectDealSituation   : this.inspectDealSituation,
+                    trafficAccidentRecordNo: this.trafficAccidentRecordNo
+            ]
+            return map;
+        }
+        return null;
+    }
 }

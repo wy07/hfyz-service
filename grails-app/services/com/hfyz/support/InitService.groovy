@@ -16,6 +16,8 @@ import com.hfyz.platform.PlatformManage
 import com.hfyz.car.CarBasicInfo
 import com.hfyz.car.CarBasicOperate
 import com.hfyz.car.RegistrationInformationCarinfo
+import com.hfyz.roster.BlackList
+import com.hfyz.roster.WhiteList
 import com.hfyz.warning.Warning
 import grails.transaction.Transactional
 import com.hfyz.security.User
@@ -27,9 +29,9 @@ import com.hfyz.security.PermissionGroup
 class InitService {
 
     def initData() {
-      /*  if(User.count()>0){
-            return
-        }*/
+        /*  if(User.count()>0){
+              return
+          }*/
 
         def rootPermission = new PermissionGroup(name: '所有权限', permissions: '*:*').save(flush: true)
         def adminRole = new Role(authority: 'ROLE_ADMIN', name: '平台管理员', permissionGroups: [rootPermission]).save()
@@ -83,6 +85,11 @@ class InitService {
 
         new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+
+        def superviseMenu = new Menu(name: '动态监管', code: 'root-supervise', icon: 'fa-desktop', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: superviseMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: superviseMenu, position: 'SIDE_BAR').save(flush: true)
+
 
 
         new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
@@ -354,7 +361,6 @@ class InitService {
                     , frameNo: "frameNo${val}").save(flush: true)
         }
 
-
 //        公司（经营业户）
         new OwnerIdentity(companyCode: '01', ownerName: '企业0', operateManager: '李四', phone: '010-89765722').save(flush: true)
         new OwnerIdentity(companyCode: '02', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
@@ -362,12 +368,25 @@ class InitService {
         new OwnerIdentity(companyCode: '04', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
 //        公司内部制度
         new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
-        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note:'触发告警为小于等于该阈值').save(flush: true)
-        new Configure(configKey: 'carRateAlarm1', configValue: '100', name: '车辆入网率告警阈值1', note:'触发告警为小于等于该阈值').save(flush: true)
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note: '触发告警为小于等于该阈值').save(flush: true)
+        new Configure(configKey: 'carRateAlarm1', configValue: '100', name: '车辆入网率告警阈值1', note: '触发告警为小于等于该阈值').save(flush: true)
 
         new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
         new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
 
+        new BlackList(vehicleNo: '陕A-CK0002', controlBegin: new Date(117, 7, 13), controlEnd: new Date(117, 7, 20)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0003', controlBegin: new Date(117, 8, 12), controlEnd: new Date(117, 8, 22)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0004', controlBegin: new Date(117, 7, 22), controlEnd: new Date(117, 8, 22)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0005', controlBegin: new Date(117, 8, 1), controlEnd: new Date(117, 8, 10)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0006', controlBegin: new Date(117, 8, 20), controlEnd: new Date(117, 8, 22)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0007', controlBegin: new Date(117, 9, 12), controlEnd: new Date(117, 9, 17)).save(flush: true)
+
+        new WhiteList(vehicleNo: '陕A-CK0008').save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0009').save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0010').save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0011').save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0012').save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0013').save(flush: true)
         initAlarmType()
     }
 
