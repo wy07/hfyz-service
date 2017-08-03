@@ -11,7 +11,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
 
 
 
-    def findListAndTotal() {
+    def list() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
         renderSuccessesWithMap(hiddenRectificationOrderService.getHiddenDangerList(max,offset,request.JSON.company,

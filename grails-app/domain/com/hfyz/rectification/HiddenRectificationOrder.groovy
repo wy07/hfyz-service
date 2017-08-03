@@ -3,27 +3,32 @@ package com.hfyz.rectification
 
 class HiddenRectificationOrder {
 
-    String billNo
-    String area
-    String enterpirse
-    String examiner
-    Date   inspectionDate
-    Date   dealineDate
-    String insPosition
-    String insDesc
-    String insQuestion
-    String proPosal
-    Date   replyDate
-    String replyDesc
-    HiddenRectificationOrderStatus status
+    String billNo               //但据编号
+    String area                 //区域
+    String enterpirse           //业户名称
+    String examiner             //检查人
+    Date   inspectionDate       //检查日期
+    Date   dealineDate          //整改期限
+    String insPosition          //检查地点
+    String insDesc              //检查内容
+    String insQuestion          //存在问题
+    String proPosal             //整改意见
+    Date   replyDate            //反馈日期
+    String replyDesc            //企业反馈
+    HiddenRectificationOrderStatus status   //状态
 
 
     static constraints = {
         billNo unique: true, blank: false
-        area     nullable: true
-        proPosal  nullable: false
+        area nullable:true , blank:true
+        enterpirse nullable: false, blank: false
+        examiner nullable: false, blank:false
+        insPosition nullable: false, blank:false
+        insDesc nullable: false, blank:false
+        insQuestion nullable: false, blank:false
+        proPosal  nullable: false, blank: true
         replyDate nullable: true
-        replyDesc nullable: true
-
+        replyDesc nullable: true, blank: true
+        status nullable:false
     }
 }
