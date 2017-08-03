@@ -30,7 +30,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
     }
 
     def edit(){
-        withHiddenDanger(params.long('id')){
+        withHiddenRectificationOrder(params.long('id')){
             hiddenRectificationOrderIn ->
                 renderSuccessesWithMap([hiddenRectificationOrder:[
                         id : hiddenRectificationOrderIn.id,
@@ -53,7 +53,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
     }
 
     def delete(){
-        withHiddenDanger(params.long('id')) {
+        withHiddenRectificationOrder(params.long('id')) {
             hiddenDanger ->
                 hiddenDanger.delete(flush: true)
                 renderSuccess()
