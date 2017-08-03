@@ -1,10 +1,19 @@
 package com.hfyz.roster
 
+import com.commons.exception.ParamsIllegalException
+import com.commons.exception.RecordNotFoundException
 import com.hfyz.car.CarBasicInfo
 import grails.transaction.Transactional
 
 @Transactional
 class BlackListService {
+    BlackList getInstanceById(Long id) {
+        BlackList instance = id ? BlackList.get(id) : null
+        if (!instance) {
+            throw new RecordNotFoundException()
+        }
+        return instance
+    }
 
     /**
      * 列表查询
@@ -14,7 +23,7 @@ class BlackListService {
      * @param max
      * @param offset
      */
-    def list(vehicleNo, dateBegin, dateEnd, max, offset) {
+    def showTableList(vehicleNo, dateBegin, dateEnd, max, offset) {
         def total = BlackList.createCriteria().get {
             projections {
                 count()
@@ -48,23 +57,19 @@ class BlackListService {
     /**
      * 查看详情
      */
-    def more(id) {
-        def instance = id ? BlackList.get(id) : null
+    def show(id) {
+        BlackList instance = getInstanceById(id)
         def vehicle = CarBasicInfo.findByLicenseNo(instance.vehicleNo)
-        if (instance && vehicle) {
-            def result = [
-                    id           : instance.id,
-                    vehicleNo    : instance.vehicleNo,
-                    controlBegin : instance.controlBegin?.format("yyyy-MM-dd HH:mm:ss"),
-                    controlEnd   : instance.controlEnd?.format("yyyy-MM-dd HH:mm:ss"),
-                    carType      : vehicle.carType,
-                    carPlateColor: vehicle.carPlateColor,
-                    carColor     : vehicle.carColor
-            ]
-            return result
-        }
+        return [
+                id           : instance.id,
+                vehicleNo    : instance.vehicleNo,
+                controlBegin : instance.controlBegin?.format("yyyy-MM-dd HH:mm:ss"),
+                controlEnd   : instance.controlEnd?.format("yyyy-MM-dd HH:mm:ss"),
+                carType      : vehicle?.carType,
+                carPlateColor: vehicle?.carPlateColor,
+                carColor     : vehicle?.carColor
+        ]
 
-        return null
     }
 
     /**
@@ -72,15 +77,11 @@ class BlackListService {
      * @param id
      * @param obj 请求json串
      */
-    def update(id, obj) {
-        def blackList = id ? BlackList.get(id) : null
-        if (!blackList) {
-            return false
-        }
-        blackList.controlBegin = Date.parse("yyyy-MM-dd HH:mm:ss", obj.controlBegin)
-        blackList.controlEnd = Date.parse("yyyy-MM-dd HH:mm:ss", obj.controlEnd)
-        blackList.save(flush: true, failOnError: true)
-        return true
+    def update(Long id, obj) {
+        BlackList instance = getInstanceById(id)
+        instance.controlBegin = Date.parse("yyyy-MM-dd HH:mm:ss", obj.controlBegin)
+        instance.controlEnd = Date.parse("yyyy-MM-dd HH:mm:ss", obj.controlEnd)
+        instance.save(flush: true, failOnError: true)
     }
 
     /**
@@ -90,11 +91,11 @@ class BlackListService {
     def save(obj) {
         def carBasicInfo = CarBasicInfo.findByLicenseNo(obj.vehicleNo)
         if (!carBasicInfo) {
-            return '车辆号牌不存在'
+            throw new ParamsIllegalException("车辆号不存在！")
         }
-        BlackList blackList = new BlackList(obj)
-        blackList.save(flush: true, failOnError: true)
-        return
+        BlackList instance = new BlackList(obj)
+        instance.frameNo = carBasicInfo.frameNo
+        instance.save(flush: true, failOnError: true)
     }
 
     /**
@@ -102,8 +103,8 @@ class BlackListService {
      * @param id
      * @return
      */
-    def delete(id) {
-        def blackList = BlackList.get(id)
-        blackList.delete(flush: true, failOnError: true)
+    def delete(Long id) {
+        BlackList instance = getInstanceById(id)
+        instance.delete(flush: true, failOnError: true)
     }
 }

@@ -363,16 +363,16 @@ class InitService {
         }
 
 //        公司（经营业户）
-        4.times{it ->
+        4.times { it ->
             new OwnerIdentity(ownerName: "企业${it}"
-                    , companyCode:"C00000000${it}"
+                    , companyCode: "C00000000${it}"
                     , ownerCode: "dwcode00${it}"
                     , parentCompanyName: '企业1'
                     , parentOwner: '企业1'
                     , ownerAddress: "合肥市怀宁路1${it}6号"
-                    , postCode: 23002+"${it}"
+                    , postCode: 23002 + "${it}"
                     , administrativeDivisionName: '蜀山区'
-                    , administrativeDivisionCode: 34010+"${it}"
+                    , administrativeDivisionCode: 34010 + "${it}"
                     , economicType: '私营经济'
                     , legalRepresentative: '张敏'
                     , idCardType: '居民身份证'
@@ -395,19 +395,19 @@ class InitService {
         new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
         new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
 
-        new BlackList(vehicleNo: '陕A-CK0002', controlBegin: new Date(117, 7, 13), controlEnd: new Date(117, 7, 20)).save(flush: true)
-        new BlackList(vehicleNo: '陕A-CK0003', controlBegin: new Date(117, 8, 12), controlEnd: new Date(117, 8, 22)).save(flush: true)
-        new BlackList(vehicleNo: '陕A-CK0004', controlBegin: new Date(117, 7, 22), controlEnd: new Date(117, 8, 22)).save(flush: true)
-        new BlackList(vehicleNo: '陕A-CK0005', controlBegin: new Date(117, 8, 1), controlEnd: new Date(117, 8, 10)).save(flush: true)
-        new BlackList(vehicleNo: '陕A-CK0006', controlBegin: new Date(117, 8, 20), controlEnd: new Date(117, 8, 22)).save(flush: true)
-        new BlackList(vehicleNo: '陕A-CK0007', controlBegin: new Date(117, 9, 12), controlEnd: new Date(117, 9, 17)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0002', frameNo: 'frameNo2', controlBegin: new Date(117, 7, 13), controlEnd: new Date(117, 7, 20)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0003', frameNo: 'frameNo3', controlBegin: new Date(117, 8, 12), controlEnd: new Date(117, 8, 22)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0004', frameNo: 'frameNo4', controlBegin: new Date(117, 7, 22), controlEnd: new Date(117, 8, 22)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0005', frameNo: 'frameNo5', controlBegin: new Date(117, 8, 1), controlEnd: new Date(117, 8, 10)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0006', frameNo: 'frameNo6', controlBegin: new Date(117, 8, 20), controlEnd: new Date(117, 8, 22)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0007', frameNo: 'frameNo7', controlBegin: new Date(117, 9, 12), controlEnd: new Date(117, 9, 17)).save(flush: true)
 
-        new WhiteList(vehicleNo: '陕A-CK0008').save(flush: true)
-        new WhiteList(vehicleNo: '陕A-CK0009').save(flush: true)
-        new WhiteList(vehicleNo: '陕A-CK0010').save(flush: true)
-        new WhiteList(vehicleNo: '陕A-CK0011').save(flush: true)
-        new WhiteList(vehicleNo: '陕A-CK0012').save(flush: true)
-        new WhiteList(vehicleNo: '陕A-CK0013').save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0008', frameNo: 'frameNo8',).save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0009', frameNo: 'frameNo9',).save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0010', frameNo: 'frameNo10',).save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0011', frameNo: 'frameNo11',).save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0012', frameNo: 'frameNo12',).save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0013', frameNo: 'frameNo13',).save(flush: true)
 
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
 
