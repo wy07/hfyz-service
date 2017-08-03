@@ -84,6 +84,7 @@ class InitService {
 //        new Menu(name: '其他地图', code: 'otherMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 
         new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '业户', code: 'ownerIdentity', icon: 'fa-building', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 
         def superviseMenu = new Menu(name: '动态监管', code: 'root-supervise', icon: 'fa-desktop', parent: null, position: 'SIDE_BAR').save(flush: true)
@@ -362,10 +363,30 @@ class InitService {
         }
 
 //        公司（经营业户）
-        new OwnerIdentity(companyCode: '01', ownerName: '企业0', operateManager: '李四', phone: '010-89765722').save(flush: true)
-        new OwnerIdentity(companyCode: '02', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
-        new OwnerIdentity(companyCode: '03', ownerName: '企业2', operateManager: '王五', phone: '010-76737823').save(flush: true)
-        new OwnerIdentity(companyCode: '04', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
+        4.times{it ->
+            new OwnerIdentity(ownerName: "企业${it}"
+                    , companyCode:"C00000000${it}"
+                    , ownerCode: "dwcode00${it}"
+                    , parentCompanyName: '企业1'
+                    , parentOwner: '企业1'
+                    , ownerAddress: "合肥市怀宁路1${it}6号"
+                    , postCode: 23002+"${it}"
+                    , administrativeDivisionName: '蜀山区'
+                    , administrativeDivisionCode: 34010+"${it}"
+                    , economicType: '私营经济'
+                    , legalRepresentative: '张敏'
+                    , idCardType: '居民身份证'
+                    , idCardNo: "${it}4212519870314673x"
+                    , picture: ''
+                    , operateManager: '吴珊'
+                    , phone: "010-${it}2425722"
+                    , fax: ''
+                    , telephone: "1${it}387673452"
+                    , email: "wushan${it}@163.com"
+                    , website: "http://www.${it}xiaojukeji.com"
+                    , shortName: '企业0').save(flush: true)
+        }
+
 //        公司内部制度
         new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note: '触发告警为小于等于该阈值').save(flush: true)
@@ -387,6 +408,13 @@ class InitService {
         new WhiteList(vehicleNo: '陕A-CK0011').save(flush: true)
         new WhiteList(vehicleNo: '陕A-CK0012').save(flush: true)
         new WhiteList(vehicleNo: '陕A-CK0013').save(flush: true)
+
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
+
+        def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
+
+
         initAlarmType()
     }
 
