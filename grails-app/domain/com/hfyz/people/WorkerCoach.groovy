@@ -3,7 +3,8 @@ package com.hfyz.people
  * 从业人员-教练员
  */
 class WorkerCoach {
-    String IDCardNo //身份证号
+    String idCardNo //身份证号
+    String companyCode //业户编码
     String workLicenseType //从业资格类别
     String workLicenseNo //从业资格证号
     Date workLicenseGetTime //从业资格初领时间
@@ -26,32 +27,64 @@ class WorkerCoach {
     String driveLicenseSituation //证照状态
 
     static constraints = {
-        "IDCardNo" maxSize: 18, unique: true
-        workLicenseType maxSize: 30, nullable: true
-        workLicenseNo maxSize: 12, nullable: true
+        idCardNo maxSize: 18, unique: true, blank: false
+        companyCode nullable: false, blank: false
+        workLicenseType maxSize: 30, nullable: true, blank: false
+        workLicenseNo maxSize: 12, nullable: true, blank: false
         workLicenseGetTime nullable: true
         workLicenseGrantTime nullable: true
         endTime nullable: true
-        driveLicenseNo maxSize: 18, nullable: true
-        driveCarType maxSize: 14, nullable: true
+        driveLicenseNo maxSize: 18, nullable: true, blank: false
+        driveCarType maxSize: 14, nullable: true, blank: false
         driveLicenseGetTime nullable: true
-        licenseGrantOrga nullable: true, maxSize: 50
-        licenseSituation maxSize: 4, nullable: true
-        workSituation maxSize: 8, nullable: true
-        ownerName maxSize: 50, nullable: true
-        businessPermitCharacter maxSize: 2, nullable: true
-        businessPermitNo maxSize: 12, nullable: true
+        licenseGrantOrga nullable: true, maxSize: 50, blank: false
+        licenseSituation maxSize: 4, nullable: true, blank: false
+        workSituation maxSize: 8, nullable: true, blank: false
+        ownerName maxSize: 50, nullable: true, blank: false
+        businessPermitCharacter maxSize: 2, nullable: true, blank: false
+        businessPermitNo maxSize: 12, nullable: true, blank: false
         changeTimes nullable: true
         trainTimes nullable: true
         inspectDealSituation nullable: true
-        teachType maxSize: 8, nullable: true
-        teachCarType maxSize: 14, nullable: true
-        driveLicenseSituation maxSize: 4, nullable: true
+        teachType maxSize: 8, nullable: true, blank: false
+        teachCarType maxSize: 14, nullable: true, blank: false
+        driveLicenseSituation maxSize: 4, nullable: true, blank: false
     }
 
     static mapping = {
         table "PEOPLE_WORKER_COACH"
         version false
         inspectDealSituation sqlType: char, length: 1
+    }
+
+    Object asType(Class c) {
+        if (c == Map.class) {
+            Map map = [
+                    idCardNo               : this.idCardNo,
+                    companyCode            : this.companyCode,
+                    workLicenseType        : this.workLicenseType,
+                    workLicenseNo          : this.workLicenseNo,
+                    workLicenseGetTime     : this.workLicenseGetTime?.format('yyyy-MM-dd'),
+                    workLicenseGrantTime   : this.workLicenseGrantTime?.format('yyyy-MM-dd'),
+                    endTime                : this.endTime?.format('yyyy-MM-dd'),
+                    driveLicenseNo         : this.driveLicenseNo,
+                    driveCarType           : this.driveCarType,
+                    driveLicenseGetTime    : this.driveLicenseGetTime?.format('yyyy-MM-dd'),
+                    licenseGrantOrga       : this.licenseGrantOrga,
+                    licenseSituation       : this.licenseSituation,
+                    workSituation          : this.workSituation,
+                    ownerName              : this.ownerName,
+                    businessPermitCharacter: this.businessPermitCharacter,
+                    businessPermitNo       : this.businessPermitNo,
+                    changeTimes            : this.changeTimes,
+                    trainTimes             : this.trainTimes,
+                    inspectDealSituation   : this.inspectDealSituation,
+                    teachType              : this.teachCarType,
+                    teachCarType           : this.teachType,
+                    driveLicenseSituation  : this.driveLicenseSituation
+            ]
+            return map;
+        }
+        return null;
     }
 }
