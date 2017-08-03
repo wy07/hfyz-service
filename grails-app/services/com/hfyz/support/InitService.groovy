@@ -1,5 +1,6 @@
 package com.hfyz.support
 
+import com.commons.utils.SQLHelper
 import com.commons.utils.ValidationUtils
 import com.hfyz.owner.CompanyRegulation
 
@@ -22,6 +23,7 @@ import com.hfyz.security.User
 import com.hfyz.security.Role
 import com.hfyz.security.UserRole
 import com.hfyz.security.PermissionGroup
+import groovy.sql.Sql
 
 @Transactional
 class InitService {
@@ -30,60 +32,34 @@ class InitService {
       /*  if(User.count()>0){
             return
         }*/
-        def adminRole = new Role(authority: 'ROLE_ROOT', name: '超级管理员', org: null).save(failOnError: true, flush: true)
-        def testUser = new User(username: 'admin', passwordHash: 'admin123', salt: ValidationUtils.getSecureRandomSalt(), name: '管理员').save(failOnError: true, flush: true)
-        UserRole.create testUser, adminRole,true
-
-        new PermissionGroup(url: '/menus/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单", category: "新增",code: 'menu_create').save(failOnError: true, flush: true)
 
             
-        new Menu(name: '关闭全部', code: 'closeall', position: 'TOP_BAR', parent: null).save(flush: true)
-        def topbar = new Menu(name: '个人中心', code: 'profile', style: 'hoverdown', position: 'TOP_BAR', parent: null).save(flush: true)
-        new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
-        new Menu(name: '退出', code: 'logout', position: 'TOP_BAR', parent: null).save(flush: true)
 
-        def homemenu = new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR').save(flush: true)
 //        new PermissionGroup(name: '浏览', permissions: 'view', menu: homemenu).save(flush: true)
 
-        def sidebar = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
-        def roleMenu = new Menu(name: '角色', code: 'role', icon: 'fa-users', parent: sidebar, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
-//        new PermissionGroup(name: '新增', permissions: 'create', menu: roleMenu).save(flush: true)
+
 //        new PermissionGroup(name: '修改', permissions: 'edit', menu: roleMenu).save(flush: true)
 //        new PermissionGroup(name: '删除', permissions: 'delete', menu: roleMenu).save(flush: true)
 //        new PermissionGroup(name: '分配权限', permissions: 'assign', menu: roleMenu).save(flush: true)
 //        new PermissionGroup(name: '浏览', permissions: 'view', menu: roleMenu).save(flush: true)
 
-        def userMenu = new Menu(name: '用户', code: 'user', icon: 'fa-user', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
 //        new PermissionGroup(name: '新增', permissions: 'create', menu: userMenu).save(flush: true)
 //        new PermissionGroup(name: '修改', permissions: 'edit', menu: userMenu).save(flush: true)
 //        new PermissionGroup(name: '删除', permissions: 'delete', menu: userMenu).save(flush: true)
 //        new PermissionGroup(name: '浏览', permissions: 'view', menu: userMenu).save(flush: true)
-        def menu = new Menu(name: '菜单', code: 'menu', icon: 'fa-list', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
+        //        new PermissionGroup(name: '新增', permissions: 'create', menu: roleMenu).save(flush: true)
+
 //        new PermissionGroup(name: '新增', permissions: 'create', menu: menu).save(flush: true)
 //        new PermissionGroup(name: '修改', permissions: 'edit', menu: menu).save(flush: true)
 //        new PermissionGroup(name: '删除', permissions: 'delete', menu: menu).save(flush: true)
 //        new PermissionGroup(name: '浏览', permissions: 'view', menu: menu).save(flush: true)
-        new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: sidebar, position: 'SIDE_BAR',permissionCode:'systemcode_list').save(flush: true)
+ //        new Menu(name: '其他地图', code: 'otherMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 
-        def logMenu = new Menu(name: '日志管理', code: 'root-logManage', icon: 'fa-list-alt', parent: null, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
-        new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: logMenu, position: 'SIDE_BAR',permissionCode: 'menu_list').save(flush: true)
-
-        def monitorMenu = new Menu(name: '联网联控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '车辆信息', code: 'carList', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_list').save(flush: true)
-        new Menu(name: '实时状态', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
-        new Menu(name: '实时监控', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
-        new Menu(name: '历史轨迹', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
-//        new Menu(name: '其他地图', code: 'otherMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-
-        new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '业户', code: 'ownerIdentity', icon: 'fa-building', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'ownerIdentity_list').save(flush: true)
-        new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'people_list').save(flush: true)
 
 
         new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
         new PlatformManage(ip: '61.123.1.15', port: '2001', name: '合肥客运平台', code: 'K002', contactName: '王平', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
 
-        new Menu(name: '报警信息', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Warning(frameNo: 'LDC92839882929345', carLicenseNo: '皖A-2329J', carColor: '白色', warningSource: 1, warningType: '驾驶员身份验证失败', warningTime: new Date(), warningTimes: 1).save(flush: true)
         new Warning(frameNo: 'LDC32552378754654', carLicenseNo: '皖A-2934W', carColor: '黑色', warningSource: 2, warningType: '疲劳驾驶', warningTime: new Date(), warningTimes: 1).save(flush: true)
         new Warning(frameNo: 'LDC43657563453234', carLicenseNo: '皖A-2239Q', carColor: '银色', warningSource: 3, warningType: '车辆非法移位', warningTime: new Date(), warningTimes: 1).save(flush: true)
@@ -421,4 +397,48 @@ class InitService {
         new AlarmType(name: "疲劳驾驶车辆率不达标", codeNum: "226", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶处理率不达标", codeNum: "227", parent: null).save(flush: true)
     }
+
+    private initSecurityData() {
+        def adminRole = new Role(authority: 'ROLE_ROOT', name: '超级管理员', org: null).save(failOnError: true, flush: true)
+        def testUser = new User(username: 'admin', passwordHash: 'admin123', salt: ValidationUtils.getSecureRandomSalt(), name: '管理员').save(failOnError: true, flush: true)
+        UserRole.create testUser, adminRole,true
+
+        new PermissionGroup(url: '/menus/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单", category: "新增",code: 'menu_create').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/menus/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单", category: "新增",code: 'menu_create').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/menus/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单", category: "新增",code: 'menu_create').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/menus/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单", category: "新增",code: 'menu_create').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/menus/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单", category: "新增",code: 'menu_create').save(failOnError: true, flush: true)
+    }
+
+    private initMenu(){
+        new Menu(name: '关闭全部', code: 'closeall', position: 'TOP_BAR', parent: null).save(flush: true)
+        def topbar = new Menu(name: '个人中心', code: 'profile', style: 'hoverdown', position: 'TOP_BAR', parent: null).save(flush: true)
+        new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
+        new Menu(name: '退出', code: 'logout', position: 'TOP_BAR', parent: null).save(flush: true)
+
+        def homemenu = new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR').save(flush: true)
+
+        def sidebar = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
+        def roleMenu = new Menu(name: '角色', code: 'role', icon: 'fa-users', parent: sidebar, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
+        def userMenu = new Menu(name: '用户', code: 'user', icon: 'fa-user', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
+        def menu = new Menu(name: '菜单', code: 'menu', icon: 'fa-list', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: sidebar, position: 'SIDE_BAR',permissionCode:'systemcode_list').save(flush: true)
+
+        def logMenu = new Menu(name: '日志管理', code: 'root-logManage', icon: 'fa-list-alt', parent: null, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
+        new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: logMenu, position: 'SIDE_BAR',permissionCode: 'menu_list').save(flush: true)
+
+        def monitorMenu = new Menu(name: '联网联控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '车辆信息', code: 'carList', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_list').save(flush: true)
+        new Menu(name: '实时状态', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
+        new Menu(name: '实时监控', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
+        new Menu(name: '历史轨迹', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
+        new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '业户', code: 'ownerIdentity', icon: 'fa-building', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'ownerIdentity_list').save(flush: true)
+        new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'people_list').save(flush: true)
+        new Menu(name: '报警信息', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+
+
+    }
+
+
 }
