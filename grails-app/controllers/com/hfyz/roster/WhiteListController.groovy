@@ -22,11 +22,8 @@ class WhiteListController implements ControllerHelper {
      * @return
      */
     def more() {
-        def result = whiteListService.more(params.id)
-        if (result) {
-            renderSuccessesWithMap(result)
-        }
-        renderNoTFoundError()
+        def result = whiteListService.more(params.long('id'))
+        renderSuccessesWithMap(result)
     }
 
     /**
