@@ -87,12 +87,7 @@ class InitService {
         new WorkerCoach(IDCardNo: '34212519870314673x', workLicenseType: '教练', workLicenseNo: 'CAH1234', workLicenseGetTime: new Date(), workLicenseGrantTime: new Date(), endTime: new Date(), driveLicenseNo: '34212519870314673x', driveCarType: '小汽车', driveLicenseGetTime: new Date(), licenseGrantOrga: '合肥市新亚驾校', licenseSituation: '可用', workSituation: '中级教练', ownerName: '合肥市新亚驾校', businessPermitCharacter: '3', businessPermitNo: '34xxx', changeTimes: 0, trainTimes: 1, inspectDealSituation: '', teachType: 'C照', driveLicenseSituation: '可用').save(flush: true)
         new WorkerDriver(IDCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '驾驶员', ownerName: '合肥市汽车客运XXX', driveCarType: '客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), driveLicenseNo: '34132519870314222x', businessPermitCharacter: 'x').save(flush: true)
 
-        def infoManage = new Menu(name: '信息管理', code: 'root-infomanage', icon: 'fa-laptop', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '信息列表', code: 'infoList', icon: 'fa-envelope-square', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
 
-        new Menu(name: '组织机构', code: 'organization', icon: 'fa-sitemap', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
 
         LicenseType licenseTypeP = new LicenseType(name: "道路运输经营许可证", codeNum: "100", parent: null).save(flush: true)
         new LicenseType(name: "道路运输经营许可证正本", codeNum: "110", parent: licenseTypeP).save(flush: true)
@@ -235,8 +230,6 @@ class InitService {
 //        new VehicleType(name: '无轨电车',code: 'N',parent: null).save(flush: true)
 //        new VehicleType(name: '有轨电车',code: 'P',parent: null).save(flush: true)
 
-        def platForm = new Menu(name: '查岗', code: 'root-pluponForm', icon: 'fa-cog', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: platForm, position: 'SIDE_BAR').save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true,
 
                 operator: testUser, responseDate: new Date(new Date().getTime() + 30 * 1000), responseContent: '5', responseTime: 30).save(flush: true)
@@ -283,7 +276,6 @@ class InitService {
         new PlatformManage(ip: '613.16.1.41', port: '2201', name: '宁国光正合肥分公司', code: 'K402', contactName: '安娜', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
         new PlatformManage(ip: '614.17.1.42', port: '2301', name: '平安四方有限公司', code: 'K502', contactName: '郑磊国', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
 
-        new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         def MapSignType1 = new MapSignType(name: "国企", codeNum: "100", parent: null).save(flush: true)
         def childMapType1 = new MapSignType(name: "银行部门", codeNum: "101", parent: MapSignType1).save(flush: true)
         new MapSign(name: '中国农业银行', mapSignType: childMapType1, longitude: 110.4578914, latitude: 30.7542289, display: true).save(flush: true)
@@ -353,7 +345,6 @@ class InitService {
         }
 
 //        公司内部制度
-        new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note:'触发告警为小于等于该阈值').save(flush: true)
         new Configure(configKey: 'carRateAlarm1', configValue: '100', name: '车辆入网率告警阈值1', note:'触发告警为小于等于该阈值').save(flush: true)
 
@@ -361,6 +352,8 @@ class InitService {
         new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
 
         initAlarmType()
+        initMenu()
+        initSecurityData()
     }
 
 
@@ -416,27 +409,41 @@ class InitService {
         new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
         new Menu(name: '退出', code: 'logout', position: 'TOP_BAR', parent: null).save(flush: true)
 
-        def homemenu = new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR').save(flush: true)
 
-        def sidebar = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
-        def roleMenu = new Menu(name: '角色', code: 'role', icon: 'fa-users', parent: sidebar, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
-        def userMenu = new Menu(name: '用户', code: 'user', icon: 'fa-user', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
-        def menu = new Menu(name: '菜单', code: 'menu', icon: 'fa-list', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: sidebar, position: 'SIDE_BAR',permissionCode:'systemcode_list').save(flush: true)
+        def systemManage = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
+        new Menu(name: '组织机构', code: 'organization', icon: 'fa-sitemap', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '角色', code: 'role', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
+        new Menu(name: '用户', code: 'user', icon: 'fa-user', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'menu_list').save(flush: true)
+        new Menu(name: '菜单', code: 'menu', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
+
+        def basicInfo = new Menu(name: '基础信息', code: 'root-basicinfo', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: basicInfo, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR',permissionCode:'systemcode_list').save(flush: true)
+        new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: basicInfo, position: 'SIDE_BAR').save(flush: true)
+
+        def monitorMenu = new Menu(name: '实时监控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '车辆实时', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
+        new Menu(name: '车辆控制', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
+        new Menu(name: '车辆历史', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
+        new Menu(name: '报警信息', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+
+
 
         def logMenu = new Menu(name: '日志管理', code: 'root-logManage', icon: 'fa-list-alt', parent: null, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
-        new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: logMenu, position: 'SIDE_BAR',permissionCode: 'menu_list').save(flush: true)
 
-        def monitorMenu = new Menu(name: '联网联控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '车辆信息', code: 'carList', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_list').save(flush: true)
-        new Menu(name: '实时状态', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
-        new Menu(name: '实时监控', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
-        new Menu(name: '历史轨迹', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
         new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '业户', code: 'ownerIdentity', icon: 'fa-building', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'ownerIdentity_list').save(flush: true)
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'people_list').save(flush: true)
-        new Menu(name: '报警信息', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        def infoManage = new Menu(name: '信息管理', code: 'root-infomanage', icon: 'fa-laptop', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '信息列表', code: 'infoList', icon: 'fa-envelope-square', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
 
+        def platForm = new Menu(name: '查岗', code: 'root-pluponForm', icon: 'fa-cog', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: platForm, position: 'SIDE_BAR').save(flush: true)
 
     }
 
