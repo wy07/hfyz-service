@@ -16,12 +16,12 @@ import com.hfyz.platform.PlatformManage
 import com.hfyz.car.CarBasicInfo
 import com.hfyz.car.CarBasicOperate
 import com.hfyz.car.RegistrationInformationCarinfo
-<<<<<<< HEAD
+
 import com.hfyz.rectification.HiddenStatus
-=======
+
 import com.hfyz.roster.BlackList
 import com.hfyz.roster.WhiteList
->>>>>>> 1fe6eb57105d7330f508cbea620076256914be46
+
 import com.hfyz.warning.Warning
 import grails.transaction.Transactional
 import com.hfyz.security.User
