@@ -1,6 +1,5 @@
 package com.hfyz.rectification
 
-import com.hfyz.infoManage
 
 class HiddenDanger {
 
@@ -16,7 +15,7 @@ class HiddenDanger {
     String proPosal
     Date   replyDate
     String replyDesc
-    Status status
+    HiddenStatus status
 
 
     static constraints = {

@@ -11,7 +11,7 @@ class HiddenDangerController implements ControllerHelper {
 
 
 
-    def list() {
+    def findListAndTotal() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
         renderSuccessesWithMap(hiddenDangerService.getHiddenDangerList(max,offset,request.JSON.company,
@@ -23,6 +23,7 @@ class HiddenDangerController implements ControllerHelper {
         hiddenDanger.inspectionDate = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.inspection)
         hiddenDanger.dealineDate = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.dealine)
         hiddenDanger.billNo = System.currentTimeMillis()+""+new Random().nextInt(100000).toString().padLeft(5, '0')
+        hiddenDanger.status = HiddenStatus.QC
         hiddenDanger.save(flush: true,failOnError: true)
         renderSuccess()
 
@@ -45,7 +46,7 @@ class HiddenDangerController implements ControllerHelper {
                         proPosal : hiddenDanger.proPosal,
                         replyDate : hiddenDanger.replyDate?.format('yyyy-MM-dd HH:mm:ss'),
                         replyDesc : hiddenDanger.replyDesc,
-                        status : hiddenDanger.status
+                        status : hiddenDanger.status.type
                 ]])
         }
 

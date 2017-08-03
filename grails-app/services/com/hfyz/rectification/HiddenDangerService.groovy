@@ -43,7 +43,7 @@ class HiddenDangerService {
                         examiner : obj.examiner,
                         inspectionDate : obj.inspectionDate.format('yyyy-MM-dd HH:mm:ss'),
                         dealineDate : obj.dealineDate.format('yyyy-MM-dd HH:mm:ss'),
-                        status : obj.status
+                        status : obj.status.type
                 ]
         }
         return [hiddenDangerList:hiddenDangerList,total:total]
