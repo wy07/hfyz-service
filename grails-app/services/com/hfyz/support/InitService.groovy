@@ -1,5 +1,7 @@
 package com.hfyz.support
 
+import com.hfyz.owner.CompanyRegulation
+
 //import com.hfyz.owner.CompanyRegulation
 import com.hfyz.owner.OwnerIdentity
 import com.hfyz.people.PeopleBasicInfo
@@ -25,10 +27,14 @@ import com.hfyz.rectification.HiddenDanger
 class InitService {
 
     def initData() {
+      /*  if(User.count()>0){
+            return
+        }*/
+
         def rootPermission = new PermissionGroup(name: '所有权限', permissions: '*:*').save(flush: true)
         def adminRole = new Role(authority: 'ROLE_ADMIN', name: '平台管理员', permissionGroups: [rootPermission]).save()
-
         def testUser = new User(username: 'admin', passwordHash: 'admin123', salt: User.getSecureRandomSalt(), name: '管理员').save(failOnError: true)
+
 
         UserRole.create testUser, adminRole
 
@@ -36,7 +42,7 @@ class InitService {
             it.flush()
             it.clear()
         }
-
+            
         new Menu(name: '关闭全部', code: 'closeall', position: 'TOP_BAR', parent: null).save(flush: true)
         def topbar = new Menu(name: '个人中心', code: 'profile', style: 'hoverdown', position: 'TOP_BAR', parent: null).save(flush: true)
         new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
@@ -76,6 +82,7 @@ class InitService {
 //        new Menu(name: '其他地图', code: 'otherMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 
         new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '业户', code: 'ownerIdentity', icon: 'fa-building', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 
 
@@ -261,6 +268,7 @@ class InitService {
         def platForm = new Menu(name: '查岗', code: 'root-pluponForm', icon: 'fa-cog', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: platForm, position: 'SIDE_BAR').save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true,
+
                 operator: testUser, responseDate: new Date(new Date().getTime() + 30 * 1000), responseContent: '5', responseTime: 30).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '9578', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '2464', question: '10-1=?', answer: '9', responsed: true,
@@ -282,6 +290,7 @@ class InitService {
         new OwnerCheckRecord(auto: false, companyCode: '7394', question: '1x10=?', answer: '10', responsed: false,
                 operator: testUser,).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true,
+
                 operator: testUser, responseDate: new Date(new Date().getTime() + 190 * 1000),
                 responseContent: '7', responseTime: 190).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '3427', question: '12÷3=?', answer: '4', responsed: true,
@@ -327,11 +336,13 @@ class InitService {
         new MapSign(name: '兴乐集团有限公司', mapSignType: childMapType4, longitude: 110.9435725, latitude: 30.3571598, display: true).save(flush: true)
         new MapSign(name: '苏宁电器连锁集团股份有限公司', mapSignType: childMapType4, longitude: 114.6458796, latitude: 29.1578542, display: true).save(flush: true)
         new MapSign(name: '澄星实业集团公司', mapSignType: childMapType4, longitude: 125.7851562, latitude: 30.9425723, display: true).save(flush: true)
+
         def childMapType5 = new MapSignType(name: "集团", codeNum: "202", parent: MapSignType2).save(flush: true)
         new MapSign(name: '正泰集团', mapSignType: childMapType5, longitude: 100.1578914, latitude: 31.1937586, display: false).save(flush: true)
         new MapSign(name: '新希望集团', mapSignType: childMapType5, longitude: 118.6458796, latitude: 19.1578572, display: false).save(flush: true)
         new MapSign(name: '报喜鸟集团', mapSignType: childMapType5, longitude: 135.8424311, latitude: 29.7896541, display: true).save(flush: true)
         new MapSign(name: '金州集团', mapSignType: childMapType5, longitude: 111.9435725, latitude: 33.3571598, display: true).save(flush: true)
+
 
         25.times { val ->
             new RegistrationInformationCarinfo(
@@ -345,16 +356,39 @@ class InitService {
                     , frameNo: "frameNo${val}").save(flush: true)
         }
 
-//        公司（经营业户）
-        new OwnerIdentity(companyCode: 'C000000001', ownerName: '企业0', operateManager: '李四', phone: '010-89765722').save(flush: true)
-        new OwnerIdentity(companyCode: 'C000000002', ownerName: '企业1', operateManager: '张三', phone: '010-32425722').save(flush: true)
-        new OwnerIdentity(companyCode: 'C000000003', ownerName: '企业2', operateManager: '王五', phone: '010-76737823').save(flush: true)
-        new OwnerIdentity(companyCode: 'C000000004', ownerName: '企业3', operateManager: '王五', phone: '010-76737823').save(flush: true)
-//        公司内部制度
-//        new CompanyRegulation(companyCode: 'C001').save(flush: true)
-//        new CompanyRegulation(companyCode: 'C002').save(flush: true)
 
-        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
+//        公司（经营业户）
+        4.times{it ->
+            new OwnerIdentity(ownerName: "企业${it}"
+                    , companyCode:"C00000000${it}"
+                    , ownerCode: "dwcode00${it}"
+                    , parentCompanyName: '企业1'
+                    , parentOwner: '企业1'
+                    , ownerAddress: "合肥市怀宁路1${it}6号"
+                    , postCode: 23002+"${it}"
+                    , administrativeDivisionName: '蜀山区'
+                    , administrativeDivisionCode: 34010+"${it}"
+                    , economicType: '私营经济'
+                    , legalRepresentative: '张敏'
+                    , idCardType: '居民身份证'
+                    , idCardNo: "${it}4212519870314673x"
+                    , picture: ''
+                    , operateManager: '吴珊'
+                    , phone: "010-${it}2425722"
+                    , fax: ''
+                    , telephone: "1${it}387673452"
+                    , email: "wushan${it}@163.com"
+                    , website: "http://www.${it}xiaojukeji.com"
+                    , shortName: '企业0').save(flush: true)
+        }
+
+//        公司内部制度
+        new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note:'触发告警为小于等于该阈值').save(flush: true)
+        new Configure(configKey: 'carRateAlarm1', configValue: '100', name: '车辆入网率告警阈值1', note:'触发告警为小于等于该阈值').save(flush: true)
+
+        new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
+        new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
 
         def parentMenu = new Menu(name: '整改', code: 'root-rectification', icon: 'fa-hand-o-up', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '隐患整改', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
@@ -368,7 +402,7 @@ class InitService {
     }
 
 
-    private  initAlarmType(){
+    private initAlarmType() {
 
         new AlarmType(name: "超速驾驶", codeNum: "101", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶", codeNum: "102", parent: null).save(flush: true)
