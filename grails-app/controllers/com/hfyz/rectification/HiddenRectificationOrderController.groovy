@@ -29,6 +29,10 @@ class HiddenRectificationOrderController implements ControllerHelper {
 
     }
 
+//    def findCompanyNameByCompanyCode(String code){
+//        String code =
+//    }
+
     def edit(){
         withHiddenRectificationOrder(params.long('id')){
             hiddenRectificationOrderIn ->
