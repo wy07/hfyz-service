@@ -13,7 +13,7 @@ class WhiteListController implements ControllerHelper {
     def list() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        def resultList = whiteListService.list(request.JSON.vehicleNo, max, offset)
+        def resultList = whiteListService.showTableList(request.JSON.vehicleNo, max, offset)
         renderSuccessesWithMap(resultList)
     }
 
@@ -21,8 +21,8 @@ class WhiteListController implements ControllerHelper {
      * 根据id查询详情
      * @return
      */
-    def more() {
-        def result = whiteListService.more(params.long('id'))
+    def show() {
+        def result = whiteListService.show(params.long('id'))
         renderSuccessesWithMap(result)
     }
 
@@ -30,10 +30,7 @@ class WhiteListController implements ControllerHelper {
      * 保存
      */
     def save() {
-        def msg = whiteListService.save(request.JSON)
-        if (msg) {
-            renderErrorMsg(msg)
-        }
+        whiteListService.save(request.JSON)
         renderSuccess()
     }
 
@@ -41,29 +38,24 @@ class WhiteListController implements ControllerHelper {
      * 删除
      */
     def delete() {
-        whiteListService.delete(params.id)
+        whiteListService.delete(params.long('id'))
         renderSuccess()
     }
 
-    def get() {
-        def instance = WhiteList.get(params.id)
-        if (instance) {
-            def result = [
-                    id       : instance.id,
-                    vehicleNo: instance.vehicleNo
-            ]
-            renderSuccessesWithMap(result)
-        }
-        renderNoTFoundError()
+    /**
+     * 编辑
+     * @return
+     */
+    def edit() {
+        WhiteList instance = whiteListService.getInstanceById(params.long('id'))
+        renderSuccessesWithMap([instance: instance])
     }
 
     /**
      * 更新
      */
     def update() {
-        if (whiteListService.update(params.id, request.JSON)) {
-            renderSuccess()
-        }
-        renderErrorMsg("更新失败，请重试！")
+        whiteListService.update(params.long('id'), request.JSON)
+        renderSuccess()
     }
 }

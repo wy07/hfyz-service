@@ -4,6 +4,7 @@ package com.hfyz.roster
  */
 class BlackList {
     String vehicleNo //车牌号
+    String frameNo // 车架号
     Date controlBegin //布控开始时间
     Date controlEnd //布控结束时间
     static constraints = {

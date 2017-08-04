@@ -8,12 +8,12 @@ import grails.transaction.Transactional
 @Transactional
 class WhiteListService {
 
-    WhiteList getWhiteList(Long id) {
-        WhiteList whiteList = id ? WhiteList.get(id) : null
-        if (!whiteList) {
+    WhiteList getInstanceById(Long id) {
+        WhiteList instance = id ? WhiteList.get(id) : null
+        if (!instance) {
             throw new RecordNotFoundException()
         }
-        return whiteList
+        return instance
     }
 
     /**
@@ -22,7 +22,7 @@ class WhiteListService {
      * @param max
      * @param offset
      */
-    def list(vehicleNo, max, offset) {
+    def showTableList(vehicleNo, max, offset) {
         def total = WhiteList.createCriteria().get {
             projections {
                 count()
@@ -48,9 +48,9 @@ class WhiteListService {
     /**
      * 查看详情
      */
-    def more(Long id) {
-        WhiteList instance = getWhiteList(id)
-        CarBasicInfo vehicle = CarBasicInfo.findByLicenseNo(instance.vehicleNo)
+    def show(Long id) {
+        WhiteList instance = getInstanceById(id)
+        CarBasicInfo vehicle = CarBasicInfo.findByFrameNo(instance.frameNo)
         return [id           : instance.id,
                 vehicleNo    : instance.vehicleNo,
                 carType      : vehicle?.carType,
@@ -64,12 +64,9 @@ class WhiteListService {
      * @param obj 请求json串
      */
     def update(id, obj) {
-        def whiteList = id ? WhiteList.get(id) : null
-        if (!whiteList) {
-            return false
-        }
-        whiteList.save(flush: true, failOnError: true)
-        return true
+        WhiteList instance = getInstanceById(id)
+        /** *************/
+        instance.save(flush: true, failOnError: true)
     }
 
     /**
@@ -77,13 +74,13 @@ class WhiteListService {
      * @param obj
      */
     def save(obj) {
-        def carBasicInfo = CarBasicInfo.findByLicenseNo(obj.vehicleNo)
+        CarBasicInfo carBasicInfo = CarBasicInfo.findByLicenseNo(obj.vehicleNo)
         if (!carBasicInfo) {
-            return '车辆号牌不存在'
+            throw new ParamsIllegalException("车牌号有误！")
         }
-        WhiteList whiteList = new WhiteList(obj)
-        whiteList.save(flush: true, failOnError: true)
-        return
+        WhiteList instance = new WhiteList(obj)
+        instance.frameNo = carBasicInfo.frameNo
+        instance.save(flush: true, failOnError: true)
     }
 
     /**
@@ -91,8 +88,8 @@ class WhiteListService {
      * @param id
      * @return
      */
-    def delete(id) {
-        def whiteList = WhiteList.get(id)
-        whiteList.delete(flush: true, failOnError: true)
+    def delete(Long id) {
+        WhiteList instance = getInstanceById(id)
+        instance.delete(flush: true, failOnError: true)
     }
 }
