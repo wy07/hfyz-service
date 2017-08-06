@@ -33,7 +33,9 @@ class InitService {
             return
         }*/
 
-            
+        initMenu()
+        initSecurityData()
+        def adminUser=User.findByUsername('admin')
 
 //        new PermissionGroup(name: '浏览', permissions: 'view', menu: homemenu).save(flush: true)
 
@@ -129,20 +131,6 @@ class InitService {
         new UnitNature(name: "社会团体", codeNum: "40", parent: unitNatureP).save(flush: true)
 
 
-        Organization organizationP = new Organization(name: '运管中心', code: '100', parent: null).save(flush: true)
-        new Organization(name: '货运管理所', code: '110', parent: organizationP).save(flush: true)
-        new Organization(name: '客运管理所', code: '120', parent: organizationP).save(flush: true)
-
-        organizationP = new Organization(name: '业务', code: '200', parent: null).save(flush: true)
-        new Organization(name: '信息科', code: '210', parent: organizationP).save(flush: true)
-        new Organization(name: '法制科', code: '220', parent: organizationP).save(flush: true)
-        new Organization(name: '安全监督科', code: '230', parent: organizationP).save(flush: true)
-
-        organizationP = new Organization(name: '运营企业', code: '300', parent: null).save(flush: true)
-        new Organization(name: '客运', code: '310', parent: organizationP).save(flush: true)
-        new Organization(name: '货运', code: '320', parent: organizationP).save(flush: true)
-
-
         def carType = ['班线客车', '旅游包车', '危险品运输车']
         50.times { val ->
             Date date = new Date()
@@ -232,16 +220,16 @@ class InitService {
 
         new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true,
 
-                operator: testUser, responseDate: new Date(new Date().getTime() + 30 * 1000), responseContent: '5', responseTime: 30).save(flush: true)
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 30 * 1000), responseContent: '5', responseTime: 30).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '9578', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '2464', question: '10-1=?', answer: '9', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 200 * 1000),
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 200 * 1000),
                 responseContent: '9', responseTime: 200).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '1934', question: '2x3=?', answer: '6', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 20 * 1000),
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 20 * 1000),
                 responseContent: '6', responseTime: 20).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '6427', question: '10÷5=?', answer: '2', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 76 * 1000),
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 76 * 1000),
                 responseContent: '2', responseTime: 76).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '7294', question: '1x10=?', answer: '10', responsed: false).save(flush: true)
         new OwnerCheckRecord(auto: true, companyCode: '6729', question: '2x2=?', answer: '4', responsed: true,
@@ -251,13 +239,13 @@ class InitService {
                 responseDate: new Date(new Date().getTime() + 121 * 1000),
                 responseContent: '9', responseTime: 121).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '7394', question: '1x10=?', answer: '10', responsed: false,
-                operator: testUser,).save(flush: true)
+                operator: adminUser,).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true,
 
-                operator: testUser, responseDate: new Date(new Date().getTime() + 190 * 1000),
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 190 * 1000),
                 responseContent: '7', responseTime: 190).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '3427', question: '12÷3=?', answer: '4', responsed: true,
-                operator: testUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
                 responseContent: '4', responseTime: 75).save(flush: true)
 
 //        new Menu(name: '平台配置管理', code: 'platformManage', icon: 'fa-columns', parent: platForm, position: 'SIDE_BAR').save(flush: true)
@@ -352,8 +340,7 @@ class InitService {
         new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
 
         initAlarmType()
-        initMenu()
-        initSecurityData()
+
     }
 
 
@@ -392,15 +379,51 @@ class InitService {
     }
 
     private initSecurityData() {
-        def adminRole = new Role(authority: 'ROLE_ROOT', name: '超级管理员', org: null).save(failOnError: true, flush: true)
-        def testUser = new User(username: 'admin', passwordHash: 'admin123', salt: ValidationUtils.getSecureRandomSalt(), name: '管理员').save(failOnError: true, flush: true)
-        UserRole.create testUser, adminRole,true
+        Organization organizationP = new Organization(name: '运管处', code: '100', parent: null).save(flush: true)
+        new Organization(name: '运管指挥中心', code: '110', parent: organizationP).save(flush: true)
+        new Organization(name: '货运管理所', code: '120', parent: organizationP).save(flush: true)
+        new Organization(name: '客运管理所', code: '130', parent: organizationP).save(flush: true)
 
-        new PermissionGroup(url: '/menus/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单", category: "新增",code: 'menu_create').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/menus/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单", category: "新增",code: 'menu_create').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/menus/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单", category: "新增",code: 'menu_create').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/menus/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单", category: "新增",code: 'menu_create').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/menus/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单", category: "新增",code: 'menu_create').save(failOnError: true, flush: true)
+        organizationP = new Organization(name: '业务', code: '200', parent: null).save(flush: true)
+        new Organization(name: '信息科', code: '210', parent: organizationP).save(flush: true)
+        new Organization(name: '法制科', code: '220', parent: organizationP).save(flush: true)
+        new Organization(name: '安全监督科', code: '230', parent: organizationP).save(flush: true)
+
+        organizationP = new Organization(name: '运营企业', code: '300', parent: null).save(flush: true)
+        def test=new Organization(name: '客运', code: '310', parent: organizationP).save(flush: true)
+        new Organization(name: '货运', code: '320', parent: organizationP).save(flush: true)
+
+        (1..100).each {
+            new Role(authority: "ROLE_AAA${it}", name: "角色${it}", org: null).save(failOnError: true, flush: true)
+        }
+
+
+        def companyRole = new Role(authority: 'ROLE_COMPANY_ROOT', name: '企业管理员', org: test).save(failOnError: true, flush: true)
+
+        (1..100).each {
+            def aaa = new User(username: "company${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: "企业用户${it}",org:test).save(failOnError: true, flush: true)
+            UserRole.create aaa, companyRole,true
+        }
+
+        def companyUser = new User(username: 'company', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '企业用户',org:test).save(failOnError: true, flush: true)
+        UserRole.create companyUser, companyRole,true
+
+        def adminRole = new Role(authority: 'ROLE_ROOT', name: '超级管理员', org: null).save(failOnError: true, flush: true)
+        def adminUser = new User(username: 'admin', passwordHash: 'admin123', salt: ValidationUtils.getSecureRandomSalt(), name: '管理员').save(failOnError: true, flush: true)
+        UserRole.create adminUser, adminRole,true
+
+
+
+
+
+        new PermissionGroup(url: '/organizations/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "组织机构管理", category: "系统管理",code: 'organization_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/roles/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理", category: "系统管理",code: 'role_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/roles/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理2", category: "系统管理",code: 'role_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/permission-groups/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "权限管理", category: "系统管理",code: 'permission_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/operation_logs/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "操作日志", category: "系统管理",code: 'log_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/menus/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单管理", category: "系统管理",code: 'menu_manage').save(failOnError: true, flush: true)
+
+        new PermissionGroup(url: '/map-signs/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "路标管理", category: "基础信息",code: 'map_sign_manage').save(failOnError: true, flush: true)
     }
 
     private initMenu(){
@@ -411,32 +434,33 @@ class InitService {
 
         new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR').save(flush: true)
 
-        def systemManage = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
-        new Menu(name: '组织机构', code: 'organization', icon: 'fa-sitemap', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '角色', code: 'role', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'menu_create').save(flush: true)
+        def systemManage = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-cogs', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '组织机构', code: 'organization', icon: 'fa-sitemap', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'organization_manage').save(flush: true)
+        new Menu(name: '角色', code: 'role', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'role_manage').save(flush: true)
+        new Menu(name: '权限', code: 'permission', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '用户', code: 'user', icon: 'fa-user', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'menu_list').save(flush: true)
+        new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'log_manage').save(flush: true)
         new Menu(name: '菜单', code: 'menu', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
 
         def basicInfo = new Menu(name: '基础信息', code: 'root-basicinfo', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: basicInfo, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR',permissionCode:'systemcode_list').save(flush: true)
+        new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: basicInfo, position: 'SIDE_BAR').save(flush: true)
 
         def monitorMenu = new Menu(name: '实时监控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '车辆实时', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
-        new Menu(name: '车辆控制', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
-        new Menu(name: '车辆历史', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode:'car_map').save(flush: true)
+        new Menu(name: '车辆实时', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '车辆控制', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '车辆历史', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '报警信息', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
 
-        def msgManage = new Menu(name: '信息管理', code: 'root-msgmanage', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR').save(flush: true)
+        def msgManage = new Menu(name: '信息管理', code: 'root-msgmanage', icon: 'fa-indent', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '业户信息', code: 'ownerIdentity', icon: 'fa-building', parent: msgManage, position: 'SIDE_BAR',permissionCode:'ownerIdentity_list').save(flush: true)
-        new Menu(name: '车辆信息', code: 'carList', icon: 'fa-car', parent: msgManage, position: 'SIDE_BAR',permissionCode:'car_list').save(flush: true)
-        new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: msgManage, position: 'SIDE_BAR',permissionCode:'people_list').save(flush: true)
+        new Menu(name: '业户信息', code: 'ownerIdentity', icon: 'fa-building', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '车辆信息', code: 'carList', icon: 'fa-car', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
 
-        def infoManage = new Menu(name: '信息管理', code: 'root-infomanage', icon: 'fa-laptop', parent: null, position: 'SIDE_BAR').save(flush: true)
+        def infoManage = new Menu(name: '信息管理/发布', code: 'root-infomanage', icon: 'fa-newspaper-o', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息列表', code: 'infoList', icon: 'fa-envelope-square', parent: infoManage, position: 'SIDE_BAR').save(flush: true)

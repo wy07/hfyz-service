@@ -6,6 +6,7 @@ grails {
                 authorityJoinClassName = 'com.hfyz.security.UserRole'
                 passwordPropertyName = 'passwordHash'
             }
+
             authority.className = 'com.hfyz.security.Role'
             requestMap.className = 'com.hfyz.security.PermissionGroup'
             securityConfigType = 'Requestmap'       //将权限字符串保存在数据库中，修改时需要显示的刷新。
@@ -44,8 +45,8 @@ grails {
                     [pattern: '/**/images/**', access: ['permitAll']],
                     [pattern: '/**/favicon.ico', access: ['permitAll']],
                     [pattern: '/login', access: ['permitAll']],
-                    [pattern: '/login/**', access: ['permitAll']],
-                    [pattern: '/**/**', access: ['permitAll']]
+                    [pattern: '/login/**', access: ['permitAll']]
+//                    [pattern: '/**/**', access: ['permitAll']]
 //                    [pattern: '/**/**', access: 'ROLE_ADMIN']
             ]
 
@@ -61,12 +62,12 @@ grails {
                     [pattern: '/auth/**', filters: 'JOINED_FILTERS,-securityContextPersistenceFilter,-logoutFilter,-authenticationProcessingFilter,-tokenProcessingFilter,-rememberMeAuthenticationFilter,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-filterInvocationInterceptor'],
                     [pattern: '/system-codes/getmenu', filters: 'none'],
                     [pattern: '/systemCode/getmenu', filters: 'none'],
-//                    [pattern: '/**', filters: 'JOINED_FILTERS']
+//                    [pattern: '/**', filters: 'none']
+                    [pattern: '/**', filters: 'JOINED_FILTERS'],
             ]
         }
     }
 }
-
 
 
 

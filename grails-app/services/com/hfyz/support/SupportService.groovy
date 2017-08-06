@@ -1,7 +1,7 @@
 package com.hfyz.security
 
 import com.commons.utils.SQLHelper
-
+import com.hfyz.support.Organization
 import com.hfyz.support.SystemCode
 import grails.transaction.Transactional
 
@@ -15,6 +15,10 @@ class SupportService {
             sql.rows(GET_ORG_SQL)
         }
         formatOrgList(orgList, 0)
+    }
+
+    def getChildrenOrgs(){
+        return Organization.findAllByParentIsNotNull()
     }
 
     def formatOrgList(def data, def pid) {

@@ -21,14 +21,6 @@ class AuthController implements ControllerHelper {
             try {
                 UserDetails userDetails = loginService.signIn(username, password)
 
-                println "=======in "
-                println userDetails.authorities
-                println userDetails.authorities[0].class
-                println userDetails.authorities.role
-                println userDetails.authorities.role[0].class
-                println "=======out"
-                println userDetails.authorities.role[0]
-                println "================"
                 def rights = springSecurityService.findRequestmapsByRoles(userDetails.authorities.role).code.join(';')
 
 

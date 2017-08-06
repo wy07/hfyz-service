@@ -1,7 +1,9 @@
 package com.hfyz.security
 
 import com.commons.utils.NumberUtils
+import com.commons.utils.PageUtils
 import com.commons.utils.SQLHelper
+import com.hfyz.support.Organization
 import grails.converters.JSON
 import java.text.SimpleDateFormat
 import com.commons.utils.ControllerHelper
@@ -15,74 +17,55 @@ class SysuserController implements ControllerHelper {
     static final String DEFAULT_PASSWORD = '666666'
 
     def list() {
-        renderSuccessesWithMap([userList: roleService.getUserList(NumberUtils.toInteger(request.JSON.operatorId))])
-    }
-   def save(){
-       User user = new User(request.JSON)
-       user.salt = ValidationUtils.secureRandomSalt
-       user.passwordHash = DEFAULT_PASSWORD
-       user.save(flush: true, failOnError: true)
-       if(request.JSON.roles){
-            Role.findAllByIdInList(request.JSON.roles).eachWithIndex{ role,index->
-                UserRole.create user, role
-                UserRole.withSession {
-                    it.flush()
-                    it.clear()
-                }
-            }
+        int max = PageUtils.getMax(request.JSON.max, 10, 100)
+        int offset = PageUtils.getOffset(request.JSON.offset)
+        def userList = User.list([max: max, offset: offset, sort: 'id', order: 'desc'])?.collect { User user ->
+            [id           : user.id
+             , name       : user.name
+             , username   : user.username
+             , dateCreated: user.dateCreated.format('yyyy-MM-dd HH:mm:ss ')
+             , roles      : user.authorities?.name?.join('；') ?: ''
+             , org        : user.org?.name
+             , companyCode: user.companyCode]
         }
+        def totalUsers = User.count()
+        renderSuccessesWithMap([userList: userList, totalUsers: totalUsers])
+    }
 
+    def save() {
+        userService.save(request.JSON)
         renderSuccess()
     }
 
     def edit() {
         println params
-        withUser(params.long('id')) {User user ->
+        withUser(params.long('id')) { User user ->
             def result = []
             Role.list(sort: "id").each {
                 result << [value: it.id, label: it.name]
             }
-            renderSuccessesWithMap([user    : [name      : user.name
-                                               , username: user.username
-                                               , rights  : user.rights
-                                               , id      : user.id
-                                               , roles   : user.authorities.id
+            renderSuccessesWithMap([user    : [name         : user.name
+                                               , username   : user.username
+                                               , id         : user.id
+                                               , roles      : user.authorities.id
                                                , companyCode: user.companyCode
-            ],
-                                    roleList: result])
+                                               , orgId      : user.org?.id
+            ]])
         }
+
     }
 
     def update() {
         withUser(params.long('id')) { userInstance ->
-            String oldpwd = userInstance.password
-
-            userInstance.properties = request.JSON
-//            //userInstance.password = request.JSON.password
-//            if(request.JSON.password!=oldpwd){
-//                userInstance.salt = User.getSecureRandomSalt()
-//                userInstance.password = encodePassword(request.JSON.password,userInstance.salt)
-//            }
-
-            userInstance.save(flush: true, failOnError: true)
-            println request.JSON
-            UserRole.removeAll userInstance
-            Role.findAllByIdInList(request.JSON.roles).eachWithIndex { role, index ->
-
-                UserRole.create userInstance, role
-                UserRole.withSession {
-                    it.flush()
-                    it.clear()
-                }
-            }
+            userService.update(userInstance, request.JSON)
+            renderSuccess()
         }
-        renderSuccess()
+
     }
 
     def delete() {
         withUser(params.long('id')) { userInstance ->
-            UserRole.removeAll(userInstance)
-            userInstance.delete(flush: true)
+            userService.delete(userInstance)
             renderSuccess()
         }
     }

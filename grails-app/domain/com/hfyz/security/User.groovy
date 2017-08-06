@@ -4,6 +4,13 @@ import com.hfyz.support.Organization
 import sun.misc.BASE64Encoder
 import java.security.SecureRandom
 
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+import grails.compiler.GrailsCompileStatic
+
+//@GrailsCompileStatic
+@EqualsAndHashCode(includes='username')
+@ToString(includes='username', includeNames=true, includePackage=false)
 class User implements Serializable {
 
 	transient springSecurityService

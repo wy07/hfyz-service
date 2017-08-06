@@ -124,3 +124,6 @@ server:
 grails:
     cors:
         enabled: true
+
+user.rootRole.name: ROLE_FRONTEND_ROOT
+
