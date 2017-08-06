@@ -1,3 +1,4 @@
+import com.hfyz.securityExtension.CustomSpringSecurityService
 import com.hfyz.securityExtension.CustomUserDetailsService
 import com.hfyz.securityExtension.TokenAuthenticationProvider
 import com.hfyz.securityExtension.TokenProcessingFilter
@@ -18,5 +19,12 @@ beans = {
 
     tokenAuthenticationProvider(TokenAuthenticationProvider) {
         userDetailsService = ref('userDetailsService');
+    }
+
+    springSecurityService(CustomSpringSecurityService){
+        authenticationTrustResolver = ref('authenticationTrustResolver')
+        grailsApplication = application
+        objectDefinitionSource = ref('objectDefinitionSource')
+        passwordEncoder = ref('passwordEncoder')
     }
 }

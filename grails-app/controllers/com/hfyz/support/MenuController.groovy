@@ -7,20 +7,22 @@ class MenuController implements ControllerHelper {
     def supportService
 
     def list() {
-        def menuList = supportService.getMenuTypeListByParent(params.long('parentId'))
+        def menuList = supportService.getMenuTypeListByParent(NumberUtils.toLong(request.JSON.parentId))
         renderSuccessesWithMap([menuList: menuList])
     }
 
     def search() {
-        if (!params.query) {
+        if (!request.JSON.query) {
             renderSuccessesWithMap([menuList: []])
+            return
         }
 
-        if (!params.position) {
+        if (!request.JSON.position) {
             renderErrorMsg("请选择菜单位置")
+            return
         }
 
-        def menuList = Menu.findAllByPositionAndCodeLike(params.position, "${params.query}%", [max: 30, sort: 'id', order: 'desc'])?.collect { Menu obj ->
+        def menuList = Menu.findAllByPositionAndCodeLike(request.JSON.position, "${request.JSON.query}%", [max: 30, sort: 'id', order: 'desc'])?.collect { Menu obj ->
             [id    : obj.id
              , name: obj.name
              , code: obj.code]

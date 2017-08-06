@@ -46,6 +46,40 @@ class CarService {
         [carList: carList.get(), carCount: carCount.get()]
     }
 
+
+    def networkRate(rate = 100) {
+        SQLHelper.withDataSource(dataSource) { sql ->
+           def networkRateList = sql.rows(getNetworkRateListSql(),[rate:rate])
+        }?.collect { obj ->
+            [companyCode     : obj.companyCode
+             , ownerName     : obj.ownerName
+             , operateManager: obj.operateManager
+             , phone         : obj.phone
+             , operateCount  : obj.operateCount
+             , carinfoCount  : obj.carinfoCount
+             , rate          : obj.rate.setScale(2,BigDecimal.ROUND_HALF_UP)]
+        }
+    }
+
+    private static String getNetworkRateListSql() {
+        String sqlStr = """
+            with result as(
+                select owner_name ownerName
+                       , count(owner_name) operateCount
+                       , count(carinfo.frame_no) carinfoCount
+                       , count(carinfo.frame_no)*0.1/count(owner_name)*1000 rate
+                from runcar_basicoperate operate
+                left join registration_infornation_carinfo carinfo on  carinfo.frame_no = operate.frame_no
+                group by owner_name)
+                
+                select company_code companyCode, ownerName, operate_manager operateManager, phone, operateCount, carinfoCount, rate
+                from result, owner_identity iden
+                where ownerName = iden.owner_name and rate <= :rate
+                order by company_code
+        """
+        return sqlStr
+    }
+
     private static String getSearchCarsSql(String businessType, String licenseNo) {
         String sqlStr = """
             SELECT  operate.transform_license_no transformLicenseNo
