@@ -6,7 +6,10 @@ import com.hfyz.warning.Alarm
 import com.hfyz.warning.AlarmLevel
 import com.hfyz.warning.SourceType
 import com.hfyz.workOrder.WorkOrder
+import grails.async.Promise
 import grails.transaction.Transactional
+
+import static grails.async.Promises.task
 
 @Transactional
 class PeopleBasicInfoService {
@@ -21,47 +24,105 @@ class PeopleBasicInfoService {
      * @param offset
      * @return
      */
-    def getPeopleList(name, phoneNo, idCardNo, max, offset) {
-        def total = PeopleBasicInfo.createCriteria().get {
-            projections {
-                count()
-            }
-            if (name) {
-                like("name", "${name}")
-            }
-            if (phoneNo) {
-                like("phoneNo", "${phoneNo}")
-            }
-            if (idCardNo) {
-                like("idCardNo", "${idCardNo}")
+    def getPeopleList(tableName, name, phoneNo, idCardNo, max, offset) {
+        def params = [:]
+        if (name) {
+            params.name = name
+        }
+        if (phoneNo) {
+            params.phoneNo = phoneNo
+        }
+        if (idCardNo) {
+            params.idCardNo = idCardNo
+        }
+        Promise peopleCount = task {
+            SQLHelper.withDataSource(dataSource) { sql ->
+                sql.firstRow(getCountSql(tableName, name, idCardNo, phoneNo), params).count ?: 0
             }
         }
-        def resultList = PeopleBasicInfo.createCriteria().list(max: max, offset: offset) {
-            if (name) {
-                like("name", "${name}")
-            }
-            if (phoneNo) {
-                like("phoneNo", "${phoneNo}")
-            }
-            if (idCardNo) {
-                like("idCardNo", "${idCardNo}")
-            }
-        }?.collect({ PeopleBasicInfo info ->
-            [
-                    name           : info.name,
-                    gender         : info.gender,
-                    IDCardNo       : info.idCardNo,
-                    birthday       : info.birthday?.format("yyyy-MM-dd"),
-                    nation         : info.nation,
-                    nativePlace    : info.nativePlace,
-                    technologyTitle: info.technologyTitle,
-                    phoneNo        : info.phoneNo,
-            ]
-        })
 
-        return [resultList: resultList, total: total]
+        Promise peopleList = task {
+            SQLHelper.withDataSource(dataSource) { sql ->
+                sql.rows(getListSql(tableName, name, idCardNo, phoneNo), params + [max: max, offset: offset])
+            }?.collect({ obj ->
+                [
+                        name           : obj.peopleName,
+                        gender         : obj.gender,
+                        IDCardNo       : obj.idCardNo,
+                        birthday       : obj.birthday?.format("yyyy-MM-dd"),
+                        nation         : obj.nation,
+                        nativePlace    : obj.nativePlace,
+                        technologyTitle: obj.technologyTitle,
+                        phoneNo        : obj.phoneNo,
+                ]
+            })
+        }
+
+        return [resultList: peopleList.get(), total: peopleCount.get()]
     }
 
+    /**
+     * 列表sql
+     * @param tableName
+     * @param name
+     * @param idCardNo
+     * @param phoneNo
+     * @return
+     */
+    private static String getListSql(String tableName, String name, String idCardNo, String phoneNo) {
+        String joinSql = tableName ? "LEFT JOIN  ${tableName} pep ON pub.id_card_no=pep.id_card_no" : ""
+        String listSql = """
+            SELECT 
+            pub.name peopleName,
+            pub.gender gender,
+            pub.id_card_no idCardNo,
+            pub.birthday birthday,
+            pub.nation nation,
+            pub.native_place nativePlace,
+            pub.technology_title technologyTitle,
+            pub.phone_no phoneNO  
+            FROM people_basicinfo_public pub  ${joinSql} 
+            WHERE 1=1 """
+        if (tableName) {
+            listSql += " AND pep.id_card_no IS NOT NULL"
+        }
+        if (name) {
+            listSql += " AND pub.name=:name"
+        }
+        if (idCardNo) {
+            listSql += " AND pub.id_card_no=:idCardNo"
+        }
+        if (phoneNo) {
+            listSql += " AND pub.phone_no=:phoneNo"
+        }
+        listSql += " limit :max offset :offset"
+        return listSql
+    }
+    /**
+     * 统计总数sql
+     * @param tableName
+     * @param name
+     * @param idCardNo
+     * @param phoneNo
+     * @return
+     */
+    private static String getCountSql(String tableName, String name, String idCardNo, String phoneNo) {
+        String joinSql = tableName ? "LEFT JOIN  ${tableName} pep ON pub.id_card_no=pep.id_card_no" : ""
+        String countSql = "SELECT COUNT(*) FROM people_basicinfo_public pub  ${joinSql} WHERE 1=1 "
+        if (tableName) {
+            countSql += "AND pep.id_card_no IS NOT NULL"
+        }
+        if (name) {
+            countSql += "AND pub.name=:name"
+        }
+        if (idCardNo) {
+            countSql += "AND pub.id_card_no=:idCardNo"
+        }
+        if (phoneNo) {
+            countSql += "AND pub.phone_no=:phoneNo"
+        }
+        return countSql
+    }
     /**
      * 查看详情
      * @param idCardNo
@@ -86,6 +147,7 @@ class PeopleBasicInfoService {
         return result
     }
 
+    /***********************************从业人员资格巡检**********************************/
     /**
      * 从业人员资格巡检
      */
@@ -178,7 +240,7 @@ class PeopleBasicInfoService {
                 WHERE fin.case_register_no IS NULL)
             SELECT cases.id_card_no idCardNo,cases.company_code companyCode
             FROM cases
-            INNER JOIN people_basicinfo_public pub ON cases.id_card_no=pub.id_card_no"""
+            INNER JOIN people_basicinfo_public pub ON cases.id_card_no=pub.id_card_no """
 
         def resultList = SQLHelper.withDataSource(dataSource) { sql ->
             sql.rows(sqlStr)

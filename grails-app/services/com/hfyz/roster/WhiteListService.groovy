@@ -36,10 +36,12 @@ class WhiteListService {
             if (vehicleNo) {
                 eq("vehicleNo", "${vehicleNo}")
             }
-        }?.collect { WhiteList whiteList ->
+        }?.collect { WhiteList instance ->
             [
-                    id       : whiteList.id,
-                    vehicleNo: whiteList.vehicleNo
+                    id          : instance.id,
+                    vehicleNo   : instance.vehicleNo,
+                    controlBegin: instance.controlBegin?.format("yyyy-MM-dd"),
+                    status      : instance.status.type
             ]
         }
         return [resultList: resultList, total: total]
@@ -55,7 +57,9 @@ class WhiteListService {
                 vehicleNo    : instance.vehicleNo,
                 carType      : vehicle?.carType,
                 carPlateColor: vehicle?.carPlateColor,
-                carColor     : vehicle?.carColor]
+                carColor     : vehicle?.carColor,
+                controlBegin : instance.controlBegin?.format("yyyy-MM-dd"),
+                status       : instance.status.type]
     }
 
     /**
@@ -65,7 +69,7 @@ class WhiteListService {
      */
     def update(id, obj) {
         WhiteList instance = getInstanceById(id)
-        /** *************/
+        instance.properties=obj
         instance.save(flush: true, failOnError: true)
     }
 

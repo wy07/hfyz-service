@@ -23,7 +23,7 @@ class WhiteListController implements ControllerHelper {
      */
     def show() {
         def result = whiteListService.show(params.long('id'))
-        renderSuccessesWithMap(result)
+        renderSuccessesWithMap([instance:result])
     }
 
     /**
