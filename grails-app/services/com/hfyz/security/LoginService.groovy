@@ -15,5 +15,11 @@ class LoginService {
         return authentication.getPrincipal()
     }
 
+//    def TestUser addTestUser(String username, String... roles) {
+//        def testUser = save(new TestUser(username: username, password: 'password'))
+//        roles.each { save new TestUserTestRole(testUser: testUser, testRole: TestRole.findOrSaveByAuthority(it)) }
+//        testUser
+//    }
+
 
 }

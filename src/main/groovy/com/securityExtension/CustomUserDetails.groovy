@@ -1,6 +1,4 @@
 package com.securityExtension
-
-
 import grails.plugin.springsecurity.userdetails.GrailsUser
 import org.springframework.security.core.GrantedAuthority
 
