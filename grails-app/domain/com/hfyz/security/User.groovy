@@ -1,17 +1,17 @@
 package com.hfyz.security
 
-import com.commons.hibernate.JsonbListType
-import groovy.transform.EqualsAndHashCode
-import groovy.transform.ToString
 import com.hfyz.support.Organization
 import sun.misc.BASE64Encoder
 import java.security.SecureRandom
 
+import groovy.transform.EqualsAndHashCode
+import groovy.transform.ToString
+import grails.compiler.GrailsCompileStatic
+
+//@GrailsCompileStatic
 @EqualsAndHashCode(includes='username')
 @ToString(includes='username', includeNames=true, includePackage=false)
 class User implements Serializable {
-
-	private static final long serialVersionUID = 1
 
 	transient springSecurityService
 
@@ -21,22 +21,34 @@ class User implements Serializable {
 	String email
 	String passwordHash                //加密后的密码
 	String salt                        //随机盐
-	List    rights     //权限
 	Date dateCreated
     Date lastUpdated
+	Organization org
+	String companyCode
+
+
 	boolean enabled = true
 	boolean accountExpired
 	boolean accountLocked
 	boolean passwordExpired
-	Organization org
-	int  operator  //操作员id
-	String companyCode
 
-//	User(String username, String password) {
-//		this()
-//		this.username = username
-//		this.password = password
-//	}
+	static mapping = {
+		table 'sys_user'
+		id generator:'native', params:[sequence:'user_seq'], defaultValue: "nextval('user_seq')"
+	}
+
+	static constraints = {
+		username blank: false, unique: true,maxSize:20
+		tel nullable:true,blank: true, unique: true,maxSize:11
+		email nullable:true,blank: true, unique: true,email:true,maxSize:50
+		name nullable:false,blank: false,maxsize:20
+		passwordHash blank: false
+		salt blank: false
+		org nullable:true
+		companyCode nullable: true, blank: false, maxSize: 10
+	}
+
+	static transients = ['springSecurityService']
 
 	Set<Role> getAuthorities() {
 		UserRole.findAllByUser(this)*.role
@@ -54,27 +66,6 @@ class User implements Serializable {
 
 	protected void encodePassword() {
 		passwordHash = springSecurityService.encodePassword(passwordHash, salt)
-	}
-
-	static transients = ['springSecurityService']
-
-	static constraints = {
-		username blank: false, unique: true,maxSize:20
-		tel nullable:true,blank: true, unique: true,maxSize:11
-		email nullable:true,blank: true, unique: true,email:true,maxSize:50
-		name nullable:false,blank: false,maxsize:20
-		passwordHash blank: false
-        salt blank: false
-		rights nullable:true
-		org nullable:true
-		operator nullable:true
-		companyCode nullable: true, blank: false, maxSize: 10
-	}
-
-	static mapping = {
-		table 'sys_user'
-		id generator:'native', params:[sequence:'user_seq'], defaultValue: "nextval('user_seq')"
-		rights   type: JsonbListType,sqlType: 'jsonb'
 	}
 
 	static String getSecureRandomSalt() {
