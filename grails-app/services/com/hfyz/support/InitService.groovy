@@ -1,10 +1,9 @@
 package com.hfyz.support
 
-import com.commons.utils.SQLHelper
 import com.commons.utils.ValidationUtils
+import com.hfyz.cases.RegisterReport
 import com.hfyz.owner.CompanyRegulation
 
-//import com.hfyz.owner.CompanyRegulation
 import com.hfyz.owner.OwnerIdentity
 import com.hfyz.people.PeopleBasicInfo
 import com.hfyz.people.WorkerCheckMember
@@ -17,47 +16,29 @@ import com.hfyz.platform.PlatformManage
 import com.hfyz.car.CarBasicInfo
 import com.hfyz.car.CarBasicOperate
 import com.hfyz.car.RegistrationInformationCarinfo
+import com.hfyz.roster.BlackList
+import com.hfyz.roster.Status
+import com.hfyz.roster.WhiteList
 import com.hfyz.warning.Warning
 import grails.transaction.Transactional
 import com.hfyz.security.User
 import com.hfyz.security.Role
 import com.hfyz.security.UserRole
 import com.hfyz.security.PermissionGroup
-import groovy.sql.Sql
+import com.hfyz.rectification.HiddenRectificationOrder
+import com.hfyz.rectification.HiddenRectificationOrderStatus
 
 @Transactional
 class InitService {
 
     def initData() {
-      /*  if(User.count()>0){
-            return
-        }*/
+        /*  if(User.count()>0){
+              return
+          }*/
 
         initMenu()
         initSecurityData()
-        def adminUser=User.findByUsername('admin')
-
-//        new PermissionGroup(name: '浏览', permissions: 'view', menu: homemenu).save(flush: true)
-
-
-//        new PermissionGroup(name: '修改', permissions: 'edit', menu: roleMenu).save(flush: true)
-//        new PermissionGroup(name: '删除', permissions: 'delete', menu: roleMenu).save(flush: true)
-//        new PermissionGroup(name: '分配权限', permissions: 'assign', menu: roleMenu).save(flush: true)
-//        new PermissionGroup(name: '浏览', permissions: 'view', menu: roleMenu).save(flush: true)
-
-//        new PermissionGroup(name: '新增', permissions: 'create', menu: userMenu).save(flush: true)
-//        new PermissionGroup(name: '修改', permissions: 'edit', menu: userMenu).save(flush: true)
-//        new PermissionGroup(name: '删除', permissions: 'delete', menu: userMenu).save(flush: true)
-//        new PermissionGroup(name: '浏览', permissions: 'view', menu: userMenu).save(flush: true)
-        //        new PermissionGroup(name: '新增', permissions: 'create', menu: roleMenu).save(flush: true)
-
-//        new PermissionGroup(name: '新增', permissions: 'create', menu: menu).save(flush: true)
-//        new PermissionGroup(name: '修改', permissions: 'edit', menu: menu).save(flush: true)
-//        new PermissionGroup(name: '删除', permissions: 'delete', menu: menu).save(flush: true)
-//        new PermissionGroup(name: '浏览', permissions: 'view', menu: menu).save(flush: true)
- //        new Menu(name: '其他地图', code: 'otherMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-
-
+        def adminUser = User.findByUsername('admin')
 
         new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
         new PlatformManage(ip: '61.123.1.15', port: '2001', name: '合肥客运平台', code: 'K002', contactName: '王平', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
@@ -80,55 +61,16 @@ class InitService {
         new Warning(frameNo: 'DEQ23525446672457', carLicenseNo: '皖A-GF333', carColor: '红色', warningSource: 9, warningType: '车辆非法点火', warningTime: new Date(), warningTimes: 1).save(flush: true)
 
 
-        new PeopleBasicInfo(name: '张敏', gender: '女', IDCardNo: '34212519870314673x', picture: '', nation: '汉', nativePlace: '安徽合肥', phoneNo: '15105512743', address: '', email: 'test1@163.com', postCode: '340101', educationLevel: '大专', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
-        new PeopleBasicInfo(name: '吴珊', gender: '男', IDCardNo: '34132519870314222x', picture: '', nation: '汉', nativePlace: '安徽巢湖', phoneNo: '15703272743', address: '', email: 'test2@163.com', postCode: '340001', educationLevel: '本科', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
-        new WorkerCheckMember(IDCardNo: '34212519870314673x', workLicenseType: '货运', workLicenseNo: 'AH2016', workLicenseGrantTime: new Date(), workLicenseGetTime: new Date(), endTime: new Date(), licenseGrantOrg: '合肥XXX运输有限公司', licenseSituation: '可用', licenseChangeTimes: 2, trainTimes: 2, checkType: '1').save(flush: true)
-        new WorkerManager(IDCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '押运装卸', ownerName: '合肥市汽车客运XXX', driveCarType: '中小型客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), licenseGrantOrg: '合肥市交通xxx').save(flush: true)
-        new WorkerTechnology(IDCardNo: '34212519870314673x', ownerName: '合肥市汽车客运XXX').save(flush: true)
-        new WorkerWaiter(IDCardNo: '34132519870314222x', jobName: '后勤管理', jobLicenseNo: 'xxxx', grantTime: new Date(), beginWorkTime: new Date()).save(flush: true)
-        new WorkerCoach(IDCardNo: '34212519870314673x', workLicenseType: '教练', workLicenseNo: 'CAH1234', workLicenseGetTime: new Date(), workLicenseGrantTime: new Date(), endTime: new Date(), driveLicenseNo: '34212519870314673x', driveCarType: '小汽车', driveLicenseGetTime: new Date(), licenseGrantOrga: '合肥市新亚驾校', licenseSituation: '可用', workSituation: '中级教练', ownerName: '合肥市新亚驾校', businessPermitCharacter: '3', businessPermitNo: '34xxx', changeTimes: 0, trainTimes: 1, inspectDealSituation: '', teachType: 'C照', driveLicenseSituation: '可用').save(flush: true)
-        new WorkerDriver(IDCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '驾驶员', ownerName: '合肥市汽车客运XXX', driveCarType: '客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), driveLicenseNo: '34132519870314222x', businessPermitCharacter: 'x').save(flush: true)
+        new PeopleBasicInfo(name: '张敏', gender: '女', idCardNo: '34212519870314673x', picture: '', nation: '汉', nativePlace: '安徽合肥', phoneNo: '15105512743', address: '', email: 'test1@163.com', postCode: '340101', educationLevel: '大专', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
+        new PeopleBasicInfo(name: '吴珊', gender: '男', idCardNo: '34132519870314222x', picture: '', nation: '汉', nativePlace: '安徽巢湖', phoneNo: '15703272743', address: '', email: 'test2@163.com', postCode: '340001', educationLevel: '本科', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
+        new WorkerCheckMember(companyCode: 'changcheng', idCardNo: '34212519870314673x', workLicenseType: '货运', workLicenseNo: 'AH2016', workLicenseGrantTime: new Date(), workLicenseGetTime: new Date(), endTime: new Date(), licenseGrantOrg: '合肥XXX运输有限公司', licenseSituation: '可用', licenseChangeTimes: 2, trainTimes: 2, checkType: '1').save(flush: true)
+        new WorkerManager(companyCode: 'changcheng', idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '押运装卸', ownerName: '合肥市汽车客运XXX', driveCarType: '中小型客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), licenseGrantOrg: '合肥市交通xxx').save(flush: true)
+        new WorkerTechnology(companyCode: 'changcheng', idCardNo: '34212519870314673x', ownerName: '合肥市汽车客运XXX').save(flush: true)
+        new WorkerWaiter(idCardNo: '34132519870314222x', jobName: '后勤管理', jobLicenseNo: 'xxxx', grantTime: new Date(), beginWorkTime: new Date()).save(flush: true)
+        new WorkerCoach(companyCode: 'changcheng', idCardNo: '34212519870314673x', workLicenseType: '教练', workLicenseNo: 'CAH1234', workLicenseGetTime: new Date(), workLicenseGrantTime: new Date(), endTime: new Date(), driveLicenseNo: '34212519870314673x', driveCarType: '小汽车', driveLicenseGetTime: new Date(), licenseGrantOrga: '合肥市新亚驾校', licenseSituation: '可用', workSituation: '中级教练', ownerName: '合肥市新亚驾校', businessPermitCharacter: '3', businessPermitNo: '34xxx', changeTimes: 0, trainTimes: 1, inspectDealSituation: '', teachType: 'C照', driveLicenseSituation: '可用').save(flush: true)
+        new WorkerDriver(companyCode: 'changcheng', idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '驾驶员', ownerName: '合肥市汽车客运XXX', driveCarType: '客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), driveLicenseNo: '34132519870314222x', businessPermitCharacter: 'x').save(flush: true)
 
 
-
-        LicenseType licenseTypeP = new LicenseType(name: "道路运输经营许可证", codeNum: "100", parent: null).save(flush: true)
-        new LicenseType(name: "道路运输经营许可证正本", codeNum: "110", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "道路运输经营许可证副本", codeNum: "120", parent: licenseTypeP).save(flush: true)
-
-        licenseTypeP = new LicenseType(name: "车辆运营证（道路运输证核心板证件）", codeNum: "200", parent: null).save(flush: true)
-        new LicenseType(name: "道路运输证", codeNum: "210", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "车辆暂扣证明", codeNum: "220", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "车辆年审标贴", codeNum: "230", parent: licenseTypeP).save(flush: true)
-        licenseTypeP = new LicenseType(name: "国际汽车运输行车许可证", codeNum: "240", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "A中行车许可证", codeNum: "241", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "B种行车许可证", codeNum: "242", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "C种行车许可证", codeNum: "243", parent: licenseTypeP).save(flush: true)
-
-        LicenseType temp = new LicenseType(name: "营运标致车", codeNum: "300", parent: null).save(flush: true)
-        licenseTypeP = new LicenseType(name: "班车客运标志牌", codeNum: "310", parent: temp).save(flush: true)
-        new LicenseType(name: "县内班车客运标志牌", codeNum: "311", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "县际班车客运标志牌", codeNum: "312", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "市际班车客运标志牌", codeNum: "313", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "省际班车客运标志牌", codeNum: "314", parent: licenseTypeP).save(flush: true)
-
-        licenseTypeP = new LicenseType(name: "包车客运标志牌", codeNum: "320", parent: temp).save(flush: true)
-        new LicenseType(name: "县内包车客运标志牌", codeNum: "321", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "县际包车客运标志牌", codeNum: "322", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "市际包车客运标志牌", codeNum: "323", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "省际包车客运标志牌", codeNum: "324", parent: licenseTypeP).save(flush: true)
-
-        licenseTypeP = new LicenseType(name: "临时客运标志牌", codeNum: "330", parent: temp).save(flush: true)
-        new LicenseType(name: "县内临时客运标志牌", codeNum: "331", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "县际临时客运标志牌", codeNum: "332", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "市际临时客运标志牌", codeNum: "333", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "省际临时客运标志牌", codeNum: "334", parent: licenseTypeP).save(flush: true)
-        new LicenseType(name: "道路客运班线经营许可证明", codeNum: "340", parent: temp).save(flush: true)
-
-        UnitNature unitNatureP = new UnitNature(name: "单位性质", codeNum: "UnitNature", parent: null).save(flush: true)
-        new UnitNature(name: "政府机关", codeNum: "10", parent: unitNatureP).save(flush: true)
-        new UnitNature(name: "企业", codeNum: "20", parent: unitNatureP).save(flush: true)
-        new UnitNature(name: "事业单位", codeNum: "30", parent: unitNatureP).save(flush: true)
-        new UnitNature(name: "社会团体", codeNum: "40", parent: unitNatureP).save(flush: true)
 
 
         def carType = ['班线客车', '旅游包车', '危险品运输车']
@@ -243,12 +185,12 @@ class InitService {
         new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true,
 
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 190 * 1000),
+
                 responseContent: '7', responseTime: 190).save(flush: true)
         new OwnerCheckRecord(auto: false, companyCode: '3427', question: '12÷3=?', answer: '4', responsed: true,
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
                 responseContent: '4', responseTime: 75).save(flush: true)
 
-//        new Menu(name: '平台配置管理', code: 'platformManage', icon: 'fa-columns', parent: platForm, position: 'SIDE_BAR').save(flush: true)
         new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
         new PlatformManage(ip: '61.123.1.15', port: '2001', name: '合肥客运平台', code: 'K002', contactName: '王平', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
         new PlatformManage(ip: '62.23.1.15', port: '2011', name: '合肥汽车客运有限公司', code: 'K003', contactName: '张敏', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
@@ -293,6 +235,9 @@ class InitService {
         new MapSign(name: '报喜鸟集团', mapSignType: childMapType5, longitude: 135.8424311, latitude: 29.7896541, display: true).save(flush: true)
         new MapSign(name: '金州集团', mapSignType: childMapType5, longitude: 111.9435725, latitude: 33.3571598, display: true).save(flush: true)
 
+        new RegisterReport(caseRegisterNo: "tx123", companyCode: "changcheng", idCardNo: "421553").save(flush: true)
+        new RegisterReport(caseRegisterNo: "test", companyCode: "changcheng", idCardNo: "2345").save(flush: true)
+        new PeopleBasicInfo(idCardNo: "421553").save(flush: true)
 
         25.times { val ->
             new RegistrationInformationCarinfo(
@@ -306,18 +251,17 @@ class InitService {
                     , frameNo: "frameNo${val}").save(flush: true)
         }
 
-
 //        公司（经营业户）
-        4.times{it ->
+        4.times { it ->
             new OwnerIdentity(ownerName: "企业${it}"
-                    , companyCode:"C00000000${it}"
+                    , companyCode: "C00000000${it}"
                     , ownerCode: "dwcode00${it}"
                     , parentCompanyName: '企业1'
                     , parentOwner: '企业1'
                     , ownerAddress: "合肥市怀宁路1${it}6号"
-                    , postCode: 23002+"${it}"
+                    , postCode: 23002 + "${it}"
                     , administrativeDivisionName: '蜀山区'
-                    , administrativeDivisionCode: 34010+"${it}"
+                    , administrativeDivisionCode: 34010 + "${it}"
                     , economicType: '私营经济'
                     , legalRepresentative: '张敏'
                     , idCardType: '居民身份证'
@@ -331,18 +275,88 @@ class InitService {
                     , website: "http://www.${it}xiaojukeji.com"
                     , shortName: '企业0').save(flush: true)
         }
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note: '触发告警为小于等于该阈值').save(flush: true)
 
 //        公司内部制度
-        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note:'触发告警为小于等于该阈值').save(flush: true)
-        new Configure(configKey: 'carRateAlarm1', configValue: '100', name: '车辆入网率告警阈值1', note:'触发告警为小于等于该阈值').save(flush: true)
-
         new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
         new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
 
+        new BlackList(vehicleNo: '陕A-CK0002', frameNo: 'frameNo2', blackType: '重点车辆盘查', controlBehavior: '卡口抓拍', scheme: '实时报警', controlRange: '合肥市主干道', controlOrg: '合肥市公安局', executor: '管理员', status: Status.BKZ, controlBegin: new Date(117, 7, 13), controlEnd: new Date(117, 7, 20)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0003', frameNo: 'frameNo3', blackType: '重点车辆盘查', controlBehavior: '卡口抓拍', scheme: '实时报警', controlRange: '合肥市主干道', controlOrg: '合肥市公安局', executor: '管理员', status: Status.BKZ, controlBegin: new Date(117, 8, 12), controlEnd: new Date(117, 8, 22)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0004', frameNo: 'frameNo4', blackType: '重点车辆盘查', controlBehavior: '卡口抓拍', scheme: '实时报警', controlRange: '合肥市主干道', controlOrg: '合肥市公安局', executor: '管理员', status: Status.BKZ, controlBegin: new Date(117, 7, 22), controlEnd: new Date(117, 8, 22)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0005', frameNo: 'frameNo5', blackType: '重点车辆盘查', controlBehavior: '卡口抓拍', scheme: '实时报警', controlRange: '合肥市主干道', controlOrg: '合肥市公安局', executor: '管理员', status: Status.BKZ, controlBegin: new Date(117, 8, 1), controlEnd: new Date(117, 8, 10)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0006', frameNo: 'frameNo6', blackType: '重点车辆盘查', controlBehavior: '卡口抓拍', scheme: '实时报警', controlRange: '合肥市主干道', controlOrg: '合肥市公安局', executor: '管理员', status: Status.BKZ, controlBegin: new Date(117, 8, 20), controlEnd: new Date(117, 8, 22)).save(flush: true)
+        new BlackList(vehicleNo: '陕A-CK0007', frameNo: 'frameNo7', blackType: '重点车辆盘查', controlBehavior: '卡口抓拍', scheme: '实时报警', controlRange: '合肥市主干道', controlOrg: '合肥市公安局', executor: '管理员', status: Status.BKZ, controlBegin: new Date(117, 9, 12), controlEnd: new Date(117, 9, 17)).save(flush: true)
+
+        new WhiteList(vehicleNo: '陕A-CK0008', frameNo: 'frameNo8', controlBegin: new Date(117, 9, 12), status: Status.JCBK).save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0009', frameNo: 'frameNo9', controlBegin: new Date(117, 9, 12), status: Status.JCBK).save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0010', frameNo: 'frameNo10', controlBegin: new Date(117, 9, 12), status: Status.JCBK).save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0011', frameNo: 'frameNo11', controlBegin: new Date(117, 9, 12), status: Status.JCBK).save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0012', frameNo: 'frameNo12', controlBegin: new Date(117, 9, 12), status: Status.JCBK).save(flush: true)
+        new WhiteList(vehicleNo: '陕A-CK0013', frameNo: 'frameNo13', controlBegin: new Date(117, 9, 12), status: Status.JCBK).save(flush: true)
+
+        def parentMenu = new Menu(name: '整改', code: 'root-rectification', icon: 'fa-hand-o-up', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '隐患整改', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730001', enterpirse: 'a公司', examiner: '李四', inspectionDate: new Date(), dealineDate: new Date() + 5, insPosition: '车间', insDesc: '机器', insQuestion: '安全问题  管理隐患 无验证  无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730002', enterpirse: 'b公司', examiner: '王五', inspectionDate: new Date(), dealineDate: new Date() + 6, insPosition: '工厂', insDesc: '线路', insQuestion: '安全问题  管理隐患 无验证  无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730003', enterpirse: 'c公司', examiner: '赵六', inspectionDate: new Date(), dealineDate: new Date() + 7, insPosition: '工厂', insDesc: '压缩机', insQuestion: '无验证', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730004', enterpirse: 'd公司', examiner: 'tony', inspectionDate: new Date(), dealineDate: new Date() + 8, insPosition: '车间', insDesc: '发动机', insQuestion: '无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730005', enterpirse: 'f公司', examiner: 'kobe', inspectionDate: new Date(), dealineDate: new Date() + 9, insPosition: '工厂', insDesc: 'jiqi', insQuestion: '安全问题  管理隐患 无验证  无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
+
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
+
+        def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
+
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
+
+        initSystemCode()
         initAlarmType()
 
     }
 
+    private initSystemCode(){
+        LicenseType licenseTypeP = new LicenseType(name: "道路运输经营许可证", codeNum: "100", parent: null).save(flush: true)
+        new LicenseType(name: "道路运输经营许可证正本", codeNum: "110", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "道路运输经营许可证副本", codeNum: "120", parent: licenseTypeP).save(flush: true)
+
+        licenseTypeP = new LicenseType(name: "车辆运营证（道路运输证核心板证件）", codeNum: "200", parent: null).save(flush: true)
+        new LicenseType(name: "道路运输证", codeNum: "210", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "车辆暂扣证明", codeNum: "220", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "车辆年审标贴", codeNum: "230", parent: licenseTypeP).save(flush: true)
+        licenseTypeP = new LicenseType(name: "国际汽车运输行车许可证", codeNum: "240", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "A中行车许可证", codeNum: "241", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "B种行车许可证", codeNum: "242", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "C种行车许可证", codeNum: "243", parent: licenseTypeP).save(flush: true)
+
+        LicenseType temp = new LicenseType(name: "营运标致车", codeNum: "300", parent: null).save(flush: true)
+        licenseTypeP = new LicenseType(name: "班车客运标志牌", codeNum: "310", parent: temp).save(flush: true)
+        new LicenseType(name: "县内班车客运标志牌", codeNum: "311", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "县际班车客运标志牌", codeNum: "312", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "市际班车客运标志牌", codeNum: "313", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "省际班车客运标志牌", codeNum: "314", parent: licenseTypeP).save(flush: true)
+
+        licenseTypeP = new LicenseType(name: "包车客运标志牌", codeNum: "320", parent: temp).save(flush: true)
+        new LicenseType(name: "县内包车客运标志牌", codeNum: "321", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "县际包车客运标志牌", codeNum: "322", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "市际包车客运标志牌", codeNum: "323", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "省际包车客运标志牌", codeNum: "324", parent: licenseTypeP).save(flush: true)
+
+        licenseTypeP = new LicenseType(name: "临时客运标志牌", codeNum: "330", parent: temp).save(flush: true)
+        new LicenseType(name: "县内临时客运标志牌", codeNum: "331", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "县际临时客运标志牌", codeNum: "332", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "市际临时客运标志牌", codeNum: "333", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "省际临时客运标志牌", codeNum: "334", parent: licenseTypeP).save(flush: true)
+        new LicenseType(name: "道路客运班线经营许可证明", codeNum: "340", parent: temp).save(flush: true)
+
+        UnitNature unitNatureP = new UnitNature(name: "单位性质", codeNum: "UnitNature", parent: null).save(flush: true)
+        new UnitNature(name: "政府机关", codeNum: "10", parent: unitNatureP).save(flush: true)
+        new UnitNature(name: "企业", codeNum: "20", parent: unitNatureP).save(flush: true)
+        new UnitNature(name: "事业单位", codeNum: "30", parent: unitNatureP).save(flush: true)
+        new UnitNature(name: "社会团体", codeNum: "40", parent: unitNatureP).save(flush: true)
+
+
+    }
 
     private initAlarmType() {
 
@@ -390,43 +404,38 @@ class InitService {
         new Organization(name: '安全监督科', code: '230', parent: organizationP).save(flush: true)
 
         organizationP = new Organization(name: '运营企业', code: '300', parent: null).save(flush: true)
-        def test=new Organization(name: '客运', code: '310', parent: organizationP).save(flush: true)
+        def test = new Organization(name: '客运', code: '310', parent: organizationP).save(flush: true)
         new Organization(name: '货运', code: '320', parent: organizationP).save(flush: true)
 
         (1..100).each {
             new Role(authority: "ROLE_AAA${it}", name: "角色${it}", org: null).save(failOnError: true, flush: true)
         }
 
-
         def companyRole = new Role(authority: 'ROLE_COMPANY_ROOT', name: '企业管理员', org: test).save(failOnError: true, flush: true)
 
         (1..100).each {
-            def aaa = new User(username: "company${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: "企业用户${it}",org:test).save(failOnError: true, flush: true)
-            UserRole.create aaa, companyRole,true
+            def aaa = new User(username: "company${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: "企业用户${it}", org: test).save(failOnError: true, flush: true)
+            UserRole.create aaa, companyRole, true
         }
 
-        def companyUser = new User(username: 'company', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '企业用户',org:test).save(failOnError: true, flush: true)
-        UserRole.create companyUser, companyRole,true
+        def companyUser = new User(username: 'company', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '企业用户', org: test).save(failOnError: true, flush: true)
+        UserRole.create companyUser, companyRole, true
 
         def adminRole = new Role(authority: 'ROLE_ROOT', name: '超级管理员', org: null).save(failOnError: true, flush: true)
         def adminUser = new User(username: 'admin', passwordHash: 'admin123', salt: ValidationUtils.getSecureRandomSalt(), name: '管理员').save(failOnError: true, flush: true)
-        UserRole.create adminUser, adminRole,true
+        UserRole.create adminUser, adminRole, true
 
+        new PermissionGroup(url: '/organizations/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "组织机构管理", category: "系统管理", code: 'organization_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/roles/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理", category: "系统管理", code: 'role_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/roles/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理2", category: "系统管理", code: 'role_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/permission-groups/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "权限管理", category: "系统管理", code: 'permission_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/operation_logs/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "操作日志", category: "系统管理", code: 'log_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/menus/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单管理", category: "系统管理", code: 'menu_manage').save(failOnError: true, flush: true)
 
-
-
-
-        new PermissionGroup(url: '/organizations/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "组织机构管理", category: "系统管理",code: 'organization_manage').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/roles/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理", category: "系统管理",code: 'role_manage').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/roles/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理2", category: "系统管理",code: 'role_manage').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/permission-groups/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "权限管理", category: "系统管理",code: 'permission_manage').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/operation_logs/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "操作日志", category: "系统管理",code: 'log_manage').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/menus/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单管理", category: "系统管理",code: 'menu_manage').save(failOnError: true, flush: true)
-
-        new PermissionGroup(url: '/map-signs/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "路标管理", category: "基础信息",code: 'map_sign_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/map-signs/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "路标管理", category: "基础信息", code: 'map_sign_manage').save(failOnError: true, flush: true)
     }
 
-    private initMenu(){
+    private initMenu() {
         new Menu(name: '关闭全部', code: 'closeall', position: 'TOP_BAR', parent: null).save(flush: true)
         def topbar = new Menu(name: '个人中心', code: 'profile', style: 'hoverdown', position: 'TOP_BAR', parent: null).save(flush: true)
         new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
@@ -435,11 +444,11 @@ class InitService {
         new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR').save(flush: true)
 
         def systemManage = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-cogs', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '组织机构', code: 'organization', icon: 'fa-sitemap', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'organization_manage').save(flush: true)
-        new Menu(name: '角色', code: 'role', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'role_manage').save(flush: true)
+        new Menu(name: '组织机构', code: 'organization', icon: 'fa-sitemap', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'organization_manage').save(flush: true)
+        new Menu(name: '角色', code: 'role', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'role_manage').save(flush: true)
         new Menu(name: '权限', code: 'permission', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '用户', code: 'user', icon: 'fa-user', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'log_manage').save(flush: true)
+        new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'log_manage').save(flush: true)
         new Menu(name: '菜单', code: 'menu', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
 
         def basicInfo = new Menu(name: '基础信息', code: 'root-basicinfo', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR').save(flush: true)
@@ -459,13 +468,13 @@ class InitService {
         new Menu(name: '业户信息', code: 'ownerIdentity', icon: 'fa-building', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '车辆信息', code: 'carList', icon: 'fa-car', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
 
         def infoManage = new Menu(name: '信息管理/发布', code: 'root-infomanage', icon: 'fa-newspaper-o', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息列表', code: 'infoList', icon: 'fa-envelope-square', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
-
-
     }
 
 

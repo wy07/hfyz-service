@@ -15,7 +15,7 @@ class PeopleBasicInfoController implements ControllerHelper {
     def list() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        def result = peopleBasicInfoService.getPeopleList(request.JSON.name, request.JSON.phoneNo, request.JSON.IDCardNo, max, offset)
+        def result = peopleBasicInfoService.getPeopleList(request.JSON.type, request.JSON.name, request.JSON.phoneNo, request.JSON.IDCardNo, max, offset)
         renderSuccessesWithMap([resultList: result.resultList, total: result.total])
     }
 
@@ -24,8 +24,15 @@ class PeopleBasicInfoController implements ControllerHelper {
      */
     def more() {
         def result = peopleBasicInfoService.getDetailInfo(request.JSON.IDCardNo)
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        JSON.registerObjectMarshaller(java.sql.Timestamp) { o -> sdf.format(o) }
         renderSuccessesWithMap(result)
+    }
+
+    /**
+     * 人员营运资格巡检
+     * @return
+     */
+    def inspection() {
+        peopleBasicInfoService.licenseInspection()
+        renderSuccess()
     }
 }
