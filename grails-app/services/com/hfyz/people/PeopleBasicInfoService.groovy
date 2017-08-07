@@ -84,7 +84,7 @@ class PeopleBasicInfoService {
             FROM people_basicinfo_public pub  ${joinSql} 
             WHERE 1=1 """
         if (tableName) {
-            listSql += " AND pep.id_card_no IS NOT NULL"
+            listSql += " AND pep.id_card_no IS NOT NULL "
         }
         if (name) {
             listSql += " AND pub.name=:name"
@@ -110,16 +110,16 @@ class PeopleBasicInfoService {
         String joinSql = tableName ? "LEFT JOIN  ${tableName} pep ON pub.id_card_no=pep.id_card_no" : ""
         String countSql = "SELECT COUNT(*) FROM people_basicinfo_public pub  ${joinSql} WHERE 1=1 "
         if (tableName) {
-            countSql += "AND pep.id_card_no IS NOT NULL"
+            countSql += " AND pep.id_card_no IS NOT NULL "
         }
         if (name) {
-            countSql += "AND pub.name=:name"
+            countSql += " AND pub.name=:name"
         }
         if (idCardNo) {
-            countSql += "AND pub.id_card_no=:idCardNo"
+            countSql += " AND pub.id_card_no=:idCardNo"
         }
         if (phoneNo) {
-            countSql += "AND pub.phone_no=:phoneNo"
+            countSql += " AND pub.phone_no=:phoneNo"
         }
         return countSql
     }
