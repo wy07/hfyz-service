@@ -7,6 +7,7 @@ class Menu {
     String icon
     Menu parent
     String position
+    String permissionCode
     Boolean display=true
 
     static constraints = {
@@ -14,7 +15,7 @@ class Menu {
         code nullable: false, unique:true,blank: false, maxSize: 20
         style nullable: true, blank: false, maxSize: 60
         icon nullable: true, blank: false, maxSize: 30
-
+        permissionCode nullable: true, blank: false, maxSize: 500
         parent nullable: true,validator: { val, obj, errors ->
             if (val && obj.position !=val.position) {
                 errors.rejectValue('parent', 'systemCode.parent.invalid.validator.message', '当前位置应与上层菜单一致')
