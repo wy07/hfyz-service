@@ -23,8 +23,6 @@ class PermissionGroupController implements ControllerHelper{
         renderSuccessesWithMap([menuList:roleService.getPermission(request.JSON.menuid)])
     }
     def save(){
-        println grailsApplication.config.getProperty("user.rootRole.name")
-
         PermissionGroup perm=new PermissionGroup(name:request.JSON.name
                 ,category:request.JSON.category
                 ,code:request.JSON.code

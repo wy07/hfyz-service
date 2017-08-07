@@ -38,7 +38,6 @@ class SysuserController implements ControllerHelper {
     }
 
     def edit() {
-        println params
         withUser(params.long('id')) { User user ->
             def result = []
             Role.list(sort: "id").each {
@@ -99,7 +98,6 @@ class SysuserController implements ControllerHelper {
 
 
     def getUserByName() {
-        println params
         def result = [:]
         def GET_USER_SQL = """
             select suser.id

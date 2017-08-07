@@ -45,10 +45,6 @@ class UserService {
             return false
         }
 
-        println "-------------"
-        println userId
-        println grailsApplication.config.getProperty("user.rootRole.name").toString()
-
         def userRole = UserRole.createCriteria().get {
             user {
                 eq('id', userId)

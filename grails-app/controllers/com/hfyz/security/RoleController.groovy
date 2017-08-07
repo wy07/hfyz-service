@@ -33,7 +33,6 @@ class RoleController implements ControllerHelper {
         User user = currentUser
         def roleList = []
         def orgList = []
-        println userService.isSuperAdmin(user.id)
         if (userService.isSuperAdmin(user.id)) {
             roleList = Role.list([sort: 'id', order: 'desc'])
             orgList = supportService.getChildrenOrgs()?.collect { Organization org ->
@@ -43,8 +42,6 @@ class RoleController implements ControllerHelper {
             roleList = Role.findAllByOrg(user.org)
             orgList = user.org ? [[value: user.org.id, label: user.org.name]] : []
         }
-
-
         renderSuccessesWithMap([
                 roleList : roleList?.collect { Role role ->
                     [value: role.id, label: role.name]
@@ -109,6 +106,11 @@ class RoleController implements ControllerHelper {
 
     def assignPerm() {
         withRole(params.long('id')) { roleInstance ->
+            if(roleInstance.authority==grailsApplication.config.getProperty("user.rootRole.name")){
+                renderErrorMsg('不能对超级管理员进行权限分配')
+                return
+            }
+
             roleService.assignPerm(roleInstance, request.JSON.perms)
             renderSuccess()
         }

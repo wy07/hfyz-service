@@ -470,12 +470,10 @@ class InitService {
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-
-        def infoManage = new Menu(name: '信息管理/发布', code: 'root-infomanage', icon: 'fa-newspaper-o', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '信息列表', code: 'infoList', icon: 'fa-envelope-square', parent: infoManage, position: 'SIDE_BAR').save(flush: true)
-    }
+        new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '发布信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        }
 
 
 }

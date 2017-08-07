@@ -10,7 +10,6 @@ class SecurityInterceptor {
 
     boolean before() {
         println "${controllerName}/${actionName}"
-        println request.requestURI
         def gatewayName = request.getHeader('dgate-gateway')?.decodeBase64()
         if (gatewayName) {
             gatewayName = new String(gatewayName)
@@ -21,8 +20,6 @@ class SecurityInterceptor {
             jwtToken = JSON.parse(new String(jwtToken))
             jwtToken.id = jwtToken.id as Long
         }
-        println request.JSON
-
         params.jwtToken = jwtToken
 
         return true
