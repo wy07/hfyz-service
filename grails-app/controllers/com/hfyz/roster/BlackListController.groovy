@@ -47,7 +47,20 @@ class BlackListController implements ControllerHelper {
      */
     def edit() {
         BlackList instance = blackListService.getInstanceById(params.long('id'))
-        renderSuccessesWithMap([instance: instance])
+        def result = [
+                id             : instance.id,
+                blackType      : instance.blackType,
+                controlBegin   : instance.controlBegin,
+                controlBehavior: instance.controlBehavior,
+                controlEnd     : instance.controlEnd,
+                controlOrg     : instance.controlOrg,
+                controlRange   : instance.controlRange,
+                executor       : instance.executor,
+                scheme         : instance.scheme,
+                status         : instance.status.id,
+                vehicleNo      : instance.vehicleNo
+        ]
+        renderSuccessesWithMap([instance: result])
 
     }
 

@@ -43,12 +43,16 @@ class BlackListService {
             if (begin && end) {
                 between("controlBegin", begin, end)
             }
-        }?.collect { BlackList blackList ->
+        }?.collect { BlackList instance ->
             [
-                    id          : blackList.id,
-                    vehicleNo   : blackList.vehicleNo,
-                    controlBegin: blackList.controlBegin?.format('yyyy-MM-dd'),
-                    controlEnd  : blackList.controlEnd?.format('yyyy-MM-dd'),
+                    id             : instance.id,
+                    vehicleNo      : instance.vehicleNo,
+                    blackType      : instance.blackType,
+                    controlOrg     : instance.controlOrg,
+                    executor       : instance.executor,
+                    controlBegin   : instance.controlBegin?.format('yyyy-MM-dd'),
+                    controlEnd     : instance.controlEnd?.format('yyyy-MM-dd'),
+                    status         : instance.status.type
             ]
         }
         return [resultList: resultList, total: total]
@@ -61,13 +65,21 @@ class BlackListService {
         BlackList instance = getInstanceById(id)
         def vehicle = CarBasicInfo.findByLicenseNo(instance.vehicleNo)
         return [
-                id           : instance.id,
-                vehicleNo    : instance.vehicleNo,
-                controlBegin : instance.controlBegin?.format("yyyy-MM-dd HH:mm:ss"),
-                controlEnd   : instance.controlEnd?.format("yyyy-MM-dd HH:mm:ss"),
-                carType      : vehicle?.carType,
-                carPlateColor: vehicle?.carPlateColor,
-                carColor     : vehicle?.carColor
+                id             : instance.id,
+                vehicleNo      : instance.vehicleNo,
+                controlBegin   : instance.controlBegin?.format("yyyy-MM-dd HH:mm:ss"),
+                controlEnd     : instance.controlEnd?.format("yyyy-MM-dd HH:mm:ss"),
+                carType        : vehicle?.carType,
+                carPlateColor  : vehicle?.carPlateColor,
+                carColor       : vehicle?.carColor,
+                blackType      : instance.blackType,
+                controlBehavior: instance.controlBehavior,
+                scheme         : instance.scheme,
+                controlRange   : instance.controlRange,
+                controlOrg     : instance.controlOrg,
+                executor       : instance.executor,
+                status         : instance.status.type
+
         ]
 
     }
@@ -79,8 +91,7 @@ class BlackListService {
      */
     def update(Long id, obj) {
         BlackList instance = getInstanceById(id)
-        instance.controlBegin = Date.parse("yyyy-MM-dd HH:mm:ss", obj.controlBegin)
-        instance.controlEnd = Date.parse("yyyy-MM-dd HH:mm:ss", obj.controlEnd)
+        instance.properties=obj
         instance.save(flush: true, failOnError: true)
     }
 
