@@ -3,19 +3,36 @@ package com.hfyz.rectification
 import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
 import com.commons.utils.NumberUtils
+import com.hfyz.owner.OwnerIdentity
 import grails.converters.JSON
+import com.hfyz.owner.OwnerIdentityService
 
 class HiddenRectificationOrderController implements ControllerHelper {
 
     def hiddenRectificationOrderService
+    def ownerIdentityService
 
+    def reviewApprovalList(){
+        def hiddenRectificationOrder = HiddenRectificationOrder.get(params.long('id'))
+        renderSuccessesWithMap(hiddenRectificationOrderService.getReviewAndApprovalList(hiddenRectificationOrder))
+    }
 
+    def setCondition() {
+        withHiddenRectificationOrder(params.long('id')){
+            hiddenRectificationOrderIns ->
+                hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.getinstanceById(request.JSON.statusId)
+                hiddenRectificationOrderIns.save(flush: true,failOnError: true)
 
+        }
+        renderSuccess()
+    }
     def list() {
+        def user = getCurrentUser()
+        def companyCode = user?user.companyCode : null
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        renderSuccessesWithMap(hiddenRectificationOrderService.getHiddenDangerList(max,offset,request.JSON.company,
-                request.JSON.startDate,request.JSON.endDate))
+        renderSuccessesWithMap(hiddenRectificationOrderService.getHiddenRectificationOrderList(request.JSON.company,
+                request.JSON.startDate,request.JSON.endDate,max,offset, request.JSON.status,request.JSON.listStatus,companyCode))
     }
 
     def save(){
@@ -24,14 +41,28 @@ class HiddenRectificationOrderController implements ControllerHelper {
         hiddenDanger.dealineDate = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.dealine)
         hiddenDanger.billNo = System.currentTimeMillis()+""+new Random().nextInt(100000).toString().padLeft(5, '0')
         hiddenDanger.status = HiddenRectificationOrderStatus.QC
+        hiddenDanger.companyCode = findCompanyNameByOwnerName(request.JSON.enterpirse.ownerName).companyCode
         hiddenDanger.save(flush: true,failOnError: true)
         renderSuccess()
 
     }
 
-//    def findCompanyNameByCompanyCode(String code){
-//        String code =
-//    }
+    def getCompanyList(){
+        renderSuccessesWithMap(ownerIdentityService.getCompanyListByChar(request.JSON.enterpirse))
+    }
+
+    def findCompanyNameByOwnerName(String name){
+        return OwnerIdentity.findByOwnerName(name)
+    }
+
+    def findCompangCodeByOwnerCode(String code){
+        return OwnerIdentity.findByCompanyCode(code)
+    }
+
+    def findReviewAndApprovalByBillId(def obj){
+        return ReviewAndApprovalForm.findByBillId(obj)
+
+    }
 
     def edit(){
         withHiddenRectificationOrder(params.long('id')){
@@ -40,7 +71,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
                         id : hiddenRectificationOrderIn.id,
                         area : hiddenRectificationOrderIn.area,
                         billNo : hiddenRectificationOrderIn.billNo,
-                        enterpirse : hiddenRectificationOrderIn.enterpirse,
+                        enterpirse : findCompangCodeByOwnerCode(hiddenRectificationOrderIn.companyCode)?.ownerName,
                         examiner : hiddenRectificationOrderIn.examiner,
                         inspectionDate : hiddenRectificationOrderIn.inspectionDate.format('yyyy-MM-dd HH:mm:ss'),
                         dealineDate : hiddenRectificationOrderIn.dealineDate.format('yyyy-MM-dd HH:mm:ss'),
@@ -52,7 +83,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
                         replyDesc : hiddenRectificationOrderIn.replyDesc,
                         status : hiddenRectificationOrderIn.status.type
                 ]])
-        }
+                        }
 
     }
 
@@ -73,8 +104,19 @@ class HiddenRectificationOrderController implements ControllerHelper {
                 hiddenRectificationOrderIns.dealineDate = request.JSON.dealine ? new Date()
                         .parse('yyyy-MM-dd HH:mm', request.JSON.dealine) : null
                 hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.QC
+                hiddenRectificationOrderIns.companyCode = findCompanyNameByOwnerName(request.JSON.enterpirse.ownerName).companyCode
                 hiddenRectificationOrderIns.save(flush: true,failOnError: true)
+                renderSuccess()
+        }
+    }
 
+    def enterpriseFeedback(){
+        withHiddenRectificationOrder(params.long('id')){
+            hiddenRectificationOrderInstence ->
+                hiddenRectificationOrderInstence.status = HiddenRectificationOrderStatus.getinstanceById(request.JSON.statusId)
+                hiddenRectificationOrderInstence.replyDate = request.JSON.reply ? new Date().parse('yyyy-MM-dd HH:mm', request.JSON.reply) : null
+                hiddenRectificationOrderInstence.replyDesc = request.JSON.replyDesc
+                hiddenRectificationOrderInstence.save(flush: true,failOnError: true)
                 renderSuccess()
         }
     }

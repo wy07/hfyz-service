@@ -31,6 +31,6 @@ class HiddenRectificationOrder {
         replyDate nullable: true
         replyDesc nullable: true, blank: true
         status nullable:false
-        rectifiResult nullable: false
+        rectifiResult nullable: true
     }
 }
