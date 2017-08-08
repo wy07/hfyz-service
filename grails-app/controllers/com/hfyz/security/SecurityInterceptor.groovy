@@ -15,7 +15,6 @@ class SecurityInterceptor {
             gatewayName = new String(gatewayName)
         }
         params.gatewayName = gatewayName
-
         def jwtToken = request.getHeader('dgate-jwt-token')?.decodeBase64()
         if (jwtToken) {
             jwtToken = JSON.parse(new String(jwtToken))

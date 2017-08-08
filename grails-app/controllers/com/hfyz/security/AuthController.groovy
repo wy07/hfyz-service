@@ -20,10 +20,17 @@ class AuthController implements ControllerHelper {
         } else {
             try {
                 UserDetails userDetails = loginService.signIn(username, password)
+
+                def rights = springSecurityService.findRequestmapsByRoles(userDetails.authorities.role).code.join(';')
+
+
+
+
                 renderSuccessesWithMap([sub:userDetails.username
                                         ,role:userDetails.authorities.authority.join(",")
                                         ,id: userDetails.id
-                                        ,companyCode: userDetails.companyCode])
+                                        ,companyCode: userDetails.companyCode
+                                        ,rights:rights])
             } catch (BadCredentialsException e) {
                 renderErrorMsg(message(code: 'login.BadCredentials.label', default: '您的用户名和密码不匹配，请重新输入'))
             } catch (Exception e) {
