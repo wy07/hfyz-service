@@ -162,17 +162,4 @@ class HiddenRectificationOrderService {
     }
 
 
-    private  final String sqlstr="""
-     SELECT  table1.id id 
-             ,table1.billNo billNo
-             , table2.owner_name enterpirse
-             , table1.status status
-             ,table1.examiner  examiner
-             ,table1.inspection_date inspectionDate
-             ,table1.dealine_date  dealineDate
-      FROM ﻿hidden_rectification_order table1 
-            , owner_identity table2 
-      WHERE table2.owner_code = table1.company_code
-    """
-
 }
