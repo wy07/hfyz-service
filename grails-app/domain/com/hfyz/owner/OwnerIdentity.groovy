@@ -48,9 +48,14 @@ class OwnerIdentity {
         telephone nullable: true, blank: false, maxSize: 11                  //手机号码
         email nullable: true, blank: false, maxSize: 50                      //电子邮箱
         website nullable: true, blank: false, maxSize: 50                    //网址
-        parentOwner nullable: true, blank :false                             //母公司
-        shortName nullable: true, blank :false                             //业户简称
-        ownerCode nullable: true, blank :false                             //企业单位代码
+        parentOwner nullable: true, blank: false                             //母公司
+        shortName nullable: true, blank: false                             //业户简称
+        ownerCode nullable: true, blank: false                             //企业单位代码
 
+    }
+
+    static mapping = {
+        table "OWNER_BASICINFO_OWNERIDENTITY"
+        version false
     }
 }
