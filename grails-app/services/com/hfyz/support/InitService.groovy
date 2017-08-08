@@ -5,6 +5,7 @@ import com.hfyz.cases.RegisterReport
 import com.hfyz.owner.CompanyRegulation
 
 import com.hfyz.owner.OwnerIdentity
+import com.hfyz.owner.OwnerManageInfo
 import com.hfyz.people.PeopleBasicInfo
 import com.hfyz.people.WorkerCheckMember
 import com.hfyz.people.WorkerCoach
@@ -274,6 +275,20 @@ class InitService {
                     , email: "wushan${it}@163.com"
                     , website: "http://www.${it}xiaojukeji.com"
                     , shortName: '企业0').save(flush: true)
+            new OwnerManageInfo(
+                    companyCode: "C00000000${it}",
+                    licenseCharacter: "${it}",
+                    licenseNo: "${it}",
+                    beginTime: new Date(),
+                    endTime: new Date(117, 8 + it, 10 + it),
+                    grantOrganization: "合肥市道路运输管理处",
+                    checkTime: new Date(),
+                    domicileOperateName: "${it}",
+                    domicileOperateNo: "${it}",
+                    paymentSituation: "${it}",
+                    licenseChangeTimes: "${it}",
+                    inspectTreatmentSituation: "${it}"
+            ).save(flush: true)
         }
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note: '触发告警为小于等于该阈值').save(flush: true)
 
