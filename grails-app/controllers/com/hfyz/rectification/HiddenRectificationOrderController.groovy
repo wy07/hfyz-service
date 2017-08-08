@@ -10,6 +10,7 @@ import com.hfyz.owner.OwnerIdentityService
 class HiddenRectificationOrderController implements ControllerHelper {
 
     def hiddenRectificationOrderService
+    def ownerIdentityService
 
     def reviewApprovalList(){
         def hiddenRectificationOrder = HiddenRectificationOrder.get(params.long('id'))
@@ -21,6 +22,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
             hiddenRectificationOrderIns ->
                 hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.getinstanceById(request.JSON.statusId)
                 hiddenRectificationOrderIns.save(flush: true,failOnError: true)
+
         }
         renderSuccess()
     }
@@ -45,6 +47,9 @@ class HiddenRectificationOrderController implements ControllerHelper {
 
     }
 
+    def getCompanyList(){
+        renderSuccessesWithMap(ownerIdentityService.getCompanyListByChar(request.JSON.enterpirse))
+    }
 
     def findCompanyNameByOwnerName(String name){
         return OwnerIdentity.findByOwnerName(name)
