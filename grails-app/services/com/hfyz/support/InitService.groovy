@@ -35,67 +35,7 @@ class InitService {
         /*  if(User.count()>0){
               return
           }*/
-
-
-        def rootPermission = new PermissionGroup(name: '所有权限', permissions: '*:*').save(flush: true)
-        def adminRole = new Role(authority: 'ROLE_ADMIN', name: '平台管理员', permissionGroups: [rootPermission]).save()
-        def testUser = new User(username: 'admin', passwordHash: 'admin123', salt: User.getSecureRandomSalt(), name: '管理员',companyCode:'C000000001').save(failOnError: true)
-
-
-        UserRole.create testUser, adminRole
-
-        UserRole.withSession {
-            it.flush()
-            it.clear()
-        }
-
-        new Menu(name: '关闭全部', code: 'closeall', position: 'TOP_BAR', parent: null).save(flush: true)
-        def topbar = new Menu(name: '个人中心', code: 'profile', style: 'hoverdown', position: 'TOP_BAR', parent: null).save(flush: true)
-        new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
-        new Menu(name: '退出', code: 'logout', position: 'TOP_BAR', parent: null).save(flush: true)
-
-        def homemenu = new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new PermissionGroup(name: '浏览', permissions: 'view', menu: homemenu).save(flush: true)
-
-        def sidebar = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR').save(flush: true)
-        def roleMenu = new Menu(name: '角色', code: 'role', icon: 'fa-users', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
-        new PermissionGroup(name: '新增', permissions: 'create', menu: roleMenu).save(flush: true)
-        new PermissionGroup(name: '修改', permissions: 'edit', menu: roleMenu).save(flush: true)
-        new PermissionGroup(name: '删除', permissions: 'delete', menu: roleMenu).save(flush: true)
-        new PermissionGroup(name: '分配权限', permissions: 'assign', menu: roleMenu).save(flush: true)
-        new PermissionGroup(name: '浏览', permissions: 'view', menu: roleMenu).save(flush: true)
-
-        def userMenu = new Menu(name: '用户', code: 'user', icon: 'fa-user', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
-        new PermissionGroup(name: '新增', permissions: 'create', menu: userMenu).save(flush: true)
-        new PermissionGroup(name: '修改', permissions: 'edit', menu: userMenu).save(flush: true)
-        new PermissionGroup(name: '删除', permissions: 'delete', menu: userMenu).save(flush: true)
-        new PermissionGroup(name: '浏览', permissions: 'view', menu: userMenu).save(flush: true)
-        def menu = new Menu(name: '菜单', code: 'menu', icon: 'fa-list', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
-        new PermissionGroup(name: '新增', permissions: 'create', menu: menu).save(flush: true)
-        new PermissionGroup(name: '修改', permissions: 'edit', menu: menu).save(flush: true)
-        new PermissionGroup(name: '删除', permissions: 'delete', menu: menu).save(flush: true)
-        new PermissionGroup(name: '浏览', permissions: 'view', menu: menu).save(flush: true)
-        new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: sidebar, position: 'SIDE_BAR').save(flush: true)
-
-        def logMenu = new Menu(name: '日志管理', code: 'root-logManage', icon: 'fa-list-alt', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: logMenu, position: 'SIDE_BAR').save(flush: true)
-
-        def monitorMenu = new Menu(name: '联网联控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '车辆信息', code: 'carList', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '实时状态', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '实时监控', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '历史轨迹', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-//        new Menu(name: '其他地图', code: 'otherMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-
-        new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '业户', code: 'ownerIdentity', icon: 'fa-building', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-
-        def superviseMenu = new Menu(name: '动态监管', code: 'root-supervise', icon: 'fa-desktop', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: superviseMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: superviseMenu, position: 'SIDE_BAR').save(flush: true)
-
-
+        
 
         initMenu()
         initSecurityData()
