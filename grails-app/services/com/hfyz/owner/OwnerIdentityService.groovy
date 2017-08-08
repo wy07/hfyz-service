@@ -54,7 +54,8 @@ class OwnerIdentityService {
             }
         }?.collect{
             OwnerIdentity obj ->
-            [ownerName:obj.ownerName]
+            [ownerName:obj.ownerName,
+            companyCode: obj.companyCode]
         }
         return [companyList:companyList]
     }

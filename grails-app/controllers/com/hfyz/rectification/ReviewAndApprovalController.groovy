@@ -13,26 +13,36 @@ class ReviewAndApprovalController implements ControllerHelper {
         reviewApproval.approver = getCurrentUser().username
         reviewApproval.approveTime = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.time)
         reviewApproval.approveDesc = request.JSON.approveDesc
-        if(request.JSON.statusId == '2' ){
+        if(Boolean.parseBoolean(request.JSON.tempStatus)){
             reviewApproval.approvalResult = true
         }else{
             reviewApproval.approvalResult = false
         }
         reviewApproval.save(flush:true,failOnError: true)
-        setStatus()
-        renderSuccess()
-    }
-
-    def setStatus(){
         HiddenRectificationOrder hiddenRectificationOrder = HiddenRectificationOrder.get(request.JSON.billId)
-        hiddenRectificationOrder.status = HiddenRectificationOrderStatus.getinstanceById(Integer.parseInt(request.JSON.statusId))
+        def statusId= hiddenRectificationOrder.status.id
+        if(statusId == 1){
+            if(Boolean.parseBoolean(request.JSON.tempStatus)){
+                hiddenRectificationOrder.status = HiddenRectificationOrderStatus.DFK
+            }else{
+                hiddenRectificationOrder.status = HiddenRectificationOrderStatus.YJJ
+            }
+        }
         hiddenRectificationOrder.save(flush:true,failOnError: true)
+        renderSuccess()
     }
 
     def giveResult(){
         HiddenRectificationOrder hiddenRectificationOrderins = HiddenRectificationOrder.get(params.long('id'))
-        hiddenRectificationOrderins.rectifiResult = HiddenRectificationOrderStatus.getinstanceById(Integer.parseInt(request.JSON.statusId)).type.toString()
-        hiddenRectificationOrderins.status = HiddenRectificationOrderStatus.getinstanceById(Integer.parseInt(request.JSON.statusId))
+        def statusId= hiddenRectificationOrderins.status.id
+        if(statusId == 4){
+            if(Boolean.parseBoolean(request.JSON.tempStatus))
+                hiddenRectificationOrderins.status = HiddenRectificationOrderStatus.HG
+                hiddenRectificationOrderins.rectifiResult = HiddenRectificationOrderStatus.HG.type
+            }else{
+                hiddenRectificationOrderins.status = HiddenRectificationOrderStatus.BHG
+                hiddenRectificationOrderins.rectifiResult = HiddenRectificationOrderStatus.BHG.type
+            }
         hiddenRectificationOrderins.save(flush:true,failOnError: true)
         renderSuccess()
     }

@@ -17,11 +17,16 @@ class HiddenRectificationOrderController implements ControllerHelper {
         renderSuccessesWithMap(hiddenRectificationOrderService.getReviewAndApprovalList(hiddenRectificationOrder))
     }
 
-    def setCondition() {
+    def submitOrder() {
         withHiddenRectificationOrder(params.long('id')){
             hiddenRectificationOrderIns ->
-                hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.getinstanceById(request.JSON.statusId)
-                hiddenRectificationOrderIns.save(flush: true,failOnError: true)
+                def tempStatus = hiddenRectificationOrderIns.status.id
+                if(tempStatus == 0 || tempStatus == 3){
+                    hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.DSH
+                    hiddenRectificationOrderIns.save(flush: true,failOnError: true)
+                }else{
+                    renderErrorMsg("此单据已被提交")
+                }
 
         }
         renderSuccess()
@@ -41,7 +46,6 @@ class HiddenRectificationOrderController implements ControllerHelper {
         hiddenDanger.dealineDate = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.dealine)
         hiddenDanger.billNo = System.currentTimeMillis()+""+new Random().nextInt(100000).toString().padLeft(5, '0')
         hiddenDanger.status = HiddenRectificationOrderStatus.QC
-        hiddenDanger.companyCode = findCompanyNameByOwnerName(request.JSON.enterpirse.ownerName).companyCode
         hiddenDanger.save(flush: true,failOnError: true)
         renderSuccess()
 
@@ -104,7 +108,6 @@ class HiddenRectificationOrderController implements ControllerHelper {
                 hiddenRectificationOrderIns.dealineDate = request.JSON.dealine ? new Date()
                         .parse('yyyy-MM-dd HH:mm', request.JSON.dealine) : null
                 hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.QC
-                hiddenRectificationOrderIns.companyCode = findCompanyNameByOwnerName(request.JSON.enterpirse.ownerName).companyCode
                 hiddenRectificationOrderIns.save(flush: true,failOnError: true)
                 renderSuccess()
         }
@@ -113,11 +116,20 @@ class HiddenRectificationOrderController implements ControllerHelper {
     def enterpriseFeedback(){
         withHiddenRectificationOrder(params.long('id')){
             hiddenRectificationOrderInstence ->
-                hiddenRectificationOrderInstence.status = HiddenRectificationOrderStatus.getinstanceById(request.JSON.statusId)
-                hiddenRectificationOrderInstence.replyDate = request.JSON.reply ? new Date().parse('yyyy-MM-dd HH:mm', request.JSON.reply) : null
-                hiddenRectificationOrderInstence.replyDesc = request.JSON.replyDesc
-                hiddenRectificationOrderInstence.save(flush: true,failOnError: true)
+                def userCompanyCode = getCurrentUser().companyCode
+                if(userCompanyCode == hiddenRectificationOrderInstence.companyCode){
+                    def tempStatus = hiddenRectificationOrderInstence.status.id
+                    if(tempStatus == 2){
+                        hiddenRectificationOrderInstence.status =  HiddenRectificationOrderStatus.DYR
+                    }
+                    //hiddenRectificationOrderInstence.status = HiddenRectificationOrderStatus.getinstanceById(request.JSON.statusId)
+                    hiddenRectificationOrderInstence.replyDate = request.JSON.reply ? new Date().parse('yyyy-MM-dd HH:mm', request.JSON.reply) : null
+                    hiddenRectificationOrderInstence.replyDesc = request.JSON.replyDesc
+                    hiddenRectificationOrderInstence.save(flush: true,failOnError: true)
                 renderSuccess()
+                }else{
+                    renderErrorMsg("您没有此操作的权限！")
+                }
         }
     }
 

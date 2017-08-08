@@ -446,7 +446,7 @@ class InitService {
         UserRole.create companyUser, companyRole, true
 
         def adminRole = new Role(authority: 'ROLE_ROOT', name: '超级管理员', org: null).save(failOnError: true, flush: true)
-        def adminUser = new User(username: 'admin', passwordHash: 'admin123', salt: ValidationUtils.getSecureRandomSalt(), name: '管理员').save(failOnError: true, flush: true)
+        def adminUser = new User(username: 'admin', passwordHash: 'admin123',companyCode: 'C000000001',salt: ValidationUtils.getSecureRandomSalt(), name: '管理员').save(failOnError: true, flush: true)
         UserRole.create adminUser, adminRole, true
 
         new PermissionGroup(url: '/organizations/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "组织机构管理", category: "系统管理", code: 'organization_manage').save(failOnError: true, flush: true)
