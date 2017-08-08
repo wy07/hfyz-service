@@ -72,7 +72,7 @@ class HiddenRectificationOrderService {
                             ,table1.inspection_date inspectionDate
                             ,table1.dealine_date  dealineDate
                         FROM hidden_rectification_order table1 
-                            , owner_identity table2 
+                            , OWNER_BASICINFO_OWNERIDENTITY table2 
                         WHERE table2.company_code = table1.company_code
                      """
         if(company){
@@ -110,7 +110,7 @@ class HiddenRectificationOrderService {
         String sql = """
                         SELECT count(table1.id)
                         FROM hidden_rectification_order table1 
-                            , owner_identity table2 
+                            , OWNER_BASICINFO_OWNERIDENTITY table2 
                         WHERE table2.company_code = table1.company_code
                      """
         if(company){
