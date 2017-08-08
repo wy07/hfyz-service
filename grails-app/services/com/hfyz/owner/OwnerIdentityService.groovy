@@ -55,7 +55,7 @@ class OwnerIdentityService {
 
     /**
      * 列表查询sql
-     * @param type 是否根据有效期查询， 值为true需要join业户经营信息表，
+     * @param type 是否根据有效期查询，
      * @param ownerName 业户名称
      * @param companyCode 业户编码
      */
@@ -88,8 +88,7 @@ class OwnerIdentityService {
     }
 
     private static getCountSql(boolean type, String ownerName, String companyCode) {
-        String joinSql = type ? "LEFT JOIN owner_basicinfo_manageinfo mag ON bas.company_code = mag.company_code" : ""
-        String countSql = "SELECT count(*) FROM owner_basicinfo_owneridentity bas ${joinSql} WHERE 1=1 "
+        String countSql = "SELECT count(*) FROM owner_basicinfo_owneridentity bas  LEFT JOIN owner_basicinfo_manageinfo mag ON bas.company_code = mag.company_code WHERE 1=1 "
         if (type) {
             countSql += " AND mag.end_time  BETWEEN to_timestamp(:dateBegin,'YYYY-MM-DD HH24:MI:SS') and to_timestamp(:dateEnd,'YYYY-MM-DD HH24:MI:SS') "
         }
