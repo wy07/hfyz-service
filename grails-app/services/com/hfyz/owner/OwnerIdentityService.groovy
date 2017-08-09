@@ -100,4 +100,17 @@ class OwnerIdentityService {
         }
         return countSql
     }
+
+    def getCompanyListByChar(String companyName){
+        def companyList = OwnerIdentity.createCriteria().list(){
+            if(companyName){
+                like("ownerName", "%${companyName}%")
+            }
+        }?.collect{
+            OwnerIdentity obj ->
+            [ownerName:obj.ownerName,
+            companyCode: obj.companyCode]
+        }
+        return [companyList:companyList]
+    }
 }
