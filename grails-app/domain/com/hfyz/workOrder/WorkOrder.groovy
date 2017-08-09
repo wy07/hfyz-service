@@ -2,6 +2,7 @@ package com.hfyz.workOrder
 
 import com.hfyz.support.AlarmType
 import com.hfyz.warning.AlarmLevel
+import com.hibernate.usertype.JsonbListType
 
 class WorkOrder {
     String sn              //工单编号
@@ -13,11 +14,19 @@ class WorkOrder {
     String phone           //电话
     String frameNo         //车架号
     String userID          //从业人员身份证号
+
+    List flows             //工作流
+    Integer flowStep       //工作流执行步骤
+    String todoRole        //需执行角色名称
+
+
     Date dateCreated
+    Date lastUpdated
     Date checkTime          //检查时间
     Date rectificationTime  //整改时间
     String note             //备注
     WorkOrderStatus status=WorkOrderStatus.DSH    //工单状态
+    WorkOrder parent
 
     static constraints = {
         sn nullable: false, blank: false, maxSize: 30, unique: true
@@ -31,10 +40,15 @@ class WorkOrder {
         userID nullable: true,blank: false,maxSize: 18
         checkTime nullable: false
         rectificationTime nullable: false
-        note nullable: true,blank: false,maxSize: 300
+        note nullable: true,blank: false,maxSize: 600
         status nullable: false
+        flows nullable: false
+        flowStep nullable: true
+        todoRole nullable: true
+        parent nullable: true
     }
     static  mapping = {
         id generator:'native', params:[sequence:'work_order_seq'], defaultValue: "nextval('work_order_seq')"
+        flows type: JsonbListType, sqlType: 'jsonb'
     }
 }

@@ -19,7 +19,11 @@ import com.hfyz.car.RegistrationInformationCarinfo
 import com.hfyz.roster.BlackList
 import com.hfyz.roster.Status
 import com.hfyz.roster.WhiteList
+import com.hfyz.warning.AlarmLevel
 import com.hfyz.warning.Warning
+import com.hfyz.workOrder.WorkOrder
+import com.hfyz.workOrder.WorkOrderFlow
+import com.hfyz.workOrder.WorkOrderFlowAction
 import grails.transaction.Transactional
 import com.hfyz.security.User
 import com.hfyz.security.Role
@@ -252,7 +256,7 @@ class InitService {
         }
 
 //        公司（经营业户）
-        4.times { it ->
+        9.times { it ->
             new OwnerIdentity(ownerName: "企业${it}"
                     , companyCode: "C00000000${it}"
                     , ownerCode: "dwcode00${it}"
@@ -305,13 +309,12 @@ class InitService {
 
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
 
-        def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
 
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
 
         initSystemCode()
         initAlarmType()
+        initWorkOrder()
 
     }
 
@@ -425,6 +428,21 @@ class InitService {
         def adminUser = new User(username: 'admin', passwordHash: 'admin123', salt: ValidationUtils.getSecureRandomSalt(), name: '管理员').save(failOnError: true, flush: true)
         UserRole.create adminUser, adminRole, true
 
+
+        def controlRole = new Role(authority: 'ROLE_CONTROL_CENTER_ROOT', name: '运管指挥中心管理员', org: Organization.findByCode('110')).save(failOnError: true, flush: true)
+        def controlUser = new User(username: 'center', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '运管指挥中心管理员').save(failOnError: true, flush: true)
+        UserRole.create controlUser, controlRole, true
+
+
+
+        def legalSectionRole = new Role(authority: 'ROLE_LEGAL_SECTION_ROOT', name: '法制科管理员', org: Organization.findByCode('220')).save(failOnError: true, flush: true)
+        def legalSectionUser = new User(username: 'legal', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '法制科管理员').save(failOnError: true, flush: true)
+        UserRole.create legalSectionUser, legalSectionRole, true
+
+
+        //
+
+
         new PermissionGroup(url: '/organizations/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "组织机构管理", category: "系统管理", code: 'organization_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/roles/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理", category: "系统管理", code: 'role_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/roles/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理2", category: "系统管理", code: 'role_manage').save(failOnError: true, flush: true)
@@ -473,7 +491,42 @@ class InitService {
         new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '发布信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+
+        def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '我的审批', code: 'pendingWorkOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
+
+    }
+
+    private initWorkOrder(){
+        def flow1=new WorkOrderFlow(alarmType:AlarmType.findByCodeNum('202'),flowVersion:1,enabled: true,flows:[[role:'ROLE_CONTROL_CENTER_ROOT',name:'初审',action:'SP']
+                                                                                        ,[role:'ROLE_LEGAL_SECTION_ROOT',name:'复审',action:'SP']
+                                                                                        ,[role:'ROLE_COMPANY_ROOT',name:'企业反馈',action:'FK']
+                                                                                        ,[role:'ROLE_CONTROL_CENTER_ROOT',name:'研判',action:'YP']]).save(flush:true)
+        def flow2=new WorkOrderFlow(alarmType:AlarmType.findByCodeNum('202'),flowVersion:2,flows:[[role:'ROLE_CONTROL_CENTER_ROOT',name:'审批',action:'SP']
+                                                                                        ,[role:'ROLE_COMPANY_ROOT',name:'企业反馈',action:'FK']
+                                                                                        ,[role:'ROLE_CONTROL_CENTER_ROOT',name:'研判',action:'YP']]).save(flush:true)
+
+        9.times { it ->
+            new WorkOrder(
+                    sn: "20170730001${it}"
+                    ,alarmType:flow1.alarmType
+                    ,alarmLevel:AlarmLevel.SERIOUS
+                    ,companyCode:"C00000000${it}"
+                    ,ownerName:"企业${it}"
+                    ,operateManager:"吴珊"
+                    , phone: "010-${it}2425722"
+                    , flows:flow1.flows
+                    ,flowStep:1
+                    ,todoRole:'ROLE_CONTROL_CENTER_ROOT'
+                    ,checkTime:new Date()
+                    ,rectificationTime:new Date()+5
+                    ,note:"过期！！！"
+                    ,status:WorkOrderFlowAction.valueOf('SP').workOrderStatus).save(flush:true)
         }
+
+
+    }
 
 
 }

@@ -9,6 +9,10 @@ class WorkOrderController implements ControllerHelper{
     def list(){
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        renderSuccessesWithMap(workOrderService.findListAndTotal(max, offset))
+        renderSuccessesWithMap(workOrderService.findWorkOrderListAndTotal(max, offset))
+    }
+
+    def pendingWorkOrderlist(){
+
     }
 }
