@@ -13,8 +13,6 @@ class OrganizationController implements ControllerHelper{
         renderSuccessesWithMap([orgList: supportService.getOrgList()])
     }
     def listForSelect(){
-        println request.JSON.roles
-
         renderSuccessesWithMap([orgList: supportService.getOrgForSelect(request.JSON.roles)])
     }
     def index() {

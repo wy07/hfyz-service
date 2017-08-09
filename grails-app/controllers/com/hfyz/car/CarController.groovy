@@ -15,32 +15,32 @@ class CarController implements ControllerHelper {
     def search() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        def result = carService.search(request.JSON.businessType, request.JSON.licenseNo, max, offset)
+        def result = carService.search(request.JSON.businessType, request.JSON.licenseNo, request.JSON.dateBegin, request.JSON.dateEnd, max, offset)
         renderSuccessesWithMap([carList: result.carList, carCount: result.carCount])
     }
 
     def networkRate() {
         Date date = new Date()
         AlarmType alarmType = AlarmType.findByCodeNum('219')
-        
+
         def resultList = carService.networkRate(ConfigUtil.instance.carRateAlarm as BigDecimal)
         resultList.each { result ->
-            new Alarm(alarmType:  alarmType
+            new Alarm(alarmType: alarmType
                     , alarmLevel: AlarmLevel.NORMAL
                     , sourceType: SourceType.COMPANY
                     , sourceCode: result.companyCode
-                    , alarmTime:  date
+                    , alarmTime: date
                     , updateTime: date).save(flush: true)
-            new WorkOrder(sn:     System.currentTimeMillis() + ""
+            new WorkOrder(sn: System.currentTimeMillis() + ""
                     + System.nanoTime().toString().toString()[-6..-1]
                     + new Random().nextInt(100000).toString().padLeft(5, '0')
-                    , alarmType:   alarmType
-                    , alarmLevel:  AlarmLevel.NORMAL
+                    , alarmType: alarmType
+                    , alarmLevel: AlarmLevel.NORMAL
                     , companyCode: result.companyCode
-                    , ownerName     : result.ownerName
+                    , ownerName: result.ownerName
                     , operateManager: result.operateManager
-                    , phone         : result.phone
-                    , checkTime:   date
+                    , phone: result.phone
+                    , checkTime: date
                     , rectificationTime: date.plus(5)).save(flush: true)
         }
         renderSuccessesWithMap([resultList: resultList])
