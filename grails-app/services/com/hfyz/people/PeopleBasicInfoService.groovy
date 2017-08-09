@@ -15,6 +15,15 @@ import static grails.async.Promises.task
 class PeopleBasicInfoService {
     def dataSource
 
+    private static final Map TABLES = [
+            考核员    : 'people_worker_checkmember',
+            教练员    : 'people_worker_coach',
+            驾驶员    : 'people_worker_driver',
+            押运装卸管理员: 'people_worker_manager',
+            维修人员   : 'people_worker_technology',
+            站场服务人员 : 'people_worker_waiter'
+    ]
+
     /**
      * 列表查询
      * @param name 姓名
@@ -24,7 +33,8 @@ class PeopleBasicInfoService {
      * @param offset
      * @return
      */
-    def getPeopleList(tableName, name, phoneNo, idCardNo, max, offset) {
+    def getPeopleList(type, name, phoneNo, idCardNo, max, offset) {
+        String tableName = TABLES[type]
         def params = [:]
         if (name) {
             params.name = name
