@@ -36,10 +36,12 @@ class InitService {
         /*  if(User.count()>0){
               return
           }*/
+        
 
         initMenu()
         initSecurityData()
         def adminUser = User.findByUsername('admin')
+
 
         new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
         new PlatformManage(ip: '61.123.1.15', port: '2001', name: '合肥客运平台', code: 'K002', contactName: '王平', contactPhone: '13023429743', draftPeople: '吴珊', status: '起草').save(flush: true)
@@ -311,12 +313,34 @@ class InitService {
         new WhiteList(vehicleNo: '陕A-CK0013', frameNo: 'frameNo13', controlBegin: new Date(117, 9, 12), status: Status.JCBK).save(flush: true)
 
         def parentMenu = new Menu(name: '整改', code: 'root-rectification', icon: 'fa-hand-o-up', parent: null, position: 'SIDE_BAR').save(flush: true)
+
+        new Menu(name: '隐患整改单', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '整改单审核', code: 'orderExamine', icon: 'fa-hand-o-right', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '企业反馈', code: 'enterpriseFeedback', icon: 'fa-hand-o-right', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730001',enterprise:'企业0' ,companyCode:'C000000000', examiner:'李四', inspectionDate:new Date(), dealineDate:new Date()+5, insPosition:'车间', insDesc:'机器', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730002',enterprise:'企业1', companyCode:'C000000001', examiner:'王五', inspectionDate:new Date(), dealineDate:new Date()+6, insPosition:'工厂', insDesc:'线路', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730003',enterprise:'企业2', companyCode:'C000000002', examiner:'赵六', inspectionDate:new Date(), dealineDate:new Date()+7, insPosition:'工厂', insDesc:'压缩机', insQuestion:'无验证', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730004',enterprise:'企业3', companyCode:'C000000003', examiner:'tony', inspectionDate:new Date(), dealineDate:new Date()+8, insPosition:'车间', insDesc:'发动机', insQuestion:'无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730005',enterprise:'企业1', companyCode:'C000000001', examiner:'kobe', inspectionDate:new Date(), dealineDate:new Date()+9, insPosition:'工厂', insDesc:'jiqi', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730006',enterprise:'企业0', companyCode:'C000000000', examiner:'KG', inspectionDate:new Date(), dealineDate:new Date()+5, insPosition:'车间', insDesc:'机器', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730007',enterprise:'企业1', companyCode:'C000000001', examiner:'KD', inspectionDate:new Date(), dealineDate:new Date()+6, insPosition:'工厂', insDesc:'线路', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730008',enterprise:'企业2', companyCode:'C000000002', examiner:'lucy', inspectionDate:new Date(), dealineDate:new Date()+7, insPosition:'工厂', insDesc:'压缩机', insQuestion:'无验证', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730009',enterprise:'企业3',companyCode:'C000000003', examiner:'bob', inspectionDate:new Date(), dealineDate:new Date()+8, insPosition:'车间', insDesc:'发动机', insQuestion:'无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730010',enterprise:'企业1', companyCode:'C000000001', examiner:'fisher', inspectionDate:new Date(), dealineDate:new Date()+9, insPosition:'工厂', insDesc:'jiqi', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730011',enterprise:'企业2', companyCode:'C000000002', examiner:'lucy', inspectionDate:new Date(), dealineDate:new Date()+7, insPosition:'工厂', insDesc:'压缩机', insQuestion:'无验证', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730012',enterprise:'企业3', companyCode:'C000000003', examiner:'bob', inspectionDate:new Date(), dealineDate:new Date()+8, insPosition:'车间', insDesc:'发动机', insQuestion:'无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+        new HiddenRectificationOrder(billNo: '20170730013',enterprise:'企业1', companyCode:'C000000001', examiner:'fisher', inspectionDate:new Date(), dealineDate:new Date()+9, insPosition:'工厂', insDesc:'jiqi', insQuestion:'安全问题  管理隐患 无验证  无人看管', proPosal:'1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status:HiddenRectificationOrderStatus.QC).save(flush: true)
+
+
+
+
         new Menu(name: '隐患整改', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730001', enterpirse: 'a公司', examiner: '李四', inspectionDate: new Date(), dealineDate: new Date() + 5, insPosition: '车间', insDesc: '机器', insQuestion: '安全问题  管理隐患 无验证  无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730002', enterpirse: 'b公司', examiner: '王五', inspectionDate: new Date(), dealineDate: new Date() + 6, insPosition: '工厂', insDesc: '线路', insQuestion: '安全问题  管理隐患 无验证  无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730003', enterpirse: 'c公司', examiner: '赵六', inspectionDate: new Date(), dealineDate: new Date() + 7, insPosition: '工厂', insDesc: '压缩机', insQuestion: '无验证', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730004', enterpirse: 'd公司', examiner: 'tony', inspectionDate: new Date(), dealineDate: new Date() + 8, insPosition: '车间', insDesc: '发动机', insQuestion: '无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730005', enterpirse: 'f公司', examiner: 'kobe', inspectionDate: new Date(), dealineDate: new Date() + 9, insPosition: '工厂', insDesc: 'jiqi', insQuestion: '安全问题  管理隐患 无验证  无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
+
 
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值').save(flush: true)
 
@@ -437,7 +461,7 @@ class InitService {
         UserRole.create companyUser, companyRole, true
 
         def adminRole = new Role(authority: 'ROLE_ROOT', name: '超级管理员', org: null).save(failOnError: true, flush: true)
-        def adminUser = new User(username: 'admin', passwordHash: 'admin123', salt: ValidationUtils.getSecureRandomSalt(), name: '管理员').save(failOnError: true, flush: true)
+        def adminUser = new User(username: 'admin', passwordHash: 'admin123',companyCode: 'C000000001',salt: ValidationUtils.getSecureRandomSalt(), name: '管理员').save(failOnError: true, flush: true)
         UserRole.create adminUser, adminRole, true
 
         new PermissionGroup(url: '/organizations/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "组织机构管理", category: "系统管理", code: 'organization_manage').save(failOnError: true, flush: true)

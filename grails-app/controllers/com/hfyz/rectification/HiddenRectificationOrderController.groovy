@@ -3,19 +3,41 @@ package com.hfyz.rectification
 import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
 import com.commons.utils.NumberUtils
+import com.hfyz.owner.OwnerIdentity
 import grails.converters.JSON
+import com.hfyz.owner.OwnerIdentityService
 
 class HiddenRectificationOrderController implements ControllerHelper {
 
     def hiddenRectificationOrderService
+    def ownerIdentityService
 
+    def reviewApprovalList(){
+        def hiddenRectificationOrder = HiddenRectificationOrder.get(params.long('id'))
+        renderSuccessesWithMap(hiddenRectificationOrderService.getReviewAndApprovalList(hiddenRectificationOrder))
+    }
 
+    def submitOrder() {
+        withHiddenRectificationOrder(params.long('id')){
+            hiddenRectificationOrderIns ->
+                def tempStatus = hiddenRectificationOrderIns.status
+                if(tempStatus == HiddenRectificationOrderStatus.QC || tempStatus == HiddenRectificationOrderStatus.YJJ){
+                    hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.DSH
+                    hiddenRectificationOrderIns.save(flush: true,failOnError: true)
+                }else{
+                    renderErrorMsg("此单据已被提交")
+                }
 
+        }
+        renderSuccess()
+    }
     def list() {
+        def user = getCurrentUser()
+        def companyCode = user?user.companyCode : null
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        renderSuccessesWithMap(hiddenRectificationOrderService.getHiddenDangerList(max,offset,request.JSON.company,
-                request.JSON.startDate,request.JSON.endDate))
+        renderSuccessesWithMap(hiddenRectificationOrderService.getHiddenRectificationOrderList(request.JSON.company,
+                request.JSON.startDate,request.JSON.endDate,max,offset, request.JSON.status,request.JSON.listStatus,companyCode))
     }
 
     def save(){
@@ -24,8 +46,26 @@ class HiddenRectificationOrderController implements ControllerHelper {
         hiddenDanger.dealineDate = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.dealine)
         hiddenDanger.billNo = System.currentTimeMillis()+""+new Random().nextInt(100000).toString().padLeft(5, '0')
         hiddenDanger.status = HiddenRectificationOrderStatus.QC
+        hiddenDanger.enterprise = findCompangCodeByOwnerCode(request.JSON.companyCode).ownerName
         hiddenDanger.save(flush: true,failOnError: true)
         renderSuccess()
+
+    }
+
+    def getCompanyList(){
+        renderSuccessesWithMap(ownerIdentityService.getCompanyListByChar(request.JSON.enterpirse))
+    }
+
+    def findCompanyNameByOwnerName(String name){
+        return OwnerIdentity.findByOwnerName(name)
+    }
+
+    def findCompangCodeByOwnerCode(String code){
+        return OwnerIdentity.findByCompanyCode(code)
+    }
+
+    def findReviewAndApprovalByBillId(def obj){
+        return ReviewAndApprovalForm.findByBillId(obj)
 
     }
 
@@ -36,7 +76,8 @@ class HiddenRectificationOrderController implements ControllerHelper {
                         id : hiddenRectificationOrderIn.id,
                         area : hiddenRectificationOrderIn.area,
                         billNo : hiddenRectificationOrderIn.billNo,
-                        enterpirse : hiddenRectificationOrderIn.enterpirse,
+                        enterpirse : hiddenRectificationOrderIn.enterprise,
+                        companyCode : hiddenRectificationOrderIn.companyCode,
                         examiner : hiddenRectificationOrderIn.examiner,
                         inspectionDate : hiddenRectificationOrderIn.inspectionDate.format('yyyy-MM-dd HH:mm:ss'),
                         dealineDate : hiddenRectificationOrderIn.dealineDate.format('yyyy-MM-dd HH:mm:ss'),
@@ -48,7 +89,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
                         replyDesc : hiddenRectificationOrderIn.replyDesc,
                         status : hiddenRectificationOrderIn.status.type
                 ]])
-        }
+                        }
 
     }
 
@@ -69,9 +110,29 @@ class HiddenRectificationOrderController implements ControllerHelper {
                 hiddenRectificationOrderIns.dealineDate = request.JSON.dealine ? new Date()
                         .parse('yyyy-MM-dd HH:mm', request.JSON.dealine) : null
                 hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.QC
+                hiddenRectificationOrderIns.enterprise = findCompangCodeByOwnerCode(request.JSON.companyCode).ownerName
                 hiddenRectificationOrderIns.save(flush: true,failOnError: true)
-
                 renderSuccess()
+        }
+    }
+
+    def enterpriseFeedback(){
+        withHiddenRectificationOrder(params.long('id')){
+            hiddenRectificationOrderInstence ->
+                def userCompanyCode = getCurrentUser().companyCode
+                if(userCompanyCode == hiddenRectificationOrderInstence.companyCode){
+                    def tempStatus = hiddenRectificationOrderInstence.status
+                    if(tempStatus == HiddenRectificationOrderStatus.DFK){
+                        hiddenRectificationOrderInstence.status =  HiddenRectificationOrderStatus.DYR
+                    }
+                    //hiddenRectificationOrderInstence.status = HiddenRectificationOrderStatus.getinstanceById(request.JSON.statusId)
+                    hiddenRectificationOrderInstence.replyDate = request.JSON.reply ? new Date().parse('yyyy-MM-dd HH:mm', request.JSON.reply) : null
+                    hiddenRectificationOrderInstence.replyDesc = request.JSON.replyDesc
+                    hiddenRectificationOrderInstence.save(flush: true,failOnError: true)
+                renderSuccess()
+                }else{
+                    renderErrorMsg("您没有此操作的权限！")
+                }
         }
     }
 
