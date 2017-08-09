@@ -94,6 +94,7 @@ class InitService {
         def superviseMenu = new Menu(name: '动态监管', code: 'root-supervise', icon: 'fa-desktop', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: superviseMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: superviseMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '运单路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: superviseMenu, position: 'SIDE_BAR').save(flush: true)
 
 
 
