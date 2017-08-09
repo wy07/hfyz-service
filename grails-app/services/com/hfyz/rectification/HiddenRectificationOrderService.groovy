@@ -23,7 +23,7 @@ class HiddenRectificationOrderService {
         def sd = startDate
         def ed = endDate
         if(company){
-            sqlParams.company = "%${company}%".toString()
+            sqlParams.company = "${company}%".toString()
         }
         if(startDate){
             sqlParams.sd = sd
@@ -66,7 +66,7 @@ class HiddenRectificationOrderService {
         String sql = """
                         SELECT table1.id id 
                             ,table1.bill_no billNo
-                            , table2.owner_name enterpirse
+                            , table1.enterprise enterpirse
                             , table1.status status
                             ,table1.examiner  examiner
                             ,table1.inspection_date inspectionDate

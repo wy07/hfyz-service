@@ -20,8 +20,8 @@ class HiddenRectificationOrderController implements ControllerHelper {
     def submitOrder() {
         withHiddenRectificationOrder(params.long('id')){
             hiddenRectificationOrderIns ->
-                def tempStatus = hiddenRectificationOrderIns.status.id
-                if(tempStatus == 0 || tempStatus == 3){
+                def tempStatus = hiddenRectificationOrderIns.status
+                if(tempStatus == HiddenRectificationOrderStatus.QC || tempStatus == HiddenRectificationOrderStatus.YJJ){
                     hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.DSH
                     hiddenRectificationOrderIns.save(flush: true,failOnError: true)
                 }else{
@@ -46,6 +46,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
         hiddenDanger.dealineDate = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.dealine)
         hiddenDanger.billNo = System.currentTimeMillis()+""+new Random().nextInt(100000).toString().padLeft(5, '0')
         hiddenDanger.status = HiddenRectificationOrderStatus.QC
+        hiddenDanger.enterprise = findCompangCodeByOwnerCode(request.JSON.companyCode).ownerName
         hiddenDanger.save(flush: true,failOnError: true)
         renderSuccess()
 
@@ -75,7 +76,8 @@ class HiddenRectificationOrderController implements ControllerHelper {
                         id : hiddenRectificationOrderIn.id,
                         area : hiddenRectificationOrderIn.area,
                         billNo : hiddenRectificationOrderIn.billNo,
-                        enterpirse : findCompangCodeByOwnerCode(hiddenRectificationOrderIn.companyCode)?.ownerName,
+                        enterpirse : hiddenRectificationOrderIn.enterprise,
+                        companyCode : hiddenRectificationOrderIn.companyCode,
                         examiner : hiddenRectificationOrderIn.examiner,
                         inspectionDate : hiddenRectificationOrderIn.inspectionDate.format('yyyy-MM-dd HH:mm:ss'),
                         dealineDate : hiddenRectificationOrderIn.dealineDate.format('yyyy-MM-dd HH:mm:ss'),
@@ -108,6 +110,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
                 hiddenRectificationOrderIns.dealineDate = request.JSON.dealine ? new Date()
                         .parse('yyyy-MM-dd HH:mm', request.JSON.dealine) : null
                 hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.QC
+                hiddenRectificationOrderIns.enterprise = findCompangCodeByOwnerCode(request.JSON.companyCode).ownerName
                 hiddenRectificationOrderIns.save(flush: true,failOnError: true)
                 renderSuccess()
         }
@@ -118,8 +121,8 @@ class HiddenRectificationOrderController implements ControllerHelper {
             hiddenRectificationOrderInstence ->
                 def userCompanyCode = getCurrentUser().companyCode
                 if(userCompanyCode == hiddenRectificationOrderInstence.companyCode){
-                    def tempStatus = hiddenRectificationOrderInstence.status.id
-                    if(tempStatus == 2){
+                    def tempStatus = hiddenRectificationOrderInstence.status
+                    if(tempStatus == HiddenRectificationOrderStatus.DFK){
                         hiddenRectificationOrderInstence.status =  HiddenRectificationOrderStatus.DYR
                     }
                     //hiddenRectificationOrderInstence.status = HiddenRectificationOrderStatus.getinstanceById(request.JSON.statusId)

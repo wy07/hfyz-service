@@ -20,8 +20,8 @@ class ReviewAndApprovalController implements ControllerHelper {
         }
         reviewApproval.save(flush:true,failOnError: true)
         HiddenRectificationOrder hiddenRectificationOrder = HiddenRectificationOrder.get(request.JSON.billId)
-        def statusId= hiddenRectificationOrder.status.id
-        if(statusId == 1){
+        def status= hiddenRectificationOrder.status
+        if(status == HiddenRectificationOrderStatus.DSH){
             if(Boolean.parseBoolean(request.JSON.tempStatus)){
                 hiddenRectificationOrder.status = HiddenRectificationOrderStatus.DFK
             }else{
@@ -34,8 +34,8 @@ class ReviewAndApprovalController implements ControllerHelper {
 
     def giveResult(){
         HiddenRectificationOrder hiddenRectificationOrderins = HiddenRectificationOrder.get(params.long('id'))
-        def statusId= hiddenRectificationOrderins.status.id
-        if(statusId == 4){
+        def status= hiddenRectificationOrderins.status
+        if(status == HiddenRectificationOrderStatus.DYR){
             if(Boolean.parseBoolean(request.JSON.tempStatus))
                 hiddenRectificationOrderins.status = HiddenRectificationOrderStatus.HG
                 hiddenRectificationOrderins.rectifiResult = HiddenRectificationOrderStatus.HG.type

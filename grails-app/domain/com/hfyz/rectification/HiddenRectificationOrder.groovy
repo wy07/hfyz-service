@@ -5,6 +5,7 @@ class HiddenRectificationOrder {
 
     String billNo               //但据编号
     String area                 //区域
+    String enterprise           //业户名称
     String companyCode          //业户编码
     String examiner             //检查人
     Date   inspectionDate       //检查日期
