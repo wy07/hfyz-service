@@ -42,9 +42,9 @@ class PermissionGroup implements Serializable {
                     , url            : this.url
                     , httpMethod     : this.httpMethod?.toString()
             ]
-            return map;
+            return map
         }
 
-        return null;
+        return null
     }
 }
