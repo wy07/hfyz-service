@@ -25,6 +25,7 @@ import com.hfyz.warning.Warning
 import com.hfyz.workOrder.WorkOrder
 import com.hfyz.workOrder.WorkOrderFlow
 import com.hfyz.workOrder.WorkOrderFlowAction
+import com.hfyz.waybill.FreightWaybill
 import grails.transaction.Transactional
 import com.hfyz.security.User
 import com.hfyz.security.Role
@@ -40,7 +41,6 @@ class InitService {
 //        if (User.count() > 0) {
 //            return
 //        }
-
 
         initMenu()
         initSecurityData()
@@ -244,7 +244,6 @@ class InitService {
 
         new RegisterReport(caseRegisterNo: "tx123", companyCode: "changcheng", idCardNo: "421553").save(flush: true)
         new RegisterReport(caseRegisterNo: "test", companyCode: "changcheng", idCardNo: "2345").save(flush: true)
-        new PeopleBasicInfo(idCardNo: "421553").save(flush: true)
 
         25.times { val ->
             new RegistrationInformationCarinfo(
@@ -354,7 +353,8 @@ class InitService {
         initSystemCode()
         initAlarmType()
         initWorkOrder()
-
+        initDangerousType()
+        initWaybill()
     }
 
     private initSystemCode() {
@@ -432,6 +432,105 @@ class InitService {
         new AlarmType(name: "超速车辆处理率不达标", codeNum: "225", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶车辆率不达标", codeNum: "226", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶处理率不达标", codeNum: "227", parent: null).save(flush: true)
+    }
+
+    private initDangerousType() {
+        new DangerousType(name: '危险货物运输（1类1项）', codeNum: '03111', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（1类2项）', codeNum: '03112', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（1类3项）', codeNum: '03113', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（1类4项）', codeNum: '03114', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（1类5项）', codeNum: '03115', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（1类6项）', codeNum: '03116', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（2类1项）', codeNum: '03121', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（2类2项）', codeNum: '03122', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（2类3项）', codeNum: '03123', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（3类）', codeNum: '03131', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（4类1项）', codeNum: '03141', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（4类2项）', codeNum: '03142', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（4类3项）', codeNum: '03143', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（5类1项）', codeNum: '03151', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（5类2项）', codeNum: '03152', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（6类1项）', codeNum: '03161', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（6类2项）', codeNum: '03161', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（7类）', codeNum: '03111', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（8类）', codeNum: '03111', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（9类）', codeNum: '03111', parent: null).save(flush: true)
+    }
+
+    private initWaybill() {
+        def dangerousType = DangerousType.findByCodeNum('03111')
+        new FreightWaybill(
+                vehicleNo: '皖A-U7290',
+                frameNo: 'frameno1',
+                companyCode: 'company01',
+                ownerName: '合肥市龙腾运输有限公司',
+                dangerousName: '液碱',
+                dangerousType: dangerousType,
+                ratifiedPayload: 7000.0,
+                emergencyPlan: '无',
+                price: 3500.0,
+                operatedType: '经营性',
+                loadedType: '卸',
+                fullLoaded: '否',
+                amount: 8.0,
+                mile: 263.0,
+                departTime: new Date(117, 8, 12, 6, 23, 40),
+                driverName: '赵坤',
+                idCardNo: '3400000',
+                consignCompany: '无',
+                backTime: new Date(117, 8, 13, 5, 23, 40),
+                departArea: '合肥',
+                arriveArea: '张家港',
+                status: '无'
+        ).save(flush: true)
+        new FreightWaybill(
+                vehicleNo: '皖A-M7673',
+                frameNo: 'frameno2',
+                companyCode: 'company01',
+                ownerName: '合肥市龙腾运输有限公司',
+                dangerousName: '甲醇',
+                dangerousType: dangerousType,
+                ratifiedPayload: 7000.0,
+                emergencyPlan: '无',
+                price: 3500.0,
+                operatedType: '经营性',
+                loadedType: '卸',
+                fullLoaded: '否',
+                amount: 4.90,
+                mile: 263.0,
+                departTime: new Date(117, 8, 14, 6, 23, 40),
+                driverName: '赵坤',
+                idCardNo: '3400000',
+                consignCompany: '无',
+                backTime: new Date(117, 8, 15, 5, 23, 40),
+                departArea: '合肥',
+                arriveArea: '武汉',
+                status: '无'
+        ).save(flush: true)
+        new FreightWaybill(
+                vehicleNo: '皖A-P2265',
+                frameNo: 'frameno3',
+                companyCode: 'company01',
+                ownerName: '合肥市龙腾运输有限公司',
+                dangerousName: '环己酮',
+                dangerousType: dangerousType,
+                ratifiedPayload: 7000.0,
+                emergencyPlan: '无',
+                price: 3500.0,
+                operatedType: '经营性',
+                loadedType: '卸',
+                fullLoaded: '否',
+                amount: 2.30,
+                mile: 263.0,
+                departTime: new Date(117, 8, 10, 14, 23, 40),
+                driverName: '赵坤',
+                idCardNo: '3400000',
+                consignCompany: '无',
+                backTime: new Date(117, 8, 11, 01, 23, 40),
+                departArea: '合肥',
+                arriveArea: '武汉',
+                status: '无'
+        ).save(flush: true)
     }
 
     private initSecurityData() {
@@ -530,9 +629,11 @@ class InitService {
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '运单路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '发布信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
 
         def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
@@ -607,9 +708,6 @@ class InitService {
             }
             temp.save(flush: true)
         }
-
-
     }
-
 
 }
