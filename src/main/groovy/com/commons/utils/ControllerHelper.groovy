@@ -1,5 +1,7 @@
 package com.commons.utils
 
+import com.commons.exception.IllegalActionException
+import com.commons.exception.InstancePermException
 import com.commons.exception.ParamsIllegalException
 import com.commons.exception.RecordNotFoundException
 import com.hfyz.security.User
@@ -12,7 +14,7 @@ trait ControllerHelper {
 
     def springSecurityService
 
-    def getCurrentUser() {
+    User getCurrentUser() {
         long userId = getCurrentUserId()
         if (!userId) {
             return null
@@ -68,6 +70,18 @@ trait ControllerHelper {
         render map as JSON
     }
 
+    def renderNoInstancePermError() {
+        response.setStatus(403)
+        def map = [errors: [message(code: 'default.instance.noPermission.message', default: '您没有权限进行此操作')]]
+        render map as JSON
+    }
+
+    def renderIllegalActionError(){
+        response.setStatus(400)
+        def map = [errors: ['操作非法，请稍后再试！']]
+        render map as JSON
+    }
+
     def handleException(Exception e) {
         println e.printStackTrace()
         renderErrorMsg('系统忙，请稍后再试!')
@@ -83,5 +97,13 @@ trait ControllerHelper {
 
     def handleValidationException(ValidationException e) {
         renderValidationErrors(e.errors)
+    }
+
+    def handleInstancePermException(InstancePermException e) {
+        renderNoInstancePermError()
+    }
+
+    def handleIllegalActionException(IllegalActionException e) {
+        renderIllegalActionError()
     }
 }
