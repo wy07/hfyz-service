@@ -16,7 +16,7 @@ class Role{
 	Organization org
 
 	static constraints = {
-		authority blank: false, unique: true,maxSize:20
+		authority blank: false, unique: true,maxSize:30
 		name blank: false, unique: true,maxSize:20
 		org nullable: true
 	}
