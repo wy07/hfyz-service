@@ -26,6 +26,7 @@ import com.hfyz.workOrder.WorkOrder
 import com.hfyz.workOrder.WorkOrderFlow
 import com.hfyz.workOrder.WorkOrderFlowAction
 import com.hfyz.waybill.FreightWaybill
+import com.hfyz.waybill.PassLineBusinessBasicInfo
 import grails.transaction.Transactional
 import com.hfyz.security.User
 import com.hfyz.security.Role
@@ -355,6 +356,7 @@ class InitService {
         initWorkOrder()
         initDangerousType()
         initWaybill()
+        initPassLineBusinessBasicInfo()
     }
 
     private initSystemCode() {
@@ -481,7 +483,20 @@ class InitService {
                 backTime: new Date(117, 8, 13, 5, 23, 40),
                 departArea: '合肥',
                 arriveArea: '张家港',
-                status: '无'
+                status: '无',
+                routerName: '合肥-太原',
+                startProvince: '安徽省',
+                startProvinceCode: '340000',
+                startCity: '合肥市',
+                startCityCode: '340100',
+                startDistrict: '蜀山区',
+                startDistrictCode: '340104',
+                endProvince: '山西省',
+                endProvinceCode: '140000',
+                endCity: '太原市',
+                endCityCode: '140100',
+                endDistrict: '迎泽区',
+                endDistrictCode: '140106'
         ).save(flush: true)
         new FreightWaybill(
                 vehicleNo: '皖A-M7673',
@@ -505,7 +520,20 @@ class InitService {
                 backTime: new Date(117, 8, 15, 5, 23, 40),
                 departArea: '合肥',
                 arriveArea: '武汉',
-                status: '无'
+                status: '无',
+                routerName: '合肥-武汉',
+                startProvince: '安徽省',
+                startProvinceCode: '340000',
+                startCity: '合肥市',
+                startCityCode: '340100',
+                startDistrict: '蜀山区',
+                startDistrictCode: '340104',
+                endProvince: '湖北省',
+                endProvinceCode: '420000',
+                endCity: '武汉市',
+                endCityCode: '420100',
+                endDistrict: '江岸区',
+                endDistrictCode: '420102'
         ).save(flush: true)
         new FreightWaybill(
                 vehicleNo: '皖A-P2265',
@@ -529,8 +557,53 @@ class InitService {
                 backTime: new Date(117, 8, 11, 01, 23, 40),
                 departArea: '合肥',
                 arriveArea: '武汉',
-                status: '无'
+                status: '无',
+                routerName: '合肥-连云港',
+                startProvince: '安徽省',
+                startProvinceCode: '340000',
+                startCity: '合肥市',
+                startCityCode: '340100',
+                startDistrict: '蜀山区',
+                startDistrictCode: '340104',
+                endProvince: '江苏省',
+                endProvinceCode: '320000',
+                endCity: '连云港市',
+                endCityCode: '320700',
+                endDistrict: '连云区',
+                endDistrictCode: '320703'
         ).save(flush: true)
+    }
+
+    private initPassLineBusinessBasicInfo() {
+        5.times { val ->
+            def aaa = new PassLineBusinessBasicInfo(
+                    lineCode: '1',
+                    ownerName: '合肥市龙腾运输有限公司',
+                    companyCode: 'company01',
+                    licenseCharacter: "${val}",
+                    licenseNo: "${val}",
+                    busType: '大车',
+                    startStationName: '滨湖时代广场',
+                    endStationName: '市政务办公区西',
+                    stopStation: '师范附小,一中,四十六中,周岗,市政务办公区西',
+                    mainPoint: '滨湖时代广场,市政务办公区西',
+                    dayTimes: val,
+                    businessWay: '国营',
+                    licenseDecideBookNo: "${val}",
+                    decideTime: new Date(),
+                    decideOrc: '运输处',
+                    beginTime: new Date(117, 8, 10, 14, 23, 40),
+                    endTime: new Date(118, 8, 10, 14, 23, 40),
+                    licenseType: '国营',
+                    businessSituation: '正常',
+                    changeLicenseTimes: 0,
+                    generalinfoChangeTimes: 0,
+                    businessinfoChangeTimes: 0,
+                    inputTotalCar: 20 + val,
+                    inputTotalSeat: 54 + val,
+                    totalLinePlate: 30 + val
+            ).save(flush: true)
+        }
     }
 
     private initSecurityData() {
@@ -634,6 +707,7 @@ class InitService {
         new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '发布信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '客运基本信息', code: 'passLineBusinessInfo', icon: 'fa-info', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
 
         def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
