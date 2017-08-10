@@ -190,8 +190,44 @@ class InitService {
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 190 * 1000),
 
                 responseContent: '7', responseTime: 190).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '3427', question: '12÷3=?', answer: '4', responsed: true,
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000001', question: '12÷3=?', answer: '4', responsed: true,
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000001', question: '12÷3=?', answer: '5', responsed: false,
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000001', question: '测试数据1', answer: '4', responsed: true,
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000001', question: '测试数据2', answer: '4', responsed: false,
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000001', question: '测试数据3', answer: '4', responsed: true,
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000002', question: '测试数据3', answer: '4', responsed: false,
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000002', question: '测试数据3', answer: '4', responsed: false,
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000002', question: '测试数据3', answer: '4', responsed: true,
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000002', question: '测试数据3', answer: '4', responsed: false,
+                operator: adminUser, responseDate: new Date(new Date().getTime() + 75 * 1000),
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000002', question: '测试数据3', answer: '4', responsed: true,
+                operator: adminUser, responseDate: new Date()+1,
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000000', question: '测试数据3', answer: '4', responsed: false,
+                operator: adminUser, responseDate: new Date()+9,
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000004', question: '测试数据3', answer: '4', responsed: true,
+                operator: adminUser, responseDate: new Date()+4,
+                responseContent: '4', responseTime: 75).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000004', question: '测试数据3', answer: '4', responsed: false,
+                operator: adminUser, responseDate: new Date()+5,
                 responseContent: '4', responseTime: 75).save(flush: true)
 
         new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
@@ -351,6 +387,9 @@ class InitService {
 
         initSystemCode()
         initAlarmType()
+
+        def statisticMenu = new Menu(name: '统计', code: 'root-statistic', icon: 'fa-pie-chart', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '查岗统计', code: 'checkStatistic', icon: 'fa-odnoklassniki', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
 
     }
 
