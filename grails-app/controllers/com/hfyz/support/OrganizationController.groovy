@@ -13,7 +13,7 @@ class OrganizationController implements ControllerHelper{
         renderSuccessesWithMap([orgList: supportService.getOrgList()])
     }
     def listForSelect(){
-        renderSuccessesWithMap([orgList: supportService.getOrgForSelect(request.JSON.roles)])
+        renderSuccessesWithMap([orgList: supportService.getOrgForSelect(currentUser)])
     }
     def index() {
         int max = PageUtils.getMax(request.JSON.max,10,100)

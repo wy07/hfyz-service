@@ -35,7 +35,7 @@ class RoleController implements ControllerHelper {
         def orgList = []
         if (userService.isSuperAdmin(user.id)) {
             roleList = Role.list([sort: 'id', order: 'desc'])
-            orgList = supportService.getChildrenOrgs()?.collect { Organization org ->
+            orgList = supportService.getOrgs()?.collect { Organization org ->
                 [value: org.id, label: org.name]
             }
         } else {
@@ -61,7 +61,7 @@ class RoleController implements ControllerHelper {
                                               , name     : role.name
                                               , authority: role.authority
                                               , orgId    : role.org?.id],
-                                    orgList: supportService.getChildrenOrgs()?.collect { Organization org ->
+                                    orgList: supportService.getOrgs()?.collect { Organization org ->
                                         [value: org.id, label: org.name]
                                     }])
         }
