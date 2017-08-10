@@ -534,33 +534,45 @@ class InitService {
     }
 
     private initSecurityData() {
-        Organization organizationP = new Organization(name: '运管处', code: '100', parent: null).save(flush: true)
-        new Organization(name: '运管指挥中心', code: '110', parent: organizationP).save(flush: true)
-        new Organization(name: '货运管理所', code: '120', parent: organizationP).save(flush: true)
-        new Organization(name: '客运管理所', code: '130', parent: organizationP).save(flush: true)
+        new Organization(name: '监控指挥中心', code: '01', parent: null).save(flush: true)
+        new Organization(name: '办公室', code: '02', parent: null).save(flush: true)
+        new Organization(name: '人事教育科', code: '03', parent: null).save(flush: true)
+        new Organization(name: '信息科', code: '04', parent: null).save(flush: true)
+        new Organization(name: '纪委', code: '05', parent: null).save(flush: true)
+        new Organization(name: '工会', code: '06', parent: null).save(flush: true)
+        new Organization(name: '财务室', code: '07', parent: null).save(flush: true)
+        new Organization(name: '客运管理所', code: '08', parent: null).save(flush: true)
+        new Organization(name: '货运管理所', code: '09', parent: null).save(flush: true)
+        new Organization(name: '机动车维修管理所', code: '10', parent: null).save(flush: true)
+        new Organization(name: '机动车驾驶员培训管理科', code: '11', parent: null).save(flush: true)
+        new Organization(name: '证件管理科', code: '12', parent: null).save(flush: true)
+        new Organization(name: '出租汽车管理所', code: '13', parent: null).save(flush: true)
+        new Organization(name: '稽查大队', code: '14', parent: null).save(flush: true)
+        new Organization(name: '法制科', code: '15', parent: null).save(flush: true)
+        new Organization(name: '安全监督管理科', code: '16', parent: null).save(flush: true)
+        new Organization(name: '瑶海道路运输管理所', code: '17', parent: null).save(flush: true)
+        new Organization(name: '庐阳道路运输管理所', code: '18', parent: null).save(flush: true)
+        new Organization(name: '蜀山道路运输管理所', code: '19', parent: null).save(flush: true)
+        new Organization(name: '包河道路运输管理所', code: '20', parent: null).save(flush: true)
+        new Organization(name: '新站道路运输管理所', code: '21', parent: null).save(flush: true)
+        new Organization(name: '高新道路运输管理所', code: '22', parent: null).save(flush: true)
+        new Organization(name: '经开道路运输管理所', code: '23', parent: null).save(flush: true)
+        new Organization(name: '业户', code: '24', parent: null).save(flush: true)
 
-        organizationP = new Organization(name: '业务', code: '200', parent: null).save(flush: true)
-        new Organization(name: '信息科', code: '210', parent: organizationP).save(flush: true)
-        new Organization(name: '法制科', code: '220', parent: organizationP).save(flush: true)
-        new Organization(name: '安全监督科', code: '230', parent: organizationP).save(flush: true)
-
-        organizationP = new Organization(name: '运营企业', code: '300', parent: null).save(flush: true)
-        def test = new Organization(name: '客运', code: '310', parent: organizationP).save(flush: true)
-        new Organization(name: '货运', code: '320', parent: organizationP).save(flush: true)
 
         (1..100).each {
             new Role(authority: "ROLE_AAA${it}", name: "角色${it}", org: null).save(failOnError: true, flush: true)
         }
 
-        def companyRole = new Role(authority: 'ROLE_COMPANY_ROOT', name: '企业管理员', org: test).save(failOnError: true, flush: true)
+        def companyRole = new Role(authority: 'ROLE_COMPANY_ROOT', name: '企业管理员', org: Organization.findByCode('24')).save(failOnError: true, flush: true)
 
         (1..100).each {
-            def aaa = new User(username: "company${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: "企业用户${it}", org: test).save(failOnError: true, flush: true)
+            def aaa = new User(username: "company${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: "企业用户${it}", org: Organization.findByCode('24')).save(failOnError: true, flush: true)
             UserRole.create aaa, companyRole, true
         }
 
         9.times { it ->
-            def companyUser = new User(username: "company-${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: "企业用户00${it}", org: test, companyCode: "C00000000${it}").save(failOnError: true, flush: true)
+            def companyUser = new User(username: "company-${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: "企业用户00${it}", org: Organization.findByCode('24'), companyCode: "C00000000${it}").save(failOnError: true, flush: true)
             UserRole.create companyUser, companyRole, true
 
         }
@@ -571,18 +583,15 @@ class InitService {
         UserRole.create adminUser, adminRole, true
 
 
-        def controlRole = new Role(authority: 'ROLE_CONTROL_CENTER_ROOT', name: '运管指挥中心管理员', org: Organization.findByCode('110')).save(failOnError: true, flush: true)
+        def controlRole = new Role(authority: 'ROLE_CONTROL_CENTER_ROOT', name: '监控指挥中心管理员', org: Organization.findByCode('01')).save(failOnError: true, flush: true)
         def controlUser = new User(username: 'center', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '运管指挥中心管理员').save(failOnError: true, flush: true)
         UserRole.create controlUser, controlRole, true
 
 
 
-        def legalSectionRole = new Role(authority: 'ROLE_LEGAL_SECTION_ROOT', name: '法制科管理员', org: Organization.findByCode('220')).save(failOnError: true, flush: true)
+        def legalSectionRole = new Role(authority: 'ROLE_LEGAL_SECTION_ROOT', name: '法制科管理员', org: Organization.findByCode('15')).save(failOnError: true, flush: true)
         def legalSectionUser = new User(username: 'legal', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '法制科管理员').save(failOnError: true, flush: true)
         UserRole.create legalSectionUser, legalSectionRole, true
-
-        //
-
 
         new PermissionGroup(url: '/organizations/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "组织机构管理", category: "系统管理", code: 'organization_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/roles/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理", category: "系统管理", code: 'role_manage').save(failOnError: true, flush: true)
