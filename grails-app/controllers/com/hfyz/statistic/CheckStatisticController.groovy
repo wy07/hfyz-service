@@ -22,8 +22,14 @@ class CheckStatisticController implements ControllerHelper{
             endDate = request.JSON.endDate + "-01"
         }
 
-        if(!request.JSON.startDate) {
+        if(request.JSON.startDate) {
             if (!request.JSON.startDate.contains("-")) {
+                startDate = request.JSON.startDate + "-01-01"
+                endDate = request.JSON.endDate + "-01-01"
+            }
+        }
+        if(request.JSON.endDate){
+            if (!request.JSON.endDate.contains("-")) {
                 startDate = request.JSON.startDate + "-01-01"
                 endDate = request.JSON.endDate + "-01-01"
             }

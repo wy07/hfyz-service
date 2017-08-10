@@ -160,7 +160,7 @@ class CheckStatisticService {
             if(dateLength == 2) {
                 strSql += " and t1.date_created <= :ed::timestamp + '1 month'"
             }
-            if(dateLength != 3 && dateLength != 2 && dateLength != 1){
+            if(dateLength != 3 && dateLength != 2 ){
                 strSql += " and t1.date_created <= :ed::timestamp + '1 year'"
             }
         }
