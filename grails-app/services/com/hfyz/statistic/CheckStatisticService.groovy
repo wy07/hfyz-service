@@ -86,17 +86,17 @@ class CheckStatisticService {
                         t3.company_code= t1.company_code
                     """
         if(startDate){
-            strSql += " and t1.response_date >= :sd::timestamp"
+            strSql += " and t1.date_created >= :sd::timestamp"
         }
         if(endDate){
             if(dateLength == 3) {
-                strSql += " and t1.response_date <= :ed::timestamp + '1 day'"
+                strSql += " and t1.date_created <= :ed::timestamp + '1 day'"
             }
             if(dateLength == 2) {
-                strSql += " and t1.response_date <=  :ed::timestamp + '1 month'"
+                strSql += " and t1.date_created <=  :ed::timestamp + '1 month'"
             }
             if(dateLength != 3 && dateLength != 2 && dateLength != 1){
-                strSql += " and t1.response_date <= :ed::timestamp + '1 year'"
+                strSql += " and t1.date_created <= :ed::timestamp + '1 year'"
             }
         }
         if(company){
@@ -151,17 +151,17 @@ class CheckStatisticService {
                              t3.company_code= t1.company_code
                     """
         if(startDate){
-            strSql += " and t1.response_date >=  :sd::timestamp"
+            strSql += " and t1.date_created >=  :sd::timestamp"
         }
         if(endDate){
             if(dateLength == 3) {
-                strSql += " and t1.response_date <= :ed::timestamp + '1 day'"
+                strSql += " and t1.date_created <= :ed::timestamp + '1 day'"
             }
             if(dateLength == 2) {
-                strSql += " and t1.response_date <= :ed::timestamp + '1 month'"
+                strSql += " and t1.date_created <= :ed::timestamp + '1 month'"
             }
             if(dateLength != 3 && dateLength != 2 && dateLength != 1){
-                strSql += " and t1.response_date <= :ed::timestamp + '1 year'"
+                strSql += " and t1.date_created <= :ed::timestamp + '1 year'"
             }
         }
         if(company){
