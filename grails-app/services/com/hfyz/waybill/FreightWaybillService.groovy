@@ -1,6 +1,5 @@
 package com.hfyz.waybill
 
-import com.hfyz.support.DangerousType
 import grails.transaction.Transactional
 
 @Transactional
@@ -32,7 +31,13 @@ class FreightWaybillService {
                     departTime   : bill.departTime?.format("yyyy-MM-dd HH:mm:ss"),
                     fullLoaded   : bill.fullLoaded,
                     departArea   : bill.departArea,
-                    arriveArea   : bill.arriveArea
+                    arriveArea   : bill.arriveArea,
+                    startProvince: bill.startProvince,
+                    startCity    : bill.startCity,
+                    startDistrict: bill.startDistrict,
+                    endProvince  : bill.endProvince,
+                    endCity      : bill.endCity,
+                    endDistrict  : bill.endDistrict
             ]
 
         })
