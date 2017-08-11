@@ -5,6 +5,7 @@ class CarBasicOperate {  //营运车辆_基本信息_营运信息
     Date modifyTime                 //更新时间
     String carfileRecordNo          //车辆档案号
     String ownerName                //业户名称
+    String ownerCode                //业户编码(组织机构代码）*
     String businessLicenseCharacter //经营许可证字
     String businessLicenseNo        //经营许可证号
     String transformLicenseCharacter//道路运输证字
