@@ -117,6 +117,7 @@ class InitService {
                     , modifyTime: date - val
                     , carfileRecordNo: "${val}".padLeft(10, '0')
                     , ownerName: "企业${val % 4}"
+                    , ownerCode: "C00000000${val % 4}"
                     , businessLicenseCharacter: "经营许可证字${val}"
                     , businessLicenseNo: "经营许可证号${val}"
                     , transformLicenseCharacter: "道路运输证字${val}"

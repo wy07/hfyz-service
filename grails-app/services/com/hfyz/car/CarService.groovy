@@ -1,6 +1,7 @@
 package com.hfyz.car
 
 import com.commons.utils.SQLHelper
+import com.hfyz.security.User
 import grails.async.Promise
 import grails.transaction.Transactional
 
@@ -10,22 +11,27 @@ import static grails.async.Promises.task
 class CarService {
     def dataSource
 
-    def search(String businessType, String licenseNo, String dateBegin, String dateEnd, Long max, Long offset) {
+    def search(Map inputParams, User user, Long max, Long offset) {
         def sqlParams = [:]
-        def dateFlag = dateBegin && dateEnd
-        if (businessType) {
-            sqlParams.businessType = businessType
+        def dateFlag = inputParams.dateBegin && inputParams.dateEnd
+        if (inputParams.businessType) {
+            sqlParams.businessType = inputParams.businessType
         }
-        if (licenseNo) {
-            sqlParams.licenseNo = "${licenseNo}%".toString()
+        if (inputParams.licenseNo) {
+            sqlParams.licenseNo = "${inputParams.licenseNo}%".toString()
         }
         if (dateFlag) {
-            sqlParams.dateBegin = dateBegin
-            sqlParams.dateEnd = dateEnd
+            sqlParams.dateBegin = inputParams.dateBegin
+            sqlParams.dateEnd = inputParams.dateEnd
         }
+
+        if (user.isCompanyUser()) {
+            sqlParams.ownerCode = user.companyCode
+        }
+
         Promise carList = task {
             SQLHelper.withDataSource(dataSource) { sql ->
-                sql.rows(getSearchCarsSql(dateFlag, businessType, licenseNo), sqlParams + [max: max, offset: offset])
+                sql.rows(getSearchCarsSql(dateFlag, inputParams.businessType, inputParams.licenseNo, user.isCompanyUser()), sqlParams + [max: max, offset: offset])
             }?.collect { obj ->
                 [transformLicenseNo: obj.transformLicenseNo
                  , licenseNo       : obj.licenseNo
@@ -41,7 +47,7 @@ class CarService {
 
         Promise carCount = task {
             SQLHelper.withDataSource(dataSource) { sql ->
-                sql.firstRow(getSearchCarsCountSql(dateFlag, businessType, licenseNo), [sqlParams]).count ?: 0
+                sql.firstRow(getSearchCarsCountSql(dateFlag, inputParams.businessType, inputParams.licenseNo, user.isCompanyUser()), [sqlParams]).count ?: 0
 
             }
         }
@@ -83,7 +89,8 @@ class CarService {
         return sqlStr
     }
 
-    private static String getSearchCarsSql(boolean dateFlag, String businessType, String licenseNo) {
+    private
+    static String getSearchCarsSql(boolean dateFlag, String businessType, String licenseNo, boolean isCompanyUser) {
         String sqlStr = """
             SELECT  operate.transform_license_no transformLicenseNo
             ,carinfo.license_no licenseNo
@@ -108,6 +115,10 @@ class CarService {
         if (dateFlag) {
             sqlStr += " and operate.end_time between to_timestamp(:dateBegin,'YYYY-MM-DD HH24:MI:SS') and to_timestamp(:dateEnd,'YYYY-MM-DD HH24:MI:SS') "
         }
+        if (isCompanyUser) {
+            sqlStr += " and operate.owner_code=:ownerCode"
+        }
+
         sqlStr += """
             order by carinfo.settle_time desc
             limit :max offset :offset;
@@ -116,7 +127,7 @@ class CarService {
         return sqlStr
     }
 
-    private static String getSearchCarsCountSql(boolean dateFlag, String businessType, String licenseNo) {
+    private static String getSearchCarsCountSql(boolean dateFlag, String businessType, String licenseNo, boolean isCompanyUser) {
         String sqlStr = """
             SELECT  count(carinfo.frame_no)
             FROM runcar_basic_carinfo carinfo
@@ -133,6 +144,9 @@ class CarService {
 
         if (dateFlag) {
             sqlStr += " and operate.end_time between to_timestamp(:dateBegin,'YYYY-MM-DD HH24:MI:SS') and to_timestamp(:dateEnd,'YYYY-MM-DD HH24:MI:SS')"
+        }
+        if (isCompanyUser) {
+            sqlStr += " and operate.owner_code=:ownerCode"
         }
         return sqlStr
     }

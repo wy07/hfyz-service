@@ -6,8 +6,16 @@ import com.commons.exception.RecordNotFoundException
 import com.hfyz.security.User
 
 class WorkOrderService {
-    def findWorkOrderListAndTotal(max, offset) {
-        def workOrderList = WorkOrder.list([max: max, offset: offset, sort: 'id', order: 'desc'])?.collect { WorkOrder obj ->
+    def findWorkOrderListAndTotal(max, offset,User user) {
+        println user.isCompanyUser()
+
+        def workOrderList=WorkOrder.createCriteria().list([max: max, offset: offset, sort: 'id', order: 'desc']) {
+            if(user.isCompanyUser()){
+                eq('companyCode',user.companyCode)
+                ne('status',WorkOrderStatus.DSH)
+                ne('status',WorkOrderStatus.YQX)
+            }
+        }?.collect { WorkOrder obj ->
             [id                 : obj.id
              , sn               : obj.sn
              , alarmType        : obj.alarmType.name
@@ -24,7 +32,18 @@ class WorkOrderService {
              , note             : obj.note
              , status           : obj.status.cnName]
         }
-        return [workOrderList: workOrderList, total: WorkOrder.count()]
+
+        def workOrderCount = WorkOrder.createCriteria().get {
+            projections {
+                count()
+            }
+            if(user.isCompanyUser()){
+                eq('companyCode',user.companyCode)
+                ne('status',WorkOrderStatus.DSH)
+                ne('status',WorkOrderStatus.YQX)
+            }
+        }
+        return [workOrderList: workOrderList, total: workOrderCount]
     }
 
 
