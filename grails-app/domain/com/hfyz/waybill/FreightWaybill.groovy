@@ -28,6 +28,20 @@ class FreightWaybill {
     String departArea //出发地
     String arriveArea //目的地
     String status //状态
+    String routerName
+    String startProvince
+    String startProvinceCode
+    String startCity
+    String startCityCode
+    String startDistrict
+    String startDistrictCode
+    String endProvince
+    String endProvinceCode
+    String endCity
+    String endCityCode
+    String endDistrict
+    String endDistrictCode
+
     static constraints = {
 
     }
