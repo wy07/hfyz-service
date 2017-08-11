@@ -26,6 +26,7 @@ import com.hfyz.workOrder.WorkOrder
 import com.hfyz.workOrder.WorkOrderFlow
 import com.hfyz.workOrder.WorkOrderFlowAction
 import com.hfyz.waybill.FreightWaybill
+import com.hfyz.waybill.PassLineBusinessBasicInfo
 import grails.transaction.Transactional
 import com.hfyz.security.User
 import com.hfyz.security.Role
@@ -399,7 +400,7 @@ class InitService {
         initWorkOrder()
         initDangerousType()
         initWaybill()
-
+        initPassLineBusinessBasicInfo()
     }
 
     private initSystemCode() {
@@ -526,7 +527,20 @@ class InitService {
                 backTime: new Date(117, 8, 13, 5, 23, 40),
                 departArea: '合肥',
                 arriveArea: '张家港',
-                status: '无'
+                status: '无',
+                routerName: '合肥-太原',
+                startProvince: '安徽省',
+                startProvinceCode: '340000',
+                startCity: '合肥市',
+                startCityCode: '340100',
+                startDistrict: '蜀山区',
+                startDistrictCode: '340104',
+                endProvince: '山西省',
+                endProvinceCode: '140000',
+                endCity: '太原市',
+                endCityCode: '140100',
+                endDistrict: '迎泽区',
+                endDistrictCode: '140106'
         ).save(flush: true)
         new FreightWaybill(
                 vehicleNo: '皖A-M7673',
@@ -550,7 +564,20 @@ class InitService {
                 backTime: new Date(117, 8, 15, 5, 23, 40),
                 departArea: '合肥',
                 arriveArea: '武汉',
-                status: '无'
+                status: '无',
+                routerName: '合肥-武汉',
+                startProvince: '安徽省',
+                startProvinceCode: '340000',
+                startCity: '合肥市',
+                startCityCode: '340100',
+                startDistrict: '蜀山区',
+                startDistrictCode: '340104',
+                endProvince: '湖北省',
+                endProvinceCode: '420000',
+                endCity: '武汉市',
+                endCityCode: '420100',
+                endDistrict: '江岸区',
+                endDistrictCode: '420102'
         ).save(flush: true)
         new FreightWaybill(
                 vehicleNo: '皖A-P2265',
@@ -574,38 +601,95 @@ class InitService {
                 backTime: new Date(117, 8, 11, 01, 23, 40),
                 departArea: '合肥',
                 arriveArea: '武汉',
-                status: '无'
+                status: '无',
+                routerName: '合肥-连云港',
+                startProvince: '安徽省',
+                startProvinceCode: '340000',
+                startCity: '合肥市',
+                startCityCode: '340100',
+                startDistrict: '蜀山区',
+                startDistrictCode: '340104',
+                endProvince: '江苏省',
+                endProvinceCode: '320000',
+                endCity: '连云港市',
+                endCityCode: '320700',
+                endDistrict: '连云区',
+                endDistrictCode: '320703'
         ).save(flush: true)
     }
 
+    private initPassLineBusinessBasicInfo() {
+        5.times { val ->
+            def aaa = new PassLineBusinessBasicInfo(
+                    lineCode: '1',
+                    ownerName: '合肥市龙腾运输有限公司',
+                    companyCode: 'company01',
+                    licenseCharacter: "${val}",
+                    licenseNo: "${val}",
+                    busType: '大车',
+                    startStationName: '滨湖时代广场',
+                    endStationName: '市政务办公区西',
+                    stopStation: '师范附小,一中,四十六中,周岗,市政务办公区西',
+                    mainPoint: '滨湖时代广场,市政务办公区西',
+                    dayTimes: val,
+                    businessWay: '国营',
+                    licenseDecideBookNo: "${val}",
+                    decideTime: new Date(),
+                    decideOrc: '运输处',
+                    beginTime: new Date(117, 8, 10, 14, 23, 40),
+                    endTime: new Date(118, 8, 10, 14, 23, 40),
+                    licenseType: '国营',
+                    businessSituation: '正常',
+                    changeLicenseTimes: 0,
+                    generalinfoChangeTimes: 0,
+                    businessinfoChangeTimes: 0,
+                    inputTotalCar: 20 + val,
+                    inputTotalSeat: 54 + val,
+                    totalLinePlate: 30 + val
+            ).save(flush: true)
+        }
+    }
+
     private initSecurityData() {
-        Organization organizationP = new Organization(name: '运管处', code: '100', parent: null).save(flush: true)
-        new Organization(name: '运管指挥中心', code: '110', parent: organizationP).save(flush: true)
-        new Organization(name: '货运管理所', code: '120', parent: organizationP).save(flush: true)
-        new Organization(name: '客运管理所', code: '130', parent: organizationP).save(flush: true)
+        new Organization(name: '监控指挥中心', code: '01', parent: null).save(flush: true)
+        new Organization(name: '办公室', code: '02', parent: null).save(flush: true)
+        new Organization(name: '人事教育科', code: '03', parent: null).save(flush: true)
+        new Organization(name: '信息科', code: '04', parent: null).save(flush: true)
+        new Organization(name: '纪委', code: '05', parent: null).save(flush: true)
+        new Organization(name: '工会', code: '06', parent: null).save(flush: true)
+        new Organization(name: '财务室', code: '07', parent: null).save(flush: true)
+        new Organization(name: '客运管理所', code: '08', parent: null).save(flush: true)
+        new Organization(name: '货运管理所', code: '09', parent: null).save(flush: true)
+        new Organization(name: '机动车维修管理所', code: '10', parent: null).save(flush: true)
+        new Organization(name: '机动车驾驶员培训管理科', code: '11', parent: null).save(flush: true)
+        new Organization(name: '证件管理科', code: '12', parent: null).save(flush: true)
+        new Organization(name: '出租汽车管理所', code: '13', parent: null).save(flush: true)
+        new Organization(name: '稽查大队', code: '14', parent: null).save(flush: true)
+        new Organization(name: '法制科', code: '15', parent: null).save(flush: true)
+        new Organization(name: '安全监督管理科', code: '16', parent: null).save(flush: true)
+        new Organization(name: '瑶海道路运输管理所', code: '17', parent: null).save(flush: true)
+        new Organization(name: '庐阳道路运输管理所', code: '18', parent: null).save(flush: true)
+        new Organization(name: '蜀山道路运输管理所', code: '19', parent: null).save(flush: true)
+        new Organization(name: '包河道路运输管理所', code: '20', parent: null).save(flush: true)
+        new Organization(name: '新站道路运输管理所', code: '21', parent: null).save(flush: true)
+        new Organization(name: '高新道路运输管理所', code: '22', parent: null).save(flush: true)
+        new Organization(name: '经开道路运输管理所', code: '23', parent: null).save(flush: true)
+        new Organization(name: '业户', code: '24', parent: null).save(flush: true)
 
-        organizationP = new Organization(name: '业务', code: '200', parent: null).save(flush: true)
-        new Organization(name: '信息科', code: '210', parent: organizationP).save(flush: true)
-        new Organization(name: '法制科', code: '220', parent: organizationP).save(flush: true)
-        new Organization(name: '安全监督科', code: '230', parent: organizationP).save(flush: true)
-
-        organizationP = new Organization(name: '运营企业', code: '300', parent: null).save(flush: true)
-        def test = new Organization(name: '客运', code: '310', parent: organizationP).save(flush: true)
-        new Organization(name: '货运', code: '320', parent: organizationP).save(flush: true)
 
         (1..100).each {
             new Role(authority: "ROLE_AAA${it}", name: "角色${it}", org: null).save(failOnError: true, flush: true)
         }
 
-        def companyRole = new Role(authority: 'ROLE_COMPANY_ROOT', name: '企业管理员', org: test).save(failOnError: true, flush: true)
+        def companyRole = new Role(authority: 'ROLE_COMPANY_ROOT', name: '企业管理员', org: Organization.findByCode('24')).save(failOnError: true, flush: true)
 
         (1..100).each {
-            def aaa = new User(username: "company${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: "企业用户${it}", org: test).save(failOnError: true, flush: true)
+            def aaa = new User(username: "company${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: "企业用户${it}", org: Organization.findByCode('24')).save(failOnError: true, flush: true)
             UserRole.create aaa, companyRole, true
         }
 
         9.times { it ->
-            def companyUser = new User(username: "company-${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: "企业用户00${it}", org: test, companyCode: "C00000000${it}").save(failOnError: true, flush: true)
+            def companyUser = new User(username: "company-${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: "企业用户00${it}", org: Organization.findByCode('24'), companyCode: "C00000000${it}").save(failOnError: true, flush: true)
             UserRole.create companyUser, companyRole, true
 
         }
@@ -616,18 +700,15 @@ class InitService {
         UserRole.create adminUser, adminRole, true
 
 
-        def controlRole = new Role(authority: 'ROLE_CONTROL_CENTER_ROOT', name: '运管指挥中心管理员', org: Organization.findByCode('110')).save(failOnError: true, flush: true)
+        def controlRole = new Role(authority: 'ROLE_CONTROL_CENTER_ROOT', name: '监控指挥中心管理员', org: Organization.findByCode('01')).save(failOnError: true, flush: true)
         def controlUser = new User(username: 'center', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '运管指挥中心管理员').save(failOnError: true, flush: true)
         UserRole.create controlUser, controlRole, true
 
 
 
-        def legalSectionRole = new Role(authority: 'ROLE_LEGAL_SECTION_ROOT', name: '法制科管理员', org: Organization.findByCode('220')).save(failOnError: true, flush: true)
+        def legalSectionRole = new Role(authority: 'ROLE_LEGAL_SECTION_ROOT', name: '法制科管理员', org: Organization.findByCode('15')).save(failOnError: true, flush: true)
         def legalSectionUser = new User(username: 'legal', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '法制科管理员').save(failOnError: true, flush: true)
         UserRole.create legalSectionUser, legalSectionRole, true
-
-        //
-
 
         new PermissionGroup(url: '/organizations/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "组织机构管理", category: "系统管理", code: 'organization_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/roles/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理", category: "系统管理", code: 'role_manage').save(failOnError: true, flush: true)
@@ -679,6 +760,7 @@ class InitService {
         new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '发布信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '客运基本信息', code: 'passLineBusinessInfo', icon: 'fa-info', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
 
         def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)

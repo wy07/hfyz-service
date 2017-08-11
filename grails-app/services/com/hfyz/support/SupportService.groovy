@@ -9,6 +9,7 @@ import grails.transaction.Transactional
 class SupportService {
 
     def dataSource
+    def grailsApplication
 
     def getOrgList(){
         def orgList = SQLHelper.withDataSource(dataSource) { sql ->
@@ -19,6 +20,10 @@ class SupportService {
 
     def getChildrenOrgs(){
         return Organization.findAllByParentIsNotNull()
+    }
+
+    def getOrgs(){
+        return Organization.list([sort: 'id', order: 'desc'])
     }
 
     def formatOrgList(def data, def pid) {
@@ -40,24 +45,35 @@ class SupportService {
         return result
     }
 
-    def getOrgForSelect(roles){
-        println roles
-        def GET_ORG_ROLES_SQL
-        if(roles){
-            def roleList=Role.findAllById(roles.split(','))
-            if (roleList[0].name=='平台管理员'){
-                GET_ORG_ROLES_SQL="select id as value,name as label from organization where parent_id is not null order by id"
-            }else{
-                GET_ORG_ROLES_SQL="select id as value,name as label from organization org left join  role_organization roleorg on org.id=roleorg.organization_id where roleorg.role_orgs_id in (${roles})"
-            }
+    def getOrgForSelect(User user){
+        def orgs
+        if(grailsApplication.config.getProperty("user.rootRole.name") in user.authorities.authority){
+            orgs=getOrgs()
         }else{
-            GET_ORG_ROLES_SQL = "select id as value,name as label from organization where parent_id is not null order by id"
+            orgs=user.org?[user.org]:[]
         }
-        println GET_ORG_ROLES_SQL
 
-        return SQLHelper.withDataSource(dataSource) { sql ->
-            sql.rows(GET_ORG_ROLES_SQL.toString())
+        orgs?.collect{Organization org->
+            [value:org.id,label:org.name]
         }
+
+//        println roles
+//        def GET_ORG_ROLES_SQL
+//        if(roles){
+//            def roleList=Role.findAllById(roles.split(','))
+//            if (roleList[0].name=='平台管理员'){
+//                GET_ORG_ROLES_SQL="select id as value,name as label from organization where parent_id is not null order by id"
+//            }else{
+//                GET_ORG_ROLES_SQL="select id as value,name as label from organization org left join  role_organization roleorg on org.id=roleorg.organization_id where roleorg.role_orgs_id in (${roles})"
+//            }
+//        }else{
+//            GET_ORG_ROLES_SQL = "select id as value,name as label from organization where parent_id is not null order by id"
+//        }
+//        println GET_ORG_ROLES_SQL
+//
+//        return SQLHelper.withDataSource(dataSource) { sql ->
+//            sql.rows(GET_ORG_ROLES_SQL.toString())
+//        }
     }
 
     def getMenu() {
