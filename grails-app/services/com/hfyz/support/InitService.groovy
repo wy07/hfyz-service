@@ -395,6 +395,7 @@ class InitService {
 
         def statisticMenu = new Menu(name: '统计', code: 'root-statistic', icon: 'fa-pie-chart', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '查岗统计', code: 'checkStatistic', icon: 'fa-odnoklassniki', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '企业统计', code: 'companyReport', icon: 'fa-line-chart', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
 
 
 
