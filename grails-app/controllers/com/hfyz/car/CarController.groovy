@@ -15,7 +15,14 @@ class CarController implements ControllerHelper {
     def search() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        def result = carService.search(request.JSON.businessType, request.JSON.licenseNo, request.JSON.dateBegin, request.JSON.dateEnd, max, offset)
+        def result = carService.search(
+                [businessType: request.JSON.businessType
+                 , licenseNo : request.JSON.licenseNo
+                 , dateBegin : request.JSON.dateBegin
+                 , dateEnd   : request.JSON.dateEnd]
+                , currentUser
+                , max
+                , offset)
         renderSuccessesWithMap([carList: result.carList, carCount: result.carCount])
     }
 
