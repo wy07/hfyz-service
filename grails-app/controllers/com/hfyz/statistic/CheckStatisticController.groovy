@@ -10,38 +10,34 @@ class CheckStatisticController implements ControllerHelper{
     def list(){
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        String [] tempStartArray = request.JSON.startDate.split("-")
-        def dateLength = tempStartArray.length
         def startDate
         def endDate
-        if(dateLength == 3){
-            startDate = request.JSON.startDate
-        }
-        if(dateLength == 2){
-            startDate = request.JSON.startDate + "-01"
-            endDate = request.JSON.endDate + "-01"
-        }
-
-        if(request.JSON.startDate) {
-            if (!request.JSON.startDate.contains("-")) {
-                startDate = request.JSON.startDate + "-01-01"
-                endDate = request.JSON.endDate + "-01-01"
-            }
+        if(request.JSON.startDate){
+            startDate = getRightDate(request.JSON.startDate)
         }
         if(request.JSON.endDate){
-            if (!request.JSON.endDate.contains("-")) {
-                startDate = request.JSON.startDate + "-01-01"
-                endDate = request.JSON.endDate + "-01-01"
-            }
+            endDate = getRightDate(request.JSON.endDate)
         }
-        if(!request.JSON.endDate){
-            endDate = request.JSON.endDate
-        }
-        if(!request.JSON.startDate){
-            startDate = request.JSON.startDate
-        }
+        String [] tempStartArray = request.JSON.endDate?.split("-")
+        def dateLength = tempStartArray.length
         renderSuccessesWithMap(checkStatisticService.getCheckStatisticList(max,offset
         ,startDate,endDate,request.JSON.company,dateLength))
+    }
+
+    def getRightDate(def date){
+        def tempStart
+        String [] tempStartArray = date.split("-")
+        def dateLength = tempStartArray.length
+        if(dateLength == 3){
+            tempStart = date
+        }
+        if(dateLength == 2){
+            tempStart = date + "-01"
+        }
+        if(dateLength != 3 && dateLength !=2 ){
+            tempStart = date +"-01-01"
+        }
+        return tempStart
     }
 
 }
