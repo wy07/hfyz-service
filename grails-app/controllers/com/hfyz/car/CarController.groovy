@@ -2,6 +2,7 @@ package com.hfyz.car
 
 import com.commons.utils.ConfigUtil
 import com.commons.utils.ControllerHelper
+import com.commons.utils.NumberUtils
 import com.commons.utils.PageUtils
 import com.hfyz.support.AlarmType
 import com.hfyz.warning.Alarm
@@ -51,5 +52,31 @@ class CarController implements ControllerHelper {
                     , rectificationTime: date.plus(5)).save(flush: true)
         }
         renderSuccessesWithMap([resultList: resultList])
+    }
+
+    def carNumStatistic() {
+
+        renderSuccessesWithMap([carNum        : 13202
+                                , enterCarNum : 9890
+                                , onlineCarNum: 6507])
+    }
+
+    def historyStatistic() {
+        int currentYear = new Date().format('yyyy').toInteger()
+        int year = NumberUtils.toInteger(request.JSON.year) ?: currentYear
+        int month = currentYear == year ? new Date().format('MM').toInteger() : 12
+
+        def initDate = {
+            (1..month).collect{
+                new Random().nextInt(100)
+            }
+        }
+        def statistic = [enterRate:initDate()
+                         ,onlineRate:initDate()
+                         ,onlineTimeRate:initDate()
+                         ,overspeedRate:initDate()
+                         ,fatigueRate:initDate()
+                         ,realTimeOnlineRate:initDate()]
+        renderSuccessesWithMap([statistic: statistic])
     }
 }
