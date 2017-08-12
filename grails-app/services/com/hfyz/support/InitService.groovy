@@ -27,6 +27,7 @@ import com.hfyz.workOrder.WorkOrderFlow
 import com.hfyz.workOrder.WorkOrderFlowAction
 import com.hfyz.waybill.FreightWaybill
 import com.hfyz.waybill.PassLineBusinessBasicInfo
+import com.hfyz.waybill.PassLinePhysicalBasicInfo
 import grails.transaction.Transactional
 import com.hfyz.security.User
 import com.hfyz.security.Role
@@ -46,6 +47,14 @@ class InitService {
         initMenu()
         initSecurityData()
         def adminUser = User.findByUsername('admin')
+
+        new PassLinePhysicalBasicInfo(lineCode:'01',lineName:'线路1',modifyTime:new Date(),businessArea:'省际',lineType:'二类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'02',lineName:'线路2',modifyTime:new Date(),businessArea:'市际',lineType:'一类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'03',lineName:'线路3',modifyTime:new Date(),businessArea:'县际',lineType:'三类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'04',lineName:'线路4',modifyTime:new Date(),businessArea:'省际',lineType:'一类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'05',lineName:'线路5',modifyTime:new Date(),businessArea:'国际',lineType:'二类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'06',lineName:'线路6',modifyTime:new Date(),businessArea:'省际',lineType:'四类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'07',lineName:'线路7',modifyTime:new Date(),businessArea:'省内',lineType:'一类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
 
 
         new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
@@ -763,6 +772,7 @@ class InitService {
         new Menu(name: '发布信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '客运基本信息', code: 'passLineBusinessInfo', icon: 'fa-info', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '客运物理路线基本信息', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
 
         def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
