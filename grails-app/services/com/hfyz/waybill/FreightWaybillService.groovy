@@ -1,21 +1,28 @@
 package com.hfyz.waybill
 
+import com.hfyz.security.User
 import grails.transaction.Transactional
 
 @Transactional
 class FreightWaybillService {
 
-    def search(String vehicleNo, String ownerName, String dateBegin, String dateEnd, Integer max, Integer offset) {
-        def begin = dateBegin ? Date.parse("yyyy-MM-dd HH:mm:ss", dateBegin) : ""
-        def end = dateEnd ? Date.parse("yyyy-MM-dd HH:mm:ss", dateEnd) : ""
+//    String vehicleNo, String ownerName, String dateBegin, String dateEnd
+    def search(Map inputParams, User user, Integer max, Integer offset) {
+        def begin = inputParams.dateBegin ? Date.parse("yyyy-MM-dd HH:mm:ss", inputParams.dateBegin) : ""
+        def end = inputParams.dateEnd ? Date.parse("yyyy-MM-dd HH:mm:ss", inputParams.dateEnd) : ""
 
         def resultList = FreightWaybill.createCriteria().list([max: max, offset: offset]) {
-            if (vehicleNo) {
-                eq("vehicleNo", vehicleNo)
+            if (user.isCompanyUser()) {
+                eq('companyCode', user.companyCode)
+            } else if (inputParams.ownerName) {
+                like("ownerName", "${inputParams.ownerName}%")
             }
-            if (ownerName) {
-                eq("ownerName", ownerName)
+
+            if (inputParams.vehicleNo) {
+                like("vehicleNo", "${inputParams.vehicleNo}%")
+
             }
+
             if (begin && end) {
                 between("departTime", begin, end)
             }
@@ -46,11 +53,13 @@ class FreightWaybillService {
             projections {
                 count()
             }
-            if (vehicleNo) {
-                eq("vehicleNo", vehicleNo)
+            if (user.isCompanyUser()) {
+                eq('companyCode', user.companyCode)
+            } else if (inputParams.ownerName) {
+                eq("ownerName", inputParams.ownerName)
             }
-            if (ownerName) {
-                eq("ownerName", ownerName)
+            if (inputParams.vehicleNo) {
+                eq("vehicleNo", inputParams.vehicleNo)
             }
             if (begin && end) {
                 between("departTime", begin, end)

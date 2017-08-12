@@ -178,29 +178,29 @@ class InitService {
 //        new VehicleType(name: '无轨电车',code: 'N',parent: null).save(flush: true)
 //        new VehicleType(name: '有轨电车',code: 'P',parent: null).save(flush: true)
 
-        new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true,
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000001', question: '2+3=?', answer: '5', responsed: true,
 
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 30 * 1000), responseContent: '5', responseTime: 30).save(flush: true)
-        new OwnerCheckRecord(auto: true, companyCode: '9578', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '2464', question: '10-1=?', answer: '9', responsed: true,
+        new OwnerCheckRecord(auto: true, companyCode: 'C000000002', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000001', question: '10-1=?', answer: '9', responsed: true,
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 200 * 1000),
                 responseContent: '9', responseTime: 200).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '1934', question: '2x3=?', answer: '6', responsed: true,
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000002', question: '2x3=?', answer: '6', responsed: true,
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 20 * 1000),
                 responseContent: '6', responseTime: 20).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '6427', question: '10÷5=?', answer: '2', responsed: true,
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000003', question: '10÷5=?', answer: '2', responsed: true,
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 76 * 1000),
                 responseContent: '2', responseTime: 76).save(flush: true)
-        new OwnerCheckRecord(auto: true, companyCode: '7294', question: '1x10=?', answer: '10', responsed: false).save(flush: true)
-        new OwnerCheckRecord(auto: true, companyCode: '6729', question: '2x2=?', answer: '4', responsed: true,
+        new OwnerCheckRecord(auto: true, companyCode: 'C000000001', question: '1x10=?', answer: '10', responsed: false).save(flush: true)
+        new OwnerCheckRecord(auto: true, companyCode: 'C000000001', question: '2x2=?', answer: '4', responsed: true,
                 responseDate: new Date(new Date().getTime() + 100 * 1000),
                 responseContent: '4', responseTime: 100).save(flush: true)
-        new OwnerCheckRecord(auto: true, companyCode: '1759', question: '1+8=?', answer: '9', responsed: true,
+        new OwnerCheckRecord(auto: true, companyCode: 'C000000005', question: '1+8=?', answer: '9', responsed: true,
                 responseDate: new Date(new Date().getTime() + 121 * 1000),
                 responseContent: '9', responseTime: 121).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '7394', question: '1x10=?', answer: '10', responsed: false,
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000005', question: '1x10=?', answer: '10', responsed: false,
                 operator: adminUser,).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true,
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000001', question: '8-1=?', answer: '7', responsed: true,
 
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 190 * 1000),
 
@@ -289,8 +289,8 @@ class InitService {
         new MapSign(name: '报喜鸟集团', mapSignType: childMapType5, longitude: 135.8424311, latitude: 29.7896541, display: true).save(flush: true)
         new MapSign(name: '金州集团', mapSignType: childMapType5, longitude: 111.9435725, latitude: 33.3571598, display: true).save(flush: true)
 
-        new RegisterReport(caseRegisterNo: "tx123", companyCode: "changcheng", idCardNo: "421553").save(flush: true)
-        new RegisterReport(caseRegisterNo: "test", companyCode: "changcheng", idCardNo: "2345").save(flush: true)
+        new RegisterReport(caseRegisterNo: "tx123", companyCode: "C000000001", idCardNo: "421553").save(flush: true)
+        new RegisterReport(caseRegisterNo: "test", companyCode: "C000000001", idCardNo: "2345").save(flush: true)
 
         25.times { val ->
             new RegistrationInformationCarinfo(
@@ -517,8 +517,8 @@ class InitService {
         new FreightWaybill(
                 vehicleNo: '皖A-U7290',
                 frameNo: 'frameno1',
-                companyCode: 'company01',
-                ownerName: '合肥市龙腾运输有限公司',
+                companyCode: 'C000000001',
+                ownerName: '企业1',
                 dangerousName: '液碱',
                 dangerousType: dangerousType,
                 ratifiedPayload: 7000.0,
@@ -554,8 +554,8 @@ class InitService {
         new FreightWaybill(
                 vehicleNo: '皖A-M7673',
                 frameNo: 'frameno2',
-                companyCode: 'company01',
-                ownerName: '合肥市龙腾运输有限公司',
+                companyCode: 'C000000001',
+                ownerName: '企业1',
                 dangerousName: '甲醇',
                 dangerousType: dangerousType,
                 ratifiedPayload: 7000.0,
@@ -591,8 +591,8 @@ class InitService {
         new FreightWaybill(
                 vehicleNo: '皖A-P2265',
                 frameNo: 'frameno3',
-                companyCode: 'company01',
-                ownerName: '合肥市龙腾运输有限公司',
+                companyCode: 'C000000002',
+                ownerName: '企业2',
                 dangerousName: '环己酮',
                 dangerousType: dangerousType,
                 ratifiedPayload: 7000.0,
@@ -631,8 +631,8 @@ class InitService {
         5.times { val ->
             def aaa = new PassLineBusinessBasicInfo(
                     lineCode: '1',
-                    ownerName: '合肥市龙腾运输有限公司',
-                    companyCode: 'company01',
+                    ownerName: "企业${val%3}",
+                    companyCode: "C00000000${val%3}",
                     licenseCharacter: "${val}",
                     licenseNo: "${val}",
                     busType: '大车',

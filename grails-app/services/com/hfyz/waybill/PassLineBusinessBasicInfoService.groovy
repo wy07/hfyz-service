@@ -1,15 +1,19 @@
 package com.hfyz.waybill
 
+import com.hfyz.security.User
 import grails.transaction.Transactional
 
 @Transactional
 class PassLineBusinessBasicInfoService {
 
-    def search(String ownerName, Integer max, Integer offset) {
+    def search(String ownerName, User user, Integer max, Integer offset) {
 
         def resultList = PassLineBusinessBasicInfo.createCriteria().list([max: max, offset: offset]) {
-            if (ownerName) {
-                eq("ownerName", ownerName)
+
+            if(user.isCompanyUser()){
+                eq('companyCode', user.companyCode)
+            }else if (ownerName) {
+                like("ownerName", "${ownerName}%")
             }
         }?.collect({ PassLineBusinessBasicInfo info ->
             [
@@ -44,8 +48,10 @@ class PassLineBusinessBasicInfoService {
             projections {
                 count()
             }
-            if (ownerName) {
-                eq("ownerName", ownerName)
+            if(user.isCompanyUser()){
+                eq('companyCode', user.companyCode)
+            }else if (ownerName) {
+                like("ownerName", "${ownerName}%")
             }
         }
 
