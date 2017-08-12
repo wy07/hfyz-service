@@ -234,22 +234,24 @@ class WorkOrderService {
     def statistic(Map inputParams, User user, Long max, Long offset) {
         def sqlParams = [:]
 
-        if (inputParams.companyName) {
+        if(user.isCompanyUser()){
+            sqlParams.companyCode=user.companyCode
+        }else if (inputParams.companyName) {
             sqlParams.companyName = "${inputParams.companyName}%".toString()
         }
         if (inputParams.alarmTypeId) {
             sqlParams.alarmTypeId = inputParams.alarmTypeId
 
         }
-        if (inputParams.stateTime) {
-            sqlParams.stateTime = inputParams.stateTime.format("yyyy-MM-dd")
+        if (inputParams.startDate) {
+            sqlParams.startDate = inputParams.startDate.format("yyyy-MM-dd")
         }
         if (inputParams.endDate) {
             sqlParams.endDate = inputParams.endDate.format("yyyy-MM-dd")
         }
 
         def statisticList = SQLHelper.withDataSource(dataSource) { sql ->
-            sql.rows(getStatisticSql(inputParams.companyName, sqlParams.alarmTypeId, inputParams.stateTime, inputParams.endDate, user), sqlParams + [max: user.isCompanyUser() ? 1 : max, offset: user.isCompanyUser() ? 0 : offset])
+            sql.rows(getStatisticSql(sqlParams.companyName,sqlParams.companyCode, sqlParams.alarmTypeId, sqlParams.stateTime, sqlParams.endDate), sqlParams + [max: user.isCompanyUser() ? 1 : max, offset: user.isCompanyUser() ? 0 : offset])
         }?.collect { obj ->
             [companyCode     : obj.company_code
              , allOrder      : obj.all_order
@@ -266,7 +268,7 @@ class WorkOrderService {
         [statisticList: statisticList, statisticCount: statisticCount]
     }
 
-    private String getStatisticSql(String companyName, Long alarmTypeId, Date startDate, Date endDate, User user) {
+    private String getStatisticSql(String companyName,String companyCode, Long alarmTypeId, String startDate, String endDate) {
         def companys = {
             String sql = """
                 select company.id
@@ -276,9 +278,9 @@ class WorkOrderService {
                 where 1=1
             """
 
-            if (user.isCompanyUser()) {
-                sql += " and company.company_code=${user.companyCode}"
-            } else if (companyName) {
+            if (companyCode) {
+                sql += " and company.company_code=:companyCode"
+            }else if (companyName) {
                 sql += " and company.owner_name like :companyName"
             }
 
