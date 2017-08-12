@@ -1,12 +1,18 @@
 package com.hfyz.waybill
 
+import com.hfyz.security.User
 import grails.transaction.Transactional
 
 @Transactional
 class FreightRouterService {
 
-    def getListAndTotal(max, offset){
-        def freightRouterList = FreightRouter.list([max: max, offset: offset, sort: 'id'])?.collect { FreightRouter obj ->
+    def getListAndTotal(max, offset,User user){
+
+        def freightRouterList=FreightRouter.createCriteria().list([max: max, offset: offset, sort: 'id']) {
+            if(user.isCompanyUser()){
+                eq('companyCode',user.companyCode)
+            }
+        }?.collect { FreightRouter obj ->
             [ id: obj.id
               ,routerName: obj.routerName
               ,startProvince: obj.startProvince
@@ -28,6 +34,16 @@ class FreightRouterService {
               ,viaLand:obj.viaLand
             ]
         }
-        return [resultList: freightRouterList, total: FreightRouter.count()]
+
+        def total = FreightRouter.createCriteria().get {
+            projections {
+                count()
+            }
+            if(user.isCompanyUser()){
+                eq('companyCode',user.companyCode)
+            }
+        }
+
+        return [resultList: freightRouterList, total: total]
     }
 }
