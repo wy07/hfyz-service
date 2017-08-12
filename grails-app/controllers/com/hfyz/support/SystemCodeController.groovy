@@ -35,6 +35,13 @@ class SystemCodeController implements ControllerHelper {
         renderSuccessesWithMap([systemCodeList: systemCodeList])
     }
 
+    def alarmTypeList(){
+        def alarmTypes=AlarmType.findAllByParentIsNull([sort: 'id', order: 'desc'])?.collect{AlarmType alarmType->
+            [id:alarmType.id,name:alarmType.name]
+        }
+        renderSuccessesWithMap([alarmTypes:alarmTypes])
+    }
+
     def search() {
         if (!request.JSON.query) {
             renderSuccessesWithMap([systemCodeList: []])
