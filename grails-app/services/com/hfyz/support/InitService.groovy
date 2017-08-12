@@ -400,13 +400,10 @@ class InitService {
         initSystemCode()
         initAlarmType()
 
-
-
         def statisticMenu = new Menu(name: '统计', code: 'root-statistic', icon: 'fa-pie-chart', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '查岗统计', code: 'checkStatistic', icon: 'fa-odnoklassniki', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '工单统计', code: 'workOrderStatistic', icon: 'fa-file-text', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '企业统计', code: 'companyReport', icon: 'fa-line-chart', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-
-
 
         initWorkOrder()
         initDangerousType()
@@ -782,71 +779,66 @@ class InitService {
     }
 
     private initWorkOrder() {
-        def flow1 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 1, enabled: true, flows: [])
+        def flow11 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 1, enabled: true, flows: [])
 
         [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '初审', action: 'SP']
          , [role: 'ROLE_LEGAL_SECTION_ROOT', name: '复审', action: 'SP']
          , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
          , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
-            flow1.flows << it
+            flow11.flows << it
         }
-        flow1.save(flush: true)
+        flow11.save(flush: true)
 
 
 
-        def flow2 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 2, flows: [])
+        def flow12 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 2, flows: [])
         [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
          , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
          , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
-            flow2.flows << it
+            flow12.flows << it
         }
-        flow2.save(flush: true)
+        flow12.save(flush: true)
 
-        9.times { it ->
+        def flow21 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('205'), flowVersion: 2, enabled: true, flows: [])
+        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
+         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
+         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
+            flow21.flows << it
+        }
+        flow12.save(flush: true)
+
+
+        def saveOrder={flow,flowStep,snTitle,snIndex,companyIndex->
             WorkOrder temp = new WorkOrder(
-                    sn: "20170730001${it}"
-                    , alarmType: flow1.alarmType
+                    sn: "${snTitle}${snIndex}"
+                    , alarmType: flow.alarmType
                     , alarmLevel: AlarmLevel.SERIOUS
-                    , companyCode: "C00000000${it}"
-                    , ownerName: "企业${it}"
+                    , companyCode: "C00000000${companyIndex}"
+                    , ownerName: "企业${companyIndex}"
                     , operateManager: "吴珊"
-                    , phone: "010-${it}2425722"
+                    , phone: "010-${companyIndex}2425722"
                     , flows: []
-                    , flowStep: 1
-                    , todoRole: 'ROLE_CONTROL_CENTER_ROOT'
+                    , flowStep: flowStep
+                    , todoRole: flow.flows[flowStep-1].role
                     , checkTime: new Date()
                     , rectificationTime: new Date() + 5
-                    , note: "过期！！！"
-                    , status: WorkOrderFlowAction.valueOf('SP').workOrderStatus)
+                    , note: "${flow.alarmType.name}"
+                    , status: WorkOrderFlowAction.valueOf(flow.flows[flowStep-1].action).workOrderStatus)
 
-            flow1.flows.each {
+            flow.flows.each {
                 temp.flows << it
             }
+            temp.validate()
+            println temp.errors
             temp.save(flush: true)
         }
 
         9.times { it ->
-            WorkOrder temp = new WorkOrder(
-                    sn: "20170730002${it}"
-                    , alarmType: flow1.alarmType
-                    , alarmLevel: AlarmLevel.SERIOUS
-                    , companyCode: "C000000001"
-                    , ownerName: "企业1"
-                    , operateManager: "吴珊"
-                    , phone: "010-12425722"
-                    , flows: []
-                    , flowStep: 1
-                    , todoRole: 'ROLE_CONTROL_CENTER_ROOT'
-                    , checkTime: new Date()
-                    , rectificationTime: new Date() + 5
-                    , note: "OMG，过期啦！！！"
-                    , status: WorkOrderFlowAction.valueOf('SP').workOrderStatus)
-
-            flow1.flows.each {
-                temp.flows << it
-            }
-            temp.save(flush: true)
+            saveOrder(flow11,1,'20170730001',it,it)
+            saveOrder(flow11,3,'20170730002',it,it)
+            saveOrder(flow21,2,'20170730003',it,it)
+            saveOrder(flow11,3,'20170730004',it,1)
+            saveOrder(flow21,2,'20170730005',it,1)
         }
     }
-
 }

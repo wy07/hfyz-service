@@ -89,8 +89,7 @@ class CarService {
         return sqlStr
     }
 
-    private
-    static String getSearchCarsSql(boolean dateFlag, String businessType, String licenseNo, boolean isCompanyUser) {
+    private static String getSearchCarsSql(boolean dateFlag, String businessType, String licenseNo, boolean isCompanyUser) {
         String sqlStr = """
             SELECT  operate.transform_license_no transformLicenseNo
             ,carinfo.license_no licenseNo

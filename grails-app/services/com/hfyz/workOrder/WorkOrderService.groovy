@@ -3,17 +3,22 @@ package com.hfyz.workOrder
 import com.commons.exception.IllegalActionException
 import com.commons.exception.InstancePermException
 import com.commons.exception.RecordNotFoundException
+import com.commons.utils.SQLHelper
+import com.hfyz.owner.OwnerIdentity
 import com.hfyz.security.User
+import grails.async.Promise
+
+import static grails.async.Promises.task
 
 class WorkOrderService {
-    def findWorkOrderListAndTotal(max, offset,User user) {
-        println user.isCompanyUser()
+    def dataSource
 
-        def workOrderList=WorkOrder.createCriteria().list([max: max, offset: offset, sort: 'id', order: 'desc']) {
-            if(user.isCompanyUser()){
-                eq('companyCode',user.companyCode)
-                ne('status',WorkOrderStatus.DSH)
-                ne('status',WorkOrderStatus.YQX)
+    def findWorkOrderListAndTotal(max, offset, User user) {
+        def workOrderList = WorkOrder.createCriteria().list([max: max, offset: offset, sort: 'id', order: 'desc']) {
+            if (user.isCompanyUser()) {
+                eq('companyCode', user.companyCode)
+                ne('status', WorkOrderStatus.DSH)
+                ne('status', WorkOrderStatus.YQX)
             }
         }?.collect { WorkOrder obj ->
             [id                 : obj.id
@@ -37,10 +42,10 @@ class WorkOrderService {
             projections {
                 count()
             }
-            if(user.isCompanyUser()){
-                eq('companyCode',user.companyCode)
-                ne('status',WorkOrderStatus.DSH)
-                ne('status',WorkOrderStatus.YQX)
+            if (user.isCompanyUser()) {
+                eq('companyCode', user.companyCode)
+                ne('status', WorkOrderStatus.DSH)
+                ne('status', WorkOrderStatus.YQX)
             }
         }
         return [workOrderList: workOrderList, total: workOrderCount]
@@ -224,8 +229,135 @@ class WorkOrderService {
         } else {
             refuseJudge(workOrder, user, note)
         }
+    }
+
+    def statistic(Map inputParams, User user, Long max, Long offset) {
+        def sqlParams = [:]
+
+        if (inputParams.companyName) {
+            sqlParams.companyName = "${inputParams.companyName}%".toString()
+        }
+        if (inputParams.alarmTypeId) {
+            sqlParams.alarmTypeId = inputParams.alarmTypeId
+
+        }
+        if (inputParams.stateTime) {
+            sqlParams.stateTime = inputParams.stateTime.format("yyyy-MM-dd")
+        }
+        if (inputParams.endDate) {
+            sqlParams.endDate = inputParams.endDate.format("yyyy-MM-dd")
+        }
+
+        def statisticList = SQLHelper.withDataSource(dataSource) { sql ->
+            sql.rows(getStatisticSql(inputParams.companyName, sqlParams.alarmTypeId, inputParams.stateTime, inputParams.endDate, user), sqlParams + [max: user.isCompanyUser() ? 1 : max, offset: user.isCompanyUser() ? 0 : offset])
+        }?.collect { obj ->
+            [companyCode     : obj.company_code
+             , allOrder      : obj.all_order
+             , doneOrder     : obj.done_order
+             , doingOrder    : obj.doing_order
+             , completionRate: obj.completion_rate
+             , alarmType     : obj.alarm_type_name
+             , companyName   : obj.company_name]
+        }
+
+        def statisticCount = user.isCompanyUser() ? 1 : OwnerIdentity.count()
 
 
+        [statisticList: statisticList, statisticCount: statisticCount]
+    }
+
+    private String getStatisticSql(String companyName, Long alarmTypeId, Date startDate, Date endDate, User user) {
+        def companys = {
+            String sql = """
+                select company.id
+                    ,company.owner_name company_name
+                    ,company.company_code
+                from owner_basicinfo_owneridentity company
+                where 1=1
+            """
+
+            if (user.isCompanyUser()) {
+                sql += " and company.company_code=${user.companyCode}"
+            } else if (companyName) {
+                sql += " and company.owner_name like :companyName"
+            }
+
+            sql += """
+                order by company.id desc
+                limit :max offset :offset
+            """
+            return sql
+        }
+
+        def orders = {
+            String sql = """
+                select company.company_name
+                    ,company.company_code
+                    ,work_order.alarm_type_id
+                    ,work_order.id work_order_id
+                    ,work_order.status
+                from companys company
+                left join work_order on company.company_code=work_order.company_code
+                where ((work_order.status!=1 and work_order.status!=5) or work_order.status is null)
+            """
+
+            if (startDate) {
+                sql += " and work_order.check_time>=:startDate::timestamp"
+            }
+            if (endDate) {
+                sql += " and work_order.check_time < :endDate::timestamp + '1 day'"
+            }
+            return sql
+
+        }
+
+        def orderAlarms = {
+            String sql = """
+                select company.company_name
+                    ,company.company_code
+                    ,alarm_type.id alarm_type_id
+                    ,work_order.work_order_id
+                    ,case when work_order.status is null then 0 else 1 end as all_order
+                    ,case when work_order.status=4 then 1 else 0 end as done_order
+                from companys company
+            """
+            if (alarmTypeId) {
+                sql += " left join system_code alarm_type on alarm_type.id=:alarmTypeId and alarm_type.type='ALARM_TYPE'"
+            } else {
+                sql += " left join system_code alarm_type on alarm_type.type='ALARM_TYPE'"
+            }
+            sql += " left join orders work_order on company.company_code=work_order.company_code and alarm_type.id=work_order.alarm_type_id"
+            return sql
+        }
+
+        def sqlStr = """
+            with companys as(
+                ${companys()}
+            ),orders as (
+                ${orders()}
+            ),orderAlarms as (
+                ${orderAlarms()}
+            ), statistic as(
+                select company_code, alarm_type_id, sum(all_order) all_order,sum(done_order) done_order
+                from orderAlarms
+                group by company_code,alarm_type_id
+            )
+            select statistic.company_code
+                ,statistic.all_order
+                ,statistic.done_order
+                ,statistic.all_order-statistic.done_order doing_order
+                ,case when all_order=0 then 100
+                when done_order=0 then 0
+                else round(done_order*1.0/all_order*100,2)  end completion_rate
+                ,alarm_type.name alarm_type_name
+                ,company.company_name
+            from statistic
+            join system_code alarm_type on alarm_type.id=statistic.alarm_type_id
+            join companys company on company.company_code=statistic.company_code
+            order by company.id desc ,alarm_type_id desc
+        """
+
+        return sqlStr
     }
 
     private static approvalJudge(WorkOrder workOrder, User user, String note) {
