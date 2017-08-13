@@ -1,7 +1,9 @@
 package com.hfyz.car
 
+import com.commons.utils.NumberUtils
 import com.commons.utils.SQLHelper
 import com.hfyz.security.User
+import com.hfyz.support.Organization
 import grails.async.Promise
 import grails.transaction.Transactional
 
@@ -68,6 +70,40 @@ class CarService {
              , carinfoCount  : obj.carinfoCount
              , rate          : obj.rate.setScale(2, BigDecimal.ROUND_HALF_UP)]
         }
+    }
+
+    def carNumStatistic(Organization organization=null) {
+        def result
+
+        if(organization?.code=='24'){
+            result=[carNum        : 843
+                    , enterCarNum : 821
+                    , onlineCarNum: 783]
+        }else{
+            result=[carNum        : 13202
+                    , enterCarNum : 9890
+                    , onlineCarNum: 6507]
+        }
+
+        return result
+    }
+
+    def historyStatistic(Organization organization=null,year) {
+        int currentYear = new Date().format('yyyy').toInteger()
+        year = year ?: currentYear
+        int month = currentYear == year ? new Date().format('MM').toInteger() : 12
+
+        def initDate = {
+            (1..month).collect{
+                new Random().nextInt(100)
+            }
+        }
+        return  [enterRate:initDate()
+                         ,onlineRate:initDate()
+                         ,onlineTimeRate:initDate()
+                         ,overspeedRate:initDate()
+                         ,fatigueRate:initDate()
+                         ,realTimeOnlineRate:initDate()]
     }
 
     private static String getNetworkRateListSql() {
