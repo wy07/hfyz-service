@@ -86,6 +86,10 @@ class SysuserController implements ControllerHelper {
         renderSuccessesWithMap([message: '密码修改成功!'])
     }
 
+    def home(){
+        renderSuccessesWithMap(userService.getHomeStatistic(currentUser))
+    }
+
     private withUser(Long id, Closure c) {
         User userInstance = id ? User.get(id) : null
 
@@ -162,21 +166,6 @@ class SysuserController implements ControllerHelper {
         JSON.registerObjectMarshaller(java.sql.Timestamp) { o -> sdf.format(o) }
         println result
         render result as JSON
-    }
-
-    protected String encodePassword(password, salt) {
-        return springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password, salt) : password
-    }
-
-    protected void notFound() {
-        def map = ['result': 'error', 'errors': ['找不到该数据！']]
-        render map as JSON
-    }
-    def renderError = { errorInstance ->
-        def map = ['result': 'error', 'errors': errorInstance.errors.allErrors.collect {
-            message(error: it, encodeAs: 'HTML')
-        }]
-        delegate.render map as JSON
     }
 
 }

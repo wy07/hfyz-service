@@ -56,27 +56,10 @@ class CarController implements ControllerHelper {
 
     def carNumStatistic() {
 
-        renderSuccessesWithMap([carNum        : 13202
-                                , enterCarNum : 9890
-                                , onlineCarNum: 6507])
+        renderSuccessesWithMap(carService.carNumStatistic())
     }
 
     def historyStatistic() {
-        int currentYear = new Date().format('yyyy').toInteger()
-        int year = NumberUtils.toInteger(request.JSON.year) ?: currentYear
-        int month = currentYear == year ? new Date().format('MM').toInteger() : 12
-
-        def initDate = {
-            (1..month).collect{
-                new Random().nextInt(100)
-            }
-        }
-        def statistic = [enterRate:initDate()
-                         ,onlineRate:initDate()
-                         ,onlineTimeRate:initDate()
-                         ,overspeedRate:initDate()
-                         ,fatigueRate:initDate()
-                         ,realTimeOnlineRate:initDate()]
-        renderSuccessesWithMap([statistic: statistic])
+        renderSuccessesWithMap([statistic: carService.historyStatistic(currentUser.org,NumberUtils.toInteger(request.JSON.year))])
     }
 }
