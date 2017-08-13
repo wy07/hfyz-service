@@ -396,9 +396,9 @@ class InitService {
         def statisticMenu = new Menu(name: '统计', code: 'root-statistic', icon: 'fa-pie-chart', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '查岗统计', code: 'checkStatistic', icon: 'fa-odnoklassniki', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '企业统计', code: 'companyReport', icon: 'fa-line-chart', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-
-
-
+        new Menu(name: '班线客运车辆信息统计', code: 'passengerStatistic', icon: 'fa-bus', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '旅游包车车辆信息统计', code: 'travelStatistic', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '危险品车辆信息统计', code: 'dangerousStatistic', icon: 'fa-exclamation-triangle', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
         initWorkOrder()
         initDangerousType()
         initWaybill()
