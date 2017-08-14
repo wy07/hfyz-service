@@ -6,9 +6,9 @@ class OwnerCheckRecordController implements ControllerHelper{
     def index() { }
 
     def list() {
-
+        def companyCode = getCurrentUser().companyCode
         def  checkResult= ownerCheckRecordService.list(request.JSON.max, request.JSON.offset, request.JSON.company,
-                                request.JSON.startDate, request.JSON.endDate)
+                                request.JSON.startDate, request.JSON.endDate,companyCode)
         renderSuccessesWithMap([checkResult: checkResult])
 
     }
