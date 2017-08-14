@@ -54,6 +54,7 @@ class FreightRouterController implements ControllerHelper {
 
         }
     }
+
     def update(){
         withCompanyFreightRouter(params.long('id'),currentUser) { freightRouterInstance ->
             freightRouterInstance.properties = request.JSON
@@ -75,7 +76,6 @@ class FreightRouterController implements ControllerHelper {
     private withCompanyFreightRouter(Long id, User user, Closure c) {
         FreightRouter freightRouterInstance = id ? FreightRouter.get(id) : null
         if (freightRouterInstance) {
-
             if(freightRouterInstance.companyCode!=user.companyCode){
                 renderNoInstancePermError()
             }else{
