@@ -45,6 +45,12 @@ class OwnerIdentityController implements ControllerHelper {
         }
     }
 
+    def appraiseStatistic() {
+        def ownerName = request.JSON.ownerName
+        def result = ownerIdentityService.getAppraiseStatistic(ownerName)
+        renderSuccessesWithMap(resultList: result)
+    }
+
     private withOwner(Long id, Closure c) {
         OwnerIdentity ownerInstance = id ? OwnerIdentity.get(id) : null
         if (ownerInstance) {

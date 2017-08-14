@@ -12,7 +12,7 @@ class Menu {
 
     static constraints = {
         name nullable: false, blank: false, maxSize: 30
-        code nullable: false, unique:true,blank: false, maxSize: 20
+        code nullable: false, unique:true,blank: false, maxSize: 50
         style nullable: true, blank: false, maxSize: 60
         icon nullable: true, blank: false, maxSize: 30
         permissionCode nullable: true, blank: false, maxSize: 500
