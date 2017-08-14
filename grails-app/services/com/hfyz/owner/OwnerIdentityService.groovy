@@ -14,7 +14,7 @@ import grails.transaction.Transactional
 class OwnerIdentityService {
     def dataSource
 
-    def getOwnerList(def max, def offset, String ownerName, String companyCode, String dateBegin, String dateEnd) {
+    def getOwnerList(def max, def offset, String ownerName, String companyCode, String dateBegin, String dateEnd,String userCompanyCode) {
         def params = [:]
         def type = dateBegin && dateEnd
         if (ownerName) {
@@ -27,17 +27,19 @@ class OwnerIdentityService {
             params.dateBegin = dateBegin
             params.dateEnd = dateEnd
         }
-
+        if(userCompanyCode){
+            params.userCompanyCode = userCompanyCode
+        }
         Promise ownerCount = Promises.task {
             SQLHelper.withDataSource(dataSource) { sql ->
-                sql.firstRow(getCountSql(type, ownerName, companyCode), params).count ?: 0
+                sql.firstRow(getCountSql(type, ownerName, companyCode,userCompanyCode), params).count ?: 0
             }
 
         }
 
         Promise ownerList = Promises.task {
             SQLHelper.withDataSource(dataSource) { sql ->
-                sql.rows(getListSql(type, ownerName, companyCode), params + [max: max, offset: offset])
+                sql.rows(getListSql(type, ownerName, companyCode,userCompanyCode), params + [max: max, offset: offset])
             }?.collect { obj ->
                 [id                 : obj.id,
                  ownerName          : obj.ownerName,
@@ -59,7 +61,7 @@ class OwnerIdentityService {
      * @param ownerName 业户名称
      * @param companyCode 业户编码
      */
-    private static getListSql(boolean type, String ownerName, String companyCode) {
+    private static getListSql(boolean type, String ownerName, String companyCode,String userCompanyCode) {
         String listSql = """
           SELECT
             bas.id id,
@@ -83,11 +85,14 @@ class OwnerIdentityService {
         if (companyCode) {
             listSql += " AND bas.company_code=:companyCode "
         }
+        if(userCompanyCode){
+            listSql += " and bas.company_code=:userCompanyCode"
+        }
         listSql += " limit :max offset :offset "
         return listSql
     }
 
-    private static getCountSql(boolean type, String ownerName, String companyCode) {
+    private static getCountSql(boolean type, String ownerName, String companyCode,String userCompanyCode) {
         String countSql = "SELECT count(*) FROM owner_basicinfo_owneridentity bas  LEFT JOIN owner_basicinfo_manageinfo mag ON bas.company_code = mag.company_code WHERE 1=1 "
         if (type) {
             countSql += " AND mag.end_time  BETWEEN to_timestamp(:dateBegin,'YYYY-MM-DD HH24:MI:SS') and to_timestamp(:dateEnd,'YYYY-MM-DD HH24:MI:SS') "
@@ -98,19 +103,44 @@ class OwnerIdentityService {
         if (companyCode) {
             countSql += " AND bas.company_code=:companyCode "
         }
+        if(userCompanyCode){
+            countSql += " AND bas.company_code=:userCompanyCode "
+        }
         return countSql
     }
 
-    def getCompanyListByChar(String companyName){
-        def companyList = OwnerIdentity.createCriteria().list(){
-            if(companyName){
+    def getCompanyListByChar(String companyName) {
+        def companyList = OwnerIdentity.createCriteria().list() {
+            if (companyName) {
                 like("ownerName", "%${companyName}%")
             }
-        }?.collect{
+        }?.collect {
             OwnerIdentity obj ->
-            [ownerName:obj.ownerName,
-            companyCode: obj.companyCode]
+                [ownerName  : obj.ownerName,
+                 companyCode: obj.companyCode]
         }
-        return [companyList:companyList]
+        return [companyList: companyList]
+    }
+
+    def getAppraiseStatistic(String ownerName) {
+        def result = SQLHelper.withDataSource(dataSource) { sql ->
+            sql.rows(getAppraiseStatisticSql(ownerName))
+        }?.collect { obj ->
+            [ownerName  : obj.ownername,
+             companyCode: obj.companycode,
+             total      : obj.total]
+        }
+        return result
+    }
+
+    private static getAppraiseStatisticSql(String ownerName) {
+        String sql = "select ownid.owner_name ownerName,ownid.company_code companyCode, count(cr.company_code) total from owner_basicinfo_owneridentity ownid " +
+                     " left join company_regulation cr on cr.company_code = ownid.company_code "
+        if (ownerName) {
+            sql += " where ownid.owner_name like '${ownerName}' "
+        }
+        sql += " group by ownid.company_code, ownid.owner_name " +
+                " order by ownid.owner_name asc;"
+        return sql
     }
 }

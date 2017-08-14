@@ -6,10 +6,12 @@ import grails.transaction.Transactional
 @Transactional
 class FreightWaybillService {
 
+
 //    String vehicleNo, String ownerName, String dateBegin, String dateEnd
     def search(Map inputParams, User user, Integer max, Integer offset) {
         def begin = inputParams.dateBegin ? Date.parse("yyyy-MM-dd HH:mm:ss", inputParams.dateBegin) : ""
         def end = inputParams.dateEnd ? Date.parse("yyyy-MM-dd HH:mm:ss", inputParams.dateEnd) : ""
+
 
         def resultList = FreightWaybill.createCriteria().list([max: max, offset: offset]) {
             if (user.isCompanyUser()) {
@@ -25,6 +27,9 @@ class FreightWaybillService {
 
             if (begin && end) {
                 between("departTime", begin, end)
+            }
+            if(userCompanyCode){
+                eq("companyCode",userCompanyCode)
             }
         }?.collect({ FreightWaybill bill ->
             [
@@ -63,6 +68,9 @@ class FreightWaybillService {
             }
             if (begin && end) {
                 between("departTime", begin, end)
+            }
+            if(userCompanyCode){
+                eq("companyCode",userCompanyCode)
             }
         }
 
