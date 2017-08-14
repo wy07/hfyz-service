@@ -22,9 +22,9 @@ class PassLinePhysicalBasicInfoService {
                startPlace : obj.startPlace,
                endPlace : obj.endPlace,
                mainPoint : obj.mainPoint,
-               villageLine : obj.villageLine?'是':'否',
-               travelLine : obj.travelLine?'是':'否',
-               busLine :obj.busLine?'是':'否'
+               villageLine : obj.villageLine,
+               travelLine : obj.travelLine,
+               busLine :obj.busLine
              ]
          }
 
