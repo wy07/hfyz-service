@@ -12,9 +12,10 @@ class OwnerIdentityController implements ControllerHelper {
     def ownerIdentityService
 
     def list() {
+        def userCompanyCode = getCurrentUser().companyCode
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        renderSuccessesWithMap([ownerList: ownerIdentityService.getOwnerList(max, offset, request.JSON.ownerName, request.JSON.companyCode, request.JSON.dateBegin, request.JSON.dateEnd)])
+        renderSuccessesWithMap([ownerList: ownerIdentityService.getOwnerList(max, offset, request.JSON.ownerName, request.JSON.companyCode, request.JSON.dateBegin, request.JSON.dateEnd,userCompanyCode)])
     }
 
     def view() {
