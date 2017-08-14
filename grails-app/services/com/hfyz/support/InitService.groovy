@@ -27,6 +27,7 @@ import com.hfyz.workOrder.WorkOrderFlow
 import com.hfyz.workOrder.WorkOrderFlowAction
 import com.hfyz.waybill.FreightWaybill
 import com.hfyz.waybill.PassLineBusinessBasicInfo
+import com.hfyz.waybill.PassLinePhysicalBasicInfo
 import grails.transaction.Transactional
 import com.hfyz.security.User
 import com.hfyz.security.Role
@@ -46,6 +47,14 @@ class InitService {
         initMenu()
         initSecurityData()
         def adminUser = User.findByUsername('admin')
+
+        new PassLinePhysicalBasicInfo(lineCode:'01',lineName:'线路1',modifyTime:new Date(),businessArea:'省际',lineType:'二类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'02',lineName:'线路2',modifyTime:new Date(),businessArea:'市际',lineType:'一类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'03',lineName:'线路3',modifyTime:new Date(),businessArea:'县际',lineType:'三类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'04',lineName:'线路4',modifyTime:new Date(),businessArea:'省际',lineType:'一类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'05',lineName:'线路5',modifyTime:new Date(),businessArea:'国际',lineType:'二类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'06',lineName:'线路6',modifyTime:new Date(),businessArea:'省际',lineType:'四类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
+        new PassLinePhysicalBasicInfo(lineCode:'07',lineName:'线路7',modifyTime:new Date(),businessArea:'省内',lineType:'一类客运班线',startPlace:'西安',endPlace:'渭南',mainPoint:'西安 渭南',startAdminDivsionCode:'01',startAdminDivsionName:'西安市',endAdminDivsionCode:'02',endAdminDivsionName:'渭南市',lineMileAge:100.3,highwayMileAge:20.5,percentage:0.2,highwayEntry:'a1',highwayExit:'a2',highway:true,villageLine:false,travelLine:true,busLine:false).save(flush: true)
 
 
         new PlatformManage(ip: '192.168.1.24', port: '4233', name: '云联城市交通', code: 'K001', contactName: '李娜', contactPhone: '13052736784', draftPeople: '张敏', status: '起草').save(flush: true)
@@ -69,14 +78,14 @@ class InitService {
         new Warning(frameNo: 'DEQ23525446672457', carLicenseNo: '皖A-GF333', carColor: '红色', warningSource: 9, warningType: '车辆非法点火', warningTime: new Date(), warningTimes: 1).save(flush: true)
 
 
-        new PeopleBasicInfo(name: '张敏', gender: '女', idCardNo: '34212519870314673x', picture: '', nation: '汉', nativePlace: '安徽合肥', phoneNo: '15105512743', address: '', email: 'test1@163.com', postCode: '340101', educationLevel: '大专', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
-        new PeopleBasicInfo(name: '吴珊', gender: '男', idCardNo: '34132519870314222x', picture: '', nation: '汉', nativePlace: '安徽巢湖', phoneNo: '15703272743', address: '', email: 'test2@163.com', postCode: '340001', educationLevel: '本科', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
-        new WorkerCheckMember(companyCode: 'changcheng', idCardNo: '34212519870314673x', workLicenseType: '货运', workLicenseNo: 'AH2016', workLicenseGrantTime: new Date(), workLicenseGetTime: new Date(), endTime: new Date(), licenseGrantOrg: '合肥XXX运输有限公司', licenseSituation: '可用', licenseChangeTimes: 2, trainTimes: 2, checkType: '1').save(flush: true)
-        new WorkerManager(companyCode: 'changcheng', idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '押运装卸', ownerName: '合肥市汽车客运XXX', driveCarType: '中小型客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), licenseGrantOrg: '合肥市交通xxx').save(flush: true)
-        new WorkerTechnology(companyCode: 'changcheng', idCardNo: '34212519870314673x', ownerName: '合肥市汽车客运XXX').save(flush: true)
+        new PeopleBasicInfo(companyCode: 'C000000001', name: '张敏', gender: '女', idCardNo: '34212519870314673x', picture: '', nation: '汉', nativePlace: '安徽合肥', phoneNo: '15105512743', address: '', email: 'test1@163.com', postCode: '340101', educationLevel: '大专', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
+        new PeopleBasicInfo(companyCode: 'C000000002', name: '吴珊', gender: '男', idCardNo: '34132519870314222x', picture: '', nation: '汉', nativePlace: '安徽巢湖', phoneNo: '15703272743', address: '', email: 'test2@163.com', postCode: '340001', educationLevel: '本科', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
+        new WorkerCheckMember(companyCode: 'C000000001', idCardNo: '34212519870314673x', workLicenseType: '货运', workLicenseNo: 'AH2016', workLicenseGrantTime: new Date(), workLicenseGetTime: new Date(), endTime: new Date(), licenseGrantOrg: '合肥XXX运输有限公司', licenseSituation: '可用', licenseChangeTimes: 2, trainTimes: 2, checkType: '1').save(flush: true)
+        new WorkerManager(companyCode: 'C000000002', idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '押运装卸', ownerName: '合肥市汽车客运XXX', driveCarType: '中小型客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), licenseGrantOrg: '合肥市交通xxx').save(flush: true)
+        new WorkerTechnology(companyCode: 'C000000001', idCardNo: '34212519870314673x', ownerName: '合肥市汽车客运XXX').save(flush: true)
         new WorkerWaiter(idCardNo: '34132519870314222x', jobName: '后勤管理', jobLicenseNo: 'xxxx', grantTime: new Date(), beginWorkTime: new Date()).save(flush: true)
-        new WorkerCoach(companyCode: 'changcheng', idCardNo: '34212519870314673x', workLicenseType: '教练', workLicenseNo: 'CAH1234', workLicenseGetTime: new Date(), workLicenseGrantTime: new Date(), endTime: new Date(), driveLicenseNo: '34212519870314673x', driveCarType: '小汽车', driveLicenseGetTime: new Date(), licenseGrantOrga: '合肥市新亚驾校', licenseSituation: '可用', workSituation: '中级教练', ownerName: '合肥市新亚驾校', businessPermitCharacter: '3', businessPermitNo: '34xxx', changeTimes: 0, trainTimes: 1, inspectDealSituation: '', teachType: 'C照', driveLicenseSituation: '可用').save(flush: true)
-        new WorkerDriver(companyCode: 'changcheng', idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '驾驶员', ownerName: '合肥市汽车客运XXX', driveCarType: '客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), driveLicenseNo: '34132519870314222x', businessPermitCharacter: 'x').save(flush: true)
+        new WorkerCoach(companyCode: 'C000000001', idCardNo: '34212519870314673x', workLicenseType: '教练', workLicenseNo: 'CAH1234', workLicenseGetTime: new Date(), workLicenseGrantTime: new Date(), endTime: new Date(), driveLicenseNo: '34212519870314673x', driveCarType: '小汽车', driveLicenseGetTime: new Date(), licenseGrantOrga: '合肥市新亚驾校', licenseSituation: '可用', workSituation: '中级教练', ownerName: '合肥市新亚驾校', businessPermitCharacter: '3', businessPermitNo: '34xxx', changeTimes: 0, trainTimes: 1, inspectDealSituation: '', teachType: 'C照', driveLicenseSituation: '可用').save(flush: true)
+        new WorkerDriver(companyCode: 'C000000002', idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '驾驶员', ownerName: '合肥市汽车客运XXX', driveCarType: '客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), driveLicenseNo: '34132519870314222x', businessPermitCharacter: 'x').save(flush: true)
 
 
 
@@ -169,29 +178,29 @@ class InitService {
 //        new VehicleType(name: '无轨电车',code: 'N',parent: null).save(flush: true)
 //        new VehicleType(name: '有轨电车',code: 'P',parent: null).save(flush: true)
 
-        new OwnerCheckRecord(auto: false, companyCode: '4598', question: '2+3=?', answer: '5', responsed: true,
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000001', question: '2+3=?', answer: '5', responsed: true,
 
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 30 * 1000), responseContent: '5', responseTime: 30).save(flush: true)
-        new OwnerCheckRecord(auto: true, companyCode: '9578', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '2464', question: '10-1=?', answer: '9', responsed: true,
+        new OwnerCheckRecord(auto: true, companyCode: 'C000000002', question: '5+8=?', answer: '13', responsed: false).save(flush: true)
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000001', question: '10-1=?', answer: '9', responsed: true,
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 200 * 1000),
                 responseContent: '9', responseTime: 200).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '1934', question: '2x3=?', answer: '6', responsed: true,
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000002', question: '2x3=?', answer: '6', responsed: true,
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 20 * 1000),
                 responseContent: '6', responseTime: 20).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '6427', question: '10÷5=?', answer: '2', responsed: true,
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000003', question: '10÷5=?', answer: '2', responsed: true,
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 76 * 1000),
                 responseContent: '2', responseTime: 76).save(flush: true)
-        new OwnerCheckRecord(auto: true, companyCode: '7294', question: '1x10=?', answer: '10', responsed: false).save(flush: true)
-        new OwnerCheckRecord(auto: true, companyCode: '6729', question: '2x2=?', answer: '4', responsed: true,
+        new OwnerCheckRecord(auto: true, companyCode: 'C000000001', question: '1x10=?', answer: '10', responsed: false).save(flush: true)
+        new OwnerCheckRecord(auto: true, companyCode: 'C000000001', question: '2x2=?', answer: '4', responsed: true,
                 responseDate: new Date(new Date().getTime() + 100 * 1000),
                 responseContent: '4', responseTime: 100).save(flush: true)
-        new OwnerCheckRecord(auto: true, companyCode: '1759', question: '1+8=?', answer: '9', responsed: true,
+        new OwnerCheckRecord(auto: true, companyCode: 'C000000005', question: '1+8=?', answer: '9', responsed: true,
                 responseDate: new Date(new Date().getTime() + 121 * 1000),
                 responseContent: '9', responseTime: 121).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '7394', question: '1x10=?', answer: '10', responsed: false,
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000005', question: '1x10=?', answer: '10', responsed: false,
                 operator: adminUser,).save(flush: true)
-        new OwnerCheckRecord(auto: false, companyCode: '6785', question: '8-1=?', answer: '7', responsed: true,
+        new OwnerCheckRecord(auto: false, companyCode: 'C000000001', question: '8-1=?', answer: '7', responsed: true,
 
                 operator: adminUser, responseDate: new Date(new Date().getTime() + 190 * 1000),
 
@@ -280,8 +289,8 @@ class InitService {
         new MapSign(name: '报喜鸟集团', mapSignType: childMapType5, longitude: 135.8424311, latitude: 29.7896541, display: true).save(flush: true)
         new MapSign(name: '金州集团', mapSignType: childMapType5, longitude: 111.9435725, latitude: 33.3571598, display: true).save(flush: true)
 
-        new RegisterReport(caseRegisterNo: "tx123", companyCode: "changcheng", idCardNo: "421553").save(flush: true)
-        new RegisterReport(caseRegisterNo: "test", companyCode: "changcheng", idCardNo: "2345").save(flush: true)
+        new RegisterReport(caseRegisterNo: "tx123", companyCode: "C000000001", idCardNo: "421553").save(flush: true)
+        new RegisterReport(caseRegisterNo: "test", companyCode: "C000000001", idCardNo: "2345").save(flush: true)
 
         25.times { val ->
             new RegistrationInformationCarinfo(
@@ -332,12 +341,17 @@ class InitService {
                     licenseChangeTimes: "${it}",
                     inspectTreatmentSituation: "${it}"
             ).save(flush: true)
+
+            new CompanyRegulation(
+                    companyCode: "C00000000${it}",
+                    ownerName: "企业${it}",
+                    regulationName: "规章制度${it}",
+                    fileName: "file${it}",
+                    fileType: it%2==0?"pdf":"doc",
+                    fileSize: it*100.0
+            ).save(flush:true)
         }
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note: '触发告警为小于等于该阈值').save(flush: true)
-
-//        公司内部制度
-        new CompanyRegulation(companyCode: 'C000000001').save(flush: true)
-        new CompanyRegulation(companyCode: 'C000000002').save(flush: true)
 
         new BlackList(vehicleNo: '陕A-CK0002', frameNo: 'frameNo2', blackType: '重点车辆盘查', controlBehavior: '卡口抓拍', scheme: '实时报警', controlRange: '合肥市主干道', controlOrg: '合肥市公安局', executor: '管理员', status: Status.BKZ, controlBegin: new Date(117, 7, 13), controlEnd: new Date(117, 7, 20)).save(flush: true)
         new BlackList(vehicleNo: '陕A-CK0003', frameNo: 'frameNo3', blackType: '重点车辆盘查', controlBehavior: '卡口抓拍', scheme: '实时报警', controlRange: '合肥市主干道', controlOrg: '合肥市公安局', executor: '管理员', status: Status.BKZ, controlBegin: new Date(117, 8, 12), controlEnd: new Date(117, 8, 22)).save(flush: true)
@@ -391,13 +405,14 @@ class InitService {
         initSystemCode()
         initAlarmType()
 
-
-
         def statisticMenu = new Menu(name: '统计', code: 'root-statistic', icon: 'fa-pie-chart', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '查岗统计', code: 'checkStatistic', icon: 'fa-odnoklassniki', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '工单统计', code: 'workOrderStatistic', icon: 'fa-file-text', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '企业统计', code: 'companyReport', icon: 'fa-line-chart', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-
-
+        new Menu(name: '运营商统计', code: 'carBasicStatistics', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '报警信息统计', code: 'alarmInfoStatistics', icon: 'fa-list', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '考核统计', code: 'ownerIdentityStatistics', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '平台统计', code: 'platformStatisticComponent', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
 
         initWorkOrder()
         initDangerousType()
@@ -510,8 +525,8 @@ class InitService {
         new FreightWaybill(
                 vehicleNo: '皖A-U7290',
                 frameNo: 'frameno1',
-                companyCode: 'company01',
-                ownerName: '合肥市龙腾运输有限公司',
+                companyCode: 'C000000001',
+                ownerName: '企业1',
                 dangerousName: '液碱',
                 dangerousType: dangerousType,
                 ratifiedPayload: 7000.0,
@@ -547,8 +562,8 @@ class InitService {
         new FreightWaybill(
                 vehicleNo: '皖A-M7673',
                 frameNo: 'frameno2',
-                companyCode: 'company01',
-                ownerName: '合肥市龙腾运输有限公司',
+                companyCode: 'C000000001',
+                ownerName: '企业1',
                 dangerousName: '甲醇',
                 dangerousType: dangerousType,
                 ratifiedPayload: 7000.0,
@@ -584,8 +599,8 @@ class InitService {
         new FreightWaybill(
                 vehicleNo: '皖A-P2265',
                 frameNo: 'frameno3',
-                companyCode: 'company01',
-                ownerName: '合肥市龙腾运输有限公司',
+                companyCode: 'C000000002',
+                ownerName: '企业2',
                 dangerousName: '环己酮',
                 dangerousType: dangerousType,
                 ratifiedPayload: 7000.0,
@@ -624,8 +639,8 @@ class InitService {
         5.times { val ->
             def aaa = new PassLineBusinessBasicInfo(
                     lineCode: '1',
-                    ownerName: '合肥市龙腾运输有限公司',
-                    companyCode: 'company01',
+                    ownerName: "企业${val%3}",
+                    companyCode: "C00000000${val%3}",
                     licenseCharacter: "${val}",
                     licenseNo: "${val}",
                     busType: '大车',
@@ -763,6 +778,8 @@ class InitService {
         new Menu(name: '发布信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '客运基本信息', code: 'passLineBusinessInfo', icon: 'fa-info', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '客运物理路线基本信息', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '管理制度', code: 'companyRegulation', icon: 'fa-book', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
 
         def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
@@ -772,71 +789,66 @@ class InitService {
     }
 
     private initWorkOrder() {
-        def flow1 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 1, enabled: true, flows: [])
+        def flow11 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 1, enabled: true, flows: [])
 
         [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '初审', action: 'SP']
          , [role: 'ROLE_LEGAL_SECTION_ROOT', name: '复审', action: 'SP']
          , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
          , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
-            flow1.flows << it
+            flow11.flows << it
         }
-        flow1.save(flush: true)
+        flow11.save(flush: true)
 
 
 
-        def flow2 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 2, flows: [])
+        def flow12 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 2, flows: [])
         [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
          , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
          , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
-            flow2.flows << it
+            flow12.flows << it
         }
-        flow2.save(flush: true)
+        flow12.save(flush: true)
 
-        9.times { it ->
+        def flow21 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('205'), flowVersion: 2, enabled: true, flows: [])
+        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
+         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
+         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
+            flow21.flows << it
+        }
+        flow12.save(flush: true)
+
+
+        def saveOrder={flow,flowStep,snTitle,snIndex,companyIndex->
             WorkOrder temp = new WorkOrder(
-                    sn: "20170730001${it}"
-                    , alarmType: flow1.alarmType
+                    sn: "${snTitle}${snIndex}"
+                    , alarmType: flow.alarmType
                     , alarmLevel: AlarmLevel.SERIOUS
-                    , companyCode: "C00000000${it}"
-                    , ownerName: "企业${it}"
+                    , companyCode: "C00000000${companyIndex}"
+                    , ownerName: "企业${companyIndex}"
                     , operateManager: "吴珊"
-                    , phone: "010-${it}2425722"
+                    , phone: "010-${companyIndex}2425722"
                     , flows: []
-                    , flowStep: 1
-                    , todoRole: 'ROLE_CONTROL_CENTER_ROOT'
+                    , flowStep: flowStep
+                    , todoRole: flow.flows[flowStep-1].role
                     , checkTime: new Date()
                     , rectificationTime: new Date() + 5
-                    , note: "过期！！！"
-                    , status: WorkOrderFlowAction.valueOf('SP').workOrderStatus)
+                    , note: "${flow.alarmType.name}"
+                    , status: WorkOrderFlowAction.valueOf(flow.flows[flowStep-1].action).workOrderStatus)
 
-            flow1.flows.each {
+            flow.flows.each {
                 temp.flows << it
             }
+//            temp.validate()
+//            println temp.errors
             temp.save(flush: true)
         }
 
         9.times { it ->
-            WorkOrder temp = new WorkOrder(
-                    sn: "20170730002${it}"
-                    , alarmType: flow1.alarmType
-                    , alarmLevel: AlarmLevel.SERIOUS
-                    , companyCode: "C000000001"
-                    , ownerName: "企业1"
-                    , operateManager: "吴珊"
-                    , phone: "010-12425722"
-                    , flows: []
-                    , flowStep: 1
-                    , todoRole: 'ROLE_CONTROL_CENTER_ROOT'
-                    , checkTime: new Date()
-                    , rectificationTime: new Date() + 5
-                    , note: "OMG，过期啦！！！"
-                    , status: WorkOrderFlowAction.valueOf('SP').workOrderStatus)
-
-            flow1.flows.each {
-                temp.flows << it
-            }
-            temp.save(flush: true)
+            saveOrder(flow11,1,'20170730001',it,it)
+            saveOrder(flow11,3,'20170730002',it,it)
+            saveOrder(flow21,2,'20170730003',it,it)
+            saveOrder(flow11,3,'20170730004',it,1)
+            saveOrder(flow21,2,'20170730005',it,1)
         }
     }
-
 }

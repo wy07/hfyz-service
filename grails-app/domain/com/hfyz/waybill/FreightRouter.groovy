@@ -15,6 +15,7 @@ class FreightRouter {
     String endDistrict
     String endDistrictCode
     String viaLand
+    String companyCode
 
     static constraints = {
         routerName nullable: false, blank: false, maxSize:50
@@ -30,6 +31,7 @@ class FreightRouter {
         endCityCode nullable: false,blank: false,maxSize: 20
         endDistrict nullable: false,blank: false,maxSize: 20
         endDistrictCode nullable: false,blank: false,maxSize: 20
-        viaLand nullable: true,blank: true,maxSize: 200
+        viaLand nullable: true,blank: false,maxSize: 200
+        companyCode nullable: false,blank: false
     }
 }

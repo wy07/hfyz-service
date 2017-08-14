@@ -2,6 +2,7 @@ package com.hfyz.waybill
 
 import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
+import com.hfyz.security.User
 
 class FreightRouterController implements ControllerHelper {
 
@@ -10,24 +11,29 @@ class FreightRouterController implements ControllerHelper {
     def list() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        renderSuccessesWithMap(freightRouterService.getListAndTotal(max, offset))
+        renderSuccessesWithMap(freightRouterService.getListAndTotal(max, offset,currentUser))
     }
 
     def save() {
+        if(!currentUser.isCompanyUser()){
+            renderNoInstancePermError()
+            return
+        }
         FreightRouter freightRouterInstance = new FreightRouter(request.JSON)
+        freightRouterInstance.companyCode=currentUser.companyCode
         freightRouterInstance.save(flush: true, failOnError: true)
         renderSuccess()
     }
 
     def delete() {
-        withFreightRouter(params.long('id')) { freightRouterInstance ->
+        withCompanyFreightRouter(params.long('id'),currentUser) { freightRouterInstance ->
             freightRouterInstance.delete(flush: true)
             renderSuccess()
         }
     }
 
     def edit() {
-        withFreightRouter(params.long('id')) { freightRouterInstance ->
+        withCompanyFreightRouter(params.long('id'),currentUser) { freightRouterInstance ->
             renderSuccessesWithMap([freightRouter: [id            : freightRouterInstance.id
                                                     ,routerName: freightRouterInstance.routerName
                                                     ,startProvince: freightRouterInstance.startProvince
@@ -49,8 +55,7 @@ class FreightRouterController implements ControllerHelper {
         }
     }
     def update(){
-        withFreightRouter(params.long('id')) { freightRouterInstance ->
-            println '====request.JSON.freightRouter====' + request.JSON
+        withCompanyFreightRouter(params.long('id'),currentUser) { freightRouterInstance ->
             freightRouterInstance.properties = request.JSON
             freightRouterInstance.save(flush: true, failOnError: true)
             renderSuccess()
@@ -65,6 +70,19 @@ class FreightRouterController implements ControllerHelper {
         } else {
             renderNoTFoundError()
         }
+    }
 
+    private withCompanyFreightRouter(Long id, User user, Closure c) {
+        FreightRouter freightRouterInstance = id ? FreightRouter.get(id) : null
+        if (freightRouterInstance) {
+
+            if(freightRouterInstance.companyCode!=user.companyCode){
+                renderNoInstancePermError()
+            }else{
+                c.call freightRouterInstance
+            }
+        } else {
+            renderNoTFoundError()
+        }
     }
 }

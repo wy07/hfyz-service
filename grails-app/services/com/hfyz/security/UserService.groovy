@@ -12,6 +12,7 @@ class UserService {
 
     def springSecurityService
     def grailsApplication
+    def carService
 
     static final String DEFAULT_PASSWORD = '666666'
 
@@ -95,6 +96,18 @@ class UserService {
     def delete(User userInstance){
         UserRole.removeAll(userInstance,true)
         userInstance.delete(flush: true)
+    }
+
+
+    def getHomeStatistic(User user){
+        def result=[org:user.org?.code?:(isSuperAdmin(user.id)?'admin':'')]
+        if(result.org in ['24','23','22','21','20','19','18','17','08','09','13']){
+            result+=carService.carNumStatistic(user.org)
+            result+=[statistic:carService.historyStatistic(user.org,null)]
+        }else if(result.org){
+        }
+
+        return result
     }
 
 }

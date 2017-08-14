@@ -11,7 +11,11 @@ class FreightWaybillController implements ControllerHelper {
         def userCompanyCode  = getCurrentUser().companyCode
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        def result = freightWaybillService.search(request.JSON.vehicleNo, request.JSON.ownerName, request.JSON.dateBegin, request.JSON.dateEnd, max, offset,userCompanyCode)
+        def result = freightWaybillService.search([vehicleNo  : request.JSON.vehicleNo
+                                                   , ownerName: request.JSON.ownerName
+                                                   , dateBegin: request.JSON.dateBegin
+                                                   , dateEnd  : request.JSON.dateEnd], currentUser, max, offset)
+
         renderSuccessesWithMap(result)
     }
 }
