@@ -5,50 +5,48 @@ import com.commons.utils.ControllerHelper
 class CarStatisticController implements ControllerHelper{
 
     def passengerList(){
-        println getCurrentUser().companyCode
-        println '=============passengerList=================='
+        if(getCurrentUser().isCompanyUser()) {
+            def total = 1
+            def passengerStatisticList = [["id": 300, "ownerName": "企业0", "onlineing": "1526", "online": "1098", "crossCar": "51", "warning": "5"]]
+            renderSuccessesWithMap([passengerStatisticList: passengerStatisticList, total: total])
+        }
         def total = 5
-        def passengerStatisticList =  [["id":300,"ownerName":"企业0","onlineing":"1526","online":"1098","crossCar":"51","warning":"5"]
-                                       ,["id":301,"ownerName":"企业1","onlineing":"2726","online":"1758","crossCar":"43","warning":"0"]
-                                       ,["id":302,"ownerName":"企业2","onlineing":"2952","online":"1958","crossCar":"58","warning":"4"]
-                                       ,["id":303,"ownerName":"企业3","onlineing":"1856","online":"1520","crossCar":"64","warning":"7"]
-                                       ,["id":304,"ownerName":"企业4","onlineing":"2258","online":"2058","crossCar":"78","warning":"3"]]
+        def passengerStatisticList = [["id": 300, "ownerName": "企业0", "onlineing": "1526", "online": "1098", "crossCar": "51", "warning": "5"]
+                                     ,["id": 301, "ownerName": "企业1", "onlineing": "2578", "online": "2045", "crossCar": "68", "warning": "7"]
+                                     ,["id": 302, "ownerName": "企业2", "onlineing": "2814", "online": "1957", "crossCar": "58", "warning": "6"]
+                                     ,["id": 303, "ownerName": "企业3", "onlineing": "2947", "online": "1758", "crossCar": "75", "warning": "13"]
+                                     ,["id": 304, "ownerName": "企业4", "onlineing": "2875", "online": "2058", "crossCar": "65", "warning": "8"]]
         renderSuccessesWithMap([passengerStatisticList: passengerStatisticList, total: total])
+
     }
 
     def travelList(){
-        println getCurrentUser().companyCode
-        println '=============travelList=================='
+        if(getCurrentUser().isCompanyUser()) {
+            def total = 1
+            def travelStatisticList = [["id": 300, "ownerName": "企业0", "onlineing": "1255", "online": "982", "crossCar": "45", "warning": "3"]]
+            renderSuccessesWithMap([travelStatisticList: travelStatisticList, total: total])
+        }
         def total = 5
-        def travelStatisticList =  [["id":300,"ownerName":"企业0","onlineing":"1526","online":"1098","crossCar":"51","warning":"5"]
-                                       ,["id":301,"ownerName":"企业1","onlineing":"2726","online":"1758","crossCar":"43","warning":"0"]
-                                       ,["id":302,"ownerName":"企业2","onlineing":"2952","online":"1958","crossCar":"58","warning":"4"]
-                                       ,["id":303,"ownerName":"企业3","onlineing":"1856","online":"1520","crossCar":"64","warning":"7"]
-                                       ,["id":304,"ownerName":"企业4","onlineing":"2258","online":"2058","crossCar":"78","warning":"3"]]
+        def travelStatisticList = [["id": 300, "ownerName": "企业0", "onlineing": "1526", "online": "1098", "crossCar": "51", "warning": "5"]
+                                      ,["id": 301, "ownerName": "企业1", "onlineing": "2578", "online": "2045", "crossCar": "68", "warning": "7"]
+                                      ,["id": 302, "ownerName": "企业2", "onlineing": "2814", "online": "1957", "crossCar": "58", "warning": "6"]
+                                      ,["id": 303, "ownerName": "企业3", "onlineing": "2947", "online": "1758", "crossCar": "75", "warning": "13"]
+                                      ,["id": 304, "ownerName": "企业4", "onlineing": "2875", "online": "2058", "crossCar": "65", "warning": "8"]]
         renderSuccessesWithMap([travelStatisticList: travelStatisticList, total: total])
     }
 
     def dangerousList(){
-        println getCurrentUser().companyCode
-        println '=============dangerousList=================='
+        if(getCurrentUser().isCompanyUser()) {
+            def total = 1
+            def dangerousStatisticList = [["id": 300, "ownerName": "企业0", "onlineing": "2487", "online": "1345", "crossCar": "25", "dangerousGoods":"易燃物","haulway":"蜀山区-庐阳区", "warning": "9"]]
+            renderSuccessesWithMap([dangerousStatisticList: dangerousStatisticList, total: total])
+        }
         def total = 5
-        def dangerousStatisticList =  [["id":300,"ownerName":"企业0","onlineing":"1526","online":"1098","crossCar":"51","warning":"5"]
-                                    ,["id":301,"ownerName":"企业1","onlineing":"2726","online":"1758","crossCar":"43","warning":"0"]
-                                    ,["id":302,"ownerName":"企业2","onlineing":"2952","online":"1958","crossCar":"58","warning":"4"]
-                                    ,["id":303,"ownerName":"企业3","onlineing":"1856","online":"1520","crossCar":"64","warning":"7"]
-                                    ,["id":304,"ownerName":"企业4","onlineing":"2258","online":"2058","crossCar":"78","warning":"3"]]
+        def dangerousStatisticList = [["id": 300, "ownerName": "企业0", "onlineing": "1526", "online": "1098", "crossCar": "51", "dangerousGoods":"易燃物","haulway":"蜀山区-庐阳区", "warning": "5"]
+                                      ,["id": 301, "ownerName": "企业1", "onlineing": "2578", "online": "2045", "crossCar": "68", "dangerousGoods":"化学药品","haulway":"滨湖新区-庐阳区", "warning": "7"]
+                                      ,["id": 302, "ownerName": "企业2", "onlineing": "2814", "online": "1957", "crossCar": "58", "dangerousGoods":"易爆物","haulway":"蜀山区-庐阳区", "warning": "6"]
+                                      ,["id": 303, "ownerName": "企业3", "onlineing": "2947", "online": "1758", "crossCar": "75", "dangerousGoods":"易燃物","haulway":"瑶海区-包河区","warning": "13"]
+                                      ,["id": 304, "ownerName": "企业4", "onlineing": "2875", "online": "2058", "crossCar": "65", "dangerousGoods":"有毒气体","haulway":"新站区-庐阳区","warning": "8"]]
         renderSuccessesWithMap([dangerousStatisticList: dangerousStatisticList, total: total])
-    }
-
-    def detailList(){
-        println getCurrentUser().companyCode
-        println '=============detailList=================='
-        def total = 5
-        def detailList =  [["id":300,"licenseNo":"皖A35898","time":"2017-07-15","speed":"30","acc":"51","mileage":"5","positioning":"开","location":"一街3号"]
-                           ,["id":301,"licenseNo":"皖B48597","time":"2017-07-15","speed":"28","acc":"43","mileage":"3","positioning":"开","location":"五街25号"]
-                           ,["id":302,"licenseNo":"皖A64859","time":"2017-07-15","speed":"30","acc":"58","mileage":"4","positioning":"开","location":"十一街4号"]
-                           ,["id":303,"licenseNo":"皖A39724","time":"2017-07-15","speed":"33","acc":"64","mileage":"7","positioning":"开","location":"七街11号"]
-                           ,["id":304,"licenseNo":"皖B17586","time":"2017-07-15","speed":"25","acc":"78","mileage":"3","positioning":"开","location":"五街7号"]]
-        renderSuccessesWithMap([detailList: detailList, total: total])
     }
 }
