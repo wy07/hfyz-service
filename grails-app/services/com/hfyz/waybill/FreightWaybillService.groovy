@@ -5,7 +5,7 @@ import grails.transaction.Transactional
 @Transactional
 class FreightWaybillService {
 
-    def search(String vehicleNo, String ownerName, String dateBegin, String dateEnd, Integer max, Integer offset) {
+    def search(String vehicleNo, String ownerName, String dateBegin, String dateEnd, Integer max, Integer offset,String userCompanyCode) {
         def begin = dateBegin ? Date.parse("yyyy-MM-dd HH:mm:ss", dateBegin) : ""
         def end = dateEnd ? Date.parse("yyyy-MM-dd HH:mm:ss", dateEnd) : ""
 
@@ -18,6 +18,9 @@ class FreightWaybillService {
             }
             if (begin && end) {
                 between("departTime", begin, end)
+            }
+            if(userCompanyCode){
+                eq("companyCode",userCompanyCode)
             }
         }?.collect({ FreightWaybill bill ->
             [
@@ -54,6 +57,9 @@ class FreightWaybillService {
             }
             if (begin && end) {
                 between("departTime", begin, end)
+            }
+            if(userCompanyCode){
+                eq("companyCode",userCompanyCode)
             }
         }
 
