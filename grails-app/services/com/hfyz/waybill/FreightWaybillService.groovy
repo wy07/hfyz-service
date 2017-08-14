@@ -8,6 +8,7 @@ class FreightWaybillService {
 
 //    String vehicleNo, String ownerName, String dateBegin, String dateEnd
     def search(Map inputParams, User user, Integer max, Integer offset) {
+
         def begin = inputParams.dateBegin ? Date.parse("yyyy-MM-dd HH:mm:ss", inputParams.dateBegin) : ""
         def end = inputParams.dateEnd ? Date.parse("yyyy-MM-dd HH:mm:ss", inputParams.dateEnd) : ""
 
