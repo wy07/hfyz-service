@@ -1,6 +1,7 @@
 package com.hfyz.people
 
 import com.commons.utils.SQLHelper
+import com.hfyz.security.User
 import com.hfyz.support.AlarmType
 import com.hfyz.warning.Alarm
 import com.hfyz.warning.AlarmLevel
@@ -33,7 +34,7 @@ class PeopleBasicInfoService {
      * @param offset
      * @return
      */
-    def getPeopleList(type, name, phoneNo, idCardNo, max, offset) {
+    def getPeopleList(String type, String name, String phoneNo, String idCardNo, Integer max, Integer offset, User user) {
         String tableName = TABLES[type]
         def params = [:]
         if (name) {
@@ -45,15 +46,18 @@ class PeopleBasicInfoService {
         if (idCardNo) {
             params.idCardNo = idCardNo
         }
+        if (user.isCompanyUser()) {
+            params.companyCode = user.companyCode
+        }
         Promise peopleCount = task {
             SQLHelper.withDataSource(dataSource) { sql ->
-                sql.firstRow(getCountSql(tableName, name, idCardNo, phoneNo), params).count ?: 0
+                sql.firstRow(getCountSql(tableName, name, idCardNo, phoneNo, user.isCompanyUser()), params).count ?: 0
             }
         }
 
         Promise peopleList = task {
             SQLHelper.withDataSource(dataSource) { sql ->
-                sql.rows(getListSql(tableName, name, idCardNo, phoneNo), params + [max: max, offset: offset])
+                sql.rows(getListSql(tableName, name, idCardNo, phoneNo, user.isCompanyUser()), params + [max: max, offset: offset])
             }?.collect({ obj ->
                 [
                         name           : obj.peopleName,
@@ -79,7 +83,8 @@ class PeopleBasicInfoService {
      * @param phoneNo
      * @return
      */
-    private static String getListSql(String tableName, String name, String idCardNo, String phoneNo) {
+    private
+    static String getListSql(String tableName, String name, String idCardNo, String phoneNo, boolean isCompanyUser) {
         String joinSql = tableName ? "LEFT JOIN  ${tableName} pep ON pub.id_card_no=pep.id_card_no" : ""
         String listSql = """
             SELECT 
@@ -105,6 +110,9 @@ class PeopleBasicInfoService {
         if (phoneNo) {
             listSql += " AND pub.phone_no=:phoneNo"
         }
+        if (isCompanyUser) {
+            listSql += " AND pub.company_code=:companyCode"
+        }
         listSql += " limit :max offset :offset"
         return listSql
     }
@@ -116,7 +124,8 @@ class PeopleBasicInfoService {
      * @param phoneNo
      * @return
      */
-    private static String getCountSql(String tableName, String name, String idCardNo, String phoneNo) {
+    private
+    static String getCountSql(String tableName, String name, String idCardNo, String phoneNo, boolean isCompanyUser) {
         String joinSql = tableName ? "LEFT JOIN  ${tableName} pep ON pub.id_card_no=pep.id_card_no" : ""
         String countSql = "SELECT COUNT(*) FROM people_basicinfo_public pub  ${joinSql} WHERE 1=1 "
         if (tableName) {
@@ -130,6 +139,9 @@ class PeopleBasicInfoService {
         }
         if (phoneNo) {
             countSql += " AND pub.phone_no=:phoneNo"
+        }
+        if (isCompanyUser) {
+            countSql += " AND pub.company_code=:companyCode"
         }
         return countSql
     }

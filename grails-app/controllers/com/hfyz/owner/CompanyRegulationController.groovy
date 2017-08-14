@@ -1,6 +1,7 @@
 package com.hfyz.owner
 
 import com.commons.utils.ControllerHelper
+import com.commons.utils.PageUtils
 import com.hfyz.support.AlarmType
 import com.hfyz.warning.Alarm
 import com.hfyz.warning.AlarmLevel
@@ -13,6 +14,23 @@ import com.hfyz.workOrder.WorkOrder
 class CompanyRegulationController implements ControllerHelper {
 
     def companyRegulationService
+
+    /**
+     * 列表
+     */
+    def search() {
+        int max = PageUtils.getMax(request.JSON.max, 10, 100)
+        int offset = PageUtils.getOffset(request.JSON.offset)
+        def requestParams = [
+                ownerName: request.JSON.ownerName,
+                dateBegin: request.JSON.dateBegin,
+                dateEnd  : request.JSON.dateEnd
+        ]
+        def resultList = companyRegulationService.search(requestParams, max, offset, currentUser)
+        renderSuccessesWithMap(resultList)
+    }
+
+
 
     //查询公司是否有上传制度附件
     def patrolCompanyRegulation() {

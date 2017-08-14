@@ -17,6 +17,7 @@ class PeopleBasicInfo {
     String educationLevel //文化程度
     String technologyTitle //技术职称
     String healthState //健康状况
+    String companyCode // 业户标识
     static constraints = {
         name maxSize: 30, nullable: true, blank: false
         gender maxSize: 12, nullable: true, blank: false
@@ -32,6 +33,7 @@ class PeopleBasicInfo {
         educationLevel maxSize: 20, nullable: true, blank: false
         technologyTitle maxSize: 20, nullable: true, blank: false
         healthState maxSize: 10, nullable: true, blank: false
+        companyCode nullable: true, blank: false
     }
     static mapping = {
         table "PEOPLE_BASICINFO_PUBLIC"

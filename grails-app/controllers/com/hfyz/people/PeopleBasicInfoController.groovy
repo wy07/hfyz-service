@@ -15,7 +15,7 @@ class PeopleBasicInfoController implements ControllerHelper {
     def list() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        def result = peopleBasicInfoService.getPeopleList(request.JSON.type, request.JSON.name, request.JSON.phoneNo, request.JSON.IDCardNo, max, offset)
+        def result = peopleBasicInfoService.getPeopleList(request.JSON.type, request.JSON.name, request.JSON.phoneNo, request.JSON.IDCardNo, max, offset,currentUser)
         renderSuccessesWithMap([resultList: result.resultList, total: result.total])
     }
 
