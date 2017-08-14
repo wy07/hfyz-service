@@ -29,9 +29,6 @@ class FreightWaybillService {
             if (begin && end) {
                 between("departTime", begin, end)
             }
-            if(userCompanyCode){
-                eq("companyCode",userCompanyCode)
-            }
         }?.collect({ FreightWaybill bill ->
             [
                     id           : bill.id,
@@ -69,9 +66,6 @@ class FreightWaybillService {
             }
             if (begin && end) {
                 between("departTime", begin, end)
-            }
-            if(userCompanyCode){
-                eq("companyCode",userCompanyCode)
             }
         }
 

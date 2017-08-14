@@ -367,11 +367,6 @@ class InitService {
         new WhiteList(vehicleNo: '陕A-CK0012', frameNo: 'frameNo12', controlBegin: new Date(117, 9, 12), status: Status.JCBK).save(flush: true)
         new WhiteList(vehicleNo: '陕A-CK0013', frameNo: 'frameNo13', controlBegin: new Date(117, 9, 12), status: Status.JCBK).save(flush: true)
 
-        def parentMenu = new Menu(name: '整改', code: 'root-rectification', icon: 'fa-hand-o-up', parent: null, position: 'SIDE_BAR').save(flush: true)
-
-        new Menu(name: '隐患整改单', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '整改单审核', code: 'orderExamine', icon: 'fa-hand-o-right', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '企业反馈', code: 'enterpriseFeedback', icon: 'fa-hand-o-right', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730001', enterprise: '企业0', companyCode: 'C000000000', examiner: '李四', inspectionDate: new Date(), dealineDate: new Date() + 5, insPosition: '车间', insDesc: '机器', insQuestion: '安全问题  管理隐患 无验证  无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730002', enterprise: '企业1', companyCode: 'C000000001', examiner: '王五', inspectionDate: new Date(), dealineDate: new Date() + 6, insPosition: '工厂', insDesc: '线路', insQuestion: '安全问题  管理隐患 无验证  无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730003', enterprise: '企业2', companyCode: 'C000000002', examiner: '赵六', inspectionDate: new Date(), dealineDate: new Date() + 7, insPosition: '工厂', insDesc: '压缩机', insQuestion: '无验证', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
@@ -386,10 +381,6 @@ class InitService {
         new HiddenRectificationOrder(billNo: '20170730012', enterprise: '企业3', companyCode: 'C000000003', examiner: 'bob', inspectionDate: new Date(), dealineDate: new Date() + 8, insPosition: '车间', insDesc: '发动机', insQuestion: '无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730013', enterprise: '企业1', companyCode: 'C000000001', examiner: 'fisher', inspectionDate: new Date(), dealineDate: new Date() + 9, insPosition: '工厂', insDesc: 'jiqi', insQuestion: '安全问题  管理隐患 无验证  无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
 
-
-
-
-        new Menu(name: '隐患整改', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: parentMenu, position: 'SIDE_BAR').save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730001', enterpirse: 'a公司', examiner: '李四', inspectionDate: new Date(), dealineDate: new Date() + 5, insPosition: '车间', insDesc: '机器', insQuestion: '安全问题  管理隐患 无验证  无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730002', enterpirse: 'b公司', examiner: '王五', inspectionDate: new Date(), dealineDate: new Date() + 6, insPosition: '工厂', insDesc: '线路', insQuestion: '安全问题  管理隐患 无验证  无人看管', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
         new HiddenRectificationOrder(billNo: '20170730003', enterpirse: 'c公司', examiner: '赵六', inspectionDate: new Date(), dealineDate: new Date() + 7, insPosition: '工厂', insDesc: '压缩机', insQuestion: '无验证', proPosal: '1电子台账未更新，2电子路单未及时上传，3动态监控，4监控室，培训室，监控设备未安装，5人员培训不到位，', status: HiddenRectificationOrderStatus.QC).save(flush: true)
@@ -409,9 +400,9 @@ class InitService {
         new Menu(name: '查岗统计', code: 'checkStatistic', icon: 'fa-odnoklassniki', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '工单统计', code: 'workOrderStatistic', icon: 'fa-file-text', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '企业统计', code: 'companyReport', icon: 'fa-line-chart', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '班线客运车辆信息统计', code: 'passengerStatistic', icon: 'fa-bus', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '旅游包车车辆信息统计', code: 'travelStatistic', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '危险品车辆信息统计', code: 'dangerousStatistic', icon: 'fa-exclamation-triangle', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '班线客运车辆统计', code: 'passengerStatistic', icon: 'fa-bus', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '旅游包车车辆统计', code: 'travelStatistic', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '危险品车辆统计', code: 'dangerousStatistic', icon: 'fa-exclamation-triangle', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '运营商统计', code: 'carBasicStatistics', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '报警信息统计', code: 'alarmInfoStatistics', icon: 'fa-list', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '考核统计', code: 'ownerIdentityStatistics', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
@@ -775,19 +766,22 @@ class InitService {
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '运单路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '危货路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '客运路线', code: 'passLineBusinessInfo', icon: 'fa-info', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '客运物理路线', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '隐患整改单', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '整改单审核', code: 'orderExamine', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '整改单反馈', code: 'enterpriseFeedback', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '发布信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '客运基本信息', code: 'passLineBusinessInfo', icon: 'fa-info', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '客运物理路线基本信息', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '管理制度', code: 'companyRegulation', icon: 'fa-book', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '工单审批/研判', code: 'pendingWorkOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '企业工单反馈', code: 'feedbackWorkOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
 
-        def workOrderMenu = new Menu(name: '工单管理', code: 'root-workOrderManger', icon: 'fa-file-text-o', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '工单审批/研判', code: 'pendingWorkOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '企业工单反馈', code: 'feedbackWorkOrder', icon: 'fa-sticky-note-o', parent: workOrderMenu, position: 'SIDE_BAR').save(flush: true)
+
 
     }
 
