@@ -8,7 +8,6 @@ class FreightWaybillController implements ControllerHelper {
     def freightWaybillService
 
     def search() {
-        def userCompanyCode  = getCurrentUser().companyCode
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
         def result = freightWaybillService.search([vehicleNo  : request.JSON.vehicleNo
