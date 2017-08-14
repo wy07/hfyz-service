@@ -405,6 +405,8 @@ class InitService {
         new Menu(name: '工单统计', code: 'workOrderStatistic', icon: 'fa-file-text', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '企业统计', code: 'companyReport', icon: 'fa-line-chart', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '运营商统计', code: 'carBasicStatistics', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '报警信息统计', code: 'alarmInfoStatistics', icon: 'fa-list', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '考核统计', code: 'ownerIdentityStatistics', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
 
         initWorkOrder()
         initDangerousType()
@@ -829,8 +831,8 @@ class InitService {
             flow.flows.each {
                 temp.flows << it
             }
-            temp.validate()
-            println temp.errors
+//            temp.validate()
+//            println temp.errors
             temp.save(flush: true)
         }
 

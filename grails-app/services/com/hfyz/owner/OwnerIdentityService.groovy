@@ -101,16 +101,38 @@ class OwnerIdentityService {
         return countSql
     }
 
-    def getCompanyListByChar(String companyName){
-        def companyList = OwnerIdentity.createCriteria().list(){
-            if(companyName){
+    def getCompanyListByChar(String companyName) {
+        def companyList = OwnerIdentity.createCriteria().list() {
+            if (companyName) {
                 like("ownerName", "%${companyName}%")
             }
-        }?.collect{
+        }?.collect {
             OwnerIdentity obj ->
-            [ownerName:obj.ownerName,
-            companyCode: obj.companyCode]
+                [ownerName  : obj.ownerName,
+                 companyCode: obj.companyCode]
         }
-        return [companyList:companyList]
+        return [companyList: companyList]
+    }
+
+    def getAppraiseStatistic(String ownerName) {
+        def result = SQLHelper.withDataSource(dataSource) { sql ->
+            sql.rows(getAppraiseStatisticSql(ownerName))
+        }?.collect { obj ->
+            [ownerName  : obj.ownername,
+             companyCode: obj.companycode,
+             total      : obj.total]
+        }
+        return result
+    }
+
+    private static getAppraiseStatisticSql(String ownerName) {
+        String sql = "select ownid.owner_name ownerName,ownid.company_code companyCode, count(cr.company_code) total from owner_basicinfo_owneridentity ownid " +
+                     " left join company_regulation cr on cr.company_code = ownid.company_code "
+        if (ownerName) {
+            sql += " where ownid.owner_name like '${ownerName}' "
+        }
+        sql += " group by ownid.company_code, ownid.owner_name " +
+                " order by ownid.owner_name asc;"
+        return sql
     }
 }

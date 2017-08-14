@@ -34,8 +34,7 @@ class AuthController implements ControllerHelper {
             } catch (BadCredentialsException e) {
                 renderErrorMsg(message(code: 'login.BadCredentials.label', default: '您的用户名和密码不匹配，请重新输入'))
             } catch (Exception e) {
-                log.error('登录错误', e)
-                log.error(LogUtils.formatException(this.getClass(), "singIn", params, e))
+                LogUtils.error(this.class, params, request, '登录', '用户', session, '首页登录', e.message)
                 renderErrorMsg(message(code: 'default.systemBusy.message', default: '系统忙，请稍后再试'))
             }
         }
