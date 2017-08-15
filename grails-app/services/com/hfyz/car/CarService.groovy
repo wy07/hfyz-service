@@ -72,39 +72,59 @@ class CarService {
         }
     }
 
-    def carNumStatistic(Organization organization=null) {
+    def carNumStatistic(Organization organization = null) {
         def result
 
-        if(organization?.code=='24'){
-            result=[carNum        : 843
-                    , enterCarNum : 821
-                    , onlineCarNum: 783]
-        }else{
-            result=[carNum        : 13202
-                    , enterCarNum : 9890
-                    , onlineCarNum: 6507]
+        if (organization?.code == '24') {
+            result = [carNum        : 843
+                      , enterCarNum : 821
+                      , onlineCarNum: 783]
+        } else {
+            result = [carNum        : 13202
+                      , enterCarNum : 9890
+                      , onlineCarNum: 6507]
         }
 
         return result
     }
 
-    def historyStatistic(Organization organization=null,year) {
+    def historyStatistic(Organization organization = null, year) {
         int currentYear = new Date().format('yyyy').toInteger()
         year = year ?: currentYear
         int month = currentYear == year ? new Date().format('MM').toInteger() : 12
 
         def initDate = {
-            (1..month).collect{
+            (1..month).collect {
                 new Random().nextInt(100)
             }
         }
-        return  [enterRate:initDate()
-                         ,onlineRate:initDate()
-                         ,onlineTimeRate:initDate()
-                         ,overspeedRate:initDate()
-                         ,fatigueRate:initDate()
-                         ,realTimeOnlineRate:initDate()]
+        return [enterRate           : initDate()
+                , onlineRate        : initDate()
+                , onlineTimeRate    : initDate()
+                , overspeedRate     : initDate()
+                , fatigueRate       : initDate()
+                , realTimeOnlineRate: initDate()]
     }
+
+    def getCompanyCars(String companyCode) {
+        SQLHelper.withDataSource(dataSource) { sql ->
+            sql.rows(GET_COMPANY_CARS_SQL, [companyCode: companyCode])
+        }?.collect { obj ->
+            [licenseNo      : obj.licenseNo
+             , carPlateColor: obj.carPlateColor]
+        }
+    }
+
+    private static String GET_COMPANY_CARS_SQL = """
+        SELECT carinfo.license_no licenseNo
+            ,operate.owner_name ownerName
+            ,carinfo.frame_no frameNo
+            ,carinfo.car_plate_color carPlateColor
+            ,carinfo.car_color carColor
+        FROM runcar_basic_carinfo carinfo
+        JOIN runcar_basicoperate operate on carinfo.frame_no=operate.frame_no
+        WHERE operate.owner_code=:companyCode
+    """
 
     private static String getNetworkRateListSql() {
         String sqlStr = """
@@ -125,7 +145,8 @@ class CarService {
         return sqlStr
     }
 
-    private static String getSearchCarsSql(boolean dateFlag, String businessType, String licenseNo, boolean isCompanyUser) {
+    private
+    static String getSearchCarsSql(boolean dateFlag, String businessType, String licenseNo, boolean isCompanyUser) {
         String sqlStr = """
             SELECT  operate.transform_license_no transformLicenseNo
             ,carinfo.license_no licenseNo
@@ -162,7 +183,8 @@ class CarService {
         return sqlStr
     }
 
-    private static String getSearchCarsCountSql(boolean dateFlag, String businessType, String licenseNo, boolean isCompanyUser) {
+    private
+    static String getSearchCarsCountSql(boolean dateFlag, String businessType, String licenseNo, boolean isCompanyUser) {
         String sqlStr = """
             SELECT  count(carinfo.frame_no)
             FROM runcar_basic_carinfo carinfo

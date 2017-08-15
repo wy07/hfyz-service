@@ -27,6 +27,14 @@ class CarController implements ControllerHelper {
         renderSuccessesWithMap([carList: result.carList, carCount: result.carCount])
     }
 
+    def getCompanyCars(){
+        if(!params.companyCode){
+            renderErrorMsg('请选择要查询的企业')
+            return
+        }
+        renderSuccessesWithMap([cars:carService.getCompanyCars(params.companyCode)])
+    }
+
     def networkRate() {
         Date date = new Date()
         AlarmType alarmType = AlarmType.findByCodeNum('219')
