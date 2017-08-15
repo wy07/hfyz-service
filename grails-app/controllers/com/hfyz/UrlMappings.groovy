@@ -62,5 +62,7 @@ class UrlMappings {
         "/login"(controller: "auth", action: 'singIn')
 
         "/home"(controller: 'sysuser',action: 'home')
+
+        "/companys/$companyCode/cars"(controller: 'car',action: 'getCompanyCars')
     }
 }
