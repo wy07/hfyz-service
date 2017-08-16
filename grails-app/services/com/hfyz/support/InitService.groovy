@@ -414,14 +414,14 @@ class InitService {
         new PermissionGroup(url: '/warnings/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "报警信息", category: "实时监控", code: 'warning').save(failOnError: true, flush: true)
 
         //工单
-        new PermissionGroup(url: '/work-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT，ROLE_COMPANY_ROOT', httpMethod: null, name: "工单列表", category: "工单", code: 'work_order_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/work-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "工单列表", category: "工单", code: 'work_order_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/work-orders/pending/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "工单审批/研判", category: "工单", code: 'work_order_pending').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/work-orders/feedback/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "工单反馈", category: "工单", code: 'work_order_feedback').save(failOnError: true, flush: true)
 
         //隐患整改单
-        new PermissionGroup(url: '/hidden-rectification-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT，ROLE_COMPANY_ROOT', httpMethod: null, name: "隐患整改单管理", category: "隐患整改单", code: 'hidden_rectification_order_list').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/hidden-rectification-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "整改单审核", category: "隐患整改单", code: 'hidden_rectification_order_pending').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/hidden-rectification-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "整改单反馈", category: "隐患整改单", code: 'hidden_rectification_order_feedback').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/hidden-rectification-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "隐患整改单管理", category: "隐患整改单", code: 'hidden_rectification_order_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/hidden-rectification-orders/pending/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "整改单审核", category: "隐患整改单", code: 'hidden_rectification_order_pending').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/hidden-rectification-orders/feedback/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "整改单反馈", category: "隐患整改单", code: 'hidden_rectification_order_feedback').save(failOnError: true, flush: true)
 
         //信息管理
         new PermissionGroup(url: '/platform-manages/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "平台管理", category: "信息管理", code: 'platform_manage').save(failOnError: true, flush: true)
@@ -482,7 +482,7 @@ class InitService {
         new Menu(name: '车辆历史', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'car_history').save(flush: true)
         new Menu(name: '报警信息', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'warning').save(flush: true)
 
-        def msgManage = new Menu(name: '信息管理', code: 'root-msgmanage', icon: 'fa-indent', parent: null, position: 'SIDE_BAR',permissionCode: 'owner_identity_manage').save(flush: true)
+        def msgManage = new Menu(name: '信息管理', code: 'root-msgmanage', icon: 'fa-indent', parent: null, position: 'SIDE_BAR',permissionCode: 'owner_identity_manage;work_order_list').save(flush: true)
         new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'platform_manage').save(flush: true)
         new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'owner_check_record_list').save(flush: true)
         new Menu(name: '业户信息', code: 'ownerIdentity', icon: 'fa-building', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'owner_identity_manage').save(flush: true)
