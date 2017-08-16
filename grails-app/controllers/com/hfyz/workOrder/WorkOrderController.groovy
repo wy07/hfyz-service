@@ -101,7 +101,7 @@ class WorkOrderController implements ControllerHelper {
         renderSuccessesWithMap([statisticList: result.statisticList, statisticCount: result.statisticCount])
     }
 
-    def edit(){
+    def show(){
         withWorkOrder(params.long('id')){
             workOrderIns ->
                 renderSuccessesWithMap(workOrder:[
@@ -130,7 +130,7 @@ class WorkOrderController implements ControllerHelper {
         if(workOrder){
             c.call(workOrder)
         }else{
-
+            renderNoTFoundError()
         }
     }
 }
