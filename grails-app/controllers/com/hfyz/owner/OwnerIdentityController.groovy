@@ -12,9 +12,7 @@ class OwnerIdentityController implements ControllerHelper {
     def ownerIdentityService
 
     def all() {
-        def companys = OwnerIdentity.list().collect { OwnerIdentity owner ->
-            [code: owner.companyCode, name: owner.ownerName]
-        }
+        def companys = ownerIdentityService.getAll(currentUser)
         renderSuccessesWithMap([companys: companys])
     }
 
