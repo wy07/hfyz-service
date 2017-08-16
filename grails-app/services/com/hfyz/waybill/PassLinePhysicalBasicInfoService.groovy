@@ -1,5 +1,7 @@
 package com.hfyz.waybill
 
+import com.commons.exception.ParamsIllegalException
+import com.commons.exception.RecordNotFoundException
 import grails.transaction.Transactional
 
 @Transactional
@@ -43,10 +45,16 @@ class PassLinePhysicalBasicInfoService {
          return [resultList: resultList, total: total]
      }
 
-
-
-
-
+    /**
+     * 根据id得到实例
+     */
+    PassLinePhysicalBasicInfo getInstanceById(Long id) {
+        PassLinePhysicalBasicInfo instance = id ? PassLinePhysicalBasicInfo.get(id) : null
+        if (!instance) {
+            throw new RecordNotFoundException()
+        }
+        return instance
+    }
 
 
 
