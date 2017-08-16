@@ -2,6 +2,7 @@ package com.hfyz.security
 
 import com.commons.utils.ControllerHelper
 import com.commons.utils.LogUtils
+import com.hfyz.owner.OwnerIdentity
 import grails.converters.JSON
 import org.springframework.security.authentication.*
 import org.springframework.security.core.userdetails.UserDetails
@@ -22,14 +23,13 @@ class AuthController implements ControllerHelper {
                 UserDetails userDetails = loginService.signIn(username, password)
 
                 def rights = springSecurityService.findRequestmapsByRoles(userDetails.authorities.role).code.join(';')
-
-
-
+                def companyName = OwnerIdentity.findByCompanyCode(userDetails.companyCode)?.ownerName
 
                 renderSuccessesWithMap([sub:userDetails.username
                                         ,role:userDetails.authorities.authority.join(",")
                                         ,id: userDetails.id
                                         ,companyCode: userDetails.companyCode
+                                        ,companyName: companyName?:''
                                         ,rights:rights])
             } catch (BadCredentialsException e) {
                 renderErrorMsg(message(code: 'login.BadCredentials.label', default: '您的用户名和密码不匹配，请重新输入'))
