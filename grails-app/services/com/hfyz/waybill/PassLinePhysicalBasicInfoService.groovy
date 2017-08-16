@@ -55,7 +55,6 @@ class PassLinePhysicalBasicInfoService {
         }
 
         def instanceMap=[
-                id                   : instance.id,
                 lineCode             : instance.lineCode,
                 lineName             : instance.lineName,
                 modifyTime           : instance.modifyTime.format('yyyy-MM-dd'),
@@ -68,8 +67,8 @@ class PassLinePhysicalBasicInfoService {
                 startAdminDivsionName: instance.startAdminDivsionName,
                 endAdminDivsionCode  : instance.endAdminDivsionCode,
                 endAdminDivsionName  : instance.endAdminDivsionName,
-                lineMileAge          : instance.lineMileAge,
-                highwayMileAge       : instance.highwayMileAge,
+                lineMileAge          : instance.lineMileAge + 'km',
+                highwayMileAge       : instance.highwayMileAge + 'km',
                 percentage           : instance.percentage *100 + '%',
                 highwayEntry         : instance.highwayEntry,
                 highwayExit          : instance.highwayExit,
