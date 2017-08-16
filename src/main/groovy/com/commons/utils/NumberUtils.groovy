@@ -95,4 +95,12 @@ class NumberUtils {
         code.toString()
     }
 
+    static int getRandom(int min, int max) {
+        if (max < min) {
+            throw new IllegalArgumentException("min:${min},不能比max:${max}大");
+        }
+        Random r = new Random()
+        r.nextInt(max - min) + min
+    }
+
 }
