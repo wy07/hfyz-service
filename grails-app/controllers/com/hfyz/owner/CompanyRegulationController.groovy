@@ -7,6 +7,8 @@ import com.hfyz.warning.Alarm
 import com.hfyz.warning.AlarmLevel
 import com.hfyz.warning.SourceType
 import com.hfyz.workOrder.WorkOrder
+import grails.converters.JSON
+import org.springframework.web.multipart.MultipartHttpServletRequest
 
 /**
  * 企业内部管理制度
@@ -61,5 +63,19 @@ class CompanyRegulationController implements ControllerHelper {
 
     }
 
+    def save(){
+        def upload = request.getFile('upload')
+        def originalFilename = upload.originalFilename
 
+        CompanyRegulation companyRegulation = new CompanyRegulation()
+        companyRegulation.ownerName = OwnerIdentity.findByCompanyCode(getCurrentUser()?.companyCode).ownerName
+        companyRegulation.companyCode = getCurrentUser()?.companyCode
+        companyRegulation.regulationName = params.regulationName
+        companyRegulation.fileName = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
+        companyRegulation.fileType = originalFilename.substring(originalFilename.lastIndexOf('.')+1, originalFilename.length())
+        companyRegulation.fileSize = (upload.getSize()/1024).setScale(2,BigDecimal.ROUND_HALF_UP)
+
+        companyRegulation.save(flush: true, failOnError: true)
+        renderSuccess()
+    }
 }
