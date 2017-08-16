@@ -67,8 +67,8 @@ class PassLinePhysicalBasicInfoService {
                 startAdminDivsionName: instance.startAdminDivsionName,
                 endAdminDivsionCode  : instance.endAdminDivsionCode,
                 endAdminDivsionName  : instance.endAdminDivsionName,
-                lineMileAge          : instance.lineMileAge + 'km',
-                highwayMileAge       : instance.highwayMileAge + 'km',
+                lineMileAge          : instance.lineMileAge,
+                highwayMileAge       : instance.highwayMileAge,
                 percentage           : instance.percentage *100 + '%',
                 highwayEntry         : instance.highwayEntry,
                 highwayExit          : instance.highwayExit,
@@ -78,7 +78,8 @@ class PassLinePhysicalBasicInfoService {
                 busLine              : instance.busLine
         ]
 
-        return instanceMap
+        return [instance: instanceMap]
+
     }
 
 

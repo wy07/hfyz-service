@@ -15,7 +15,7 @@ class PassLinePhysicalBasicInfoController implements ControllerHelper{
 
     def show() {
         Map instance = passLinePhysicalBasicInfoService.showDetail(params.long('id'))
-        renderSuccessesWithMap([instance: instance])
+        renderSuccessesWithMap(instance)
     }
     
 
