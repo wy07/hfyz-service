@@ -100,4 +100,37 @@ class WorkOrderController implements ControllerHelper {
         def result = workOrderService.statistic(inputParams, currentUser, max, offset)
         renderSuccessesWithMap([statisticList: result.statisticList, statisticCount: result.statisticCount])
     }
+
+    def edit(){
+        withWorkOrder(params.long('id')){
+            workOrderIns ->
+                renderSuccessesWithMap(workOrder:[
+                        id            : workOrderIns.id,
+                        sn            : workOrderIns.sn,
+                        alarmType     : workOrderIns.alarmType.name,
+                        alarmLevel    : workOrderIns.alarmLevel.cnName,
+                        companyCode   : workOrderIns.companyCode,
+                        ownerName     : workOrderIns.ownerName,
+                        operateManager: workOrderIns.operateManager,
+                        phone         : workOrderIns.phone,
+                        frameNo       : workOrderIns.frameNo,
+                        userID        : workOrderIns.userID,
+                        dateCreated   : workOrderIns.dateCreated.format('yyyy-MM-dd HH:mm'),
+                        lastUpdated   : workOrderIns.lastUpdated.format('yyyy-MM-dd HH:mm'),
+                        checkTime     : workOrderIns.checkTime.format('yyyy-MM-dd HH:mm'),
+                        rectificationTime : workOrderIns.rectificationTime.format('yyyy-MM-dd HH:mm'),
+                        note          : workOrderIns.note,
+                        status        : workOrderIns.status.cnName
+                ])
+        }
+    }
+
+    private withWorkOrder(Long id,Closure c){
+        WorkOrder workOrder = id ? WorkOrder.get(id) : null
+        if(workOrder){
+            c.call(workOrder)
+        }else{
+
+        }
+    }
 }
