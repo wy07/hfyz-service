@@ -396,17 +396,6 @@ class InitService {
         initSystemCode()
         initAlarmType()
 
-        def statisticMenu = new Menu(name: '统计', code: 'root-statistic', icon: 'fa-pie-chart', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '查岗统计', code: 'checkStatistic', icon: 'fa-odnoklassniki', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '工单统计', code: 'workOrderStatistic', icon: 'fa-file-text', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '企业统计', code: 'companyReport', icon: 'fa-line-chart', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '班线客运车辆统计', code: 'passengerStatistic', icon: 'fa-bus', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '旅游包车车辆统计', code: 'travelStatistic', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '危险品车辆统计', code: 'dangerousStatistic', icon: 'fa-exclamation-triangle', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '运营商统计', code: 'carBasicStatistics', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '报警信息统计', code: 'alarmInfoStatistics', icon: 'fa-list', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '考核统计', code: 'ownerIdentityStatistics', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '平台统计', code: 'platformStatisticComponent', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR').save(flush: true)
 
         initWorkOrder()
         initDangerousType()
@@ -721,14 +710,69 @@ class InitService {
         def legalSectionUser = new User(username: 'legal', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '法制科管理员').save(failOnError: true, flush: true)
         UserRole.create legalSectionUser, legalSectionRole, true
 
+        //系统管理
         new PermissionGroup(url: '/organizations/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "组织机构管理", category: "系统管理", code: 'organization_manage').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/roles/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理", category: "系统管理", code: 'role_manage').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/roles/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "角色管理2", category: "系统管理", code: 'role_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/roles/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "角色管理", category: "系统管理", code: 'role_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/permission-groups/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "权限管理", category: "系统管理", code: 'permission_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/operation_logs/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "操作日志", category: "系统管理", code: 'log_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/menus/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单管理", category: "系统管理", code: 'menu_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/sysusers/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "用户管理", category: "系统管理", code: 'menu_manage').save(failOnError: true, flush: true)
 
+        //基础信息
         new PermissionGroup(url: '/map-signs/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "路标管理", category: "基础信息", code: 'map_sign_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/system-codes/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "数据字典管理", category: "基础信息", code: 'system_code_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/configures/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "系统配置管理", category: "基础信息", code: 'configure_manage').save(failOnError: true, flush: true)
+
+        new PermissionGroup(url: '/home', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "首页", category: "其他", code: 'home').save(failOnError: true, flush: true)
+
+        //实时监控
+        new PermissionGroup(url: '/cars/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "车辆实时", category: "实时监控", code: 'car_real_time_monitor').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/cars/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "车辆控制", category: "实时监控", code: 'car_real_time_control').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/cars/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "车辆历史", category: "实时监控", code: 'car_history').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/warnings/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "报警信息", category: "实时监控", code: 'warning').save(failOnError: true, flush: true)
+
+
+        //工单
+        new PermissionGroup(url: '/work-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT，ROLE_COMPANY_ROOT', httpMethod: null, name: "工单列表", category: "工单", code: 'work_order_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/work-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "工单审批/研判", category: "工单", code: 'work_order_pending').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/work-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "工单反馈", category: "工单", code: 'work_order_feedback').save(failOnError: true, flush: true)
+
+        //隐患整改单
+        new PermissionGroup(url: '/hidden-rectification-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT，ROLE_COMPANY_ROOT', httpMethod: null, name: "隐患整改单列表", category: "工单", code: 'hidden_rectification_order_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/hidden-rectification-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "整改单审核", category: "工单", code: 'hidden_rectification_order_pending').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/hidden-rectification-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "整改单反馈", category: "工单", code: 'hidden_rectification_order_feedback').save(failOnError: true, flush: true)
+
+
+        //信息管理
+        new PermissionGroup(url: '/platform-manages/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "平台管理", category: "信息管理", code: 'platform_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/owner-identitys/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "业户信息", category: "信息管理", code: 'owner_identity_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/black-lists/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "黑名单管理", category: "信息管理", code: 'black_list_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/white-lists/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "白名单管理", category: "信息管理", code: 'white_list_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/owner-check-records/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "查岗记录", category: "信息管理", code: 'owner_check_record_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/owner-check-records/manual', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "手动查岗", category: "信息管理", code: 'owner_check_record_manual').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/cars/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "车辆信息", category: "信息管理", code: 'car_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/people-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "人员信息", category: "信息管理", code: 'people_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/freight-routers/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货路线列表", category: "信息管理", code: 'freight_router_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/freight-routers/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货路线管理", category: "信息管理", code: 'freight_router_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/pass-line-business-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "客运路线", category: "信息管理", code: 'pass_line_business_basic_info_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/pass-line-physical-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "客运物理路线", category: "信息管理", code: 'pass_line_physical_basic_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/freight-waybills/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货电子路单", category: "信息管理", code: 'freight_waybill_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/company-regulations/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "管理制度", category: "信息管理", code: 'company_regulation_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/info-publish/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "信息发布", category: "信息管理", code: 'info_publish').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/info-check/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "信息审核", category: "信息管理", code: 'info_check').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/info-list/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "信息查询", category: "信息管理", code: 'info-list').save(failOnError: true, flush: true)
+
+        //统计
+        new PermissionGroup(url: '/check-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "查岗统计", category: "统计", code: 'check_statistic').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/work-order-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "工单统计", category: "统计", code: 'work_order_statistic').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/company-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "企业统计", category: "统计", code: 'company_statistic').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/passenger-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "班线客运车辆统计", category: "统计", code: 'passenger_statistic').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/travel-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "旅游包车车辆统计", category: "统计", code: 'travel_statistic').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/dangerous-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "旅游包车车辆统计", category: "统计", code: 'dangerous_statistic').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/car-basic-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "运营商统计", category: "统计", code: 'car_basic_statistic').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/alarm-info-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "报警信息统计", category: "统计", code: 'alarm_info_statistic').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/owner-identity-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "考核统计", category: "统计", code: 'owner_identity_statistic').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/platform-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "平台统计", category: "统计", code: 'platform_statistic').save(failOnError: true, flush: true)
     }
 
     private initMenu() {
@@ -737,52 +781,61 @@ class InitService {
         new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
         new Menu(name: '退出', code: 'logout', position: 'TOP_BAR', parent: null).save(flush: true)
 
-        new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR',permissionCode: 'home').save(flush: true)
 
         def systemManage = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-cogs', parent: null, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '组织机构', code: 'organization', icon: 'fa-sitemap', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'organization_manage').save(flush: true)
         new Menu(name: '角色', code: 'role', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'role_manage').save(flush: true)
-        new Menu(name: '权限', code: 'permission', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '权限', code: 'permission', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'permission_manage').save(flush: true)
         new Menu(name: '用户', code: 'user', icon: 'fa-user', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
         new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'log_manage').save(flush: true)
-        new Menu(name: '菜单', code: 'menu', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '菜单', code: 'menu', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR',permissionCode: 'menu_manage').save(flush: true)
 
         def basicInfo = new Menu(name: '基础信息', code: 'root-basicinfo', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: basicInfo, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: basicInfo, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: basicInfo, position: 'SIDE_BAR',permissionCode: 'map_sign_manage').save(flush: true)
+        new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR',permissionCode: 'system_code_manage').save(flush: true)
+        new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: basicInfo, position: 'SIDE_BAR',permissionCode: 'configure_manage').save(flush: true)
 
         def monitorMenu = new Menu(name: '实时监控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '车辆实时', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '车辆控制', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '车辆历史', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '报警信息', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '车辆实时', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode: 'car_real_time_monitor').save(flush: true)
+        new Menu(name: '车辆控制', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode: 'car_real_time_control').save(flush: true)
+        new Menu(name: '车辆历史', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR',permissionCode: 'car_history').save(flush: true)
+        new Menu(name: '报警信息', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR',permissionCode: 'warning').save(flush: true)
 
         def msgManage = new Menu(name: '信息管理', code: 'root-msgmanage', icon: 'fa-indent', parent: null, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '业户信息', code: 'ownerIdentity', icon: 'fa-building', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '车辆信息', code: 'carList', icon: 'fa-car', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '危货路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '客运路线', code: 'passLineBusinessInfo', icon: 'fa-info', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '客运物理路线', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '危货电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '隐患整改单', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '整改单审核', code: 'orderExamine', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '整改单反馈', code: 'enterpriseFeedback', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '发布信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '管理制度', code: 'companyRegulation', icon: 'fa-book', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '工单审批/研判', code: 'pendingWorkOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
-        new Menu(name: '企业工单反馈', code: 'feedbackWorkOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'platform_manage').save(flush: true)
+        new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'owner_check_record_list').save(flush: true)
+        new Menu(name: '业户信息', code: 'ownerIdentity', icon: 'fa-building', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'owner_identity_manage').save(flush: true)
+        new Menu(name: '车辆信息', code: 'carList', icon: 'fa-car', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'car_list').save(flush: true)
+        new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'people_list').save(flush: true)
+        new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'black_list_manage').save(flush: true)
+        new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'white_list_manage').save(flush: true)
+        new Menu(name: '危货路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'freight_waybills_list').save(flush: true)
+        new Menu(name: '客运路线', code: 'passLineBusinessInfo', icon: 'fa-info', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'pass_line_business_basic_info_list').save(flush: true)
+        new Menu(name: '客运物理路线', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'pass_line_physical_basic_list').save(flush: true)
+        new Menu(name: '危货电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'freight_waybill_list').save(flush: true)
+        new Menu(name: '隐患整改单', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'hidden_rectification_order_list').save(flush: true)
+        new Menu(name: '整改单审核', code: 'orderExamine', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'hidden_rectification_order_pending').save(flush: true)
+        new Menu(name: '整改单反馈', code: 'enterpriseFeedback', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'hidden_rectification_order_feedback').save(flush: true)
+        new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'info_publish').save(flush: true)
+        new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'info_check').save(flush: true)
+        new Menu(name: '发布信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'info-list').save(flush: true)
+        new Menu(name: '管理制度', code: 'companyRegulation', icon: 'fa-book', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'company_regulation_list').save(flush: true)
+        new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'work_order_list').save(flush: true)
+        new Menu(name: '工单审批/研判', code: 'pendingWorkOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'work_order_pending').save(flush: true)
+        new Menu(name: '企业工单反馈', code: 'feedbackWorkOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR',permissionCode: 'work_order_feedback').save(flush: true)
 
-
-
+        def statisticMenu = new Menu(name: '统计', code: 'root-statistic', icon: 'fa-pie-chart', parent: null, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '查岗统计', code: 'checkStatistic', icon: 'fa-odnoklassniki', parent: statisticMenu, position: 'SIDE_BAR',permissionCode: 'check_statistic').save(flush: true)
+        new Menu(name: '工单统计', code: 'workOrderStatistic', icon: 'fa-file-text', parent: statisticMenu, position: 'SIDE_BAR',permissionCode: 'work_order_statistic').save(flush: true)
+        new Menu(name: '企业统计', code: 'companyReport', icon: 'fa-line-chart', parent: statisticMenu, position: 'SIDE_BAR',permissionCode: 'company_statistic').save(flush: true)
+        new Menu(name: '班线客运车辆统计', code: 'passengerStatistic', icon: 'fa-bus', parent: statisticMenu, position: 'SIDE_BAR',permissionCode: 'passenger_statistic').save(flush: true)
+        new Menu(name: '旅游包车车辆统计', code: 'travelStatistic', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR',permissionCode: 'travel_statistic').save(flush: true)
+        new Menu(name: '危险品车辆统计', code: 'dangerousStatistic', icon: 'fa-exclamation-triangle', parent: statisticMenu, position: 'SIDE_BAR',permissionCode: 'dangerous_statistic').save(flush: true)
+        new Menu(name: '运营商统计', code: 'carBasicStatistics', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR',permissionCode: 'car_basic_statistic').save(flush: true)
+        new Menu(name: '报警信息统计', code: 'alarmInfoStatistics', icon: 'fa-list', parent: statisticMenu, position: 'SIDE_BAR',permissionCode: 'alarm_info_statistic').save(flush: true)
+        new Menu(name: '考核统计', code: 'ownerIdentityStatistics', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR',permissionCode: 'owner_identity_statistic').save(flush: true)
+        new Menu(name: '平台统计', code: 'platformStatisticComponent', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR',permissionCode: 'platform_statistic').save(flush: true)
     }
 
     private initWorkOrder() {
