@@ -11,7 +11,7 @@ class WorkOrderController implements ControllerHelper {
     def list() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        renderSuccessesWithMap(workOrderService.findWorkOrderListAndTotal(max, offset,currentUser))
+        renderSuccessesWithMap(workOrderService.findWorkOrderListAndTotal(max, offset, currentUser))
     }
 
     def pendingWorkOrderList() {
@@ -20,7 +20,7 @@ class WorkOrderController implements ControllerHelper {
         renderSuccessesWithMap(workOrderService.findPendingWorkOrderListAndTotal(max, offset, currentUser.authorities?.authority))
     }
 
-    def feedbackWorkOrderList(){
+    def feedbackWorkOrderList() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
         renderSuccessesWithMap(workOrderService.findFeedbackWorkOrderListAndTotal(max, offset, currentUser))
@@ -43,7 +43,7 @@ class WorkOrderController implements ControllerHelper {
         renderSuccessesWithMap(workOrderService.preFeedback(params.long('id'), currentUser))
     }
 
-    def feedback(){
+    def feedback() {
 
         if (!request.JSON.note) {
             renderParamsIllegalErrorMsg('反馈内容不能为空')
@@ -65,39 +65,61 @@ class WorkOrderController implements ControllerHelper {
         workOrderService.judge(params.long('id'), currentUser, request.JSON.note, NumberUtils.getBoolean(request.JSON.result))
         renderSuccess()
     }
-    def statistic(){
+
+    def statistic() {
 
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
 
-        def inputParams=[:]
+        def inputParams = [:]
 
-        Date startDate=NumberUtils.getDate(request.JSON.startDate,'yyyy-MM-dd')
-        if(!startDate){
+        Date startDate = NumberUtils.getDate(request.JSON.startDate, 'yyyy-MM-dd')
+        if (!startDate) {
             renderErrorMsg('请输入正确的起始时间')
             return
         }
-        Date endDate=NumberUtils.getDate(request.JSON.endDate,'yyyy-MM-dd')
-        if(!endDate){
+        Date endDate = NumberUtils.getDate(request.JSON.endDate, 'yyyy-MM-dd')
+        if (!endDate) {
             renderErrorMsg('请输入正确的终止时间')
             return
         }
-        if(endDate<startDate){
+        if (endDate < startDate) {
             renderErrorMsg('终止时间不能小于起始时间')
             return
         }
 
-        inputParams.startDate=startDate
-        inputParams.endDate=endDate
+        inputParams.startDate = startDate
+        inputParams.endDate = endDate
 
-        if(request.JSON.companyName){
-            inputParams.companyName=request.JSON.companyName
+        if (request.JSON.companyName) {
+            inputParams.companyName = request.JSON.companyName
         }
-        if(request.JSON.alarmType){
-            inputParams.alarmTypeId=NumberUtils.toLong(request.JSON.alarmType)
+        if (request.JSON.alarmType) {
+            inputParams.alarmTypeId = NumberUtils.toLong(request.JSON.alarmType)
         }
 
         def result = workOrderService.statistic(inputParams, currentUser, max, offset)
         renderSuccessesWithMap([statisticList: result.statisticList, statisticCount: result.statisticCount])
+    }
+
+    def show() {
+        withWorkOrder(params.long('id')) { workOrderIns ->
+            def resule = [workOrder: workOrderIns as Map]
+            if (!currentUser.isCompanyUser()) {
+                resule.workOrderRecords = workOrderIns.workOrderRecords?.collect { WorkOrderRecord record ->
+                    record as Map
+                }
+            }
+            renderSuccessesWithMap(resule)
+        }
+    }
+
+    private withWorkOrder(Long id, Closure c) {
+        WorkOrder workOrder = id ? WorkOrder.get(id) : null
+        if (workOrder) {
+            c.call(workOrder)
+        } else {
+            renderNoTFoundError()
+        }
     }
 }

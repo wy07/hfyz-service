@@ -35,14 +35,15 @@ class ReviewAndApprovalController implements ControllerHelper {
     def giveResult(){
         HiddenRectificationOrder hiddenRectificationOrderins = HiddenRectificationOrder.get(params.long('id'))
         def status= hiddenRectificationOrderins.status
-        if(status == HiddenRectificationOrderStatus.DYR){
-            if(Boolean.parseBoolean(request.JSON.tempStatus))
+        if(status == HiddenRectificationOrderStatus.DYR) {
+            if (request.JSON.tempStatus == 'true') {
                 hiddenRectificationOrderins.status = HiddenRectificationOrderStatus.HG
                 hiddenRectificationOrderins.rectifiResult = HiddenRectificationOrderStatus.HG.type
-            }else{
+            } else {
                 hiddenRectificationOrderins.status = HiddenRectificationOrderStatus.BHG
                 hiddenRectificationOrderins.rectifiResult = HiddenRectificationOrderStatus.BHG.type
             }
+        }
         hiddenRectificationOrderins.save(flush:true,failOnError: true)
         renderSuccess()
     }

@@ -17,6 +17,7 @@ class HiddenRectificationOrder {
     Date   replyDate            //反馈日期
     String replyDesc            //企业反馈
     String rectifiResult        //整改结果
+    Date lastUpdated            //更改时间
     HiddenRectificationOrderStatus status   //状态
 
 

@@ -100,6 +100,7 @@ class UserService {
 
 
     def getHomeStatistic(User user){
+
         def result=[org:user.org?.code?:(isSuperAdmin(user.id)?'admin':'')]
         if(result.org in ['24','23','22','21','20','19','18','17','08','09','13']){
             result+=carService.carNumStatistic(user.org)
