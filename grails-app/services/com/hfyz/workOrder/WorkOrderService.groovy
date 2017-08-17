@@ -14,7 +14,7 @@ class WorkOrderService {
     def dataSource
 
     def findWorkOrderListAndTotal(max, offset, User user) {
-        def workOrderList = WorkOrder.createCriteria().list([max: max, offset: offset, sort: 'id', order: 'desc']) {
+        def workOrderList = WorkOrder.createCriteria().list([max: max, offset: offset, sort: 'lastUpdated', order: 'desc']) {
             if (user.isCompanyUser()) {
                 eq('companyCode', user.companyCode)
                 ne('status', WorkOrderStatus.DSH)
