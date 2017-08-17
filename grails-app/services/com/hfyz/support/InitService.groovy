@@ -432,8 +432,8 @@ class InitService {
         new PermissionGroup(url: '/owner-check-records/manual', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "手动查岗", category: "信息管理", code: 'owner_check_record_manual').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/cars/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "车辆信息", category: "信息管理", code: 'car_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/people-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "人员信息", category: "信息管理", code: 'people_list').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/freight-routers/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货路线列表", category: "信息管理", code: 'freight_router_list').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/freight-routers/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货路线管理", category: "信息管理", code: 'freight_router_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/freight-routers/list', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货路线列表", category: "信息管理", code: 'freight_router_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/freight-routers/manage/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货路线管理", category: "信息管理", code: 'freight_router_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/pass-line-business-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "客运路线", category: "信息管理", code: 'pass_line_business_basic_info_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/pass-line-physical-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "客运物理路线", category: "信息管理", code: 'pass_line_physical_basic_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/freight-waybills/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货电子路单", category: "信息管理", code: 'freight_waybill_list').save(failOnError: true, flush: true)
@@ -490,9 +490,9 @@ class InitService {
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'people_list').save(flush: true)
         new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'black_list_manage').save(flush: true)
         new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'white_list_manage').save(flush: true)
-        new Menu(name: '危货路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_waybills_list').save(flush: true)
         new Menu(name: '客运路线', code: 'passLineBusinessInfo', icon: 'fa-info', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'pass_line_business_basic_info_list').save(flush: true)
         new Menu(name: '客运物理路线', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'pass_line_physical_basic_list').save(flush: true)
+        new Menu(name: '危货路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_router_list').save(flush: true)
         new Menu(name: '危货电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_waybill_list').save(flush: true)
         new Menu(name: '隐患整改单', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_list').save(flush: true)
         new Menu(name: '整改单审核', code: 'orderExamine', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_pending').save(flush: true)
@@ -531,21 +531,21 @@ class InitService {
 
 
 
-        def flow12 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 2, flows: [])
-        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
-         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
-         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
-            flow12.flows << it
-        }
-        flow12.save(flush: true)
+//        def flow12 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 2, flows: [])
+//        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
+//         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
+//         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
+//            flow12.flows << it
+//        }
+//        flow12.save(flush: true)
 
-        def flow21 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('205'), flowVersion: 2, enabled: true, flows: [])
-        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
-         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
-         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
-            flow21.flows << it
-        }
-        flow12.save(flush: true)
+//        def flow21 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('205'), flowVersion: 2, enabled: true, flows: [])
+//        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
+//         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
+//         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
+//            flow21.flows << it
+//        }
+//        flow21.save(flush: true)
 
 
         def saveOrder = { flow, flowStep, snTitle, snIndex, companyIndex ->
@@ -572,11 +572,11 @@ class InitService {
         }
 
         9.times { it ->
-            saveOrder(flow11, 1, '20170730001', it, it)
+            saveOrder(flow11, 1, '20170730001', it, 1)
             saveOrder(flow11, 3, '20170730002', it, it)
-            saveOrder(flow21, 2, '20170730003', it, it)
+//            saveOrder(flow21, 2, '20170730003', it, it)
             saveOrder(flow11, 3, '20170730004', it, 1)
-            saveOrder(flow21, 2, '20170730005', it, 1)
+//            saveOrder(flow21, 2, '20170730005', it, 1)
         }
     }
 
