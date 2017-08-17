@@ -383,13 +383,13 @@ class InitService {
 
 
         def controlRole = new Role(authority: 'ROLE_CONTROL_CENTER_ROOT', name: '监控指挥中心管理员', org: Organization.findByCode('01')).save(failOnError: true, flush: true)
-        def controlUser = new User(username: 'center', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '运管指挥中心管理员').save(failOnError: true, flush: true)
+        def controlUser = new User(username: 'center', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '运管指挥中心管理员', org: Organization.findByCode('01')).save(failOnError: true, flush: true)
         UserRole.create controlUser, controlRole, true
 
 
 
         def passengerSectionRole = new Role(authority: 'ROLE_PASSENGER_SECTION_ROOT', name: '客运管理所管理员', org: Organization.findByCode('08')).save(failOnError: true, flush: true)
-        def passengerSectionUser = new User(username: 'passenger', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '客运管理所管理员').save(failOnError: true, flush: true)
+        def passengerSectionUser = new User(username: 'passenger', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '客运管理所管理员', org: Organization.findByCode('08')).save(failOnError: true, flush: true)
         UserRole.create passengerSectionUser, passengerSectionRole, true
 
         //系统管理
