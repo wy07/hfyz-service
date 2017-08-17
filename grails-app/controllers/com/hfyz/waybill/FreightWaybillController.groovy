@@ -20,9 +20,11 @@ class FreightWaybillController implements ControllerHelper {
 
     def show() {
         withFreightWaybill(params.long('id')) { FreightWaybill freightWaybillInstance ->
-            if(!currentUser.isCompanyUser()){
-                renderNoInstancePermError()
-                return
+            if(currentUser.isCompanyUser()){
+                if(freightWaybillInstance.companyCode!=currentUser.companyCode){
+                    renderNoInstancePermError()
+                    return
+                }
             }
             renderSuccessesWithMap([freightWaybill: [id                 : freightWaybillInstance.id
                                                      , vehicleNo        : freightWaybillInstance.vehicleNo
