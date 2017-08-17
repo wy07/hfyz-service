@@ -102,7 +102,7 @@ class BlackListService {
     def save(obj) {
         def carBasicInfo = CarBasicInfo.findByLicenseNo(obj.vehicleNo)
         if (!carBasicInfo) {
-            throw new ParamsIllegalException("车辆号不存在！")
+            throw new ParamsIllegalException("车辆号有误！")
         }
         BlackList instance = new BlackList(obj)
         instance.frameNo = carBasicInfo.frameNo
