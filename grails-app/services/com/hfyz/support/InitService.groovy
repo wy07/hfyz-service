@@ -388,9 +388,9 @@ class InitService {
 
 
 
-        def legalSectionRole = new Role(authority: 'ROLE_LEGAL_SECTION_ROOT', name: '法制科管理员', org: Organization.findByCode('15')).save(failOnError: true, flush: true)
-        def legalSectionUser = new User(username: 'legal', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '法制科管理员').save(failOnError: true, flush: true)
-        UserRole.create legalSectionUser, legalSectionRole, true
+        def passengerSectionRole = new Role(authority: 'ROLE_PASSENGER_SECTION_ROOT', name: '客运管理所管理员', org: Organization.findByCode('08')).save(failOnError: true, flush: true)
+        def passengerSectionUser = new User(username: 'passenger', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '客运管理所管理员').save(failOnError: true, flush: true)
+        UserRole.create passengerSectionUser, passengerSectionRole, true
 
         //系统管理
         new PermissionGroup(url: '/organizations/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "组织机构管理", category: "系统管理", code: 'organization_manage').save(failOnError: true, flush: true)
@@ -405,7 +405,7 @@ class InitService {
         new PermissionGroup(url: '/system-codes/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "数据字典管理", category: "基础信息", code: 'system_code_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/configures/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "系统配置管理", category: "基础信息", code: 'configure_manage').save(failOnError: true, flush: true)
 
-        new PermissionGroup(url: '/home', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "首页", category: "其他", code: 'home').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/home', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "首页", category: "其他", code: 'home').save(failOnError: true, flush: true)
 
         //实时监控
         new PermissionGroup(url: '/cars/monitor/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "车辆实时", category: "实时监控", code: 'car_real_time_monitor').save(failOnError: true, flush: true)
@@ -414,13 +414,13 @@ class InitService {
         new PermissionGroup(url: '/warnings/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "报警信息", category: "实时监控", code: 'warning').save(failOnError: true, flush: true)
 
         //工单
-        new PermissionGroup(url: '/work-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "工单列表", category: "工单", code: 'work_order_list').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/work-orders/pending/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "工单审批/研判", category: "工单", code: 'work_order_pending').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/work-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "工单列表", category: "工单", code: 'work_order_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/work-orders/pending/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT', httpMethod: null, name: "工单审批/研判", category: "工单", code: 'work_order_pending').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/work-orders/feedback/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "工单反馈", category: "工单", code: 'work_order_feedback').save(failOnError: true, flush: true)
 
         //隐患整改单
-        new PermissionGroup(url: '/hidden-rectification-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "隐患整改单管理", category: "隐患整改单", code: 'hidden_rectification_order_list').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/hidden-rectification-orders/pending/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "整改单审核", category: "隐患整改单", code: 'hidden_rectification_order_pending').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/hidden-rectification-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT', httpMethod: null, name: "隐患整改单管理", category: "隐患整改单", code: 'hidden_rectification_order_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/hidden-rectification-orders/pending/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT', httpMethod: null, name: "整改单审核", category: "隐患整改单", code: 'hidden_rectification_order_pending').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/hidden-rectification-orders/feedback/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "整改单反馈", category: "隐患整改单", code: 'hidden_rectification_order_feedback').save(failOnError: true, flush: true)
 
         //信息管理
@@ -522,7 +522,7 @@ class InitService {
         def flow11 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 1, enabled: true, flows: [])
 
         [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '初审', action: 'SP']
-         , [role: 'ROLE_LEGAL_SECTION_ROOT', name: '复审', action: 'SP']
+         , [role: 'ROLE_PASSENGER_SECTION_ROOT', name: '复审', action: 'SP']
          , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
          , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
             flow11.flows << it
