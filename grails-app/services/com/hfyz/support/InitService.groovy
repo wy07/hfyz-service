@@ -304,7 +304,7 @@ class InitService {
         5.times { val ->
             new PassLineBusinessBasicInfo(
                     lineCode: '1',
-                    ownerName: cars[val%4],
+                    ownerName: companys[val%4],
                     companyCode: "C00000000${val % 4}",
                     licenseCharacter: "${val}",
                     licenseNo: "${val}",
