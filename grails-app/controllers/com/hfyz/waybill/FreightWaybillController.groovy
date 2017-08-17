@@ -15,12 +15,15 @@ class FreightWaybillController implements ControllerHelper {
                                                    , ownerName: request.JSON.ownerName
                                                    , dateBegin: request.JSON.dateBegin
                                                    , dateEnd  : request.JSON.dateEnd], currentUser, max, offset)
-
         renderSuccessesWithMap(result)
     }
 
     def show() {
         withFreightWaybill(params.long('id')) { FreightWaybill freightWaybillInstance ->
+            if(currentUser.isCompanyUser()){
+                renderNoInstancePermError()
+                return
+            }
             renderSuccessesWithMap([freightWaybill: [id                 : freightWaybillInstance.id
                                                      , vehicleNo        : freightWaybillInstance.vehicleNo
                                                      , frameNo          : freightWaybillInstance.frameNo
@@ -63,7 +66,7 @@ class FreightWaybillController implements ControllerHelper {
         }
     }
 
-    private withFreightWaybill(Long id, Closure c) {
+    private withFreightWaybill(Long id,  Closure c) {
         FreightWaybill freightWaybillInstance = id ? FreightWaybill.get(id) : null
         if (freightWaybillInstance) {
             c.call freightWaybillInstance
