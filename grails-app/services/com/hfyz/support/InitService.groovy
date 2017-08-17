@@ -571,12 +571,14 @@ class InitService {
             temp.save(flush: true)
         }
 
-        9.times { it ->
+        100.times { it ->
             saveOrder(flow11, 1, '20170730001', it, 1)
+//            saveOrder(flow21, 2, '20170730005', it, 1)
+        }
+        9.times {it->
             saveOrder(flow11, 3, '20170730002', it, it)
 //            saveOrder(flow21, 2, '20170730003', it, it)
             saveOrder(flow11, 3, '20170730004', it, 1)
-//            saveOrder(flow21, 2, '20170730005', it, 1)
         }
     }
 
