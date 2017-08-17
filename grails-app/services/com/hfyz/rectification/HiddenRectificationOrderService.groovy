@@ -100,7 +100,7 @@ class HiddenRectificationOrderService {
         }
 
         sql += """
-            order by table1.bill_no desc
+            order by table1.last_updated desc
             limit :max offset :offset;
         """
            return sql
