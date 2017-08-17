@@ -30,7 +30,7 @@ class CheckStatisticService {
                 obj ->
                     [ownerName : obj.enterprise,
                     responsed : obj.responsed?obj.responsed:0,
-                    noResponse : obj.noresponse,
+                    noResponse : obj.noresponse?obj.noresponse:0,
                     responseRate : new BigDecimal((obj.responsed ?obj.responsed:0)/obj.total).setScale(2,BigDecimal.ROUND_HALF_UP)*100+'%']
             }
         }
