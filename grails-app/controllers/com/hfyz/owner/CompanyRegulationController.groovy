@@ -64,6 +64,11 @@ class CompanyRegulationController implements ControllerHelper {
     }
 
     def save(){
+        if(!currentUser.isCompanyUser()){
+            renderNoInstancePermError()
+            return
+        }
+
         def upload = request.getFile('upload')
         def originalFilename = upload.originalFilename
 
