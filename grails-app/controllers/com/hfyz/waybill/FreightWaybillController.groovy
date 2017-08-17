@@ -20,7 +20,7 @@ class FreightWaybillController implements ControllerHelper {
 
     def show() {
         withFreightWaybill(params.long('id')) { FreightWaybill freightWaybillInstance ->
-            if(currentUser.isCompanyUser()){
+            if(!currentUser.isCompanyUser()){
                 renderNoInstancePermError()
                 return
             }
