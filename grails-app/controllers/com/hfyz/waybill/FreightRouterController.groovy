@@ -11,52 +11,45 @@ class FreightRouterController implements ControllerHelper {
     def list() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        renderSuccessesWithMap(freightRouterService.getListAndTotal(max, offset,currentUser))
+        renderSuccessesWithMap(freightRouterService.getListAndTotal(max, offset, currentUser))
     }
 
     def save() {
-        if(!currentUser.isCompanyUser()){
+        if (!currentUser.isCompanyUser()) {
             renderNoInstancePermError()
             return
         }
         FreightRouter freightRouterInstance = new FreightRouter(request.JSON)
-        freightRouterInstance.companyCode=currentUser.companyCode
+        freightRouterInstance.companyCode = currentUser.companyCode
         freightRouterInstance.save(flush: true, failOnError: true)
         renderSuccess()
     }
 
     def delete() {
-        withCompanyFreightRouter(params.long('id'),currentUser) { freightRouterInstance ->
+        withCompanyFreightRouter(params.long('id'), currentUser) { freightRouterInstance ->
             freightRouterInstance.delete(flush: true)
             renderSuccess()
         }
     }
 
     def edit() {
-        withCompanyFreightRouter(params.long('id'),currentUser) { freightRouterInstance ->
-            renderSuccessesWithMap([freightRouter: [id            : freightRouterInstance.id
-                                                    ,routerName: freightRouterInstance.routerName
-                                                    ,startProvince: freightRouterInstance.startProvince
-                                                    ,startCity: freightRouterInstance.startCity
-                                                    ,startDistrict: freightRouterInstance.startDistrict
-                                                    ,startProvinceCode: freightRouterInstance.startProvinceCode
-                                                    ,startCityCode: freightRouterInstance.startCityCode
-                                                    ,startDistrictCode: freightRouterInstance.startDistrictCode
-                                                    ,endProvince: freightRouterInstance.endProvince
-                                                    ,endCity: freightRouterInstance.endCity
-                                                    ,endDistrict: freightRouterInstance.endDistrict
-                                                    ,endProvinceCode: freightRouterInstance.endProvinceCode
-                                                    ,endCityCode: freightRouterInstance.endCityCode
-                                                    ,endDistrictCode: freightRouterInstance.endDistrictCode
-                                                    ,provenance: freightRouterInstance.startProvince+'/'+freightRouterInstance.startCity+'/'+freightRouterInstance.startDistrict
-                                                    ,destination: freightRouterInstance.endProvince+'/'+freightRouterInstance.endCity+'/'+freightRouterInstance.endDistrict
-                                                    ,viaLand: freightRouterInstance.viaLand]])
-
+        withCompanyFreightRouter(params.long('id'), currentUser) { freightRouterInstance ->
+            renderSuccessesWithMap([freightRouter: freightRouterInstance as Map])
         }
     }
 
-    def update(){
-        withCompanyFreightRouter(params.long('id'),currentUser) { freightRouterInstance ->
+    def show() {
+        withFreightRouter(params.long('id')) { freightRouterInstance ->
+            if (currentUser.isCompanyUser() && freightRouterInstance.companyCode != currentUser.companyCode) {
+                renderNoInstancePermError()
+                return
+            }
+            renderSuccessesWithMap([freightRouter: freightRouterInstance as Map])
+        }
+    }
+
+    def update() {
+        withCompanyFreightRouter(params.long('id'), currentUser) { freightRouterInstance ->
             freightRouterInstance.properties = request.JSON
             freightRouterInstance.save(flush: true, failOnError: true)
             renderSuccess()
@@ -76,9 +69,9 @@ class FreightRouterController implements ControllerHelper {
     private withCompanyFreightRouter(Long id, User user, Closure c) {
         FreightRouter freightRouterInstance = id ? FreightRouter.get(id) : null
         if (freightRouterInstance) {
-            if(freightRouterInstance.companyCode!=user.companyCode){
+            if (freightRouterInstance.companyCode != user.companyCode) {
                 renderNoInstancePermError()
-            }else{
+            } else {
                 c.call freightRouterInstance
             }
         } else {
