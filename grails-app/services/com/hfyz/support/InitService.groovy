@@ -304,7 +304,7 @@ class InitService {
         5.times { val ->
             new PassLineBusinessBasicInfo(
                     lineCode: '1',
-                    ownerName: cars[val%4],
+                    ownerName: companys[val%4],
                     companyCode: "C00000000${val % 4}",
                     licenseCharacter: "${val}",
                     licenseNo: "${val}",
@@ -383,14 +383,14 @@ class InitService {
 
 
         def controlRole = new Role(authority: 'ROLE_CONTROL_CENTER_ROOT', name: '监控指挥中心管理员', org: Organization.findByCode('01')).save(failOnError: true, flush: true)
-        def controlUser = new User(username: 'center', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '运管指挥中心管理员').save(failOnError: true, flush: true)
+        def controlUser = new User(username: 'center', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '运管指挥中心管理员', org: Organization.findByCode('01')).save(failOnError: true, flush: true)
         UserRole.create controlUser, controlRole, true
 
 
 
-        def legalSectionRole = new Role(authority: 'ROLE_LEGAL_SECTION_ROOT', name: '法制科管理员', org: Organization.findByCode('15')).save(failOnError: true, flush: true)
-        def legalSectionUser = new User(username: 'legal', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '法制科管理员').save(failOnError: true, flush: true)
-        UserRole.create legalSectionUser, legalSectionRole, true
+        def passengerSectionRole = new Role(authority: 'ROLE_PASSENGER_SECTION_ROOT', name: '客运管理所管理员', org: Organization.findByCode('08')).save(failOnError: true, flush: true)
+        def passengerSectionUser = new User(username: 'passenger', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '客运管理所管理员', org: Organization.findByCode('08')).save(failOnError: true, flush: true)
+        UserRole.create passengerSectionUser, passengerSectionRole, true
 
         //系统管理
         new PermissionGroup(url: '/organizations/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "组织机构管理", category: "系统管理", code: 'organization_manage').save(failOnError: true, flush: true)
@@ -405,7 +405,7 @@ class InitService {
         new PermissionGroup(url: '/system-codes/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "数据字典管理", category: "基础信息", code: 'system_code_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/configures/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "系统配置管理", category: "基础信息", code: 'configure_manage').save(failOnError: true, flush: true)
 
-        new PermissionGroup(url: '/home', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "首页", category: "其他", code: 'home').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/home', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "首页", category: "其他", code: 'home').save(failOnError: true, flush: true)
 
         //实时监控
         new PermissionGroup(url: '/cars/monitor/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "车辆实时", category: "实时监控", code: 'car_real_time_monitor').save(failOnError: true, flush: true)
@@ -414,13 +414,13 @@ class InitService {
         new PermissionGroup(url: '/warnings/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "报警信息", category: "实时监控", code: 'warning').save(failOnError: true, flush: true)
 
         //工单
-        new PermissionGroup(url: '/work-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "工单列表", category: "工单", code: 'work_order_list').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/work-orders/pending/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "工单审批/研判", category: "工单", code: 'work_order_pending').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/work-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "工单列表", category: "工单", code: 'work_order_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/work-orders/pending/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT', httpMethod: null, name: "工单审批/研判", category: "工单", code: 'work_order_pending').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/work-orders/feedback/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "工单反馈", category: "工单", code: 'work_order_feedback').save(failOnError: true, flush: true)
 
         //隐患整改单
-        new PermissionGroup(url: '/hidden-rectification-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "隐患整改单管理", category: "隐患整改单", code: 'hidden_rectification_order_list').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/hidden-rectification-orders/pending/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_LEGAL_SECTION_ROOT', httpMethod: null, name: "整改单审核", category: "隐患整改单", code: 'hidden_rectification_order_pending').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/hidden-rectification-orders/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT', httpMethod: null, name: "隐患整改单管理", category: "隐患整改单", code: 'hidden_rectification_order_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/hidden-rectification-orders/pending/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT', httpMethod: null, name: "整改单审核", category: "隐患整改单", code: 'hidden_rectification_order_pending').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/hidden-rectification-orders/feedback/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "整改单反馈", category: "隐患整改单", code: 'hidden_rectification_order_feedback').save(failOnError: true, flush: true)
 
         //信息管理
@@ -432,8 +432,8 @@ class InitService {
         new PermissionGroup(url: '/owner-check-records/manual', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "手动查岗", category: "信息管理", code: 'owner_check_record_manual').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/cars/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "车辆信息", category: "信息管理", code: 'car_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/people-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "人员信息", category: "信息管理", code: 'people_list').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/freight-routers/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货路线列表", category: "信息管理", code: 'freight_router_list').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/freight-routers/**/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货路线管理", category: "信息管理", code: 'freight_router_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/freight-routers/list', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货路线列表", category: "信息管理", code: 'freight_router_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/freight-routers/manage/**', configAttribute: 'ROLE_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货路线管理", category: "信息管理", code: 'freight_router_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/pass-line-business-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "客运路线", category: "信息管理", code: 'pass_line_business_basic_info_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/pass-line-physical-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "客运物理路线", category: "信息管理", code: 'pass_line_physical_basic_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/freight-waybills/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货电子路单", category: "信息管理", code: 'freight_waybill_list').save(failOnError: true, flush: true)
@@ -490,9 +490,9 @@ class InitService {
         new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'people_list').save(flush: true)
         new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'black_list_manage').save(flush: true)
         new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'white_list_manage').save(flush: true)
-        new Menu(name: '危货路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_waybills_list').save(flush: true)
         new Menu(name: '客运路线', code: 'passLineBusinessInfo', icon: 'fa-info', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'pass_line_business_basic_info_list').save(flush: true)
         new Menu(name: '客运物理路线', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'pass_line_physical_basic_list').save(flush: true)
+        new Menu(name: '危货路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_router_list').save(flush: true)
         new Menu(name: '危货电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_waybill_list').save(flush: true)
         new Menu(name: '隐患整改单', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_list').save(flush: true)
         new Menu(name: '整改单审核', code: 'orderExamine', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_pending').save(flush: true)
@@ -522,7 +522,7 @@ class InitService {
         def flow11 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 1, enabled: true, flows: [])
 
         [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '初审', action: 'SP']
-         , [role: 'ROLE_LEGAL_SECTION_ROOT', name: '复审', action: 'SP']
+         , [role: 'ROLE_PASSENGER_SECTION_ROOT', name: '复审', action: 'SP']
          , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
          , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
             flow11.flows << it
@@ -531,21 +531,21 @@ class InitService {
 
 
 
-        def flow12 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 2, flows: [])
-        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
-         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
-         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
-            flow12.flows << it
-        }
-        flow12.save(flush: true)
+//        def flow12 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 2, flows: [])
+//        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
+//         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
+//         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
+//            flow12.flows << it
+//        }
+//        flow12.save(flush: true)
 
-        def flow21 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('205'), flowVersion: 2, enabled: true, flows: [])
-        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
-         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
-         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
-            flow21.flows << it
-        }
-        flow12.save(flush: true)
+//        def flow21 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('205'), flowVersion: 2, enabled: true, flows: [])
+//        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
+//         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
+//         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
+//            flow21.flows << it
+//        }
+//        flow21.save(flush: true)
 
 
         def saveOrder = { flow, flowStep, snTitle, snIndex, companyIndex ->
@@ -571,12 +571,14 @@ class InitService {
             temp.save(flush: true)
         }
 
-        9.times { it ->
-            saveOrder(flow11, 1, '20170730001', it, it)
+        100.times { it ->
+            saveOrder(flow11, 1, '20170730001', it, 1)
+//            saveOrder(flow21, 2, '20170730005', it, 1)
+        }
+        9.times {it->
             saveOrder(flow11, 3, '20170730002', it, it)
-            saveOrder(flow21, 2, '20170730003', it, it)
+//            saveOrder(flow21, 2, '20170730003', it, it)
             saveOrder(flow11, 3, '20170730004', it, 1)
-            saveOrder(flow21, 2, '20170730005', it, 1)
         }
     }
 
@@ -627,8 +629,8 @@ class InitService {
     }
 
     private initPeople() {
-        new PeopleBasicInfo(companyCode: 'C000000001', name: '张敏', gender: '女', idCardNo: '34212519870314673x', picture: '', nation: '汉', nativePlace: '安徽合肥', phoneNo: '15105512743', address: '', email: 'test1@163.com', postCode: '340101', educationLevel: '大专', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
-        new PeopleBasicInfo(companyCode: 'C000000002', name: '吴珊', gender: '男', idCardNo: '34132519870314222x', picture: '', nation: '汉', nativePlace: '安徽巢湖', phoneNo: '15703272743', address: '', email: 'test2@163.com', postCode: '340001', educationLevel: '本科', technologyTitle: '', healthState: '健康', birthday: new Date()).save(flush: true)
+        new PeopleBasicInfo(companyCode: 'C000000001', name: '张敏', gender: '女', idCardNo: '34212519870314673x', picture: '', nation: '汉', nativePlace: '安徽合肥', phoneNo: '15105512743', address: '', email: 'test1@163.com', postCode: '340101', educationLevel: '大专', technologyTitle: '一级', healthState: '健康', birthday: new Date()).save(flush: true)
+        new PeopleBasicInfo(companyCode: 'C000000002', name: '吴珊', gender: '男', idCardNo: '34132519870314222x', picture: '', nation: '汉', nativePlace: '安徽巢湖', phoneNo: '15703272743', address: '', email: 'test2@163.com', postCode: '340001', educationLevel: '本科', technologyTitle: '一级', healthState: '健康', birthday: new Date()).save(flush: true)
         new WorkerCheckMember(companyCode: 'C000000001', idCardNo: '34212519870314673x', workLicenseType: '货运', workLicenseNo: 'AH2016', workLicenseGrantTime: new Date(), workLicenseGetTime: new Date(), endTime: new Date(), licenseGrantOrg: '合肥XXX运输有限公司', licenseSituation: '可用', licenseChangeTimes: 2, trainTimes: 2, checkType: '1').save(flush: true)
         new WorkerManager(companyCode: 'C000000002', idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '押运装卸', ownerName: '合肥市汽车客运XXX', driveCarType: '中小型客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), licenseGrantOrg: '合肥市交通xxx').save(flush: true)
         new WorkerTechnology(companyCode: 'C000000001', idCardNo: '34212519870314673x', ownerName: '合肥市汽车客运XXX').save(flush: true)
