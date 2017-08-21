@@ -996,7 +996,8 @@ class InitService {
                     regulationName: "${val}规章制度",
                     fileName: "${val}规章制度",
                     fileType: "doc",
-                    fileSize: 9801.0
+                    fileSize: 9801.0,
+                    fileRealPath: "hfyz/web-app/companyRegulation/C00000000${index}"
             ).save(flush: true)
         }
     }

@@ -11,7 +11,7 @@ class CompanyRegulation {
     String fileType //文件类型
     Double fileSize //单位kb
     Date dateCreated
-
+    String fileRealPath //上传文件真实路径
     static constraints = {
         companyCode blank: false, maxSize: 10
     }
