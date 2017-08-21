@@ -50,7 +50,8 @@ class CompanyRegulationService {
                     fileName      : regulation.fileName,
                     fileType      : regulation.fileType,
                     fileSize      : regulation.fileSize,
-                    dateCreated   : regulation.dateCreated?.format("yyyy-MM-dd HH:mm:ss")
+                    dateCreated   : regulation.dateCreated?.format("yyyy-MM-dd HH:mm:ss"),
+                    fileRealPath  : regulation.fileRealPath
             ]
 
         })
