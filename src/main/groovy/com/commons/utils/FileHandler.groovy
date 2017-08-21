@@ -10,7 +10,7 @@ import java.security.MessageDigest
     企业管理制度： $app/web-app/files/companyRegulation/$companyCode/$file
  */
 class FileHandler {
-    private static FILEMAXSIZE = 5242880
+    private static final FILEMAXSIZE = 5242880
 
     static checkoutFile(MultipartFile file){
         if(file == null || file.empty) {
