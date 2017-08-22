@@ -1,7 +1,7 @@
 package com.commons.utils
 
 import org.springframework.web.multipart.MultipartFile
-import com.commons.exception.FileException
+import com.commons.exception.FileUploadException
 
 import java.security.MessageDigest
 
@@ -14,9 +14,9 @@ class FileHandler {
 
     static checkoutFile(MultipartFile file){
         if(file == null || file.empty) {
-            throw new FileException('请先选择需要上传的文件！')
+            throw new FileUploadException("请先选择需要上传的文件！")
         } else if (file.size > FILEMAXSIZE) {
-            throw new FileException('文件不能超过5M，请重新上传！')
+            throw new FileUploadException("文件不能超过5M，请重新上传！")
         }
     }
 
@@ -26,6 +26,16 @@ class FileHandler {
             directory.mkdirs()
         }
         directory
+    }
+
+    static deleteFile(File file) {
+        boolean filePresent = file.exists()
+        if (filePresent) {
+            if (!file.delete()) {
+                String message = file.absolutePath + "文件删除失败"
+                throw new FileUploadException(message)
+            }
+        }
     }
 
     private static String getMD5Code(InputStream inputStream) {

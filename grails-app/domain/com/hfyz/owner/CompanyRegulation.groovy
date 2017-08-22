@@ -14,5 +14,7 @@ class CompanyRegulation {
     String fileRealPath //上传文件真实路径
     static constraints = {
         companyCode blank: false, maxSize: 10
+        regulationName unique: 'companyCode', nullable: false, blank: false
+        fileName unique: 'companyCode', nullable: false, blank: false
     }
 }

@@ -1,5 +1,6 @@
 package com.commons.utils
 
+import com.commons.exception.FileUploadException
 import com.commons.exception.IllegalActionException
 import com.commons.exception.InstancePermException
 import com.commons.exception.ParamsIllegalException
@@ -56,7 +57,12 @@ trait ControllerHelper {
         def map = [errors: [msg ?: '请求参数不合法，请查证！']]
         render map as JSON
     }
-    
+
+    def renderFileUploadErrorMsg(msg = null) {
+        response.setStatus(400)
+        def map = [errors: [msg ?: '请求参数不合法，请查证！']]
+        render map as JSON
+    }
 
     def renderValidationErrors(Errors errors) {
         response.setStatus(400)
@@ -105,5 +111,9 @@ trait ControllerHelper {
 
     def handleIllegalActionException(IllegalActionException e) {
         renderIllegalActionError()
+    }
+
+    def handleFileUploadException(FileUploadException e){
+        renderFileUploadErrorMsg(e.message)
     }
 }
