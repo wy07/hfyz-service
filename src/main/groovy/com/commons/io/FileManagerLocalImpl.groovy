@@ -1,5 +1,6 @@
 package com.commons.io
 
+import com.commons.exception.FileUploadException
 import org.springframework.web.multipart.MultipartFile
 import com.commons.utils.FileHandler
 
@@ -13,21 +14,38 @@ class FileManagerLocalImpl implements IFileManager{
     @Override
     String saveCompanyRegulationFile(MultipartFile file, String companyCode) {
         if(!file.empty) {
+            String fileRealPath = getCompanyRegulationFileRealPath(file, companyCode)
+            File newFile = new File(fileRealPath)
+            file.transferTo(newFile)
+        }
+    }
+
+    boolean deleteFile(String fileRealPath) {
+        try{
+            if(new File(fileRealPath).exists()){
+                FileHandler.deleteFile(new File(fileRealPath))
+            }
+            return true
+        }catch (e){
+            throw new FileUploadException("文件删除失败")
+        }
+    }
+
+    String getCompanyRegulationFileRealPath(MultipartFile file, String companyCode) {
+        if(!file.empty) {
             FileHandler.checkoutFile(file)
             String directory = "${grailsApplication.config.getProperty("uploadFilePath")}${File.separator}companyRegulation${File.separator}${companyCode}"
             String fileName = "${FileHandler.getMD5Code(file.inputStream)}"
             FileHandler.findOrCreateDirectory(directory)
 
-            String fileNamePath=System.getProperty("user.dir")+File.separator+directory+File.separator+fileName
-            String fileExtension=file.originalFilename.substring(file.originalFilename.lastIndexOf('.')+1)
-            String fileRealPath = "${fileNamePath}.${fileExtension}"
-            File newFile = new File(fileRealPath)
-            if (newFile.exists()) {
-                def index = rename("${fileNamePath}", '', fileExtension, 1)
-                newFile = new File("${fileNamePath}[${index}].${fileExtension}")
-                fileRealPath = "${fileNamePath}[${index}].${fileExtension}"
+            String fileNamePath = System.getProperty("user.dir") + File.separator + directory + File.separator + fileName
+            String fileExtension = file.originalFilename.substring(file.originalFilename.lastIndexOf('.') + 1)
+            String fileRealPath =  "${fileNamePath}.${fileExtension}"
+            File newFile=new File("${fileNamePath}.${fileExtension}")
+            if(newFile.exists()){
+                def index=rename("${fileNamePath}",'',fileExtension,1)
+                fileRealPath="${fileNamePath}[${index}].${fileExtension}"
             }
-            file.transferTo(newFile)
             fileRealPath
         }
     }

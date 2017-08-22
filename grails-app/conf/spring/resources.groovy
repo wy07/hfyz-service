@@ -28,8 +28,19 @@ beans = {
         objectDefinitionSource = ref('objectDefinitionSource')
         passwordEncoder = ref('passwordEncoder')
     }
+
     switch(Environment.current) {
+        case Environment.PRODUCTION:
+            fileManager(FileManagerLocalImpl){
+                grailsApplication = application
+            }
+            break
         case Environment.DEVELOPMENT:
+            fileManager(FileManagerLocalImpl){
+                grailsApplication = application
+            }
+            break
+        default:
             fileManager(FileManagerLocalImpl){
                 grailsApplication = application
             }
