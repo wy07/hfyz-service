@@ -3,6 +3,7 @@ package com.hfyz.security
 import com.commons.utils.NumberUtils
 import com.commons.utils.PageUtils
 import com.commons.utils.SQLHelper
+import com.hfyz.owner.OwnerIdentity
 import com.hfyz.support.Organization
 import grails.converters.JSON
 import java.text.SimpleDateFormat
@@ -14,6 +15,7 @@ class SysuserController implements ControllerHelper {
     def roleService
     def springSecurityService
     def userService
+    def ownerIdentityService
     static final String DEFAULT_PASSWORD = '666666'
 
     def list() {
@@ -33,7 +35,13 @@ class SysuserController implements ControllerHelper {
     }
 
     def save() {
-        userService.save(request.JSON)
+        def companyCode
+        def org
+        if(!getCurrentUser().isAdmin()){
+            companyCode = getCurrentUser().companyCode
+            org = getCurrentUser().org
+        }
+        userService.save(request.JSON, companyCode, org)
         renderSuccess()
     }
 
@@ -49,6 +57,7 @@ class SysuserController implements ControllerHelper {
                                                , roles      : user.authorities.id
                                                , companyCode: user.companyCode
                                                , orgId      : user.org?.id
+                                               , enterpirse : OwnerIdentity.findByCompanyCode(user.companyCode)?.ownerName
             ]])
         }
 
@@ -67,6 +76,10 @@ class SysuserController implements ControllerHelper {
             userService.delete(userInstance)
             renderSuccess()
         }
+    }
+
+    def getCompanyList(){
+        renderSuccessesWithMap(ownerIdentityService.getCompanyListByChar(request.JSON.enterpirse))
     }
 
     def resetPassword() {

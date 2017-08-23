@@ -24,12 +24,13 @@ class AuthController implements ControllerHelper {
 
                 def rights = springSecurityService.findRequestmapsByRoles(userDetails.authorities.role).code.join(';')
                 def companyName = OwnerIdentity.findByCompanyCode(userDetails.companyCode)?.ownerName
-
+                def orgId =  User.get(userDetails.id).org?.id
                 renderSuccessesWithMap([sub:userDetails.username
                                         ,role:userDetails.authorities.authority.join(",")
                                         ,id: userDetails.id
                                         ,companyCode: userDetails.companyCode
                                         ,companyName: companyName?:''
+                                        ,orgId:orgId
                                         ,rights:rights])
             } catch (BadCredentialsException e) {
                 renderErrorMsg(message(code: 'login.BadCredentials.label', default: '您的用户名和密码不匹配，请重新输入'))

@@ -398,7 +398,7 @@ class InitService {
         new PermissionGroup(url: '/permission-groups/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "权限管理", category: "系统管理", code: 'permission_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/operation_logs/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "操作日志", category: "系统管理", code: 'log_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/menus/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "菜单管理", category: "系统管理", code: 'menu_manage').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/sysusers/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "用户管理", category: "系统管理", code: 'sysuser_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/sysusers/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "用户管理", category: "系统管理", code: 'sysuser_manage').save(failOnError: true, flush: true)
 
         //基础信息
         new PermissionGroup(url: '/map-signs/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "路标管理", category: "基础信息", code: 'map_sign_manage').save(failOnError: true, flush: true)
