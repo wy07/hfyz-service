@@ -8,6 +8,10 @@ import com.hfyz.support.DangerousType
 class FreightWaybill {
     String vehicleNo // 车牌号
     String frameNo // 车架号
+    String carPlateColor // 车辆颜色
+    String carType // 车辆类型
+    String carSize // 车辆尺寸
+    String licenseNo // 挂车车牌号
     String companyCode // 业户编码
     String ownerName //业户名称
     String dangerousName //危险品名称
@@ -22,7 +26,11 @@ class FreightWaybill {
     Double mile //运输距离
     Date departTime //运输出场时间
     String driverName //驾驶员姓名
-    String idCardNo //驾驶员身份证号
+    String driverWokeLicenseNo //驾驶员从业资格证号
+    String driverPhone //驾驶员联系电话
+    String supercargoName //押运员姓名
+    String supercargoWokeLicenseNo // 押运员从业资格证号
+    String supercargoPhone //押运员联系电话
     String consignCompany //托运单位
     Date backTime //托运会回场时间
     String departArea //出发地
@@ -41,6 +49,7 @@ class FreightWaybill {
     String endCityCode
     String endDistrict
     String endDistrictCode
+    String viaLand
 
     static constraints = {
 

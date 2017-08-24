@@ -135,6 +135,13 @@ class SystemCodeController implements ControllerHelper {
         renderSuccessesWithMap(supportService.getMenu())
     }
 
+    def getDangerousTypeList() {
+        def dangerousTypeList = DangerousType.list().collect{obj ->
+            [id: obj.id, name: obj.name]
+        }
+        renderSuccessesWithMap([dangerousTypeList: dangerousTypeList])
+    }
+
     private withSystemCode(Long id, String type, Closure c) {
         def clazz = getClazzObj(type)?.clazz
         if (!clazz) {

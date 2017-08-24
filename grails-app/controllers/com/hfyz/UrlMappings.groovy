@@ -64,5 +64,12 @@ class UrlMappings {
         "/home"(controller: 'sysuser',action: 'home')
 
         "/companys/$companyCode/cars"(controller: 'car',action: 'getCompanyCars')
+
+        "/cars/infos"(controller: 'car',action: 'getCarInfo')
+
+        "/system-code/get-dangerous-types"(controller: 'systemCode',action: 'getDangerousTypeList')
+
+        "/people-basic-info/get-company-worker-drivers-and-manager"(controller: 'peopleBasicInfo',action: 'getCompanyWorkerDriversAndManager')
+
     }
 }
