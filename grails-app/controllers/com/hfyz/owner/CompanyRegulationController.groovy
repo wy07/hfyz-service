@@ -7,6 +7,8 @@ import com.hfyz.warning.Alarm
 import com.hfyz.warning.AlarmLevel
 import com.hfyz.warning.SourceType
 import com.hfyz.workOrder.WorkOrder
+import grails.converters.JSON
+import org.springframework.web.multipart.MultipartHttpServletRequest
 
 /**
  * 企业内部管理制度
@@ -14,7 +16,7 @@ import com.hfyz.workOrder.WorkOrder
 class CompanyRegulationController implements ControllerHelper {
 
     def companyRegulationService
-
+    def fileManager
     /**
      * 列表
      */
@@ -61,5 +63,58 @@ class CompanyRegulationController implements ControllerHelper {
 
     }
 
+    def save(){
+        if(!currentUser.isCompanyUser()){
+            renderNoInstancePermError()
+            return
+        }
+        def upload = request.getFile('upload')
+        def originalFilename = upload.originalFilename
+        String fileRealPath = fileManager.getCompanyRegulationFileRealPath(upload, getCurrentUser().companyCode)
 
+        CompanyRegulation companyRegulation = new CompanyRegulation()
+        companyRegulation.ownerName = OwnerIdentity.findByCompanyCode(getCurrentUser()?.companyCode).ownerName
+        companyRegulation.companyCode = getCurrentUser()?.companyCode
+        companyRegulation.regulationName = params.regulationName.substring(1, params.regulationName.lastIndexOf('"'))
+        companyRegulation.fileName = originalFilename.substring(0, originalFilename.lastIndexOf('.'))
+        companyRegulation.fileType = originalFilename.substring(originalFilename.lastIndexOf('.')+1, originalFilename.length())
+        companyRegulation.fileSize = (upload.getSize()/1024).setScale(2,BigDecimal.ROUND_HALF_UP)
+        companyRegulation.fileRealPath = fileRealPath
+        companyRegulation.save(flush: true, failOnError: true)
+        fileManager.saveCompanyRegulationFile(upload, getCurrentUser().companyCode)
+        renderSuccess()
+    }
+
+    def edit(){
+        withRegulation(params.long('id')) { regulationInstance ->
+            renderSuccessesWithMap([regulation: [id             : regulationInstance.id
+                                               , regulationName : regulationInstance.regulationName
+                                               , fileName    : regulationInstance.fileName]])
+        }
+    }
+
+    def update(){
+        withRegulation(params.long('id')) { regulationInstance ->
+            regulationInstance.properties = request.JSON
+            regulationInstance.save(flush: true, failOnError: true)
+            renderSuccess()
+        }
+    }
+
+    def delete(){
+        withRegulation(params.long('id')) { regulationInstance ->
+            fileManager.deleteFile(regulationInstance.fileRealPath)
+            regulationInstance.delete(flush: true)
+            renderSuccess()
+        }
+    }
+
+    private withRegulation(Long id, Closure c) {
+        CompanyRegulation regulationInstance = id ? CompanyRegulation.get(id) : null
+        if (regulationInstance) {
+            c.call regulationInstance
+        } else {
+            renderNoTFoundError()
+        }
+    }
 }

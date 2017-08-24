@@ -1,6 +1,8 @@
 package com.hfyz.security
 
+import com.commons.exception.RecordNotFoundException
 import com.commons.utils.SQLHelper
+import com.hfyz.support.AlarmType
 import com.hfyz.support.Organization
 import com.hfyz.support.SystemCode
 import grails.transaction.Transactional
@@ -11,19 +13,27 @@ class SupportService {
     def dataSource
     def grailsApplication
 
-    def getOrgList(){
+    def getOrgList() {
         def orgList = SQLHelper.withDataSource(dataSource) { sql ->
             sql.rows(GET_ORG_SQL)
         }
         formatOrgList(orgList, 0)
     }
 
-    def getChildrenOrgs(){
+    def getChildrenOrgs() {
         return Organization.findAllByParentIsNotNull()
     }
 
-    def getOrgs(){
+    def getOrgs() {
         return Organization.list([sort: 'id', order: 'desc'])
+    }
+
+    def getAlarmType(Long id){
+        AlarmType alarmType = id ? AlarmType.get(id) : null
+        if (!alarmType) {
+            throw new RecordNotFoundException()
+        }
+        return alarmType
     }
 
     def formatOrgList(def data, def pid) {
@@ -31,10 +41,10 @@ class SupportService {
         def list = data.findAll { obj -> obj.parentId == pid }
         list?.each { obj ->
             Map tMap = [:]
-            tMap = [data:[ id: obj.id
-                          ,name :obj.name
-                          ,codeNum:obj.codeNum
-                          ,expanded: true]]
+            tMap = [data: [id        : obj.id
+                           , name    : obj.name
+                           , codeNum : obj.codeNum
+                           , expanded: true]]
             def tFind = data.find { a -> a.parentId == obj.id }
 
             if (tFind) {
@@ -45,16 +55,16 @@ class SupportService {
         return result
     }
 
-    def getOrgForSelect(User user){
+    def getOrgForSelect(User user) {
         def orgs
-        if(grailsApplication.config.getProperty("user.rootRole.name") in user.authorities.authority){
-            orgs=getOrgs()
-        }else{
-            orgs=user.org?[user.org]:[]
+        if (grailsApplication.config.getProperty("user.rootRole.name") in user.authorities.authority) {
+            orgs = getOrgs()
+        } else {
+            orgs = user.org ? [user.org] : []
         }
 
-        orgs?.collect{Organization org->
-            [value:org.id,label:org.name]
+        orgs?.collect { Organization org ->
+            [value: org.id, label: org.name]
         }
 
 //        println roles
@@ -76,6 +86,31 @@ class SupportService {
 //        }
     }
 
+
+    def getOrgWithRole() {
+        def result = [:]
+        SQLHelper.withDataSource(dataSource) { sql ->
+            sql.rows(ORG_WITH_ROLE_SQL.toString())
+        }.each { obj ->
+            if (!result["${obj.orgId}"]) {
+                result["${obj.orgId}"] = [id: obj.orgId, name: obj.orgName, roles: []]
+            }
+            result["${obj.orgId}"].roles << [id: obj.roleId, name: obj.roleName, authority: obj.authority]
+        }
+        result.values()
+    }
+
+    private static final ORG_WITH_ROLE_SQL = """
+        select org.id orgId
+            ,org.name orgName
+            ,r.id roleId
+            ,r.name roleName
+            ,r.authority authority
+        from organization org
+        join role r on r.org_id=org.id
+        order by org.id desc,r.id desc
+    """
+
     def getMenu() {
         def result = [:]
         def GET_MENU_SQL = "select id,name,code ,style, icon,position,permission_code from menu where parent_id is null and display=true and position in ('TOP_BAR','SIDE_BAR') order by id"
@@ -95,7 +130,7 @@ class SupportService {
             }
             result["${root.position}"] << menu
         }
-        result["ROLE_RIGHTS"]=null
+        result["ROLE_RIGHTS"] = null
         return result
     }
 
