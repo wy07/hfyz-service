@@ -364,6 +364,7 @@ class InitService {
 //        }
 
         def companyRole = new Role(authority: 'ROLE_COMPANY_ROOT', name: '企业管理员', org: Organization.findByCode('24')).save(failOnError: true, flush: true)
+        new Role(authority: 'ROLE_COMPANY_DIRVER', name: '驾驶员', org: Organization.findByCode('24')).save(failOnError: true, flush: true)
 
         (1..100).each {
             def aaa = new User(username: "user${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: mockUsername(), org: Organization.findByCode('24'),companyCode: "C00000000${it%9}").save(failOnError: true, flush: true)
@@ -383,6 +384,7 @@ class InitService {
 
 
         def controlRole = new Role(authority: 'ROLE_CONTROL_CENTER_ROOT', name: '监控指挥中心管理员', org: Organization.findByCode('01')).save(failOnError: true, flush: true)
+        new Role(authority: 'ROLE_CONTROL_CENTER_COMMON', name: '监控指挥中心业务员', org: Organization.findByCode('01')).save(failOnError: true, flush: true)
         def controlUser = new User(username: 'center', passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: '运管指挥中心管理员', org: Organization.findByCode('01')).save(failOnError: true, flush: true)
         UserRole.create controlUser, controlRole, true
 
@@ -470,6 +472,7 @@ class InitService {
         new Menu(name: '用户', code: 'user', icon: 'fa-user', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'sysuser_manage').save(flush: true)
         new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'log_manage').save(flush: true)
         new Menu(name: '菜单', code: 'menu', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'menu_manage').save(flush: true)
+        new Menu(name: '工单工作流', code: 'workOrderFlow', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
 
         def basicInfo = new Menu(name: '基础信息', code: 'root-basicinfo', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR', permissionCode: 'map_sign_manage;system_code_manage;configure_manage').save(flush: true)
         new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'map_sign_manage').save(flush: true)
@@ -531,21 +534,21 @@ class InitService {
 
 
 
-//        def flow12 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 2, flows: [])
-//        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
-//         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
-//         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
-//            flow12.flows << it
-//        }
-//        flow12.save(flush: true)
+        def flow12 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 2, flows: [])
+        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
+         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
+         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
+            flow12.flows << it
+        }
+        flow12.save(flush: true)
 
-//        def flow21 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('205'), flowVersion: 2, enabled: true, flows: [])
-//        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
-//         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
-//         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
-//            flow21.flows << it
-//        }
-//        flow21.save(flush: true)
+        def flow21 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('205'), flowVersion: 2, enabled: true, flows: [])
+        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '审批', action: 'SP']
+         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
+         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
+            flow21.flows << it
+        }
+        flow21.save(flush: true)
 
 
         def saveOrder = { flow, flowStep, snTitle, snIndex, companyIndex ->

@@ -5,7 +5,7 @@ package com.commons.exception
  */
 class IllegalActionException extends RuntimeException {
 
-    IllegalActionException() {
-        super('illegal action')
+    IllegalActionException(String msg) {
+        super(msg)
     }
 }
