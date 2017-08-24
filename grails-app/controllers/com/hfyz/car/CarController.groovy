@@ -8,11 +8,12 @@ import com.hfyz.support.AlarmType
 import com.hfyz.warning.Alarm
 import com.hfyz.warning.AlarmLevel
 import com.hfyz.warning.SourceType
+import com.hfyz.warning.Warning
 import com.hfyz.workOrder.WorkOrder
 
 class CarController implements ControllerHelper {
     def carService
-
+    def warningService
     def search() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
@@ -69,5 +70,50 @@ class CarController implements ControllerHelper {
 
     def historyStatistic() {
         renderSuccessesWithMap([statistic: carService.historyStatistic(currentUser.org,NumberUtils.toInteger(request.JSON.year))])
+    }
+
+    def detail() {
+        withCar(params.long('id')) { carInstance ->
+            def carDetail = [id                : carInstance.id
+                             , modifyTime      : carInstance.modifyTime?.format('yyyy-MM-dd HH:mm:ss')
+                             , licenseNo       : carInstance.licenseNo
+                             , carPlateColor   : carInstance.carPlateColor
+                             , brand           : carInstance.brand
+                             , model           : carInstance.model
+                             , carType         : carInstance.carType
+                             , passengerLevel  : carInstance.passengerLevel
+                             , carColor        : carInstance.carColor
+                             , engNo           : carInstance.engNo
+                             , frameNo         : carInstance.frameNo
+                             , carIdentityCode : carInstance.carIdentityCode
+                             , seatNo          : carInstance.seatNo
+                             , carTonnage      : carInstance.carTonnage
+                             , carBoxNo        : carInstance.carBoxNo
+                             , volume          : carInstance.volume
+                             , fuelType        : carInstance.fuelType
+                             , engPower        : carInstance.engPower
+                             , leaveFactoryTime: carInstance.leaveFactoryTime?.format('yyyy-MM-dd HH:mm:ss')
+                             , buyCarTime      : carInstance.buyCarTime?.format('yyyy-MM-dd HH:mm:ss')
+                             , settleTime      : carInstance.settleTime?.format('yyyy-MM-dd HH:mm:ss')
+                             , picture         : carInstance.picture
+                             , wheelbase       : carInstance.wheelbase
+                             , carLength       : carInstance.carLength
+                             , carHeight       : carInstance.carHeight
+                             , carWidth        : carInstance.carWidth
+                             , carSmokeNo      : carInstance.carSmokeNo
+                             , leafSpringNo    : carInstance.leafSpringNo
+                             , tractionTonnage : carInstance.tractionTonnage]
+            def warningResult = warningService.getWarningList(10,0, carInstance.frameNo,carInstance.licenseNo)
+            renderSuccessesWithMap([car: carDetail,warningResult:warningResult])
+        }
+    }
+
+    private withCar(Long id, Closure c) {
+        CarBasicInfo carInstance = id ? CarBasicInfo.get(id) : null
+        if (carInstance) {
+            c.call carInstance
+        } else {
+            renderNoTFoundError()
+        }
     }
 }
