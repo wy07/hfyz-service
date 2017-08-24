@@ -116,4 +116,18 @@ class CarController implements ControllerHelper {
             renderNoTFoundError()
         }
     }
+
+    def getCarInfo() {
+        def carInfo = CarBasicInfo.findByLicenseNo(request.JSON.vehicleNo)
+        if(carInfo) {
+            carInfo = [
+                    carPlateColor:carInfo?.carPlateColor,
+                    carType:carInfo?.carType,
+                    carSize:"${carInfo?.carLength}mm*${carInfo?.carWidth}mm*${carInfo?.carHeight}"
+            ]
+        }else {
+            carInfo = []
+        }
+        renderSuccessesWithMap([carInfo: carInfo])
+    }
 }

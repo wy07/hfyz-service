@@ -15,6 +15,9 @@ class OrganizationController implements ControllerHelper{
     def listForSelect(){
         renderSuccessesWithMap([orgList: supportService.getOrgForSelect(currentUser)])
     }
+    def listWithRole(){
+        renderSuccessesWithMap([orgList: supportService.getOrgWithRole()])
+    }
     def index() {
         int max = PageUtils.getMax(request.JSON.max,10,100)
         int offset = PageUtils.getOffset(request.JSON.offset)

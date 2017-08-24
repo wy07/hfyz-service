@@ -21,7 +21,11 @@ class SysuserController implements ControllerHelper {
     def list() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        def userList = User.list([max: max, offset: offset, sort: 'id', order: 'desc'])?.collect { User user ->
+        def userList = User.createCriteria().list([max:max, offset:offset, sort: 'id', order: 'desc']){
+            if(getCurrentUser().isCompanyUser()){
+                eq ("companyCode", getCurrentUser().companyCode)
+            }
+        }?.collect(){ User user ->
             [id           : user.id
              , name       : user.name
              , username   : user.username
@@ -30,7 +34,14 @@ class SysuserController implements ControllerHelper {
              , org        : user.org?.name
              , companyCode: user.companyCode]
         }
-        def totalUsers = User.count()
+        def totalUsers = User.createCriteria().get {
+            projections {
+                count()
+            }
+            if(getCurrentUser().isCompanyUser()){
+                eq ("companyCode", getCurrentUser().companyCode)
+            }
+        }
         renderSuccessesWithMap([userList: userList, totalUsers: totalUsers])
     }
 
