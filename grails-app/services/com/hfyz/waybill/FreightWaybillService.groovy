@@ -38,7 +38,7 @@ class FreightWaybillService {
                     dangerousType: bill.dangerousType?.name,
                     amount       : bill.amount,
                     loadedType   : bill.loadedType,
-                    departTime   : bill.departTime?.format("yyyy-MM-dd HH:mm:ss"),
+                    departTime   : bill.departTime?.format("yyyy-MM-dd HH:mm"),
                     fullLoaded   : bill.fullLoaded,
                     departArea   : bill.departArea,
                     arriveArea   : bill.arriveArea,

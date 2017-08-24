@@ -35,4 +35,10 @@ class PeopleBasicInfoController implements ControllerHelper {
         peopleBasicInfoService.licenseInspection()
         renderSuccess()
     }
+
+    def getCompanyWorkerDriversAndManager() {
+        def result = peopleBasicInfoService.getCompanyWorkerDriversAndManagers(request.JSON.companyCode)
+        renderSuccessesWithMap([driversList: result.driversList, managersList: result.managersList])
+
+    }
 }

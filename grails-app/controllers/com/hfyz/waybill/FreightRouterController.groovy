@@ -57,6 +57,18 @@ class FreightRouterController implements ControllerHelper {
         }
     }
 
+    def getViaLand() {
+        def viaLands = FreightRouter.findAllByStartDistrictCodeAndEndDistrictCodeAndCompanyCode(request.JSON.startDistrictCode
+                       ,request.JSON.endDistrictCode, request.JSON.companyCode).collect{obj ->
+            [
+                    id: obj.id,
+                    viaLand: obj.viaLand,
+                    routerName: obj.routerName
+            ]
+        }
+        renderSuccessesWithMap([viaLands: viaLands])
+    }
+
     private withFreightRouter(Long id, Closure c) {
         FreightRouter freightRouterInstance = id ? FreightRouter.get(id) : null
         if (freightRouterInstance) {
