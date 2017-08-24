@@ -189,7 +189,11 @@ class InitService {
         def dangerousType = DangerousType.findByCodeNum('03111')
         new FreightWaybill(
                 vehicleNo: cars[0],
+                licenseNo: cars[0],
                 frameNo: getFrameNo(0),
+                carPlateColor: '红',
+                carType: '普通货车',
+                carSize: '9000mm*2780mm*2465mm',
                 companyCode: "C000000000",
                 ownerName: companys[0],
                 dangerousName: '液碱',
@@ -198,18 +202,22 @@ class InitService {
                 emergencyPlan: '无',
                 price: 3500.0,
                 operatedType: '经营性',
-                loadedType: '卸',
+                loadedType: '装载',
                 fullLoaded: '否',
                 amount: 8.0,
                 mile: 263.0,
                 departTime: new Date(117, 8, 12, 6, 23, 40),
                 driverName: '赵坤',
-                idCardNo: '3400000',
+                driverWokeLicenseNo: '3400234',
+                driverPhone: '13152099234',
+                supercargoName: '王坤',
+                supercargoWokeLicenseNo: '3242424',
+                supercargoPhone: '13152099235',
                 consignCompany: '无',
                 backTime: new Date(117, 8, 13, 5, 23, 40),
                 departArea: '合肥',
                 arriveArea: '张家港',
-                status: '无',
+                status: 'CG',
                 routerName: '合肥-太原',
                 startProvince: '安徽省',
                 startProvinceCode: '340000',
@@ -222,11 +230,16 @@ class InitService {
                 endCity: '太原市',
                 endCityCode: '140100',
                 endDistrict: '迎泽区',
-                endDistrictCode: '140106'
+                endDistrictCode: '140106',
+                viaLand: '渭南,运城,济源'
         ).save(flush: true)
         new FreightWaybill(
                 vehicleNo: cars[1],
+                licenseNo: cars[1],
                 frameNo: getFrameNo(1),
+                carPlateColor: '黄',
+                carType: '普通货车',
+                carSize: '9000mm*2780mm*2465mm',
                 companyCode: "C000000001",
                 ownerName: companys[1],
                 dangerousName: '甲醇',
@@ -235,18 +248,22 @@ class InitService {
                 emergencyPlan: '无',
                 price: 3500.0,
                 operatedType: '经营性',
-                loadedType: '卸',
+                loadedType: '卸载',
                 fullLoaded: '否',
                 amount: 4.90,
                 mile: 263.0,
                 departTime: new Date(117, 8, 14, 6, 23, 40),
                 driverName: '赵坤',
-                idCardNo: '3400000',
+                driverWokeLicenseNo: '3400234',
+                driverPhone: '13152099234',
+                supercargoName: '王坤',
+                supercargoWokeLicenseNo: '3242424',
+                supercargoPhone: '13152099235',
                 consignCompany: '无',
                 backTime: new Date(117, 8, 15, 5, 23, 40),
                 departArea: '合肥',
                 arriveArea: '武汉',
-                status: '无',
+                status: 'CG',
                 routerName: '合肥-武汉',
                 startProvince: '安徽省',
                 startProvinceCode: '340000',
@@ -259,11 +276,16 @@ class InitService {
                 endCity: '武汉市',
                 endCityCode: '420100',
                 endDistrict: '江岸区',
-                endDistrictCode: '420102'
+                endDistrictCode: '420102',
+                viaLand: '渭南,运城,济源'
         ).save(flush: true)
         new FreightWaybill(
                 vehicleNo: cars[2],
+                licenseNo: cars[2],
                 frameNo: getFrameNo(2),
+                carPlateColor: '黄',
+                carType: '普通货车',
+                carSize: '9000mm*2780mm*2465mm',
                 companyCode: "C000000002",
                 ownerName: companys[2],
                 dangerousName: '环己酮',
@@ -272,18 +294,22 @@ class InitService {
                 emergencyPlan: '无',
                 price: 3500.0,
                 operatedType: '经营性',
-                loadedType: '卸',
+                loadedType: '装载',
                 fullLoaded: '否',
                 amount: 2.30,
                 mile: 263.0,
                 departTime: new Date(117, 8, 10, 14, 23, 40),
                 driverName: '赵坤',
-                idCardNo: '3400000',
+                driverWokeLicenseNo: '3400234',
+                driverPhone: '13152099234',
+                supercargoName: '王坤',
+                supercargoWokeLicenseNo: '3242424',
+                supercargoPhone: '13152099235',
                 consignCompany: '无',
                 backTime: new Date(117, 8, 11, 01, 23, 40),
                 departArea: '合肥',
                 arriveArea: '武汉',
-                status: '无',
+                status: 'CG',
                 routerName: '合肥-连云港',
                 startProvince: '安徽省',
                 startProvinceCode: '340000',
@@ -296,7 +322,8 @@ class InitService {
                 endCity: '连云港市',
                 endCityCode: '320700',
                 endDistrict: '连云区',
-                endDistrictCode: '320703'
+                endDistrictCode: '320703',
+                viaLand: '渭南,运城,济源'
         ).save(flush: true)
     }
 
@@ -631,12 +658,15 @@ class InitService {
     private initPeople() {
         new PeopleBasicInfo(companyCode: 'C000000001', name: '张敏', gender: '女', idCardNo: '34212519870314673x', picture: '', nation: '汉', nativePlace: '安徽合肥', phoneNo: '15105512743', address: '', email: 'test1@163.com', postCode: '340101', educationLevel: '大专', technologyTitle: '一级', healthState: '健康', birthday: new Date()).save(flush: true)
         new PeopleBasicInfo(companyCode: 'C000000002', name: '吴珊', gender: '男', idCardNo: '34132519870314222x', picture: '', nation: '汉', nativePlace: '安徽巢湖', phoneNo: '15703272743', address: '', email: 'test2@163.com', postCode: '340001', educationLevel: '本科', technologyTitle: '一级', healthState: '健康', birthday: new Date()).save(flush: true)
+        new PeopleBasicInfo(companyCode: 'C000000001', name: mockUsername(), gender: '男', idCardNo: '34132519870314256x', picture: '', nation: '汉', nativePlace: '安徽巢湖', phoneNo: '15703272743', address: '', email: 'test2@163.com', postCode: '340001', educationLevel: '本科', technologyTitle: '一级', healthState: '健康', birthday: new Date()).save(flush: true)
+        new PeopleBasicInfo(companyCode: 'C000000001', name: mockUsername(), gender: '男', idCardNo: '34132519870314289x', picture: '', nation: '汉', nativePlace: '安徽巢湖', phoneNo: '15703272743', address: '', email: 'test2@163.com', postCode: '340001', educationLevel: '本科', technologyTitle: '一级', healthState: '健康', birthday: new Date()).save(flush: true)
         new WorkerCheckMember(companyCode: 'C000000001', idCardNo: '34212519870314673x', workLicenseType: '货运', workLicenseNo: 'AH2016', workLicenseGrantTime: new Date(), workLicenseGetTime: new Date(), endTime: new Date(), licenseGrantOrg: '合肥XXX运输有限公司', licenseSituation: '可用', licenseChangeTimes: 2, trainTimes: 2, checkType: '1').save(flush: true)
         new WorkerManager(companyCode: 'C000000002', idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '押运装卸', ownerName: '合肥市汽车客运XXX', driveCarType: '中小型客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), licenseGrantOrg: '合肥市交通xxx').save(flush: true)
         new WorkerTechnology(companyCode: 'C000000001', idCardNo: '34212519870314673x', ownerName: '合肥市汽车客运XXX').save(flush: true)
         new WorkerWaiter(idCardNo: '34132519870314222x', jobName: '后勤管理', jobLicenseNo: 'xxxx', grantTime: new Date(), beginWorkTime: new Date()).save(flush: true)
         new WorkerCoach(companyCode: 'C000000001', idCardNo: '34212519870314673x', workLicenseType: '教练', workLicenseNo: 'CAH1234', workLicenseGetTime: new Date(), workLicenseGrantTime: new Date(), endTime: new Date(), driveLicenseNo: '34212519870314673x', driveCarType: '小汽车', driveLicenseGetTime: new Date(), licenseGrantOrga: '合肥市新亚驾校', licenseSituation: '可用', workSituation: '中级教练', ownerName: '合肥市新亚驾校', businessPermitCharacter: '3', businessPermitNo: '34xxx', changeTimes: 0, trainTimes: 1, inspectDealSituation: '', teachType: 'C照', driveLicenseSituation: '可用').save(flush: true)
-        new WorkerDriver(companyCode: 'C000000002', idCardNo: '34132519870314222x', workLicenseGrantTime: new Date(), workLicenseType: '驾驶员', ownerName: '合肥市汽车客运XXX', driveCarType: '客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), driveLicenseNo: '34132519870314222x', businessPermitCharacter: 'x').save(flush: true)
+        new WorkerDriver(companyCode: 'C000000001', idCardNo: '34132519870314256x', workLicenseGrantTime: new Date(), workLicenseType: '驾驶员', workLicenseNo: 'CAH1234', ownerName: '合肥市汽车客运XXX', driveCarType: '客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), driveLicenseNo: '34132519870314222x', businessPermitCharacter: 'x').save(flush: true)
+        new WorkerManager(companyCode: 'C000000001', idCardNo: '34132519870314289x', workLicenseGrantTime: new Date(), workLicenseType: '押运装卸', workLicenseNo: 'CAH5678', ownerName: '合肥市汽车客运XXX', driveCarType: '中小型客运汽车', trafficAccidentRecordNo: 0, endTime: new Date(), licenseGrantOrg: '合肥市交通xxx').save(flush: true)
     }
 
     private initCar() {
