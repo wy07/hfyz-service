@@ -74,7 +74,7 @@ class CarController implements ControllerHelper {
 
     def detail() {
         withCar(params.long('id')) { carInstance ->
-            def carDetail = [id                : carInstance.id
+            renderSuccessesWithMap([car: [id                : carInstance.id
                              , modifyTime      : carInstance.modifyTime?.format('yyyy-MM-dd HH:mm:ss')
                              , licenseNo       : carInstance.licenseNo
                              , carPlateColor   : carInstance.carPlateColor
@@ -102,9 +102,32 @@ class CarController implements ControllerHelper {
                              , carWidth        : carInstance.carWidth
                              , carSmokeNo      : carInstance.carSmokeNo
                              , leafSpringNo    : carInstance.leafSpringNo
-                             , tractionTonnage : carInstance.tractionTonnage]
-            def warningResult = warningService.getWarningList(10,0, carInstance.frameNo,carInstance.licenseNo)
-            renderSuccessesWithMap([car: carDetail,warningResult:warningResult])
+                             , tractionTonnage : carInstance.tractionTonnage]])
+        }
+    }
+
+    def getWarning() {
+        int max = PageUtils.getMax(request.JSON.max, 10, 100)
+        int offset = PageUtils.getOffset(request.JSON.offset)
+        withCar(params.long('id')) { carInstance ->
+            renderSuccessesWithMap(warningService.getWarningByCar(max, offset, carInstance.frameNo))
+        }
+    }
+
+    def getHistory() {
+        withCar(params.long('id')) { carInstance ->
+            def historyList = [
+                    [licenseNo: carInstance.licenseNo, carColor: carInstance.carColor, point: '116.37168,39.93218', speed: '80', totalMileage: 3, recSpeed: 80, direction: 4
+                     , altitude: 75, vehicleState: '良好', refreshTime: new Date().format('yyyy-MM-dd')],
+                    [licenseNo: carInstance.licenseNo, carColor: carInstance.carColor, point: '118.64859,39.93218', speed: '75', totalMileage: 1, recSpeed: 75, direction: 9
+                     , altitude: 74.6, vehicleState: '良好', refreshTime: new Date().format('yyyy-MM-dd')],
+                    [licenseNo: carInstance.licenseNo, carColor: carInstance.carColor, point: '116.98514,45.93218', speed: '60', totalMileage: 2.8, recSpeed: 60, direction: 6
+                     , altitude: 75, vehicleState: '良好', refreshTime: new Date().format('yyyy-MM-dd')],
+                    [licenseNo: carInstance.licenseNo, carColor: carInstance.carColor, point: '120.37168,39.93218', speed: '20', totalMileage: 3.4, recSpeed: 20, direction: 7
+                     , altitude: 78, vehicleState: '良好', refreshTime: new Date().format('yyyy-MM-dd')],
+                    [licenseNo: carInstance.licenseNo, carColor: carInstance.carColor, point: '116.37168,39.75249', speed: '48', totalMileage: 0.7, recSpeed: 48, direction: 10
+                     , altitude: 77, vehicleState: '良好', refreshTime: new Date().format('yyyy-MM-dd')]]
+            renderSuccessesWithMap([historyList : historyList])
         }
     }
 

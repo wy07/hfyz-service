@@ -17,7 +17,7 @@ class Warning {
     String superviseEmail         //督办联系电子邮箱
 
     static constraints = {
-        frameNo unique: true, blank: false, maxSize: 17
+        frameNo blank: false, maxSize: 17
         carLicenseNo blank: false, maxSize: 8
         carColor blank: false, maxSize: 10
         warningSource blank: false, inList: [1, 2, 3, 9]
