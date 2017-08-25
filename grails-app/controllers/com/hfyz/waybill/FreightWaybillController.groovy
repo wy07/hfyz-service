@@ -81,11 +81,11 @@ class FreightWaybillController implements ControllerHelper {
         freightWaybillInstance.status = 'CG'
         freightWaybillInstance.dangerousType = dangerousType
         freightWaybillInstance.driverName = request.JSON.driver.name
-        freightWaybillInstance.driverWokeLicenseNo = request.JSON.driver.workLicenseNo
-        freightWaybillInstance.driverPhone = request.JSON.driver.phoneNo
+        freightWaybillInstance.driverWokeLicenseNo = request.JSON.driver.wokeLicenseNo
+        freightWaybillInstance.driverPhone = request.JSON.driver.phone
         freightWaybillInstance.supercargoName = request.JSON.supercargo.name
-        freightWaybillInstance.supercargoWokeLicenseNo = request.JSON.supercargo.workLicenseNo
-        freightWaybillInstance.supercargoPhone = request.JSON.supercargo.phoneNo
+        freightWaybillInstance.supercargoWokeLicenseNo = request.JSON.supercargo.wokeLicenseNo
+        freightWaybillInstance.supercargoPhone = request.JSON.supercargo.phone
         freightWaybillInstance.companyCode = currentUser.companyCode
         freightWaybillInstance.save(flush: true, failOnError: true)
         renderSuccess()
@@ -113,8 +113,8 @@ class FreightWaybillController implements ControllerHelper {
                                                      , amount           : freightWaybillInstance.amount
                                                      , mile             : freightWaybillInstance.mile
                                                      , departTime       : freightWaybillInstance.departTime?.format('yyyy-MM-dd HH:mm')
-                                                     , driver           : [name: freightWaybillInstance.driverName, workLicenseNo: freightWaybillInstance.driverWokeLicenseNo, phoneNo: freightWaybillInstance.driverPhone]
-                                                     , supercargo       : [name: freightWaybillInstance.supercargoName, workLicenseNo: freightWaybillInstance.supercargoWokeLicenseNo, phoneNo: freightWaybillInstance.supercargoPhone]
+                                                     , driver           : [name: freightWaybillInstance.driverName, wokeLicenseNo: freightWaybillInstance.driverWokeLicenseNo, phone: freightWaybillInstance.driverPhone]
+                                                     , supercargo       : [name: freightWaybillInstance.supercargoName, wokeLicenseNo: freightWaybillInstance.supercargoWokeLicenseNo, phone: freightWaybillInstance.supercargoPhone]
                                                      , consignCompany   : freightWaybillInstance.consignCompany
                                                      , backTime         : freightWaybillInstance.backTime?.format('yyyy-MM-dd HH:mm')
                                                      , departArea       : freightWaybillInstance.departArea
@@ -146,11 +146,11 @@ class FreightWaybillController implements ControllerHelper {
             freightWaybillInstance.departTime = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.departTime)
             freightWaybillInstance.backTime = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.backTime)
             freightWaybillInstance.driverName = request.JSON.driver.name
-            freightWaybillInstance.driverWokeLicenseNo = request.JSON.driver.workLicenseNo
-            freightWaybillInstance.driverPhone = request.JSON.driver.phoneNo
+            freightWaybillInstance.driverWokeLicenseNo = request.JSON.driver.wokeLicenseNo
+            freightWaybillInstance.driverPhone = request.JSON.driver.phone
             freightWaybillInstance.supercargoName = request.JSON.supercargo.name
-            freightWaybillInstance.supercargoWokeLicenseNo = request.JSON.supercargo.workLicenseNo
-            freightWaybillInstance.supercargoPhone = request.JSON.supercargo.phoneNo
+            freightWaybillInstance.supercargoWokeLicenseNo = request.JSON.supercargo.wokeLicenseNo
+            freightWaybillInstance.supercargoPhone = request.JSON.supercargo.phone
             request.JSON.remove('departTime')
             request.JSON.remove('backTime')
             freightWaybillInstance.properties = request.JSON
