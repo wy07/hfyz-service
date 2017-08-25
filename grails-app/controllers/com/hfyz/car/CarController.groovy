@@ -70,4 +70,18 @@ class CarController implements ControllerHelper {
     def historyStatistic() {
         renderSuccessesWithMap([statistic: carService.historyStatistic(currentUser.org,NumberUtils.toInteger(request.JSON.year))])
     }
+
+    def getCarInfo() {
+        def carInfo = CarBasicInfo.findByLicenseNo(request.JSON.vehicleNo)
+        if(carInfo) {
+            carInfo = [
+                    carPlateColor:carInfo?.carPlateColor,
+                    carType:carInfo?.carType,
+                    carSize:"${carInfo?.carLength}mm*${carInfo?.carWidth}mm*${carInfo?.carHeight}"
+            ]
+        }else {
+            carInfo = []
+        }
+        renderSuccessesWithMap([carInfo: carInfo])
+    }
 }

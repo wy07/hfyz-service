@@ -3,7 +3,7 @@ package com.hfyz.waybill
 import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
 import com.hfyz.security.User
-import com.hfyz.support.DangerousType
+import com.hfyz.support.SystemCode
 
 class FreightWaybillController implements ControllerHelper {
     def freightWaybillService
@@ -20,8 +20,8 @@ class FreightWaybillController implements ControllerHelper {
 
     def show() {
         withFreightWaybill(params.long('id')) { FreightWaybill freightWaybillInstance ->
-            if(currentUser.isCompanyUser()){
-                if(freightWaybillInstance.companyCode!=currentUser.companyCode){
+            if (currentUser.isCompanyUser()) {
+                if (freightWaybillInstance.companyCode != currentUser.companyCode) {
                     renderNoInstancePermError()
                     return
                 }
@@ -29,10 +29,14 @@ class FreightWaybillController implements ControllerHelper {
             renderSuccessesWithMap([freightWaybill: [id                 : freightWaybillInstance.id
                                                      , vehicleNo        : freightWaybillInstance.vehicleNo
                                                      , frameNo          : freightWaybillInstance.frameNo
+                                                     , licenseNo        : freightWaybillInstance.licenseNo
+                                                     , carPlateColor    : freightWaybillInstance.carPlateColor
+                                                     , carType          : freightWaybillInstance.carType
+                                                     , carSize          : freightWaybillInstance.carSize
                                                      , companyCode      : freightWaybillInstance.companyCode
                                                      , ownerName        : freightWaybillInstance.ownerName
                                                      , dangerousName    : freightWaybillInstance.dangerousName
-                                                     , dangerousType    : freightWaybillInstance.dangerousType.name
+                                                     , dangerousType    : [id: freightWaybillInstance.dangerousType.id, name: freightWaybillInstance.dangerousType.name]
                                                      , ratifiedPayload  : freightWaybillInstance.ratifiedPayload
                                                      , emergencyPlan    : freightWaybillInstance.emergencyPlan
                                                      , price            : freightWaybillInstance.price
@@ -41,15 +45,16 @@ class FreightWaybillController implements ControllerHelper {
                                                      , fullLoaded       : freightWaybillInstance.fullLoaded
                                                      , amount           : freightWaybillInstance.amount
                                                      , mile             : freightWaybillInstance.mile
-                                                     , departTime       : freightWaybillInstance.departTime?.format('yyyy-MM-dd')
-                                                     , driverName       : freightWaybillInstance.driverName
-                                                     , idCardNo         : freightWaybillInstance.idCardNo
+                                                     , departTime       : freightWaybillInstance.departTime?.format('yyyy-MM-dd HH:mm')
+                                                     , driver           : [name: freightWaybillInstance.driverName, wokeLicenseNo: freightWaybillInstance.driverWokeLicenseNo, phone: freightWaybillInstance.driverPhone]
+                                                     , supercargo       : [name: freightWaybillInstance.supercargoName, wokeLicenseNo: freightWaybillInstance.supercargoWokeLicenseNo, phone: freightWaybillInstance.supercargoPhone]
                                                      , consignCompany   : freightWaybillInstance.consignCompany
-                                                     , backTime         : freightWaybillInstance.backTime?.format('yyyy-MM-dd')
+                                                     , backTime         : freightWaybillInstance.backTime?.format('yyyy-MM-dd  HH:mm')
                                                      , departArea       : freightWaybillInstance.departArea
                                                      , arriveArea       : freightWaybillInstance.arriveArea
                                                      , status           : freightWaybillInstance.status
                                                      , routerName       : freightWaybillInstance.routerName
+                                                     , viaLand          : freightWaybillInstance.viaLand
                                                      , startProvince    : freightWaybillInstance.startProvince
                                                      , startCity        : freightWaybillInstance.startCity
                                                      , startDistrict    : freightWaybillInstance.startDistrict
@@ -62,13 +67,106 @@ class FreightWaybillController implements ControllerHelper {
                                                      , endProvinceCode  : freightWaybillInstance.endProvinceCode
                                                      , endCityCode      : freightWaybillInstance.endCityCode
                                                      , endDistrictCode  : freightWaybillInstance.endDistrictCode
-                                                     , provenance       : freightWaybillInstance.startProvince + '/' + freightWaybillInstance.startCity + '/' + freightWaybillInstance.startDistrict
-                                                     , destination      : freightWaybillInstance.endProvince + '/' + freightWaybillInstance.endCity + '/' + freightWaybillInstance.endDistrict
             ]])
         }
     }
 
-    private withFreightWaybill(Long id,  Closure c) {
+    def save() {
+        if (!currentUser.isCompanyUser()) {
+            renderNoInstancePermError()
+            return
+        }
+        def dangerousType = SystemCode.get(request.JSON.dangerousType.id)
+        FreightWaybill freightWaybillInstance = new FreightWaybill(request.JSON)
+        freightWaybillInstance.status = 'CG'
+        freightWaybillInstance.dangerousType = dangerousType
+        freightWaybillInstance.driverName = request.JSON.driver.name
+        freightWaybillInstance.driverWokeLicenseNo = request.JSON.driver.wokeLicenseNo
+        freightWaybillInstance.driverPhone = request.JSON.driver.phone
+        freightWaybillInstance.supercargoName = request.JSON.supercargo.name
+        freightWaybillInstance.supercargoWokeLicenseNo = request.JSON.supercargo.wokeLicenseNo
+        freightWaybillInstance.supercargoPhone = request.JSON.supercargo.phone
+        freightWaybillInstance.companyCode = currentUser.companyCode
+        freightWaybillInstance.save(flush: true, failOnError: true)
+        renderSuccess()
+    }
+
+    def edit() {
+        withCompanyFreightWaybill(params.long('id'), currentUser) { freightWaybillInstance ->
+            renderSuccessesWithMap([freightWaybill: [id                 : freightWaybillInstance.id
+                                                     , vehicleNo        : freightWaybillInstance.vehicleNo
+                                                     , frameNo          : freightWaybillInstance.frameNo
+                                                     , licenseNo        : freightWaybillInstance.licenseNo
+                                                     , carPlateColor    : freightWaybillInstance.carPlateColor
+                                                     , carType          : freightWaybillInstance.carType
+                                                     , carSize          : freightWaybillInstance.carSize
+                                                     , companyCode      : freightWaybillInstance.companyCode
+                                                     , ownerName        : freightWaybillInstance.ownerName
+                                                     , dangerousName    : freightWaybillInstance.dangerousName
+                                                     , dangerousType    : [id: freightWaybillInstance.dangerousType.id, name: freightWaybillInstance.dangerousType.name]
+                                                     , ratifiedPayload  : freightWaybillInstance.ratifiedPayload
+                                                     , emergencyPlan    : freightWaybillInstance.emergencyPlan
+                                                     , price            : freightWaybillInstance.price
+                                                     , operatedType     : freightWaybillInstance.operatedType
+                                                     , loadedType       : freightWaybillInstance.loadedType
+                                                     , fullLoaded       : freightWaybillInstance.fullLoaded
+                                                     , amount           : freightWaybillInstance.amount
+                                                     , mile             : freightWaybillInstance.mile
+                                                     , departTime       : freightWaybillInstance.departTime?.format('yyyy-MM-dd HH:mm')
+                                                     , driver           : [name: freightWaybillInstance.driverName, wokeLicenseNo: freightWaybillInstance.driverWokeLicenseNo, phone: freightWaybillInstance.driverPhone]
+                                                     , supercargo       : [name: freightWaybillInstance.supercargoName, wokeLicenseNo: freightWaybillInstance.supercargoWokeLicenseNo, phone: freightWaybillInstance.supercargoPhone]
+                                                     , consignCompany   : freightWaybillInstance.consignCompany
+                                                     , backTime         : freightWaybillInstance.backTime?.format('yyyy-MM-dd HH:mm')
+                                                     , departArea       : freightWaybillInstance.departArea
+                                                     , arriveArea       : freightWaybillInstance.arriveArea
+                                                     , status           : freightWaybillInstance.status
+                                                     , routerName       : freightWaybillInstance.routerName
+                                                     , viaLand          : freightWaybillInstance.viaLand
+                                                     , startProvince    : freightWaybillInstance.startProvince
+                                                     , startCity        : freightWaybillInstance.startCity
+                                                     , startDistrict    : freightWaybillInstance.startDistrict
+                                                     , startProvinceCode: freightWaybillInstance.startProvinceCode
+                                                     , startCityCode    : freightWaybillInstance.startCityCode
+                                                     , startDistrictCode: freightWaybillInstance.startDistrictCode
+                                                     , endProvince      : freightWaybillInstance.endProvince
+                                                     , endCity          : freightWaybillInstance.endCity
+                                                     , endDistrict      : freightWaybillInstance.endDistrict
+                                                     , endProvinceCode  : freightWaybillInstance.endProvinceCode
+                                                     , endCityCode      : freightWaybillInstance.endCityCode
+                                                     , endDistrictCode  : freightWaybillInstance.endDistrictCode
+            ]])
+        }
+
+    }
+
+    def update() {
+        withCompanyFreightWaybill(params.long('id'), currentUser) { FreightWaybill freightWaybillInstance ->
+            def dangerousType = SystemCode.get(request.JSON.dangerousType.id)
+            freightWaybillInstance.dangerousType = dangerousType
+            freightWaybillInstance.departTime = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.departTime)
+            freightWaybillInstance.backTime = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.backTime)
+            freightWaybillInstance.driverName = request.JSON.driver.name
+            freightWaybillInstance.driverWokeLicenseNo = request.JSON.driver.wokeLicenseNo
+            freightWaybillInstance.driverPhone = request.JSON.driver.phone
+            freightWaybillInstance.supercargoName = request.JSON.supercargo.name
+            freightWaybillInstance.supercargoWokeLicenseNo = request.JSON.supercargo.wokeLicenseNo
+            freightWaybillInstance.supercargoPhone = request.JSON.supercargo.phone
+            request.JSON.remove('departTime')
+            request.JSON.remove('backTime')
+            freightWaybillInstance.properties = request.JSON
+            freightWaybillInstance.save(flush: true, failOnError: true)
+            renderSuccess()
+        }
+    }
+
+    def delete() {
+        withCompanyFreightWaybill(params.long('id'), currentUser) { freightWaybillInstance ->
+            freightWaybillInstance.delete(flush: true)
+            renderSuccess()
+        }
+    }
+
+    private withFreightWaybill(Long id, Closure c) {
         FreightWaybill freightWaybillInstance = id ? FreightWaybill.get(id) : null
         if (freightWaybillInstance) {
             c.call freightWaybillInstance

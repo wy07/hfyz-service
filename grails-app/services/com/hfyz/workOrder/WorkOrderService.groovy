@@ -3,15 +3,19 @@ package com.hfyz.workOrder
 import com.commons.exception.IllegalActionException
 import com.commons.exception.InstancePermException
 import com.commons.exception.RecordNotFoundException
+import com.commons.utils.NumberUtils
 import com.commons.utils.SQLHelper
 import com.hfyz.owner.OwnerIdentity
 import com.hfyz.security.User
+import com.hfyz.support.AlarmType
 import grails.async.Promise
 
 import static grails.async.Promises.task
 
 class WorkOrderService {
     def dataSource
+    def supportService
+
 
     def findWorkOrderListAndTotal(max, offset, User user) {
         def workOrderList = WorkOrder.createCriteria().list([max: max, offset: offset, sort: 'lastUpdated', order: 'desc']) {
@@ -53,8 +57,6 @@ class WorkOrderService {
 
 
     def findPendingWorkOrderListAndTotal(max, offset, roles) {
-
-
         def workOrderList = WorkOrder.findAllByStatusInListAndTodoRoleInList([WorkOrderStatus.DSH, WorkOrderStatus.DYP], roles, [max: max, offset: offset, sort: 'lastUpdated', order: 'desc'])?.collect { WorkOrder obj ->
             [id                 : obj.id
              , sn               : obj.sn
@@ -234,9 +236,9 @@ class WorkOrderService {
     def statistic(Map inputParams, User user, Long max, Long offset) {
         def sqlParams = [:]
 
-        if(user.isCompanyUser()){
-            sqlParams.companyCode=user.companyCode
-        }else if (inputParams.companyName) {
+        if (user.isCompanyUser()) {
+            sqlParams.companyCode = user.companyCode
+        } else if (inputParams.companyName) {
             sqlParams.companyName = "${inputParams.companyName}%".toString()
         }
         if (inputParams.alarmTypeId) {
@@ -251,7 +253,7 @@ class WorkOrderService {
         }
 
         def statisticList = SQLHelper.withDataSource(dataSource) { sql ->
-            sql.rows(getStatisticSql(sqlParams.companyName,sqlParams.companyCode, sqlParams.alarmTypeId, sqlParams.stateTime, sqlParams.endDate), sqlParams + [max: user.isCompanyUser() ? 1 : max, offset: user.isCompanyUser() ? 0 : offset])
+            sql.rows(getStatisticSql(sqlParams.companyName, sqlParams.companyCode, sqlParams.alarmTypeId, sqlParams.stateTime, sqlParams.endDate), sqlParams + [max: user.isCompanyUser() ? 1 : max, offset: user.isCompanyUser() ? 0 : offset])
         }?.collect { obj ->
             [companyCode     : obj.company_code
              , allOrder      : obj.all_order
@@ -268,7 +270,60 @@ class WorkOrderService {
         [statisticList: statisticList, statisticCount: statisticCount]
     }
 
-    private String getStatisticSql(String companyName,String companyCode, Long alarmTypeId, String startDate, String endDate) {
+
+    def findWorkOrderFlowListAndCount(max, offset) {
+        def list = WorkOrderFlow.createCriteria().list(max: max, offset: offset) {
+            order("enabled", "desc")
+            order("alarmType", "desc")
+            order("flowVersion", "desc")
+        }?.collect { WorkOrderFlow flow ->
+            [id           : flow.id
+             , alarmType  : flow.alarmType.name
+             , flowVersion: flow.flowVersion
+             , enabled    : flow.enabled
+             , dateCreated: flow.dateCreated.format("yyyy-MM-dd")
+             , lastUpdated: flow.lastUpdated.format("yyyy-MM-dd")]
+        }
+
+        def count = WorkOrderFlow.count()
+        [workOrderFlowList: list, workOrderFlowCount: count]
+    }
+
+    def saveFlow(def params) {
+        AlarmType alarmType = supportService.getAlarmType(NumberUtils.toLong(params.alarmType))
+        int lastVersion = WorkOrderFlow.findByAlarmType(alarmType, [sort: 'dateCreated', order: 'desc'])?.flowVersion ?: 0
+        WorkOrderFlow flow = new WorkOrderFlow(alarmType: alarmType
+                , flowVersion: lastVersion + 1
+                , flows: [])
+        params.examineFlows.each { obj ->
+            flow.flows << [name: obj.name, role: obj.role, action: WorkOrderFlowAction.SP.name()]
+        }
+        flow.flows << [name: params.feedbackFlow.name, role: params.feedbackFlow.role, action: WorkOrderFlowAction.FK.name()]
+        flow.flows << [name: params.judgeFlow.name, role: params.judgeFlow.role, action: WorkOrderFlowAction.YP.name()]
+        flow.save(flush: true, failOnError: true)
+    }
+
+    def updateFlow(WorkOrderFlow flow, def params) {
+        flow.flows = []
+        params.examineFlows.each { obj ->
+            flow.flows << [name: obj.name, role: obj.role, action: WorkOrderFlowAction.SP.name()]
+        }
+        flow.flows << [name: params.feedbackFlow.name, role: params.feedbackFlow.role, action: WorkOrderFlowAction.FK.name()]
+        flow.flows << [name: params.judgeFlow.name, role: params.judgeFlow.role, action: WorkOrderFlowAction.YP.name()]
+        flow.alarmType = supportService.getAlarmType(NumberUtils.toLong(params.alarmType))
+        flow.save(flush: true, failOnError: true)
+    }
+
+    def makeFlowEffective(WorkOrderFlow workOrderFlow) {
+        if (workOrderFlow.enabled) {
+            throw new IllegalActionException('该工作流已生效，请勿重复操作！')
+        }
+        WorkOrderFlow.executeUpdate("update WorkOrderFlow flow set flow.enabled=false where flow.alarmType=:alarmType", [alarmType: workOrderFlow.alarmType])
+        workOrderFlow.enabled = true
+        workOrderFlow.save(flush: true, failOnError: true)
+    }
+
+    private String getStatisticSql(String companyName, String companyCode, Long alarmTypeId, String startDate, String endDate) {
         def companys = {
             String sql = """
                 select company.id
@@ -280,7 +335,7 @@ class WorkOrderService {
 
             if (companyCode) {
                 sql += " and company.company_code=:companyCode"
-            }else if (companyName) {
+            } else if (companyName) {
                 sql += " and company.owner_name like :companyName"
             }
 

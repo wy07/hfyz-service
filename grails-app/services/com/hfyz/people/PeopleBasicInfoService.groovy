@@ -302,6 +302,48 @@ class PeopleBasicInfoService {
         })
     }
 
+    def getCompanyWorkerDriversAndManagers(companyCode) {
+        Promise driversList = task {
+            SQLHelper.withDataSource(dataSource) { sql ->
+                sql.rows(getWorkerDriverSql(companyCode))
+            }?.collect({ obj ->
+                [
+                        name   : obj.name?:'',
+                        wokeLicenseNo: obj.workLicenseNo?:'',
+                        phone: obj.phoneNo?:''
+                ]
+            })
+        }
+
+        Promise managersList = task {
+            SQLHelper.withDataSource(dataSource) { sql ->
+                sql.rows(getWorkerManagerSql(companyCode))
+            }?.collect({ obj ->
+                [
+                        name   : obj.name?:'',
+                        wokeLicenseNo: obj.workLicenseNo?:'',
+                        phone: obj.phoneNo?:''
+                ]
+            })
+        }
+
+        return [driversList: driversList.get(), managersList: managersList.get()]
+    }
+
+    private static getWorkerDriverSql(companyCode) {
+        String sql = """select pbp.name,pwd.work_license_no workLicenseNo,pbp.phone_no phoneNo from people_worker_driver pwd 
+                        left join people_basicinfo_public pbp on pbp.id_card_no = pwd.id_card_no 
+                        where pwd.company_code = '${companyCode}'"""
+        return sql
+    }
+
+    private static getWorkerManagerSql(companyCode) {
+        String sql = """select pbp.name,pwm.work_license_no workLicenseNo,pbp.phone_no phoneNo from people_worker_manager pwm 
+                        left join people_basicinfo_public pbp on pbp.id_card_no = pwm.id_card_no 
+                        where pwm.company_code = '${companyCode}'"""
+        return sql
+    }
+
     /**
      * 生成工单号
      */

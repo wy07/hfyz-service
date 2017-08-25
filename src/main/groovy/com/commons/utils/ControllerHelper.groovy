@@ -82,9 +82,9 @@ trait ControllerHelper {
         render map as JSON
     }
 
-    def renderIllegalActionError(){
+    def renderIllegalActionError(msg = null) {
         response.setStatus(400)
-        def map = [errors: ['操作非法，请稍后再试！']]
+        def map = [errors: [msg ?: '操作非法，请稍后再试！']]
         render map as JSON
     }
 
@@ -110,10 +110,10 @@ trait ControllerHelper {
     }
 
     def handleIllegalActionException(IllegalActionException e) {
-        renderIllegalActionError()
+        renderIllegalActionError(e.message)
     }
 
-    def handleFileUploadException(FileUploadException e){
+    def handleFileUploadException(FileUploadException e) {
         renderFileUploadErrorMsg(e.message)
     }
 }
