@@ -58,6 +58,9 @@ class User implements Serializable {
 		return this.org?.code=='24'
 	}
 
+	boolean isAdmin(){
+		return this.org?.code== null
+	}
 	def beforeInsert() {
 		encodePassword()
 	}

@@ -4,7 +4,7 @@ import com.commons.exception.ParamsIllegalException
 import com.commons.exception.RecordNotFoundException
 import com.commons.utils.NumberUtils
 import com.commons.utils.ValidationUtils
-
+import com.hfyz.support.Organization
 import grails.transaction.Transactional
 
 @Transactional
@@ -57,8 +57,14 @@ class UserService {
         userRole ? true : false
     }
 
-    def save(params){
+    def save(params, companyCode, org){
         User user = new User(params)
+        if(companyCode){
+            user.companyCode = companyCode
+        }
+        if(org){
+            user.org = org
+        }
         user.salt = ValidationUtils.secureRandomSalt
         user.passwordHash = DEFAULT_PASSWORD
         user.save(flush: true, failOnError: true)
@@ -71,6 +77,7 @@ class UserService {
 
     def update(User userInstance,params){
         userInstance.properties = params
+        userInstance.org = Organization.get(params.orgId)
         userInstance.save(flush: true, failOnError: true)
 
         if(!params.roles){
