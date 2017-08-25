@@ -309,8 +309,8 @@ class PeopleBasicInfoService {
             }?.collect({ obj ->
                 [
                         name   : obj.name?:'',
-                        workLicenseNo: obj.workLicenseNo?:'',
-                        phoneNo: obj.phoneNo?:''
+                        wokeLicenseNo: obj.workLicenseNo?:'',
+                        phone: obj.phoneNo?:''
                 ]
             })
         }
@@ -321,8 +321,8 @@ class PeopleBasicInfoService {
             }?.collect({ obj ->
                 [
                         name   : obj.name?:'',
-                        workLicenseNo: obj.workLicenseNo?:'',
-                        phoneNo: obj.phoneNo?:''
+                        wokeLicenseNo: obj.workLicenseNo?:'',
+                        phone: obj.phoneNo?:''
                 ]
             })
         }
