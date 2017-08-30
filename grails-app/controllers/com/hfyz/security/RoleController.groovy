@@ -36,11 +36,11 @@ class RoleController implements ControllerHelper {
         if (userService.isSuperAdmin(user.id)) {
             roleList = Role.list([sort: 'id', order: 'desc'])
             orgList = supportService.getOrgs()?.collect { Organization org ->
-                [value: org.id, label: org.name]
+                [value: org.id, label: org.name, code: org.code]
             }
         } else {
             roleList = Role.findAllByOrg(user.org)
-            orgList = user.org ? [[value: user.org.id, label: user.org.name]] : []
+            orgList = user.org ? [[value: user.org.id, label: user.org.name, code: user.org.code]] : []
         }
         renderSuccessesWithMap([
                 roleList : roleList?.collect { Role role ->

@@ -35,7 +35,8 @@ class CarService {
             SQLHelper.withDataSource(dataSource) { sql ->
                 sql.rows(getSearchCarsSql(dateFlag, inputParams.businessType, inputParams.licenseNo, user.isCompanyUser()), sqlParams + [max: max, offset: offset])
             }?.collect { obj ->
-                [transformLicenseNo: obj.transformLicenseNo
+                [id: obj.id
+                 ,transformLicenseNo: obj.transformLicenseNo
                  , licenseNo       : obj.licenseNo
                  , ownerName       : obj.ownerName
                  , frameNo         : obj.frameNo
@@ -148,7 +149,8 @@ class CarService {
     private
     static String getSearchCarsSql(boolean dateFlag, String businessType, String licenseNo, boolean isCompanyUser) {
         String sqlStr = """
-            SELECT  operate.transform_license_no transformLicenseNo
+            SELECT  carinfo.id id,
+            operate.transform_license_no transformLicenseNo
             ,carinfo.license_no licenseNo
             ,operate.owner_name ownerName
             ,carinfo.frame_no frameNo
