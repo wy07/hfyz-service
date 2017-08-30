@@ -5,17 +5,15 @@ import com.commons.exception.InstancePermException
 import com.commons.exception.RecordNotFoundException
 import com.commons.utils.NumberUtils
 import com.commons.utils.SQLHelper
+import com.hfyz.infoCenter.InfoCenterService
 import com.hfyz.owner.OwnerIdentity
 import com.hfyz.security.User
 import com.hfyz.support.AlarmType
-import grails.async.Promise
-
-import static grails.async.Promises.task
 
 class WorkOrderService {
     def dataSource
     def supportService
-
+    def infoCenterService
 
     def findWorkOrderListAndTotal(max, offset, User user) {
         def workOrderList = WorkOrder.createCriteria().list([max: max, offset: offset, sort: 'lastUpdated', order: 'desc']) {
@@ -195,7 +193,8 @@ class WorkOrderService {
         workOrder.flowStep += 1
         workOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
 
-        workOrder.save(flush: true, failOnError: true)
+        def order = workOrder.save(flush: true, failOnError: true)
+        infoCenterService.save(order.id, 'GD')
     }
 
     def preJudge(Long id, User user) {
@@ -417,7 +416,7 @@ class WorkOrderService {
         return sqlStr
     }
 
-    private static approvalJudge(WorkOrder workOrder, User user, String note) {
+    private approvalJudge(WorkOrder workOrder, User user, String note) {
         workOrder.addToWorkOrderRecords(new WorkOrderRecord(user: user
                 , note: note
                 , workOrderStatus: workOrder.status
@@ -428,10 +427,10 @@ class WorkOrderService {
         workOrder.passed = true
 
         workOrder.save(flush: true, failOnError: true)
-
+        infoCenterService.save(workOrder.id, 'GD')
     }
 
-    private static refuseJudge(WorkOrder workOrder, User user, String note) {
+    private refuseJudge(WorkOrder workOrder, User user, String note) {
         workOrder.addToWorkOrderRecords(new WorkOrderRecord(user: user
                 , note: note
                 , workOrderStatus: workOrder.status
@@ -442,7 +441,6 @@ class WorkOrderService {
         workOrder.todoRole = null
         workOrder.passed = false
         workOrder.save(flush: true, failOnError: true)
-
         if (workOrder.parent) {
             return
         }
@@ -481,10 +479,11 @@ class WorkOrderService {
         newWorkerOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
 
         newWorkerOrder.save(flush: true, failOnError: true)
+        infoCenterService.save(newWorkerOrder.id, 'GD')
 
     }
 
-    private static approvalExamine(WorkOrder workOrder, User user, String note) {
+    private approvalExamine(WorkOrder workOrder, User user, String note) {
 
         workOrder.addToWorkOrderRecords(new WorkOrderRecord(user: user
                 , note: note
@@ -497,12 +496,11 @@ class WorkOrderService {
         workOrder.flowStep += 1
         workOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
 
-        workOrder.save(flush: true, failOnError: true)
-
-
+        def order = workOrder.save(flush: true, failOnError: true)
+        infoCenterService.save(order.id, 'GD')
     }
 
-    private static refuseExamine(WorkOrder workOrder, User user, String note) {
+    private refuseExamine(WorkOrder workOrder, User user, String note) {
         workOrder.addToWorkOrderRecords(new WorkOrderRecord(user: user
                 , note: note
                 , workOrderStatus: workOrder.status
@@ -519,7 +517,8 @@ class WorkOrderService {
             workOrder.flowStep -= 1
             workOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
         }
-        workOrder.save(flush: true, failOnError: true)
+        def order = workOrder.save(flush: true, failOnError: true)
+        infoCenterService.save(order.id, 'GD')
     }
 
 }
