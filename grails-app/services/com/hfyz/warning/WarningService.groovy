@@ -20,7 +20,9 @@ class WarningService {
              , carLicenseNo   : it.carLicenseNo
              , carColor       : it.carColor
              , warningSource  : getWarningSourceName(it.warningSource)
-             , warningType    : it.warningType]
+             , warningType    : it.warningType
+             , warningTime    : it.warningTime?.format('yyyy-MM-dd HH:mm:ss')
+             , warningTimes   : it.warningTimes]
         }
 
         def total = Warning.createCriteria().get {
@@ -37,10 +39,32 @@ class WarningService {
         return [warningList: warningList, total: total]
     }
 
+    def getWarningByCar(def max, def offset, String frameNo){
+        def warningList = Warning.createCriteria().list([max: max, offset: offset]) {
+                eq("frameNo", frameNo)
+        }?.collect { Warning it ->
+            [id               : it.id
+             , frameNo        : it.frameNo
+             , carLicenseNo   : it.carLicenseNo
+             , carColor       : it.carColor
+             , warningSource  : getWarningSourceName(it.warningSource)
+             , warningType    : it.warningType
+             , warningTime    : it.warningTime?.format('yyyy-MM-dd HH:mm:ss')
+             , warningTimes   : it.warningTimes]
+        }
+
+        def total = Warning.createCriteria().get {
+            projections {
+                count()
+            }
+                eq("frameNo", frameNo)
+        }
+        return [warningList: warningList, total: total]
+    }
+
     def final warningSourceNameMap = ['1': '车载终端', '2': '企业监控', '3': '政府监管', '9': '其他']
 
     def getWarningSourceName(warningSource) {
         return warningSourceNameMap["${warningSource}"]
     }
-
 }
