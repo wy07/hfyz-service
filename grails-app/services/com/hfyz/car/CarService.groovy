@@ -1,5 +1,7 @@
 package com.hfyz.car
 
+import com.commons.exception.InstancePermException
+import com.commons.exception.RecordNotFoundException
 import com.commons.utils.NumberUtils
 import com.commons.utils.SQLHelper
 import com.hfyz.security.User
@@ -12,6 +14,7 @@ import static grails.async.Promises.task
 @Transactional
 class CarService {
     def dataSource
+    def warningService
 
     def search(Map inputParams, User user, Long max, Long offset) {
         def sqlParams = [:]
@@ -35,15 +38,15 @@ class CarService {
             SQLHelper.withDataSource(dataSource) { sql ->
                 sql.rows(getSearchCarsSql(dateFlag, inputParams.businessType, inputParams.licenseNo, user.isCompanyUser()), sqlParams + [max: max, offset: offset])
             }?.collect { obj ->
-                [id: obj.id
-                 ,transformLicenseNo: obj.transformLicenseNo
-                 , licenseNo       : obj.licenseNo
-                 , ownerName       : obj.ownerName
-                 , frameNo         : obj.frameNo
-                 , carType         : obj.carType
-                 , carPlateColor   : obj.carPlateColor
-                 , carColor        : obj.carColor
-                 , endTime         : obj.endTime?.format("yyyy-MM-dd")]
+                [id                  : obj.id
+                 , transformLicenseNo: obj.transformLicenseNo
+                 , licenseNo         : obj.licenseNo
+                 , ownerName         : obj.ownerName
+                 , frameNo           : obj.frameNo
+                 , carType           : obj.carType
+                 , carPlateColor     : obj.carPlateColor
+                 , carColor          : obj.carColor
+                 , endTime           : obj.endTime?.format("yyyy-MM-dd")]
             }
         }
 
@@ -114,6 +117,105 @@ class CarService {
             [licenseNo      : obj.licenseNo
              , carPlateColor: obj.carPlateColor]
         }
+    }
+
+    def getWarningAndHistoryList(String licenseNo, User currentUser, int max) {
+
+        CarBasicInfo carInstance = licenseNo ? CarBasicInfo.findByLicenseNo(licenseNo) : null
+        if (!carInstance) {
+            throw new RecordNotFoundException()
+        }
+
+        if (currentUser.isCompanyUser()) {
+            CarBasicOperate carOperateInstance = CarBasicOperate.createCriteria().get {
+                eq('ownerCode', currentUser.companyCode)
+                eq('frameNo', carInstance.frameNo)
+                le('beginTime', new Date())
+                ge('endTime', new Date())
+                maxResults(1)
+            }
+            if (!carOperateInstance) {
+                throw new InstancePermException()
+            }
+        }
+
+        def warninglist = warningService.getWarningsByCar(carInstance.frameNo, max, 0)
+        def historyLocations = historyLocations(licenseNo, max, 0)
+
+        [warnings          : warninglist
+         , historyLocations: historyLocations]
+    }
+
+    def getHistoryInfo(String licenseNo, User currentUser, Date startDate, Date endDate) {
+        CarBasicInfo carInstance = licenseNo ? CarBasicInfo.findByLicenseNo(licenseNo) : null
+        if (!carInstance) {
+            throw new RecordNotFoundException()
+        }
+
+        if (currentUser.isCompanyUser()) {
+            CarBasicOperate carOperateInstance = CarBasicOperate.createCriteria().get {
+                eq('ownerCode', currentUser.companyCode)
+                eq('frameNo', carInstance.frameNo)
+                le('beginTime', new Date())
+                ge('endTime', new Date())
+                maxResults(1)
+            }
+            if (!carOperateInstance) {
+                throw new InstancePermException()
+            }
+        }
+        def warningList = warningService.getWarningsByCarAndDate(carInstance.frameNo, startDate, endDate)
+        def historyLocations = historyLocationsByDate(licenseNo, startDate, endDate)
+
+
+        [warnings          : warningList
+         , historyLocations: historyLocations]
+    }
+
+    BigDecimal lng = 116.37168
+    BigDecimal lat = 39.93218
+
+    def historyLocations(String plateNo, def max, def offset) {
+        lng += 0.01
+        lat -= 0.01
+        (1..max).collect {
+            [dateStr     : new Date().format('yyyy-MM-dd HH:mm:ss'),
+             plateColor  : '白色',
+             plateNo     : plateNo,
+             posEncrypt  : 0,
+             geoPoint    : "${lng},${lat}",
+             gpsSpeed    : '60',
+             totalMileage: 1,
+             recSpeed    : 60,
+             direction   : NumberUtils.getRandom(0, 360),
+             altitude    : 0,
+             vehicleState: 3,
+             alarmState  : NumberUtils.getRandom(0, 10) % 2]
+        }
+    }
+
+
+    def historyLocationsByDate(String plateNo, Date startDate, Date endDate) {
+        Long startDateTime = startDate.time
+        Long endDateTime = endDate.time
+        def list = []
+        startDateTime.step(endDateTime, 30000) {
+            lng -= 0.01
+            lat += 0.01
+            list << [dateStr     : new Date(it).format('yyyy-MM-dd HH:mm:ss'),
+                     plateColor  : '白色',
+                     plateNo     : plateNo,
+                     posEncrypt  : 0,
+                     geoPoint    : "${lng},${lat}",
+                     gpsSpeed    : '60',
+                     totalMileage: 1,
+                     recSpeed    : 60,
+                     direction   : NumberUtils.getRandom(0, 360),
+                     altitude    : 0,
+                     vehicleState: 3,
+                     alarmState  : NumberUtils.getRandom(0, 10) % 2]
+        }
+        list
     }
 
     private static String GET_COMPANY_CARS_SQL = """
