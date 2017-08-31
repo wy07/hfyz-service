@@ -125,8 +125,8 @@ class SupportService {
             def children = SQLHelper.withDataSource(dataSource) { menusql -> menusql.rows(SYSTEM_CODE_LIST_BY_MENU.toString(), [parentId: root.id])
             }
             if (children.size() > 0) {
+                menu['hasChildren'] = false
                 menu['children'] = children
-
             }
             result["${root.position}"] << menu
         }
