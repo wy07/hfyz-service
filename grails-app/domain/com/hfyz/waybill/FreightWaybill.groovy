@@ -16,8 +16,9 @@ class FreightWaybill {
     String ownerName //业户名称
     String dangerousName //危险品名称
     DangerousType dangerousType //危险品分类
+    EmergencyPlan emergencyPlan //应急预案
     Double ratifiedPayload //核定载重质量,kg
-    String emergencyPlan //应急预案
+//    String emergencyPlan //应急预案
     Double price //运输价格 元/车
     String operatedType //是否经营性运输
     String loadedType // 装载or卸载
