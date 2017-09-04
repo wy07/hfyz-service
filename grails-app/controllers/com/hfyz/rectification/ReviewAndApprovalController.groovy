@@ -6,6 +6,7 @@ import grails.converters.JSON
 
 class ReviewAndApprovalController implements ControllerHelper {
 
+    def infoCenterService
 
     def save(){
         ReviewAndApprovalForm reviewApproval =  new ReviewAndApprovalForm(request.JSON)
@@ -29,6 +30,7 @@ class ReviewAndApprovalController implements ControllerHelper {
             }
         }
         hiddenRectificationOrder.save(flush:true,failOnError: true)
+        infoCenterService.save(hiddenRectificationOrder.id, 'YHZGD')
         renderSuccess()
     }
 
@@ -45,6 +47,7 @@ class ReviewAndApprovalController implements ControllerHelper {
             }
         }
         hiddenRectificationOrderins.save(flush:true,failOnError: true)
+        infoCenterService.save(hiddenRectificationOrderins.id, 'YHZGD')
         renderSuccess()
     }
 

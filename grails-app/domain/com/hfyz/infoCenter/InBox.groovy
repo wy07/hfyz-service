@@ -9,14 +9,15 @@ class InBox {
     SourceType sourceType
     String title
     Date dateCreated
+    String action
     Boolean isRead = false
-
     static constraints = {
         infoCenter nullable: false
         accepter nullable: false
         sourceId nullable: false
         sourceType nullable: false
         title blank: false, nullable: false
+        action blank: true, nullable: true
     }
 
     static mapping = {

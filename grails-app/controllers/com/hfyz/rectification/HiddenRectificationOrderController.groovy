@@ -11,7 +11,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
 
     def hiddenRectificationOrderService
     def ownerIdentityService
-
+    def infoCenterService
     def reviewApprovalList(){
         def hiddenRectificationOrder = HiddenRectificationOrder.get(params.long('id'))
         renderSuccessesWithMap(hiddenRectificationOrderService.getReviewAndApprovalList(hiddenRectificationOrder))
@@ -24,6 +24,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
                 if(tempStatus == HiddenRectificationOrderStatus.QC || tempStatus == HiddenRectificationOrderStatus.YJJ){
                     hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.DSH
                     hiddenRectificationOrderIns.save(flush: true,failOnError: true)
+                    infoCenterService.save(hiddenRectificationOrderIns.id, 'YHZGD')
                 }else{
                     renderErrorMsg("此单据已被提交")
                 }
@@ -129,6 +130,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
                     hiddenRectificationOrderInstence.replyDate = request.JSON.reply ? new Date().parse('yyyy-MM-dd HH:mm', request.JSON.reply) : null
                     hiddenRectificationOrderInstence.replyDesc = request.JSON.replyDesc
                     hiddenRectificationOrderInstence.save(flush: true,failOnError: true)
+                    infoCenterService.save(hiddenRectificationOrderInstence.id, 'YHZGD')
                 renderSuccess()
                 }else{
                     renderErrorMsg("您没有此操作的权限！")

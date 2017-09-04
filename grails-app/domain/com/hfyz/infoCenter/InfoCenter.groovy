@@ -6,7 +6,6 @@ class InfoCenter {
     SourceType sourceType
     String title
     Date dateCreated
-
     static constraints = {
         sourceId nullable: false
         sourceType nullable: false

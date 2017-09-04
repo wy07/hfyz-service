@@ -1,7 +1,6 @@
 package com.hfyz.infoCenter
 
-class InfoCenterController {
+import com.commons.utils.ControllerHelper
 
-    def save() {
-    }
+class InfoCenterController implements ControllerHelper{
 }
