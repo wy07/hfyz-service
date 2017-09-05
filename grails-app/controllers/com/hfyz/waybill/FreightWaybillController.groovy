@@ -38,7 +38,7 @@ class FreightWaybillController implements ControllerHelper {
                                                      , dangerousName    : freightWaybillInstance.dangerousName
                                                      , dangerousType    : [id: freightWaybillInstance.dangerousType.id, name: freightWaybillInstance.dangerousType.name]
                                                      , ratifiedPayload  : freightWaybillInstance.ratifiedPayload
-                                                     , emergencyPlan    : freightWaybillInstance.emergencyPlan
+                                                     , emergencyPlan    : [id: freightWaybillInstance.emergencyPlan.id, name: freightWaybillInstance.emergencyPlan.name, describe: freightWaybillInstance.emergencyPlan.describe]
                                                      , price            : freightWaybillInstance.price
                                                      , operatedType     : freightWaybillInstance.operatedType
                                                      , loadedType       : freightWaybillInstance.loadedType
@@ -92,7 +92,7 @@ class FreightWaybillController implements ControllerHelper {
     }
 
     def edit() {
-        withCompanyFreightWaybill(params.long('id'), currentUser) { freightWaybillInstance ->
+        withCompanyFreightWaybill(params.long('id'), currentUser) {FreightWaybill freightWaybillInstance ->
             renderSuccessesWithMap([freightWaybill: [id                 : freightWaybillInstance.id
                                                      , vehicleNo        : freightWaybillInstance.vehicleNo
                                                      , frameNo          : freightWaybillInstance.frameNo
@@ -105,7 +105,7 @@ class FreightWaybillController implements ControllerHelper {
                                                      , dangerousName    : freightWaybillInstance.dangerousName
                                                      , dangerousType    : [id: freightWaybillInstance.dangerousType.id, name: freightWaybillInstance.dangerousType.name]
                                                      , ratifiedPayload  : freightWaybillInstance.ratifiedPayload
-                                                     , emergencyPlan    : freightWaybillInstance.emergencyPlan
+                                                     , emergencyPlan    : [id: freightWaybillInstance.emergencyPlan.id, name: freightWaybillInstance.emergencyPlan.name, describe: freightWaybillInstance.emergencyPlan.describe]
                                                      , price            : freightWaybillInstance.price
                                                      , operatedType     : freightWaybillInstance.operatedType
                                                      , loadedType       : freightWaybillInstance.loadedType
