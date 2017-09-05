@@ -827,7 +827,6 @@ class InitService {
         new PlatformManage(ip: '613.16.1.41', port: '2201', name: '宁国光正合肥分公司', code: 'K402', contactName: '安娜', contactPhone: '13023429743').save(flush: true)
         new PlatformManage(ip: '614.17.1.42', port: '2301', name: '平安四方有限公司', code: 'K502', contactName: '郑磊国', contactPhone: '13023429743').save(flush: true)
     }
-    \
 
     private initMapSign() {
         def MapSignType1 = new MapSignType(name: "国企", codeNum: "100", parent: null).save(flush: true)
@@ -1086,7 +1085,7 @@ class InitService {
     private initConfigure() {
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值',note: '单位：%').save(flush: true)
     }
-
+//    发布信息--法律法规
     private initInfoaudit(){
         new Infoaudit(type:'政策法律法规',publisher:1,receiver:1,auditor:1,title:'《机动车驾驶证申领和使用规定》',content:'  第一条  根据《中华人民共和国道路交通安全法》及其实施条例、《中华人民共和国行政许可法》，制定本规定。\n' +
                 '    第二条  本规定由公安机关交通管理部门负责实施。\n' +
