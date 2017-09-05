@@ -23,6 +23,7 @@ import com.hfyz.roster.Status
 import com.hfyz.roster.WhiteList
 import com.hfyz.warning.AlarmLevel
 import com.hfyz.warning.Warning
+import com.hfyz.waybill.EmergencyPlan
 import com.hfyz.workOrder.WorkOrder
 import com.hfyz.workOrder.WorkOrderFlow
 import com.hfyz.workOrder.WorkOrderFlowAction
@@ -73,6 +74,7 @@ class InitService {
         initSystemCode()
         initAlarmType()
         initWorkOrder()
+        initEmergencyPlan()
         initWaybill()
         initPassLineBusinessBasicInfo()
         initPassLinePhysicalBasicInfo()
@@ -185,6 +187,12 @@ class InitService {
         new AlarmType(name: "疲劳驾驶处理率不达标", codeNum: "227", parent: null).save(flush: true)
     }
 
+    private initEmergencyPlan() {
+        new EmergencyPlan(name:'危货(1类1项)应急预案', describe: '沙土', dangerousType:DangerousType.findByCodeNum('03111')).save(flush: true)
+        new EmergencyPlan(name:'危货(1类2项)应急预案', describe: '沙土2', dangerousType:DangerousType.findByCodeNum('03112')).save(flush: true)
+        new EmergencyPlan(name:'危货(1类3项)应急预案', describe: '沙土3', dangerousType:DangerousType.findByCodeNum('03113')).save(flush: true)
+    }
+
     private initWaybill() {
         def dangerousType = DangerousType.findByCodeNum('03111')
         new FreightWaybill(
@@ -199,7 +207,7 @@ class InitService {
                 dangerousName: '液碱',
                 dangerousType: dangerousType,
                 ratifiedPayload: 7000.0,
-                emergencyPlan: '无',
+                emergencyPlan: EmergencyPlan.findByName('危货(1类1项)应急预案'),
                 price: 3500.0,
                 operatedType: '经营性',
                 loadedType: '装载',
@@ -245,7 +253,7 @@ class InitService {
                 dangerousName: '甲醇',
                 dangerousType: dangerousType,
                 ratifiedPayload: 7000.0,
-                emergencyPlan: '无',
+                emergencyPlan: EmergencyPlan.findByName('危货(1类2项)应急预案'),
                 price: 3500.0,
                 operatedType: '经营性',
                 loadedType: '卸载',
@@ -291,7 +299,7 @@ class InitService {
                 dangerousName: '环己酮',
                 dangerousType: dangerousType,
                 ratifiedPayload: 7000.0,
-                emergencyPlan: '无',
+                emergencyPlan: EmergencyPlan.findByName('危货(1类3项)应急预案'),
                 price: 3500.0,
                 operatedType: '经营性',
                 loadedType: '装载',
@@ -431,6 +439,7 @@ class InitService {
 
         //基础信息
         new PermissionGroup(url: '/map-signs/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "路标管理", category: "基础信息", code: 'map_sign_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/emergency_plans/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "应急预案", category: "基础信息", code: 'emergency_plan_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/system-codes/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "数据字典管理", category: "基础信息", code: 'system_code_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/configures/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "系统配置管理", category: "基础信息", code: 'configure_manage').save(failOnError: true, flush: true)
 
@@ -503,6 +512,7 @@ class InitService {
 
         def basicInfo = new Menu(name: '基础信息', code: 'root-basicinfo', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR', permissionCode: 'map_sign_manage;system_code_manage;configure_manage').save(flush: true)
         new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'map_sign_manage').save(flush: true)
+        new Menu(name: '应急预案', code: 'emergencyPlan', icon: 'fa-file-powerpoint-o', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'emergency_plan_manage').save(flush: true)
         new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'system_code_manage').save(flush: true)
         new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'configure_manage').save(flush: true)
 
