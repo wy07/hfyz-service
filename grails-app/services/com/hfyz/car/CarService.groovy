@@ -200,8 +200,8 @@ class CarService {
         Long endDateTime = endDate.time
         def list = []
         startDateTime.step(endDateTime, 30000) {
-            lng -= 0.01
-            lat += 0.01
+            lng=NumberUtils.getRandom(0, 10) % 2==0?lng+0.01:lng-0.01
+            lat=NumberUtils.getRandom(0, 10) % 2==0?lat+0.01:lat-0.01
             list << [dateStr     : new Date(it).format('yyyy-MM-dd HH:mm:ss'),
                      plateColor  : '白色',
                      plateNo     : plateNo,
