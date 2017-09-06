@@ -1,4 +1,7 @@
 package com.hfyz.owner
+
+import com.hfyz.support.SystemType
+
 /**
  * 企业内部管理制度
  */
@@ -10,6 +13,7 @@ class CompanyRegulation {
     String fileName //文件名称
     String fileType //文件类型
     Double fileSize //单位kb
+    SystemType systemType
     Date dateCreated
     String fileRealPath //上传文件真实路径
     static constraints = {

@@ -5,14 +5,16 @@ import com.commons.utils.ControllerHelper
 class FreightWaybillApproveOpinionController implements ControllerHelper  {
 
     def approveOpinion() {
-        withFreightWaybill(params.long('id')) { FreightWaybill freightWaybillInstance ->
-            println '=====request.JSON====' + request.JSON
+        withFreightWaybill(request.JSON.fid) { FreightWaybill freightWaybillInstance ->
             FreightWaybillApproveOpinion freightWaybillApproveOpinion = new FreightWaybillApproveOpinion()
             freightWaybillApproveOpinion.approveTime = new Date()
             freightWaybillApproveOpinion.approveDesc = request.JSON.approveDesc
-            freightWaybillApproveOpinion.approver = ''
+            freightWaybillApproveOpinion.approver = currentUser
             freightWaybillApproveOpinion.freightWaybill = freightWaybillInstance
-//            freightWaybillApproveOpinion.save(flash: true)
+            freightWaybillApproveOpinion.save(flash: true)
+            freightWaybillInstance.status = request.JSON.type == 'agreed' ? 'YJS' : 'YJJ'
+            freightWaybillInstance.save(flush: true, failOnError: true)
+            renderSuccess()
         }
     }
 

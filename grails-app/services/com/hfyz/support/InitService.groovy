@@ -152,6 +152,11 @@ class InitService {
         new DangerousType(name: '危险货物运输（7类）', codeNum: '03111', parent: null).save(flush: true)
         new DangerousType(name: '危险货物运输（8类）', codeNum: '03111', parent: null).save(flush: true)
         new DangerousType(name: '危险货物运输（9类）', codeNum: '03111', parent: null).save(flush: true)
+
+        def a = new SystemType(name: '行政法规', codeNum: '01', parent: null).save(flush: true)
+        new SystemType(name: '章程', codeNum: '02', parent: null).save(flush: true)
+        new SystemType(name: '制度', codeNum: '03', parent: null).save(flush: true)
+        new SystemType(name: '公约', codeNum: '04', parent: null).save(flush: true)
     }
 
     private initAlarmType() {
@@ -1057,6 +1062,7 @@ class InitService {
             new CompanyRegulation(
                     companyCode: "C00000000${index}",
                     ownerName: "${val}",
+                    systemType: SystemType.findByCodeNum('01'),
                     regulationName: "${val}规章制度",
                     fileName: "${val}规章制度",
                     fileType: "doc",
