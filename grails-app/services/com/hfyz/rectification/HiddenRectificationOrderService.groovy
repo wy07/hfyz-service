@@ -12,7 +12,7 @@ class HiddenRectificationOrderService {
     def setStatus(){
         withHiddenRectificationOrder(params.long('id')){
             hiddenRectificationOrderIns ->
-                hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.getinstanceById(request.JSON.statusId)
+                hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.getInstanceById(request.JSON.statusId)
                 hiddenRectificationOrderIns.save(flush: true,failOnError: true)
 
         }
@@ -47,7 +47,7 @@ class HiddenRectificationOrderService {
                  , examiner      : obj.examiner
                  , inspectionDate: obj.inspectionDate.format('yyyy-MM-dd HH:mm:ss')
                  , dealineDate   : obj.dealineDate.format('yyyy-MM-dd HH:mm:ss')
-                 , status        : HiddenRectificationOrderStatus.getinstanceById(obj.status).type]
+                 , status        : HiddenRectificationOrderStatus.getInstanceById(obj.status).type]
             }
         }
 

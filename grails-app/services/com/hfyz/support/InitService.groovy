@@ -503,6 +503,7 @@ class InitService {
         new Menu(name: '关闭全部', code: 'closeall', position: 'TOP_BAR', parent: null).save(flush: true)
         def topbar = new Menu(name: '个人中心', code: 'profile', style: 'hoverdown', position: 'TOP_BAR', parent: null).save(flush: true)
         new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
+        new Menu(name: '消息中心', code: 'infoCenter', position: 'TOP_BAR', parent: null).save(flush: true)
         new Menu(name: '退出', code: 'logout', position: 'TOP_BAR', parent: null).save(flush: true)
 
         new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR', permissionCode: 'home').save(flush: true)
