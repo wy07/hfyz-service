@@ -76,9 +76,9 @@ trait ControllerHelper {
         render map as JSON
     }
 
-    def renderNoInstancePermError() {
+    def renderNoInstancePermError(msg = null) {
         response.setStatus(403)
-        def map = [errors: [message(code: 'default.instance.noPermission.message', default: '您没有权限进行此操作')]]
+        def map = [errors: [msg ?:message(code: 'default.instance.noPermission.message', default: '您没有权限进行此操作')]]
         render map as JSON
     }
 
@@ -106,7 +106,7 @@ trait ControllerHelper {
     }
 
     def handleInstancePermException(InstancePermException e) {
-        renderNoInstancePermError()
+        renderNoInstancePermError(e.message)
     }
 
     def handleIllegalActionException(IllegalActionException e) {
