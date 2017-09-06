@@ -4,6 +4,7 @@ import com.commons.utils.SQLHelper
 import com.hfyz.rectification.HiddenRectificationOrder
 import com.hfyz.rectification.HiddenRectificationOrderStatus
 import com.hfyz.workOrder.WorkOrder
+import com.hfyz.workOrder.WorkOrderFlowAction
 import com.hfyz.workOrder.WorkOrderStatus
 
 class InBoxService {
@@ -22,7 +23,7 @@ class InBoxService {
             nextIsCompany = true
             sqlParams.companyCode = WorkOrder.get(infoCenter.sourceId).companyCode
             flowList.each{flow ->
-                if(flow.action == 'FK') {
+                if(flow.action == WorkOrderFlowAction.FK.name()) {
                     sqlParams.role = flow.role
                 }
             }
