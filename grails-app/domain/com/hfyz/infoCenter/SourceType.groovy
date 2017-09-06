@@ -8,12 +8,8 @@ enum SourceType {
     int id
     String cnName
 
-    public SourceType(int id,String cnName) {
+    SourceType(int id,String cnName) {
         this.id=id
         this.cnName = cnName
-    }
-
-    public String toString() {
-        cnName
     }
 }

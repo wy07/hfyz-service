@@ -3,6 +3,7 @@ package com.hfyz.support
 import com.commons.utils.NumberUtils
 import com.commons.utils.ValidationUtils
 import com.hfyz.cases.RegisterReport
+import com.hfyz.infoManage.Infoaudit
 import com.hfyz.owner.CompanyRegulation
 
 import com.hfyz.owner.OwnerIdentity
@@ -75,13 +76,13 @@ class InitService {
         initAlarmType()
         initWorkOrder()
         initEmergencyPlan()
-        initWaybill()
         initPassLineBusinessBasicInfo()
         initPassLinePhysicalBasicInfo()
         initPlatformManage()
         initBlackAndWhite()
         initWarning()
         initPeople()
+        initWaybill()
         initCheckRecord()
         initMapSign()
         initRegisterReport()
@@ -90,6 +91,7 @@ class InitService {
         initHiddenRectificationOrder()
         initConfigure()
         initCar()
+        initInfoaudit()
     }
 
     private initSystemCode() {
@@ -152,6 +154,11 @@ class InitService {
         new DangerousType(name: '危险货物运输（7类）', codeNum: '03111', parent: null).save(flush: true)
         new DangerousType(name: '危险货物运输（8类）', codeNum: '03111', parent: null).save(flush: true)
         new DangerousType(name: '危险货物运输（9类）', codeNum: '03111', parent: null).save(flush: true)
+
+        def a = new SystemType(name: '行政法规', codeNum: '01', parent: null).save(flush: true)
+        new SystemType(name: '章程', codeNum: '02', parent: null).save(flush: true)
+        new SystemType(name: '制度', codeNum: '03', parent: null).save(flush: true)
+        new SystemType(name: '公约', codeNum: '04', parent: null).save(flush: true)
     }
 
     private initAlarmType() {
@@ -215,12 +222,12 @@ class InitService {
                 amount: 8.0,
                 mile: 263.0,
                 departTime: new Date(117, 8, 12, 6, 23, 40),
-                driverName: '赵坤',
-                driverWokeLicenseNo: '3400234',
-                driverPhone: '13152099234',
-                supercargoName: '王坤',
-                supercargoWokeLicenseNo: '3242424',
-                supercargoPhone: '13152099235',
+                driverName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').name,
+                driverWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').idCardNo,
+                driverPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').phoneNo,
+                supercargoName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
                 consignCompany: '无',
                 backTime: new Date(117, 8, 13, 5, 23, 40),
                 departArea: '合肥',
@@ -261,12 +268,12 @@ class InitService {
                 amount: 4.90,
                 mile: 263.0,
                 departTime: new Date(117, 8, 14, 6, 23, 40),
-                driverName: '赵坤',
-                driverWokeLicenseNo: '3400234',
-                driverPhone: '13152099234',
-                supercargoName: '王坤',
-                supercargoWokeLicenseNo: '3242424',
-                supercargoPhone: '13152099235',
+                driverName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').name,
+                driverWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').idCardNo,
+                driverPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').phoneNo,
+                supercargoName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
                 consignCompany: '无',
                 backTime: new Date(117, 8, 15, 5, 23, 40),
                 departArea: '合肥',
@@ -307,12 +314,12 @@ class InitService {
                 amount: 2.30,
                 mile: 263.0,
                 departTime: new Date(117, 8, 10, 14, 23, 40),
-                driverName: '赵坤',
-                driverWokeLicenseNo: '3400234',
-                driverPhone: '13152099234',
-                supercargoName: '王坤',
-                supercargoWokeLicenseNo: '3242424',
-                supercargoPhone: '13152099235',
+                driverName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').name,
+                driverWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').idCardNo,
+                driverPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').phoneNo,
+                supercargoName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
                 consignCompany: '无',
                 backTime: new Date(117, 8, 11, 01, 23, 40),
                 departArea: '合肥',
@@ -475,6 +482,7 @@ class InitService {
         new PermissionGroup(url: '/pass-line-business-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "客运路线", category: "信息管理", code: 'pass_line_business_basic_info_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/pass-line-physical-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "客运物理路线", category: "信息管理", code: 'pass_line_physical_basic_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/freight-waybills/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货电子路单", category: "信息管理", code: 'freight_waybill_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/freight-waybills/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "危货电子路单审核", category: "信息管理", code: 'freight_waybill_approve_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/company-regulations/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "管理制度", category: "信息管理", code: 'company_regulation_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/info-publish/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "信息发布", category: "信息管理", code: 'info_publish').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/info-check/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "信息审核", category: "信息管理", code: 'info_check').save(failOnError: true, flush: true)
@@ -535,6 +543,7 @@ class InitService {
         new Menu(name: '客运物理路线', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'pass_line_physical_basic_list').save(flush: true)
         new Menu(name: '危货路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_router_list').save(flush: true)
         new Menu(name: '危货电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_waybill_list').save(flush: true)
+        new Menu(name: '危货电子路单审核', code: 'freightWaybillApprove', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_waybill_approve_list').save(flush: true)
         new Menu(name: '隐患整改单', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_list').save(flush: true)
         new Menu(name: '整改单审核', code: 'orderExamine', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_pending').save(flush: true)
         new Menu(name: '整改单反馈', code: 'enterpriseFeedback', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_feedback').save(flush: true)
@@ -1056,6 +1065,7 @@ class InitService {
             new CompanyRegulation(
                     companyCode: "C00000000${index}",
                     ownerName: "${val}",
+                    systemType: SystemType.findByCodeNum('01'),
                     regulationName: "${val}规章制度",
                     fileName: "${val}规章制度",
                     fileType: "doc",
@@ -1084,4 +1094,26 @@ class InitService {
     private initConfigure() {
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值',note: '单位：%').save(flush: true)
     }
+//    发布信息--法律法规
+    private initInfoaudit(){
+        new Infoaudit(type:'政策法律法规',publisher:1,receiver:1,auditor:1,title:'《机动车驾驶证申领和使用规定》',content:'  第一条  根据《中华人民共和国道路交通安全法》及其实施条例、《中华人民共和国行政许可法》，制定本规定。\n' +
+                '    第二条  本规定由公安机关交通管理部门负责实施。\n' +
+                '    省级公安机关交通管理部门负责本省（自治区、直辖市）机动车驾驶证业务工作的指导、检查和监督。直辖市公安机关交通管理部门车辆管理所、设区的市或者相当于同级的公安机关交通管理部门车辆管理所负责办理本行政辖区内机动车驾驶证业务。\n' +
+                '    县级公安机关交通管理部门车辆管理所可以办理本行政辖区内低速载货汽车、三轮汽车、摩托车驾驶证业务，以及其他机动车驾驶证换发、补发、审验、提交身体条件证明等业务。条件具备的，可以办理小型汽车、小型自动挡汽车、残疾人专用小型自动挡载客汽车驾驶证业务，以及其他机动车驾驶证的道路交通安全法律、法规和相关知识考试业务。具体业务范围和办理条件由省级公安机关交通管理部门确定。\n' +
+                '第三条  车辆管理所办理机动车驾驶证业务，应当遵循严格、公开、公正、便民的原则。\n' +
+                '车辆管理所办理机动车驾驶证业务，应当依法受理申请人的申请，审核申请人提交的材料。对符合条件的，按照规定的标准、程序和期限办理机动车驾驶证。对申请材料不齐全或者不符合法定形式的，应当一次书面告知申请人需要补正的全部内容。对不符合条件的，应当书面告知理由。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
+        new Infoaudit(type:'政策法律法规',publisher:2,receiver:2,auditor:2,title:'《道路交通安全违法行为处理程序规定》',content:'修订后的《道路交通安全违法行为处理程序规定》已经2008年11月17日公安部部长办公会议通过，现予发布，自2009年4月1日起施行<br>第一条 为了规范道路交通安全违法行为处理程序，保障公安机关交通管理部门正确履行职责，保护公民、法人和其他组织的合法权益，根据《中华人民共和国道路交通安全法》及其实施条例等法律、行政法规制定本规定。\n' +
+                '　　第二条 公安机关交通管理部门及其交通警察对道路交通安全违法行为（以下简称违法行为）的处理程序，在法定职权范围内依照本规定实施。\n' +
+                '　　第三条 对违法行为的处理应当遵循合法、公正、文明、公开、及时的原则，尊重和保障人权，保护公民的人格尊严。\n' +
+                '　　对违法行为的处理应当坚持教育与处罚相结合的原则，教育公民、法人和其他组织自觉遵守道路交通安全法律法规。\n' +
+                '　　对违法行为的处理，应当以事实为依据，与违法行为的事实、性质、情节以及社会危害程度相当。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
+        new Infoaudit(type:'政策法律法规',publisher:3,receiver:3,auditor:3,title:'《道路交通事故处理程序规定》',content:'第一条 为了规范道路交通事故处理程序，保障公安机关交通管理部门依法履行职责，保护道路交通事故当事人的合法权益，根据《中华人民共和国道路交通安全法》及其实施条例等有关法律、法规，制定本规定。\n' +
+                '第二条 公安机关交通管理部门处理道路交通事故，应当遵循公正、公开、便民、效率的原则。\n' +
+                '第三条 交通警察处理道路交通事故，应当取得相应等级的处理道路交通事故资格。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
+        new Infoaudit(type:'政策法律法规',publisher:4,receiver:4,auditor:4,title:'《中华人民共和国道路交通安全法实施条例》',content:'第一章　总　则编辑\n' +
+                '第一条　根据《中华人民共和国道路交通安全法》（以下简称道路交通安全法）的规定，制定本条例。\n' +
+                '第二条　中华人民共和国境内的车辆驾驶人、行人、乘车人以及与道路交通活动有关的单位和个人，应当遵守道路交通安全法和本条例。\n' +
+                '第三条　县级以上地方各级人民政府应当建立、健全道路交通安全工作协调机制，组织有关部门对城市建设项目进行交通影响评价，制定道路交通安全管理规划，确定管理目标，制定实施方案。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
+    }
+
 }

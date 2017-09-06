@@ -18,4 +18,12 @@ enum WorkOrderStatus {
     public String toString() {
         cnName
     }
+
+    def static getInstanceById(def id){
+        for(WorkOrderStatus workOrderStatus : WorkOrderStatus.values()){
+            if(workOrderStatus.getId() == id){
+                return workOrderStatus
+            }
+        }
+    }
 }

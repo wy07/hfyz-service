@@ -2,18 +2,20 @@ package com.hfyz.waybill
 
 import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
+import com.hfyz.infoCenter.SourceType
 import com.hfyz.security.User
 import com.hfyz.support.SystemCode
 
 class FreightWaybillController implements ControllerHelper {
     def freightWaybillService
-
+    def infoCenterService
     def search() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
         def result = freightWaybillService.search([vehicleNo  : request.JSON.vehicleNo
                                                    , ownerName: request.JSON.ownerName
                                                    , dateBegin: request.JSON.dateBegin
+                                                   , status:    request.JSON.status
                                                    , dateEnd  : request.JSON.dateEnd], currentUser, max, offset)
         renderSuccessesWithMap(result)
     }
@@ -23,6 +25,12 @@ class FreightWaybillController implements ControllerHelper {
             if (currentUser.isCompanyUser()) {
                 if (freightWaybillInstance.companyCode != currentUser.companyCode) {
                     renderNoInstancePermError()
+                    return
+                }
+            }
+            if(request.JSON.action){
+                if(request.JSON.action != freightWaybillInstance.status){
+                    renderErrorMsg('此电子路单已被处理！')
                     return
                 }
             }
@@ -160,10 +168,20 @@ class FreightWaybillController implements ControllerHelper {
     }
 
     def delete() {
-        withCompanyFreightWaybill(params.long('id'), currentUser) { freightWaybillInstance ->
+        withCompanyFreightWaybill(params.long('id'), currentUser) { FreightWaybill freightWaybillInstance ->
             freightWaybillInstance.delete(flush: true)
             renderSuccess()
         }
+    }
+
+    def submit() {
+        withCompanyFreightWaybill(params.long('id'), currentUser) { FreightWaybill freightWaybillInstance ->
+            freightWaybillInstance.status = 'SHZ'
+            freightWaybillInstance.save(flush: true, failOnError: true)
+            infoCenterService.save(freightWaybillInstance.id, SourceType.DZLD)
+            renderSuccess()
+        }
+
     }
 
     private withFreightWaybill(Long id, Closure c) {

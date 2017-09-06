@@ -18,7 +18,7 @@ enum HiddenRectificationOrderStatus {
         this.id = id
     }
 
-    def static  getinstanceById(def index){
+    def static  getInstanceById(def index){
         for(HiddenRectificationOrderStatus orderStatus : HiddenRectificationOrderStatus.values()){
             if(orderStatus.getId() == index){
                 return orderStatus

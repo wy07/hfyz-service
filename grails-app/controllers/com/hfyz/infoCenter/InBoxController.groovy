@@ -3,7 +3,9 @@ package com.hfyz.infoCenter
 import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
 import com.hfyz.rectification.HiddenRectificationOrder
+import com.hfyz.rectification.HiddenRectificationOrderStatus
 import com.hfyz.workOrder.WorkOrder
+import com.hfyz.workOrder.WorkOrderStatus
 
 class InBoxController implements ControllerHelper{
 
@@ -11,49 +13,54 @@ class InBoxController implements ControllerHelper{
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
         def list = InBox.createCriteria().list([max:max, offset:offset, sort: 'isRead']){
-            and {
-                eq("accepter", getCurrentUser())
-            }
+            eq("accepter", getCurrentUser())
         }?.collect(){ InBox inBox ->
-            def action
-            def actualAction
+            def action = inBox.action
             if(inBox.sourceType == SourceType.GD){
-                action = inBox.action
-                def flowList = WorkOrder.get(inBox.sourceId).flows
-                def step = WorkOrder.get(inBox.sourceId).flowStep
-                actualAction = step ? flowList[step-1].action : ''
+                action = WorkOrderStatus.getInstanceById(inBox.action.toBigInteger())?.name()
             }
             if(inBox.sourceType == SourceType.YHZGD) {
-                def HiddenRectificationStatus = ['DSH','DFK','YJJ','DYR','HG','BHG']
-                action = HiddenRectificationStatus[inBox.action.toBigInteger()-1]
-                actualAction = HiddenRectificationOrder.get(inBox.sourceId).status.name()
+                action = HiddenRectificationOrderStatus.getInstanceById(inBox.action.toBigInteger())?.name()
             }
             [id           : inBox.id
              , sourceId   : inBox.sourceId
-             , sourceType : inBox.sourceType.cnName
+             , sourceType : inBox.sourceType.name()
              , title      : inBox.title
              , isRead     : inBox.isRead
              , dateCreated: inBox.dateCreated.format('yyyy-MM-dd HH:mm:ss ')
              , action     : action
-             , actualAction: actualAction
             ]
         }
         def total = InBox.createCriteria().get {
             projections {
                 count()
             }
-            and {
-                eq("accepter", getCurrentUser())
-            }
+            eq("accepter", getCurrentUser())
         }
         renderSuccessesWithMap([list: list, total: total])
     }
+
     def changeState() {
         withInBox(params.long('id')){InBox inBox ->
-            inBox.isRead = true
-            inBox.save(flush: true, failOnError: true)
+            if(!inBox.isRead) {
+                inBox.isRead = true
+                inBox.save(flush: true, failOnError: true)
+            }
         }
         renderSuccess()
+    }
+
+    def unreadMessage() {
+        def unreadMessageCount = InBox.createCriteria().get(){
+            projections {
+                count()
+            }
+            eq("accepter", getCurrentUser())
+            and {
+                eq("isRead", false)
+            }
+        }
+        renderSuccessesWithMap([unreadMessageCount: unreadMessageCount])
     }
 
     private withInBox(Long id,Closure c){
