@@ -5,6 +5,7 @@ import com.commons.exception.InstancePermException
 import com.commons.exception.RecordNotFoundException
 import com.commons.utils.NumberUtils
 import com.commons.utils.SQLHelper
+import com.hfyz.infoCenter.SourceType
 import com.hfyz.owner.OwnerIdentity
 import com.hfyz.security.User
 import com.hfyz.support.AlarmType
@@ -109,10 +110,10 @@ class WorkOrderService {
     }
 
     def preExamine(Long id, User user) {
-        WorkOrder workOrder = getWorkOrderById(id)
+            WorkOrder workOrder = getWorkOrderById(id)
 
         if (workOrder.status != WorkOrderStatus.DSH) {
-            throw new IllegalActionException()
+            throw new IllegalActionException('此工单已被处理！')
         }
 
         if (!(workOrder.todoRole in user.authorities?.authority)) {
@@ -153,7 +154,7 @@ class WorkOrderService {
         }
 
         if (!(workOrder.todoRole in user.authorities?.authority)) {
-            throw new InstancePermException()
+            throw new InstancePermException('此工单已被处理！')
         }
 
         if (workOrder.status != WorkOrderStatus.DFK) {
@@ -192,17 +193,17 @@ class WorkOrderService {
         workOrder.flowStep += 1
         workOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
 
-        def order = workOrder.save(flush: true, failOnError: true)
-        infoCenterService.save(order.id, 'GD')
+        workOrder.save(flush: true, failOnError: true)
+        infoCenterService.save(workOrder.id, SourceType.GD)
     }
 
     def preJudge(Long id, User user) {
         WorkOrder workOrder = getWorkOrderById(id)
 
         if (workOrder.status != WorkOrderStatus.DYP) {
-            throw new IllegalActionException()
+            throw new IllegalActionException('此工单已被处理！')
         }
-
+        println workOrder.status
         if (!(workOrder.todoRole in user.authorities?.authority)) {
             throw new InstancePermException()
         }
@@ -426,7 +427,7 @@ class WorkOrderService {
         workOrder.passed = true
 
         workOrder.save(flush: true, failOnError: true)
-        infoCenterService.save(workOrder.id, 'GD')
+        infoCenterService.save(workOrder.id, SourceType.GD)
     }
 
     private refuseJudge(WorkOrder workOrder, User user, String note) {
@@ -478,7 +479,7 @@ class WorkOrderService {
         newWorkerOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
 
         newWorkerOrder.save(flush: true, failOnError: true)
-        infoCenterService.save(newWorkerOrder.id, 'GD')
+        infoCenterService.save(newWorkerOrder.id, SourceType.GD)
 
     }
 
@@ -495,8 +496,8 @@ class WorkOrderService {
         workOrder.flowStep += 1
         workOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
 
-        def order = workOrder.save(flush: true, failOnError: true)
-        infoCenterService.save(order.id, 'GD')
+        workOrder.save(flush: true, failOnError: true)
+        infoCenterService.save(workOrder.id, SourceType.GD)
     }
 
     private refuseExamine(WorkOrder workOrder, User user, String note) {
@@ -516,8 +517,8 @@ class WorkOrderService {
             workOrder.flowStep -= 1
             workOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
         }
-        def order = workOrder.save(flush: true, failOnError: true)
-        infoCenterService.save(order.id, 'GD')
+        workOrder.save(flush: true, failOnError: true)
+        infoCenterService.save(workOrder.id, SourceType.GD)
     }
 
 }

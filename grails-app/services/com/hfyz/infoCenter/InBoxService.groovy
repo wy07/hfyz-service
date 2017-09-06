@@ -9,52 +9,35 @@ import com.hfyz.workOrder.WorkOrderStatus
 class InBoxService {
 
     def dataSource
-    def saveWorkOrder(InfoCenter infoCenter) {
-
-        def flowList = WorkOrder.get(infoCenter.sourceId).flows
-        def step = WorkOrder.get(infoCenter.sourceId).flowStep
-        def action = step ? flowList[step-1].action : ''
+    def saveWorkOrderInBox(InfoCenter infoCenter) {
 
         boolean nextIsCompany = false
+        def flowList = WorkOrder.get(infoCenter.sourceId).flows
+        def step = WorkOrder.get(infoCenter.sourceId).flowStep
+
         def role = WorkOrder.get(infoCenter.sourceId).todoRole
         def sqlParams = [:]
         sqlParams.role = role
         sqlParams.id = infoCenter.id
-        sqlParams.action = action
-        if(role == 'ROLE_COMPANY_ROOT'){
+        if(step == 3 || WorkOrder.get(infoCenter.sourceId).status == WorkOrderStatus.YWC){
             nextIsCompany = true
             sqlParams.companyCode = WorkOrder.get(infoCenter.sourceId).companyCode
-        }
-        if(WorkOrder.get(infoCenter.sourceId).status == WorkOrderStatus.YWC) {
-            nextIsCompany = true
-            sqlParams.companyCode = WorkOrder.get(infoCenter.sourceId).companyCode
-            sqlParams.action = WorkOrder.get(infoCenter.sourceId).status.name()
-            sqlParams.role = 'ROLE_COMPANY_ROOT'
+            sqlParams.role = flowList[2].role
         }
         SQLHelper.withDataSource(dataSource) { sql ->
            sql.execute(saveWorkOrderInBoxSql(nextIsCompany), sqlParams)
         }
-
     }
 
-    def saveHiddenRectificationOrder(InfoCenter infoCenter) {
+    def saveHiddenRectificationOrderInBox(InfoCenter infoCenter) {
         boolean nextIsCompany = false
-        String menuCode = ''
         def status = HiddenRectificationOrder.get(infoCenter.sourceId).status
-        if(status==HiddenRectificationOrderStatus.DFK || status==HiddenRectificationOrderStatus.HG
-         || status==HiddenRectificationOrderStatus.BHG){
-            nextIsCompany = true
-            menuCode = 'enterpriseFeedback'
-        }
-        if(status==HiddenRectificationOrderStatus.DSH || status==HiddenRectificationOrderStatus.DYR){
-            menuCode = 'orderExamine'
-        }
-        if(status==HiddenRectificationOrderStatus.YJJ){
-            menuCode = 'hiddenDanger'
-        }
         def sqlParams = [:]
-        sqlParams.menuCode = menuCode
+        sqlParams.menuCode = getMenuCode(status)
         sqlParams.id = infoCenter.id
+        if(getMenuCode(status) == 'enterpriseFeedback') {
+            nextIsCompany = true
+        }
         if(nextIsCompany){
             sqlParams.companyCode = HiddenRectificationOrder.get(infoCenter.sourceId).companyCode
         }
@@ -63,6 +46,20 @@ class InBoxService {
         }
 
     }
+
+    def private getMenuCode(status){
+        String menuCode = ''
+        if(status==HiddenRectificationOrderStatus.DFK || status==HiddenRectificationOrderStatus.HG
+                || status==HiddenRectificationOrderStatus.BHG){
+            menuCode = 'enterpriseFeedback'
+        }else if(status==HiddenRectificationOrderStatus.DSH || status==HiddenRectificationOrderStatus.DYR){
+            menuCode = 'orderExamine'
+        }else if(status==HiddenRectificationOrderStatus.YJJ){
+            menuCode = 'hiddenDanger'
+        }
+        return menuCode
+    }
+
     private static String saveHiddenRectificationInBoxSql(nextIsCompany) {
         String sqlStr = """     
                 with t   
@@ -89,7 +86,7 @@ class InBoxService {
     private static String saveWorkOrderInBoxSql(nextIsCompany) {
         String sqlStr = """     
                insert into in_box(version, date_created,info_center_id, accepter_id, source_id, source_type, title, is_read, action)
-               select distinct 0, current_timestamp, info.id, user_id, info.source_id, info.source_type, info.title, false, :action
+               select distinct 0, current_timestamp, info.id, user_id, info.source_id, info.source_type, info.title, false, t_order.status
                from role, user_role, info_center info, work_order t_order, sys_user
                where role.authority = :role and user_role.role_id = role.id and info.id= :id and t_order.id = info.source_id
                 """

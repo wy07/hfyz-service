@@ -3,6 +3,7 @@ package com.hfyz.rectification
 import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
 import com.commons.utils.NumberUtils
+import com.hfyz.infoCenter.SourceType
 import com.hfyz.owner.OwnerIdentity
 import grails.converters.JSON
 import com.hfyz.owner.OwnerIdentityService
@@ -24,7 +25,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
                 if(tempStatus == HiddenRectificationOrderStatus.QC || tempStatus == HiddenRectificationOrderStatus.YJJ){
                     hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.DSH
                     hiddenRectificationOrderIns.save(flush: true,failOnError: true)
-                    infoCenterService.save(hiddenRectificationOrderIns.id, 'YHZGD')
+                    infoCenterService.save(hiddenRectificationOrderIns.id, SourceType.YHZGD)
                 }else{
                     renderErrorMsg("此单据已被提交")
                 }
@@ -73,6 +74,11 @@ class HiddenRectificationOrderController implements ControllerHelper {
     def edit(){
         withHiddenRectificationOrder(params.long('id')){
             hiddenRectificationOrderIn ->
+                if(request.JSON.action){
+                    if(request.JSON.action != hiddenRectificationOrderIn.status.name()){
+                        renderErrorMsg('该整改单已被处理！')
+                    }
+                }
                 renderSuccessesWithMap([hiddenRectificationOrder:[
                         id : hiddenRectificationOrderIn.id,
                         area : hiddenRectificationOrderIn.area,
@@ -91,7 +97,6 @@ class HiddenRectificationOrderController implements ControllerHelper {
                         status : hiddenRectificationOrderIn.status.type
                 ]])
                         }
-
     }
 
     def delete(){
@@ -126,11 +131,11 @@ class HiddenRectificationOrderController implements ControllerHelper {
                     if(tempStatus == HiddenRectificationOrderStatus.DFK){
                         hiddenRectificationOrderInstence.status =  HiddenRectificationOrderStatus.DYR
                     }
-                    //hiddenRectificationOrderInstence.status = HiddenRectificationOrderStatus.getinstanceById(request.JSON.statusId)
+
                     hiddenRectificationOrderInstence.replyDate = request.JSON.reply ? new Date().parse('yyyy-MM-dd HH:mm', request.JSON.reply) : null
                     hiddenRectificationOrderInstence.replyDesc = request.JSON.replyDesc
                     hiddenRectificationOrderInstence.save(flush: true,failOnError: true)
-                    infoCenterService.save(hiddenRectificationOrderInstence.id, 'YHZGD')
+                    infoCenterService.save(hiddenRectificationOrderInstence.id, SourceType.YHZGD)
                 renderSuccess()
                 }else{
                     renderErrorMsg("您没有此操作的权限！")
