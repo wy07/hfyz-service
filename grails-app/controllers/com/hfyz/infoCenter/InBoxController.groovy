@@ -39,6 +39,7 @@ class InBoxController implements ControllerHelper{
         }
         renderSuccessesWithMap([list: list, total: total])
     }
+
     def changeState() {
         withInBox(params.long('id')){InBox inBox ->
             inBox.isRead = true
@@ -47,7 +48,7 @@ class InBoxController implements ControllerHelper{
         renderSuccess()
     }
 
-    def isShow() {
+    def unreadMessage() {
         def list = InBox.createCriteria().list(){
             eq("accepter", getCurrentUser())
             and {
