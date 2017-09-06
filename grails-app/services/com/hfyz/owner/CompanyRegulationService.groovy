@@ -2,6 +2,7 @@ package com.hfyz.owner
 
 import com.commons.utils.SQLHelper
 import com.hfyz.security.User
+import com.hfyz.support.SystemType
 import grails.transaction.Transactional
 
 /**
@@ -39,6 +40,9 @@ class CompanyRegulationService {
             if (requestParams.ownerName) {
                 like("ownerName", "${requestParams.ownerName}%")
             }
+            if (requestParams.systemTypeId) {
+                eq("systemType", SystemType.get(requestParams.systemTypeId))
+            }
             if (begin && end) {
                 between("dateCreated", begin, end)
             }
@@ -47,6 +51,7 @@ class CompanyRegulationService {
                     id            : regulation.id,
                     ownerName     : regulation.ownerName,
                     regulationName: regulation.regulationName,
+                    systemType    : regulation.systemType.name,
                     fileName      : regulation.fileName,
                     fileType      : regulation.fileType,
                     fileSize      : regulation.fileSize,

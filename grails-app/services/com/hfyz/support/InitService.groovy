@@ -75,13 +75,13 @@ class InitService {
         initAlarmType()
         initWorkOrder()
         initEmergencyPlan()
-        initWaybill()
         initPassLineBusinessBasicInfo()
         initPassLinePhysicalBasicInfo()
         initPlatformManage()
         initBlackAndWhite()
         initWarning()
         initPeople()
+        initWaybill()
         initCheckRecord()
         initMapSign()
         initRegisterReport()
@@ -152,6 +152,11 @@ class InitService {
         new DangerousType(name: '危险货物运输（7类）', codeNum: '03111', parent: null).save(flush: true)
         new DangerousType(name: '危险货物运输（8类）', codeNum: '03111', parent: null).save(flush: true)
         new DangerousType(name: '危险货物运输（9类）', codeNum: '03111', parent: null).save(flush: true)
+
+        def a = new SystemType(name: '行政法规', codeNum: '01', parent: null).save(flush: true)
+        new SystemType(name: '章程', codeNum: '02', parent: null).save(flush: true)
+        new SystemType(name: '制度', codeNum: '03', parent: null).save(flush: true)
+        new SystemType(name: '公约', codeNum: '04', parent: null).save(flush: true)
     }
 
     private initAlarmType() {
@@ -215,12 +220,12 @@ class InitService {
                 amount: 8.0,
                 mile: 263.0,
                 departTime: new Date(117, 8, 12, 6, 23, 40),
-                driverName: '赵坤',
-                driverWokeLicenseNo: '3400234',
-                driverPhone: '13152099234',
-                supercargoName: '王坤',
-                supercargoWokeLicenseNo: '3242424',
-                supercargoPhone: '13152099235',
+                driverName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').name,
+                driverWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').idCardNo,
+                driverPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').phoneNo,
+                supercargoName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
                 consignCompany: '无',
                 backTime: new Date(117, 8, 13, 5, 23, 40),
                 departArea: '合肥',
@@ -261,12 +266,12 @@ class InitService {
                 amount: 4.90,
                 mile: 263.0,
                 departTime: new Date(117, 8, 14, 6, 23, 40),
-                driverName: '赵坤',
-                driverWokeLicenseNo: '3400234',
-                driverPhone: '13152099234',
-                supercargoName: '王坤',
-                supercargoWokeLicenseNo: '3242424',
-                supercargoPhone: '13152099235',
+                driverName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').name,
+                driverWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').idCardNo,
+                driverPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').phoneNo,
+                supercargoName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
                 consignCompany: '无',
                 backTime: new Date(117, 8, 15, 5, 23, 40),
                 departArea: '合肥',
@@ -307,12 +312,12 @@ class InitService {
                 amount: 2.30,
                 mile: 263.0,
                 departTime: new Date(117, 8, 10, 14, 23, 40),
-                driverName: '赵坤',
-                driverWokeLicenseNo: '3400234',
-                driverPhone: '13152099234',
-                supercargoName: '王坤',
-                supercargoWokeLicenseNo: '3242424',
-                supercargoPhone: '13152099235',
+                driverName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').name,
+                driverWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').idCardNo,
+                driverPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314256x').phoneNo,
+                supercargoName: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoWokeLicenseNo: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
+                supercargoPhone: PeopleBasicInfo.findByCompanyCodeAndIdCardNo('C000000001', '34132519870314289x').name,
                 consignCompany: '无',
                 backTime: new Date(117, 8, 11, 01, 23, 40),
                 departArea: '合肥',
@@ -475,6 +480,7 @@ class InitService {
         new PermissionGroup(url: '/pass-line-business-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "客运路线", category: "信息管理", code: 'pass_line_business_basic_info_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/pass-line-physical-basic-infos/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "客运物理路线", category: "信息管理", code: 'pass_line_physical_basic_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/freight-waybills/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "危货电子路单", category: "信息管理", code: 'freight_waybill_list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/freight-waybills/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "危货电子路单审核", category: "信息管理", code: 'freight_waybill_approve_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/company-regulations/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "管理制度", category: "信息管理", code: 'company_regulation_list').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/info-publish/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "信息发布", category: "信息管理", code: 'info_publish').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/info-check/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "信息审核", category: "信息管理", code: 'info_check').save(failOnError: true, flush: true)
@@ -534,6 +540,7 @@ class InitService {
         new Menu(name: '客运物理路线', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'pass_line_physical_basic_list').save(flush: true)
         new Menu(name: '危货路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_router_list').save(flush: true)
         new Menu(name: '危货电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_waybill_list').save(flush: true)
+        new Menu(name: '危货电子路单审核', code: 'freightWaybillApprove', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_waybill_approve_list').save(flush: true)
         new Menu(name: '隐患整改单', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_list').save(flush: true)
         new Menu(name: '整改单审核', code: 'orderExamine', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_pending').save(flush: true)
         new Menu(name: '整改单反馈', code: 'enterpriseFeedback', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_feedback').save(flush: true)
@@ -1055,6 +1062,7 @@ class InitService {
             new CompanyRegulation(
                     companyCode: "C00000000${index}",
                     ownerName: "${val}",
+                    systemType: SystemType.findByCodeNum('01'),
                     regulationName: "${val}规章制度",
                     fileName: "${val}规章制度",
                     fileType: "doc",
