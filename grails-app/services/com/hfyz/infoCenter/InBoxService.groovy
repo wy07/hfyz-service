@@ -51,7 +51,7 @@ class InBoxService {
 
     }
 
-    def private getMenuCode(status){
+    private getMenuCode(status){
         String menuCode = ''
         if(status==HiddenRectificationOrderStatus.DFK || status==HiddenRectificationOrderStatus.HG
                 || status==HiddenRectificationOrderStatus.BHG){

@@ -42,20 +42,25 @@ class InBoxController implements ControllerHelper{
 
     def changeState() {
         withInBox(params.long('id')){InBox inBox ->
-            inBox.isRead = true
-            inBox.save(flush: true, failOnError: true)
+            if(!inBox.isRead) {
+                inBox.isRead = true
+                inBox.save(flush: true, failOnError: true)
+            }
         }
         renderSuccess()
     }
 
     def unreadMessage() {
-        def list = InBox.createCriteria().list(){
+        def unreadMessageCount = InBox.createCriteria().get(){
+            projections {
+                count()
+            }
             eq("accepter", getCurrentUser())
             and {
                 eq("isRead", false)
             }
         }
-        renderSuccessesWithMap([isShow: list.size()>0])
+        renderSuccessesWithMap([unreadMessageCount: unreadMessageCount])
     }
 
     private withInBox(Long id,Closure c){
