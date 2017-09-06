@@ -13,16 +13,19 @@ class InBoxService {
 
         boolean nextIsCompany = false
         def flowList = WorkOrder.get(infoCenter.sourceId).flows
-        def step = WorkOrder.get(infoCenter.sourceId).flowStep
 
         def role = WorkOrder.get(infoCenter.sourceId).todoRole
         def sqlParams = [:]
         sqlParams.role = role
         sqlParams.id = infoCenter.id
-        if(step == 3 || WorkOrder.get(infoCenter.sourceId).status == WorkOrderStatus.YWC){
+        if(WorkOrder.get(infoCenter.sourceId).status == WorkOrderStatus.DFK || WorkOrder.get(infoCenter.sourceId).status == WorkOrderStatus.YWC){
             nextIsCompany = true
             sqlParams.companyCode = WorkOrder.get(infoCenter.sourceId).companyCode
-            sqlParams.role = flowList[2].role
+            flowList.each{flow ->
+                if(flow.action == 'FK') {
+                    sqlParams.role = flow.role
+                }
+            }
         }
         SQLHelper.withDataSource(dataSource) { sql ->
            sql.execute(saveWorkOrderInBoxSql(nextIsCompany), sqlParams)
