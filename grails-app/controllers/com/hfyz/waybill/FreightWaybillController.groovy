@@ -14,6 +14,7 @@ class FreightWaybillController implements ControllerHelper {
         def result = freightWaybillService.search([vehicleNo  : request.JSON.vehicleNo
                                                    , ownerName: request.JSON.ownerName
                                                    , dateBegin: request.JSON.dateBegin
+                                                   , status:    request.JSON.status
                                                    , dateEnd  : request.JSON.dateEnd], currentUser, max, offset)
         renderSuccessesWithMap(result)
     }
@@ -160,10 +161,19 @@ class FreightWaybillController implements ControllerHelper {
     }
 
     def delete() {
-        withCompanyFreightWaybill(params.long('id'), currentUser) { freightWaybillInstance ->
+        withCompanyFreightWaybill(params.long('id'), currentUser) { FreightWaybill freightWaybillInstance ->
             freightWaybillInstance.delete(flush: true)
             renderSuccess()
         }
+    }
+
+    def submit() {
+        withCompanyFreightWaybill(params.long('id'), currentUser) { FreightWaybill freightWaybillInstance ->
+            freightWaybillInstance.status = 'SHZ'
+            freightWaybillInstance.save(flush: true, failOnError: true)
+            renderSuccess()
+        }
+
     }
 
     private withFreightWaybill(Long id, Closure c) {

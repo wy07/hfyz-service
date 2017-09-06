@@ -26,6 +26,11 @@ class FreightWaybillService {
 
             }
 
+            if (inputParams.status) {
+                like("status", "SHZ")
+
+            }
+
             if (begin && end) {
                 between("departTime", begin, end)
             }
@@ -47,7 +52,8 @@ class FreightWaybillService {
                     startDistrict: bill.startDistrict,
                     endProvince  : bill.endProvince,
                     endCity      : bill.endCity,
-                    endDistrict  : bill.endDistrict
+                    endDistrict  : bill.endDistrict,
+                    status  : bill.status
             ]
 
         })
