@@ -15,7 +15,7 @@ class InBoxController implements ControllerHelper{
         def list = InBox.createCriteria().list([max:max, offset:offset, sort: 'isRead']){
             eq("accepter", getCurrentUser())
         }?.collect(){ InBox inBox ->
-            def action
+            def action = inBox.action
             if(inBox.sourceType == SourceType.GD){
                 action = WorkOrderStatus.getInstanceById(inBox.action.toBigInteger())?.name()
             }
@@ -24,7 +24,7 @@ class InBoxController implements ControllerHelper{
             }
             [id           : inBox.id
              , sourceId   : inBox.sourceId
-             , sourceType : inBox.sourceType.cnName
+             , sourceType : inBox.sourceType.name()
              , title      : inBox.title
              , isRead     : inBox.isRead
              , dateCreated: inBox.dateCreated.format('yyyy-MM-dd HH:mm:ss ')

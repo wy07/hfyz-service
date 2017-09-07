@@ -76,7 +76,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
             hiddenRectificationOrderIn ->
                 if(request.JSON.action){
                     if(request.JSON.action != hiddenRectificationOrderIn.status.name()){
-                        renderErrorMsg('该整改单已被处理！')
+                        renderErrorMsg('此整改单已被处理！')
                         return
                     }
                 }
