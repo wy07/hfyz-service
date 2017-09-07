@@ -444,6 +444,7 @@ class InitService {
 
         //基础信息
         new PermissionGroup(url: '/map-signs/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "路标管理", category: "基础信息", code: 'map_sign_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/electric_fences/**/**', configAttribute: 'ROLE_ROOT, ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "电子围栏", category: "基础信息", code: 'electric_fence').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/emergency_plans/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "应急预案", category: "基础信息", code: 'emergency_plan_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/system-codes/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "数据字典管理", category: "基础信息", code: 'system_code_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/configures/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "系统配置管理", category: "基础信息", code: 'configure_manage').save(failOnError: true, flush: true)
@@ -518,6 +519,7 @@ class InitService {
 
         def basicInfo = new Menu(name: '基础信息', code: 'root-basicinfo', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR', permissionCode: 'map_sign_manage;system_code_manage;configure_manage').save(flush: true)
         new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'map_sign_manage').save(flush: true)
+        new Menu(name: '电子围栏', code: 'electricFence', icon: 'fa-map', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'electric_fence').save(flush: true)
         new Menu(name: '应急预案', code: 'emergencyPlan', icon: 'fa-file-powerpoint-o', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'emergency_plan_manage').save(flush: true)
         new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'system_code_manage').save(flush: true)
         new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'configure_manage').save(flush: true)
