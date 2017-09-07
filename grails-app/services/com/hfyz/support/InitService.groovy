@@ -446,7 +446,7 @@ class InitService {
 
         //基础信息
         new PermissionGroup(url: '/map-signs/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "路标管理", category: "基础信息", code: 'map_sign_manage').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/emergency_plans/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "应急预案", category: "基础信息", code: 'emergency_plan_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/emergency-plans/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "应急预案", category: "基础信息", code: 'emergency_plan_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/system-codes/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "数据字典管理", category: "基础信息", code: 'system_code_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/configures/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "系统配置管理", category: "基础信息", code: 'configure_manage').save(failOnError: true, flush: true)
 

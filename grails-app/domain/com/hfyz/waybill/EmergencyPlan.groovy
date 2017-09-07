@@ -8,5 +8,7 @@ class EmergencyPlan {
     DangerousType dangerousType
 
     static constraints = {
+        name unique: true, nullable: false, blank: false
+        describe nullable: false, blank: false, maxSize: 200
     }
 }
