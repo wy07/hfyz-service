@@ -6,7 +6,7 @@ import grails.transaction.Transactional
 class EmergencyPlanService {
 
     def getEmergencyPlanListAndTotal(def max, def offset) {
-        def emergencyPlanList = EmergencyPlan.list([max: max, offset: offset])?.collect { EmergencyPlan emergencyPlan->
+        def emergencyPlanList = EmergencyPlan.list([max: max, offset: offset, sort: 'id'])?.collect { EmergencyPlan emergencyPlan->
             [id       :emergencyPlan.id
              ,name    :emergencyPlan.name
              ,describe   :emergencyPlan.describe
