@@ -1,9 +1,11 @@
 package com.hfyz.waybill
 
 import com.commons.utils.ControllerHelper
+import com.hfyz.infoCenter.SourceType
 
 class FreightWaybillApproveOpinionController implements ControllerHelper  {
 
+    def infoCenterService
     def approveOpinion() {
         withFreightWaybill(request.JSON.fid) { FreightWaybill freightWaybillInstance ->
             FreightWaybillApproveOpinion freightWaybillApproveOpinion = new FreightWaybillApproveOpinion()
@@ -14,6 +16,7 @@ class FreightWaybillApproveOpinionController implements ControllerHelper  {
             freightWaybillApproveOpinion.save(flash: true)
             freightWaybillInstance.status = request.JSON.type == 'agreed' ? 'YJS' : 'YJJ'
             freightWaybillInstance.save(flush: true, failOnError: true)
+            infoCenterService.save(freightWaybillInstance.id, SourceType.DZLD)
             renderSuccess()
         }
     }
