@@ -18,7 +18,13 @@ class SystemCode {
     }
 
     static mapping = {
-        discriminator column: 'type', value: "SYSTEM_CODE"
+        comment '数据字典表'
+        id generator:'native', params:[sequence:'system_code_seq'], defaultValue: "nextval('system_code_seq')"
+        discriminator column: 'type', value: "SYSTEM_CODE", comment: '数据字典类型'
+        name comment: '数据字典名称'
+        codeNum comment: '数据字典编码'
+        parent comment: '父级数据字典'
+
     }
 
     String toString() {

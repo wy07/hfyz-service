@@ -3,7 +3,7 @@ package com.hfyz.rectification
 
 class HiddenRectificationOrder {
 
-    String billNo               //但据编号
+    String billNo               //单据编号
     String area                 //区域
     String enterprise           //业户名称
     String companyCode          //业户编码
@@ -35,4 +35,26 @@ class HiddenRectificationOrder {
         status nullable:false
         rectifiResult nullable: true
     }
+
+    static mapping = {
+        comment '隐患整改单信息表'
+        id generator:'native', params:[sequence:'hidden_rectification_order_seq'], defaultValue: "nextval('hidden_rectification_order_seq')"
+        billNo comment: '单据编号'
+        area comment: '区域'
+        enterprise comment: '业户名称'
+        companyCode comment: '业户编码'
+        examiner comment: '检查人'
+        inspectionDate comment: '检查日期'
+        dealineDate comment: '整改期限'
+        insPosition comment: '检查地点'
+        insDesc comment: '检查内容'
+        insQuestion comment: '存在问题'
+        proPosal comment: '整改意见'
+        replyDate comment: '反馈日期'
+        replyDesc comment: '企业反馈'
+        rectifiResult comment: '整改结果'
+        lastUpdated comment: '最后更新时间'
+        status comment: '状态'
+    }
+
 }

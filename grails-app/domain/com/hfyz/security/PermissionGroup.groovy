@@ -30,6 +30,17 @@ class PermissionGroup implements Serializable {
         url blank: false, unique: 'httpMethod', maxSize: 100
     }
 
+    static mapping = {
+        comment '权限信息表'
+        id generator:'native', params:[sequence:'permission_group_seq'], defaultValue: "nextval('permission_group_seq')"
+        category comment: '权限分类'
+        name comment: '权限名称'
+        code comment: '权限编码'
+        configAttribute comment: '权限配置'
+        httpMethod comment: '请求方法'
+        url comment: '请求路径'
+    }
+
     Object asType(Class clazz) {
 
         if (clazz == Map.class) {

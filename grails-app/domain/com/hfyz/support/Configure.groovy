@@ -14,6 +14,15 @@ class Configure {
         note nullable: true, blank: true, maxSize: 1500
     }
 
+    static mapping = {
+        comment '系统配置表'
+        id generator:'native', params:[sequence:'configure_seq'], defaultValue: "nextval('configure_seq')"
+        configKey comment: '系统配置键'
+        configValue comment: '系统配置值'
+        name comment: '系统配置名称'
+        note comment: '备注'
+    }
+
     String toString(){
         configKey+':'+configValue
     }

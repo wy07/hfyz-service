@@ -11,4 +11,13 @@ class WhiteList {
         vehicleNo nullable: false, blank: false
         frameNo nullable: false, blank: false
     }
+
+    static mapping = {
+        comment '白名单信息表'
+        id generator:'native', params:[sequence:'white_list_seq'], defaultValue: "nextval('white_list_seq')"
+        vehicleNo comment: '车牌号'
+        frameNo comment: '车架号'
+        controlBegin comment: '解除布控时间'
+        status comment: '布控状态'
+    }
 }
