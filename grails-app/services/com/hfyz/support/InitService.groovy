@@ -446,7 +446,8 @@ class InitService {
 
         //基础信息
         new PermissionGroup(url: '/map-signs/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "路标管理", category: "基础信息", code: 'map_sign_manage').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/emergency-plans/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "应急预案", category: "基础信息", code: 'emergency_plan_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/electric_fences/**/**', configAttribute: 'ROLE_ROOT, ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "电子围栏", category: "基础信息", code: 'electric_fence').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/emergency_plans/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "应急预案", category: "基础信息", code: 'emergency_plan_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/system-codes/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "数据字典管理", category: "基础信息", code: 'system_code_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/configures/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "系统配置管理", category: "基础信息", code: 'configure_manage').save(failOnError: true, flush: true)
 
@@ -510,7 +511,6 @@ class InitService {
 
         new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR', permissionCode: 'home').save(flush: true)
 
-
         def monitorMenu = new Menu(name: '联网联控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR',permissionCode: 'car_real_time_monitor;car_real_time_control;car_history;warning;platform_manage').save(flush: true)
         new Menu(name: '企业运营商平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'platform_manage').save(flush: true)
         new Menu(name: '车辆实时监控', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'car_real_time_monitor').save(flush: true)
@@ -530,7 +530,6 @@ class InitService {
         new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'info_check').save(flush: true)
         new Menu(name: '信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'info-list').save(flush: true)
         new Menu(name: '应急预案', code: 'emergencyPlan', icon: 'fa-file-powerpoint-o', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'emergency_plan_manage').save(flush: true)
-
 
         def msgManage = new Menu(name: '动态监管', code: 'root-msgmanage', icon: 'fa-indent', parent: null, position: 'SIDE_BAR',permissionCode: 'black_list_manage;white_list_manage;work_order_pending;work_order_list;work_order_feedback;hidden_rectification_order_list;hidden_rectification_order_pending;hidden_rectification_order_feedback;freight_waybill_list;freight_waybill_approve_list;owner_check_record_list').save(flush: true)
         new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'black_list_manage').save(flush: true)
@@ -557,8 +556,7 @@ class InitService {
         new Menu(name: '考核信息统计', code: 'ownerIdentityStatistics', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'owner_identity_statistic').save(flush: true)
         new Menu(name: '平台信息统计', code: 'platformStatisticComponent', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'platform_statistic').save(flush: true)
 
-
-        def systemManage = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-cogs', parent: null, position: 'SIDE_BAR', permissionCode: 'organization_manage;role_manage;permission_manage;sysuser_manage;log_manage;menu_manage').save(flush: true)
+        def systemManage = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-cogs', parent: null, position: 'SIDE_BAR', permissionCode: 'organization_manage;role_manage;permission_manage;sysuser_manage;log_manage;menu_manage;electric_fence').save(flush: true)
         new Menu(name: '组织结构管理', code: 'organization', icon: 'fa-sitemap', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'organization_manage').save(flush: true)
         new Menu(name: '用户账号管理', code: 'user', icon: 'fa-user', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'sysuser_manage').save(flush: true)
         new Menu(name: '角色管理', code: 'role', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'role_manage').save(flush: true)
@@ -569,21 +567,8 @@ class InitService {
         new Menu(name: '数据字典管理', code: 'systemcode', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'system_code_manage').save(flush: true)
         new Menu(name: '系统配置管理', code: 'configure', icon: 'fa-cogs', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'configure_manage').save(flush: true)
         new Menu(name: '工单工作流管理', code: 'workOrderFlow', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }
+        new Menu(name: '电子围栏', code: 'electricFence', icon: 'fa-map', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'electric_fence').save(flush: true)
+    }
 
     private initWorkOrder() {
         def flow11 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('202'), flowVersion: 1, enabled: true, flows: [])

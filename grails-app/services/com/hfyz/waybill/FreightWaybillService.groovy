@@ -27,8 +27,7 @@ class FreightWaybillService {
             }
 
             if (inputParams.status) {
-                like("status", "SHZ")
-
+                eq("status", "${inputParams.status}")
             }
 
             if (begin && end) {
@@ -70,6 +69,11 @@ class FreightWaybillService {
             if (inputParams.vehicleNo) {
                 eq("vehicleNo", inputParams.vehicleNo)
             }
+
+            if (inputParams.status) {
+                eq("status", inputParams.status)
+            }
+
             if (begin && end) {
                 between("departTime", begin, end)
             }
