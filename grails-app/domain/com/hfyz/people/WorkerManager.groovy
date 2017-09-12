@@ -3,7 +3,8 @@ package com.hfyz.people
  * 从业人员-危货押运、装卸管理员
  */
 class WorkerManager {
-    String IDCardNo //身份证号
+    String idCardNo //身份证号
+    String companyCode //业户编码
     String workLicenseType //从业资格类别
     String workLicenseNo //从业资格证号
     Date workLicenseGetTime //从业资格初领时间
@@ -21,18 +22,19 @@ class WorkerManager {
     Integer trafficAccidentRecordNo //交通事故次数
 
     static constraints = {
-        "IDCardNo" maxSize: 18, unique: true
-        workLicenseType maxSize: 30, nullable: true,blank:true
-        workLicenseNo maxSize: 12, nullable: true,blank:true
+        idCardNo maxSize: 18, unique: true
+        companyCode nullable: false, blank: false
+        workLicenseType maxSize: 30, nullable: true, blank: false
+        workLicenseNo maxSize: 12, nullable: true, blank: false
         workLicenseGetTime nullable: true
         workLicenseGrantTime nullable: true
         endTime nullable: true
-        licenseGrantOrg maxSize: 50, nullable: true,blank:true
-        licenseSituation maxSize: 4, nullable: true,blank:true
-        workSituation maxSize: 8, nullable: true,blank:true
-        ownerName maxSize: 50, nullable: true,blank:true
-        businessPermitCharacter maxSize: 2, nullable: true,blank:true
-        businessPermitNo maxSize: 12, nullable: true,blank:true
+        licenseGrantOrg maxSize: 50, nullable: true, blank: false
+        licenseSituation maxSize: 4, nullable: true, blank: false
+        workSituation maxSize: 8, nullable: true, blank: false
+        ownerName maxSize: 50, nullable: true, blank: false
+        businessPermitCharacter maxSize: 2, nullable: true, blank: false
+        businessPermitNo maxSize: 12, nullable: true, blank: false
         changeTimes nullable: true
         trainTimes nullable: true
         inspectDealSituation nullable: true
@@ -44,5 +46,31 @@ class WorkerManager {
         table "PEOPLE_WORKER_MANAGER"
         version false
         inspectDealSituation sqlType: char, length: 1
+    }
+
+    Object asType(Class c) {
+        if (c == Map.class) {
+            Map map = [
+                    idCardNo               : this.idCardNo,
+                    companyCode            : this.companyCode,
+                    workLicenseType        : this.workLicenseType,
+                    workLicenseNo          : this.workLicenseNo,
+                    workLicenseGetTime     : this.workLicenseGetTime?.format('yyyy-MM-dd'),
+                    workLicenseGrantTime   : this.workLicenseGrantTime?.format('yyyy-MM-dd'),
+                    endTime                : this.endTime?.format('yyyy-MM-dd'),
+                    licenseGrantOrg        : this.licenseGrantOrg,
+                    licenseSituation       : this.licenseSituation,
+                    workSituation          : this.workSituation,
+                    ownerName              : this.ownerName,
+                    businessPermitCharacter: this.businessPermitCharacter,
+                    businessPermitNo       : this.businessPermitNo,
+                    changeTimes            : this.changeTimes,
+                    trainTimes             : this.trainTimes,
+                    inspectDealSituation   : this.inspectDealSituation,
+                    trafficAccidentRecordNo: this.trafficAccidentRecordNo
+            ]
+            return map;
+        }
+        return null;
     }
 }

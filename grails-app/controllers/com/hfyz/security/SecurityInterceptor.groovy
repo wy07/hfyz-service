@@ -1,5 +1,6 @@
 package com.hfyz.security
 
+import com.commons.utils.LogUtils
 import grails.converters.JSON
 
 class SecurityInterceptor {
@@ -9,8 +10,8 @@ class SecurityInterceptor {
     }
 
     boolean before() {
-        println "${controllerName}/${actionName}"
-        println request.requestURI
+//        println "${controllerName}/${actionName}"
+        LogUtils.debug(this.class, params, request)
         def gatewayName = request.getHeader('dgate-gateway')?.decodeBase64()
         if (gatewayName) {
             gatewayName = new String(gatewayName)
@@ -21,8 +22,6 @@ class SecurityInterceptor {
             jwtToken = JSON.parse(new String(jwtToken))
             jwtToken.id = jwtToken.id as Long
         }
-        println request.JSON
-
         params.jwtToken = jwtToken
 
         return true

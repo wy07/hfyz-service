@@ -23,8 +23,8 @@ class PermissionGroup implements Serializable {
 
     static constraints = {
         category nullable: false, blank: false, maxSize: 50
-        name nullable: false, blank: false, maxSize: 20
-        code nullable: false, blank: false, maxSize: 50
+        name nullable: false, blank: false, maxSize: 20,unique: 'category'
+        code nullable: false, blank: false, maxSize: 100, unique: true
         configAttribute blank: true, nullable: false, maxSize: 200
         httpMethod nullable: true, maxSize: 50
         url blank: false, unique: 'httpMethod', maxSize: 100
@@ -42,9 +42,9 @@ class PermissionGroup implements Serializable {
                     , url            : this.url
                     , httpMethod     : this.httpMethod?.toString()
             ]
-            return map;
+            return map
         }
 
-        return null;
+        return null
     }
 }

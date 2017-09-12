@@ -2,6 +2,7 @@ package com.hfyz.support
 
 import com.commons.utils.ControllerHelper
 import com.commons.utils.NumberUtils
+import grails.converters.JSON
 
 class MenuController implements ControllerHelper {
     def supportService
@@ -32,7 +33,6 @@ class MenuController implements ControllerHelper {
     }
 
     def save() {
-
         Menu menu = new Menu(request.JSON)
         if (request.JSON?.parentId) {
             Long parentId = NumberUtils.toLong(request.JSON.parentId)
@@ -83,10 +83,16 @@ class MenuController implements ControllerHelper {
     }
 
     def delete() {
-        withMenu(params.long('id')) { menuInstance ->
+         withMenu(params.long('id')) { menuInstance ->
+            Menu child=Menu.findByParent(menuInstance)
+            if(child){
+                  renderErrorMsg('当前菜单下有子菜单,不能删除！')
+                  return
+            }
             menuInstance.delete(flush: true)
             renderSuccess()
-        }
+         }
+
     }
 
 

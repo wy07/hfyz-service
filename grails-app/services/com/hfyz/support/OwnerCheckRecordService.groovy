@@ -5,12 +5,15 @@ import grails.transaction.Transactional
 @Transactional
 class OwnerCheckRecordService {
 
-    def list(def max, def offset, def company, def startDate, def endDate) {
+    def list(def max, def offset, def company, def startDate, def endDate,def companyCode) {
         def sd = startDate ? new Date().parse('yyyy-MM-dd HH:mm', startDate) : null
         def ed = endDate ? new Date().parse('yyyy-MM-dd HH:mm', endDate) : new Date()
         def total = OwnerCheckRecord.createCriteria().get {
             projections {
                 count()
+            }
+            if(companyCode){
+                eq("companyCode",companyCode)
             }
             if(company){
                 like ("companyCode", "${company}%")

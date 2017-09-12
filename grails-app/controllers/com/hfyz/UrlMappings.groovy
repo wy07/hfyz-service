@@ -61,41 +61,15 @@ class UrlMappings {
 
         "/login"(controller: "auth", action: 'singIn')
 
-//        //SystemCode
-//        "/system-codes/$className/$actionStr" {
-//            controller = 'systemCode'
-//            action = { new URIUtils(URIPartStr: params.actionStr).parseSeparatorToCamelCase().toString() }
-//            constraints {
-//                className matches: /(department|unit|license-type|unit-nature)/
-//                actionStr matches: /\S+[^s]$/
-//            }
-//        }
-//
-//        "/system-codes/$className" {
-//            controller = 'systemCode'
-//            action = [GET: "list", POST: "save"]
-//            constraints {
-//                className matches: /(department|unit|license-type|unit-nature)/
-//            }
-//        }
-//
-//        "/system-codes/$className/$id" {
-//            controller = 'systemCode'
-//            action = [GET: "show", PUT: "update", POST: "update", DELETE: "delete"]
-//            constraints {
-//                className matches: /(department|unit|license-type|unit-nature)/
-//                id matches: /\d+/
-//            }
-//        }
-//
-//        "/system-codes/$className/$id/$actionStr" {
-//            controller = 'systemCode'
-//            action = { new URIUtils(URIPartStr: params.actionStr).parseSeparatorToCamelCase().toString() }
-//            constraints {
-//                className matches: /(department|unit|license-type|unit-nature)/
-//                id matches: /\d+/
-//                actionStr matches: /\S+[^s]$/        //不以s结尾的单词,和普通的resource区分开
-//            }
-//        }
+        "/home"(controller: 'sysuser',action: 'home')
+
+        "/companys/$companyCode/cars"(controller: 'car',action: 'getCompanyCars')
+
+        "/cars/infos"(controller: 'car',action: 'getCarInfo')
+
+        "/system-code/get-dangerous-types"(controller: 'systemCode',action: 'getDangerousTypeList')
+
+        "/people-basic-info/get-company-worker-drivers-and-manager"(controller: 'peopleBasicInfo',action: 'getCompanyWorkerDriversAndManager')
+
     }
 }

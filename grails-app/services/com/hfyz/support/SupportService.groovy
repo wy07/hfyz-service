@@ -1,6 +1,8 @@
 package com.hfyz.security
 
+import com.commons.exception.RecordNotFoundException
 import com.commons.utils.SQLHelper
+import com.hfyz.support.AlarmType
 import com.hfyz.support.Organization
 import com.hfyz.support.SystemCode
 import grails.transaction.Transactional
@@ -9,16 +11,29 @@ import grails.transaction.Transactional
 class SupportService {
 
     def dataSource
+    def grailsApplication
 
-    def getOrgList(){
+    def getOrgList() {
         def orgList = SQLHelper.withDataSource(dataSource) { sql ->
             sql.rows(GET_ORG_SQL)
         }
         formatOrgList(orgList, 0)
     }
 
-    def getChildrenOrgs(){
+    def getChildrenOrgs() {
         return Organization.findAllByParentIsNotNull()
+    }
+
+    def getOrgs() {
+        return Organization.list([sort: 'id', order: 'desc'])
+    }
+
+    def getAlarmType(Long id){
+        AlarmType alarmType = id ? AlarmType.get(id) : null
+        if (!alarmType) {
+            throw new RecordNotFoundException()
+        }
+        return alarmType
     }
 
     def formatOrgList(def data, def pid) {
@@ -26,10 +41,10 @@ class SupportService {
         def list = data.findAll { obj -> obj.parentId == pid }
         list?.each { obj ->
             Map tMap = [:]
-            tMap = [data:[ id: obj.id
-                          ,name :obj.name
-                          ,codeNum:obj.codeNum
-                          ,expanded: true]]
+            tMap = [data: [id        : obj.id
+                           , name    : obj.name
+                           , codeNum : obj.codeNum
+                           , expanded: true]]
             def tFind = data.find { a -> a.parentId == obj.id }
 
             if (tFind) {
@@ -40,25 +55,61 @@ class SupportService {
         return result
     }
 
-    def getOrgForSelect(roles){
-        println roles
-        def GET_ORG_ROLES_SQL
-        if(roles){
-            def roleList=Role.findAllById(roles.split(','))
-            if (roleList[0].name=='平台管理员'){
-                GET_ORG_ROLES_SQL="select id as value,name as label from organization where parent_id is not null order by id"
-            }else{
-                GET_ORG_ROLES_SQL="select id as value,name as label from organization org left join  role_organization roleorg on org.id=roleorg.organization_id where roleorg.role_orgs_id in (${roles})"
-            }
-        }else{
-            GET_ORG_ROLES_SQL = "select id as value,name as label from organization where parent_id is not null order by id"
+    def getOrgForSelect(User user) {
+        def orgs
+        if (grailsApplication.config.getProperty("user.rootRole.name") in user.authorities.authority) {
+            orgs = getOrgs()
+        } else {
+            orgs = user.org ? [user.org] : []
         }
-        println GET_ORG_ROLES_SQL
 
-        return SQLHelper.withDataSource(dataSource) { sql ->
-            sql.rows(GET_ORG_ROLES_SQL.toString())
+        orgs?.collect { Organization org ->
+            [value: org.id, label: org.name]
         }
+
+//        println roles
+//        def GET_ORG_ROLES_SQL
+//        if(roles){
+//            def roleList=Role.findAllById(roles.split(','))
+//            if (roleList[0].name=='平台管理员'){
+//                GET_ORG_ROLES_SQL="select id as value,name as label from organization where parent_id is not null order by id"
+//            }else{
+//                GET_ORG_ROLES_SQL="select id as value,name as label from organization org left join  role_organization roleorg on org.id=roleorg.organization_id where roleorg.role_orgs_id in (${roles})"
+//            }
+//        }else{
+//            GET_ORG_ROLES_SQL = "select id as value,name as label from organization where parent_id is not null order by id"
+//        }
+//        println GET_ORG_ROLES_SQL
+//
+//        return SQLHelper.withDataSource(dataSource) { sql ->
+//            sql.rows(GET_ORG_ROLES_SQL.toString())
+//        }
     }
+
+
+    def getOrgWithRole() {
+        def result = [:]
+        SQLHelper.withDataSource(dataSource) { sql ->
+            sql.rows(ORG_WITH_ROLE_SQL.toString())
+        }.each { obj ->
+            if (!result["${obj.orgId}"]) {
+                result["${obj.orgId}"] = [id: obj.orgId, name: obj.orgName, roles: []]
+            }
+            result["${obj.orgId}"].roles << [id: obj.roleId, name: obj.roleName, authority: obj.authority]
+        }
+        result.values()
+    }
+
+    private static final ORG_WITH_ROLE_SQL = """
+        select org.id orgId
+            ,org.name orgName
+            ,r.id roleId
+            ,r.name roleName
+            ,r.authority authority
+        from organization org
+        join role r on r.org_id=org.id
+        order by org.id desc,r.id desc
+    """
 
     def getMenu() {
         def result = [:]
@@ -74,12 +125,12 @@ class SupportService {
             def children = SQLHelper.withDataSource(dataSource) { menusql -> menusql.rows(SYSTEM_CODE_LIST_BY_MENU.toString(), [parentId: root.id])
             }
             if (children.size() > 0) {
+                menu['hasChildren'] = false
                 menu['children'] = children
-
             }
             result["${root.position}"] << menu
         }
-        result["ROLE_RIGHTS"]=null
+        result["ROLE_RIGHTS"] = null
         return result
     }
 

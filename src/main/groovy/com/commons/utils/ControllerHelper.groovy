@@ -1,6 +1,10 @@
 package com.commons.utils
 
+import com.commons.exception.FileUploadException
+import com.commons.exception.IllegalActionException
+import com.commons.exception.InstancePermException
 import com.commons.exception.ParamsIllegalException
+import com.commons.exception.RecordNotFoundException
 import com.hfyz.security.User
 import grails.converters.JSON
 import grails.validation.ValidationException
@@ -11,7 +15,7 @@ trait ControllerHelper {
 
     def springSecurityService
 
-    def getCurrentUser() {
+    User getCurrentUser() {
         long userId = getCurrentUserId()
         if (!userId) {
             return null
@@ -53,7 +57,12 @@ trait ControllerHelper {
         def map = [errors: [msg ?: '请求参数不合法，请查证！']]
         render map as JSON
     }
-    
+
+    def renderFileUploadErrorMsg(msg = null) {
+        response.setStatus(400)
+        def map = [errors: [msg ?: '请求参数不合法，请查证！']]
+        render map as JSON
+    }
 
     def renderValidationErrors(Errors errors) {
         response.setStatus(400)
@@ -67,6 +76,18 @@ trait ControllerHelper {
         render map as JSON
     }
 
+    def renderNoInstancePermError(msg = null) {
+        response.setStatus(403)
+        def map = [errors: [msg ?:message(code: 'default.instance.noPermission.message', default: '您没有权限进行此操作')]]
+        render map as JSON
+    }
+
+    def renderIllegalActionError(msg = null) {
+        response.setStatus(400)
+        def map = [errors: [msg ?: '操作非法，请稍后再试！']]
+        render map as JSON
+    }
+
     def handleException(Exception e) {
         println e.printStackTrace()
         renderErrorMsg('系统忙，请稍后再试!')
@@ -76,9 +97,23 @@ trait ControllerHelper {
         renderParamsIllegalErrorMsg(e.message)
     }
 
-
+    def handleRecordNotFoundException(RecordNotFoundException e) {
+        renderErrorMsg('数据错误')
+    }
 
     def handleValidationException(ValidationException e) {
         renderValidationErrors(e.errors)
+    }
+
+    def handleInstancePermException(InstancePermException e) {
+        renderNoInstancePermError(e.message)
+    }
+
+    def handleIllegalActionException(IllegalActionException e) {
+        renderIllegalActionError(e.message)
+    }
+
+    def handleFileUploadException(FileUploadException e) {
+        renderFileUploadErrorMsg(e.message)
     }
 }

@@ -54,6 +54,13 @@ class User implements Serializable {
 		UserRole.findAllByUser(this)*.role
 	}
 
+	boolean isCompanyUser(){
+		return this.org?.code=='24'
+	}
+
+	boolean isAdmin(){
+		return this.org?.code== null
+	}
 	def beforeInsert() {
 		encodePassword()
 	}

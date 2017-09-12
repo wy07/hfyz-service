@@ -35,6 +35,13 @@ class SystemCodeController implements ControllerHelper {
         renderSuccessesWithMap([systemCodeList: systemCodeList])
     }
 
+    def alarmTypeList(){
+        def alarmTypes=AlarmType.findAllByParentIsNull([sort: 'id', order: 'desc'])?.collect{AlarmType alarmType->
+            [id:alarmType.id,name:alarmType.name]
+        }
+        renderSuccessesWithMap([alarmTypes:alarmTypes])
+    }
+
     def search() {
         if (!request.JSON.query) {
             renderSuccessesWithMap([systemCodeList: []])
@@ -124,13 +131,15 @@ class SystemCodeController implements ControllerHelper {
 
     def getmenu() {
 
-//        LogUtils.debug(this.class, params, request)
-//
-//        LogUtils.info(this.class, params, request, '菜单', '管理员', session, '获取菜单列表')
-//
-//        LogUtils.error(this.class, params, request, '菜单', '管理员', session, '获取菜单列表', '获取菜单列表出错')
-
+        LogUtils.debug(this.class, params, request)
         renderSuccessesWithMap(supportService.getMenu())
+    }
+
+    def getDangerousTypeList() {
+        def dangerousTypeList = DangerousType.list().collect{obj ->
+            [id: obj.id, name: obj.name]
+        }
+        renderSuccessesWithMap([dangerousTypeList: dangerousTypeList])
     }
 
     private withSystemCode(Long id, String type, Closure c) {

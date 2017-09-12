@@ -2,6 +2,9 @@ package com.commons.utils
 
 import grails.util.GrailsStringUtils
 
+import java.text.ParseException
+import java.text.SimpleDateFormat
+
 /**
  * Created by zy on 17/6/15.
  */
@@ -56,6 +59,21 @@ class NumberUtils {
         return null
     }
 
+    static Date getDate(Object obj, String format="yyyy-MM-dd HH:mm:ss.S") {
+        if (obj instanceof Date) {
+            return (Date)obj;
+        }
+
+        if (obj != null) {
+            try {
+                return new SimpleDateFormat(format).parse(obj.toString());
+            } catch (ParseException e) {
+                // ignore
+            }
+        }
+        return null;
+    }
+
     //生成随机6位数
     static String genRandomCode(int code_len) {
         int maxNum = 9
@@ -75,6 +93,14 @@ class NumberUtils {
         }
         //返回此随机数
         code.toString()
+    }
+
+    static int getRandom(int min, int max) {
+        if (max < min) {
+            throw new IllegalArgumentException("min:${min},不能比max:${max}大");
+        }
+        Random r = new Random()
+        r.nextInt(max - min) + min
     }
 
 }

@@ -1,7 +1,8 @@
 package com.hfyz.people
 
 class WorkerTechnology {
-    String IDCardNo //身份证号
+    String idCardNo //身份证号
+    String companyCode //业户编码
     String workLicenseType //从业资格类别
     String workLicenseNo //从业资格证号
     Date workLicenseGetTime //从业资格初领时间
@@ -20,22 +21,23 @@ class WorkerTechnology {
     Date technologyLicenseGrantTime //专业技术证书发放时间
 
     static constraints = {
-        "IDCardNo" maxSize: 18, unique: true
-        workLicenseType maxSize: 30, nullable: true,blank:true
-        workLicenseNo maxSize: 12, nullable: true,blank:true
+        idCardNo maxSize: 18, unique: true
+        companyCode nullable: false, blank: false
+        workLicenseType maxSize: 30, nullable: true, blank: false
+        workLicenseNo maxSize: 12, nullable: true, blank: false
         workLicenseGetTime nullable: true
-        workLicenseGrantTime nullable: true,blank:true
+        workLicenseGrantTime nullable: true, blank: false
         endTime nullable: true
-        licenseGrantOrganization maxSize: 50, nullable: true,blank:true
-        licenseSituation maxSize: 4, nullable: true,blank:true
-        ownerName maxSize: 50, nullable: true,blank:true
-        businessPermitCharacter maxSize: 2, nullable: true,blank:true
-        businessPermitNo maxSize: 12, nullable: true,blank:true
+        licenseGrantOrganization maxSize: 50, nullable: true, blank: false
+        licenseSituation maxSize: 4, nullable: true, blank: false
+        ownerName maxSize: 50, nullable: true, blank: false
+        businessPermitCharacter maxSize: 2, nullable: true, blank: false
+        businessPermitNo maxSize: 12, nullable: true, blank: false
         changeTimes nullable: true
         trainTimes nullable: true
         inspectDealSituation nullable: true
         technologyDirector nullable: true
-        technologyLevel nullable: true,blank:true, maxSize: 4
+        technologyLevel nullable: true, blank: false, maxSize: 4
         technologyLicenseGrantTime nullable: true
     }
 
@@ -43,5 +45,32 @@ class WorkerTechnology {
         table "PEOPLE_WORKER_TECHNOLOGY"
         version false
         inspectDealSituation sqlType: char, length: 1
+    }
+
+    Object asType(Class c) {
+        if (c == Map.class) {
+            Map map = [
+                    idCardNo                  : this.idCardNo,
+                    companyCode               : this.companyCode,
+                    workLicenseType           : this.workLicenseType,
+                    workLicenseNo             : this.workLicenseNo,
+                    workLicenseGetTime        : this.workLicenseGetTime?.format('yyyy-MM-dd'),
+                    workLicenseGrantTime      : this.workLicenseGrantTime?.format('yyyy-MM-dd'),
+                    endTime                   : this.endTime?.format('yyyy-MM-dd'),
+                    licenseGrantOrganization  : this.licenseGrantOrganization,
+                    licenseSituation          : this.licenseSituation,
+                    ownerName                 : this.ownerName,
+                    businessPermitCharacter   : this.businessPermitCharacter,
+                    businessPermitNo          : this.businessPermitNo,
+                    changeTimes               : this.changeTimes,
+                    trainTimes                : this.trainTimes,
+                    inspectDealSituation      : this.inspectDealSituation,
+                    technologyDirector        : this.technologyDirector,
+                    technologyLevel           : this.technologyLevel,
+                    technologyLicenseGrantTime: this.technologyLicenseGrantTime?.format('yyyy-MM-dd')
+            ]
+            return map;
+        }
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package com.hfyz.security
 import com.commons.utils.NumberUtils
 import com.commons.utils.PageUtils
 import com.commons.utils.SQLHelper
+import com.hfyz.owner.OwnerIdentity
 import com.hfyz.support.Organization
 import grails.converters.JSON
 import java.text.SimpleDateFormat
@@ -14,12 +15,17 @@ class SysuserController implements ControllerHelper {
     def roleService
     def springSecurityService
     def userService
+    def ownerIdentityService
     static final String DEFAULT_PASSWORD = '666666'
 
     def list() {
         int max = PageUtils.getMax(request.JSON.max, 10, 100)
         int offset = PageUtils.getOffset(request.JSON.offset)
-        def userList = User.list([max: max, offset: offset, sort: 'id', order: 'desc'])?.collect { User user ->
+        def userList = User.createCriteria().list([max:max, offset:offset, sort: 'id', order: 'desc']){
+            if(getCurrentUser().isCompanyUser()){
+                eq ("companyCode", getCurrentUser().companyCode)
+            }
+        }?.collect(){ User user ->
             [id           : user.id
              , name       : user.name
              , username   : user.username
@@ -28,17 +34,29 @@ class SysuserController implements ControllerHelper {
              , org        : user.org?.name
              , companyCode: user.companyCode]
         }
-        def totalUsers = User.count()
+        def totalUsers = User.createCriteria().get {
+            projections {
+                count()
+            }
+            if(getCurrentUser().isCompanyUser()){
+                eq ("companyCode", getCurrentUser().companyCode)
+            }
+        }
         renderSuccessesWithMap([userList: userList, totalUsers: totalUsers])
     }
 
     def save() {
-        userService.save(request.JSON)
+        def companyCode
+        def org
+        if(!getCurrentUser().isAdmin()){
+            companyCode = getCurrentUser().companyCode
+            org = getCurrentUser().org
+        }
+        userService.save(request.JSON, companyCode, org)
         renderSuccess()
     }
 
     def edit() {
-        println params
         withUser(params.long('id')) { User user ->
             def result = []
             Role.list(sort: "id").each {
@@ -50,6 +68,8 @@ class SysuserController implements ControllerHelper {
                                                , roles      : user.authorities.id
                                                , companyCode: user.companyCode
                                                , orgId      : user.org?.id
+                                               , orgCode    : user.org?.code
+                                               , enterpirse : OwnerIdentity.findByCompanyCode(user.companyCode)?.ownerName
             ]])
         }
 
@@ -70,6 +90,10 @@ class SysuserController implements ControllerHelper {
         }
     }
 
+    def getCompanyList(){
+        renderSuccessesWithMap(ownerIdentityService.getCompanyListByChar(request.JSON.enterpirse))
+    }
+
     def resetPassword() {
         def userInstance = request.JSON.id ? User.findById(request.JSON.id) : null
         if (!userInstance) {
@@ -87,6 +111,10 @@ class SysuserController implements ControllerHelper {
         renderSuccessesWithMap([message: '密码修改成功!'])
     }
 
+    def home(){
+        renderSuccessesWithMap(userService.getHomeStatistic(currentUser))
+    }
+
     private withUser(Long id, Closure c) {
         User userInstance = id ? User.get(id) : null
 
@@ -99,7 +127,6 @@ class SysuserController implements ControllerHelper {
 
 
     def getUserByName() {
-        println params
         def result = [:]
         def GET_USER_SQL = """
             select suser.id
@@ -164,21 +191,6 @@ class SysuserController implements ControllerHelper {
         JSON.registerObjectMarshaller(java.sql.Timestamp) { o -> sdf.format(o) }
         println result
         render result as JSON
-    }
-
-    protected String encodePassword(password, salt) {
-        return springSecurityService?.passwordEncoder ? springSecurityService.encodePassword(password, salt) : password
-    }
-
-    protected void notFound() {
-        def map = ['result': 'error', 'errors': ['找不到该数据！']]
-        render map as JSON
-    }
-    def renderError = { errorInstance ->
-        def map = ['result': 'error', 'errors': errorInstance.errors.allErrors.collect {
-            message(error: it, encodeAs: 'HTML')
-        }]
-        delegate.render map as JSON
     }
 
 }
