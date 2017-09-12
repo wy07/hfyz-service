@@ -5,17 +5,15 @@ import com.commons.exception.InstancePermException
 import com.commons.exception.RecordNotFoundException
 import com.commons.utils.NumberUtils
 import com.commons.utils.SQLHelper
+import com.hfyz.infoCenter.SourceType
 import com.hfyz.owner.OwnerIdentity
 import com.hfyz.security.User
 import com.hfyz.support.AlarmType
-import grails.async.Promise
-
-import static grails.async.Promises.task
 
 class WorkOrderService {
     def dataSource
     def supportService
-
+    def infoCenterService
 
     def findWorkOrderListAndTotal(max, offset, User user) {
         def workOrderList = WorkOrder.createCriteria().list([max: max, offset: offset, sort: 'lastUpdated', order: 'desc']) {
@@ -112,10 +110,10 @@ class WorkOrderService {
     }
 
     def preExamine(Long id, User user) {
-        WorkOrder workOrder = getWorkOrderById(id)
+            WorkOrder workOrder = getWorkOrderById(id)
 
         if (workOrder.status != WorkOrderStatus.DSH) {
-            throw new IllegalActionException()
+            throw new IllegalActionException('此工单已被处理！')
         }
 
         if (!(workOrder.todoRole in user.authorities?.authority)) {
@@ -156,7 +154,7 @@ class WorkOrderService {
         }
 
         if (!(workOrder.todoRole in user.authorities?.authority)) {
-            throw new InstancePermException()
+            throw new InstancePermException('此工单已被处理！')
         }
 
         if (workOrder.status != WorkOrderStatus.DFK) {
@@ -196,15 +194,16 @@ class WorkOrderService {
         workOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
 
         workOrder.save(flush: true, failOnError: true)
+        infoCenterService.save(workOrder.id, SourceType.GD)
     }
 
     def preJudge(Long id, User user) {
         WorkOrder workOrder = getWorkOrderById(id)
 
         if (workOrder.status != WorkOrderStatus.DYP) {
-            throw new IllegalActionException()
+            throw new IllegalActionException('此工单已被处理！')
         }
-
+        println workOrder.status
         if (!(workOrder.todoRole in user.authorities?.authority)) {
             throw new InstancePermException()
         }
@@ -417,7 +416,7 @@ class WorkOrderService {
         return sqlStr
     }
 
-    private static approvalJudge(WorkOrder workOrder, User user, String note) {
+    private approvalJudge(WorkOrder workOrder, User user, String note) {
         workOrder.addToWorkOrderRecords(new WorkOrderRecord(user: user
                 , note: note
                 , workOrderStatus: workOrder.status
@@ -428,10 +427,10 @@ class WorkOrderService {
         workOrder.passed = true
 
         workOrder.save(flush: true, failOnError: true)
-
+        infoCenterService.save(workOrder.id, SourceType.GD)
     }
 
-    private static refuseJudge(WorkOrder workOrder, User user, String note) {
+    private refuseJudge(WorkOrder workOrder, User user, String note) {
         workOrder.addToWorkOrderRecords(new WorkOrderRecord(user: user
                 , note: note
                 , workOrderStatus: workOrder.status
@@ -442,7 +441,6 @@ class WorkOrderService {
         workOrder.todoRole = null
         workOrder.passed = false
         workOrder.save(flush: true, failOnError: true)
-
         if (workOrder.parent) {
             return
         }
@@ -481,10 +479,11 @@ class WorkOrderService {
         newWorkerOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
 
         newWorkerOrder.save(flush: true, failOnError: true)
+        infoCenterService.save(newWorkerOrder.id, SourceType.GD)
 
     }
 
-    private static approvalExamine(WorkOrder workOrder, User user, String note) {
+    private approvalExamine(WorkOrder workOrder, User user, String note) {
 
         workOrder.addToWorkOrderRecords(new WorkOrderRecord(user: user
                 , note: note
@@ -498,11 +497,10 @@ class WorkOrderService {
         workOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
 
         workOrder.save(flush: true, failOnError: true)
-
-
+        infoCenterService.save(workOrder.id, SourceType.GD)
     }
 
-    private static refuseExamine(WorkOrder workOrder, User user, String note) {
+    private refuseExamine(WorkOrder workOrder, User user, String note) {
         workOrder.addToWorkOrderRecords(new WorkOrderRecord(user: user
                 , note: note
                 , workOrderStatus: workOrder.status
@@ -520,6 +518,7 @@ class WorkOrderService {
             workOrder.status = WorkOrderFlowAction.valueOf(flow.action).workOrderStatus
         }
         workOrder.save(flush: true, failOnError: true)
+        infoCenterService.save(workOrder.id, SourceType.GD)
     }
 
 }

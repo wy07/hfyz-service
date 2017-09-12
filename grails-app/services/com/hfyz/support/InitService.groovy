@@ -3,6 +3,7 @@ package com.hfyz.support
 import com.commons.utils.NumberUtils
 import com.commons.utils.ValidationUtils
 import com.hfyz.cases.RegisterReport
+import com.hfyz.infoManage.Infoaudit
 import com.hfyz.owner.CompanyRegulation
 
 import com.hfyz.owner.OwnerIdentity
@@ -90,6 +91,7 @@ class InitService {
         initHiddenRectificationOrder()
         initConfigure()
         initCar()
+        initInfoaudit()
     }
 
     private initSystemCode() {
@@ -504,67 +506,68 @@ class InitService {
         new Menu(name: '关闭全部', code: 'closeall', position: 'TOP_BAR', parent: null).save(flush: true)
         def topbar = new Menu(name: '个人中心', code: 'profile', style: 'hoverdown', position: 'TOP_BAR', parent: null).save(flush: true)
         new Menu(name: '修改密码', code: 'changepwd', position: 'TOP_BAR', parent: topbar).save(flush: true)
+        new Menu(name: '消息中心', code: 'infoCenter', position: 'TOP_BAR', parent: null).save(flush: true)
         new Menu(name: '退出', code: 'logout', position: 'TOP_BAR', parent: null).save(flush: true)
 
         new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR', permissionCode: 'home').save(flush: true)
 
-        def systemManage = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-cogs', parent: null, position: 'SIDE_BAR', permissionCode: 'organization_manage;role_manage;permission_manage;sysuser_manage;log_manage;menu_manage').save(flush: true)
-        new Menu(name: '组织机构', code: 'organization', icon: 'fa-sitemap', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'organization_manage').save(flush: true)
-        new Menu(name: '角色', code: 'role', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'role_manage').save(flush: true)
-        new Menu(name: '权限', code: 'permission', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'permission_manage').save(flush: true)
-        new Menu(name: '用户', code: 'user', icon: 'fa-user', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'sysuser_manage').save(flush: true)
-        new Menu(name: '操作日志', code: 'operationLog', icon: 'fa-table', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'log_manage').save(flush: true)
-        new Menu(name: '菜单', code: 'menu', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'menu_manage').save(flush: true)
-        new Menu(name: '工单工作流', code: 'workOrderFlow', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
+        def monitorMenu = new Menu(name: '联网联控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR',permissionCode: 'car_real_time_monitor;car_real_time_control;car_history;warning;platform_manage').save(flush: true)
+        new Menu(name: '企业运营商平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'platform_manage').save(flush: true)
+        new Menu(name: '车辆实时监控', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'car_real_time_monitor').save(flush: true)
+        new Menu(name: '车辆实时控制', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'car_real_time_control').save(flush: true)
+        new Menu(name: '车辆历史轨迹', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'car_history').save(flush: true)
+        new Menu(name: '报警信息管理', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'warning').save(flush: true)
 
-        def basicInfo = new Menu(name: '基础信息', code: 'root-basicinfo', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR', permissionCode: 'map_sign_manage;system_code_manage;configure_manage').save(flush: true)
-        new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'map_sign_manage').save(flush: true)
-        new Menu(name: '电子围栏', code: 'electricFence', icon: 'fa-map', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'electric_fence').save(flush: true)
+        def basicInfo = new Menu(name: '基础信息', code: 'root-basicinfo', icon: 'fa-wrench', parent: null, position: 'SIDE_BAR', permissionCode: 'owner_identity_manage;car_list;people_list;pass_line_physical_basic_list;pass_line_business_basic_info_list;company_regulation_list;info_publish;info_check;info-list;emergency_plan_manage;freight_router_list').save(flush: true)
+        new Menu(name: '业户基础信息', code: 'ownerIdentity', icon: 'fa-building', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'owner_identity_manage').save(flush: true)
+        new Menu(name: '车辆基础信息', code: 'carList', icon: 'fa-car', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'car_list').save(flush: true)
+        new Menu(name: '人员基础信息', code: 'peopleList', icon: 'fa-group', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'people_list').save(flush: true)
+        new Menu(name: '客运物理线路', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'pass_line_physical_basic_list').save(flush: true)
+        new Menu(name: '客运经营线路', code: 'passLineBusinessInfo', icon: 'fa-info', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'pass_line_business_basic_info_list').save(flush: true)
+        new Menu(name: '危货路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'freight_router_list').save(flush: true)
+        new Menu(name: '企业管理制度', code: 'companyRegulation', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'company_regulation_list').save(flush: true)
+        new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'info_publish').save(flush: true)
+        new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'info_check').save(flush: true)
+        new Menu(name: '信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'info-list').save(flush: true)
         new Menu(name: '应急预案', code: 'emergencyPlan', icon: 'fa-file-powerpoint-o', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'emergency_plan_manage').save(flush: true)
-        new Menu(name: '数据字典', code: 'systemcode', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'system_code_manage').save(flush: true)
-        new Menu(name: '系统配置', code: 'configure', icon: 'fa-cogs', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'configure_manage').save(flush: true)
 
-        def monitorMenu = new Menu(name: '实时监控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR',permissionCode: 'car_real_time_monitor;car_real_time_control;car_history;warning').save(flush: true)
-        new Menu(name: '车辆实时', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'car_real_time_monitor').save(flush: true)
-        new Menu(name: '车辆控制', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'car_real_time_control').save(flush: true)
-        new Menu(name: '车辆历史', code: 'historyMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'car_history').save(flush: true)
-        new Menu(name: '报警信息', code: 'warning', icon: 'fa-car', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'warning').save(flush: true)
-
-        def msgManage = new Menu(name: '信息管理', code: 'root-msgmanage', icon: 'fa-indent', parent: null, position: 'SIDE_BAR',permissionCode: 'owner_identity_manage;work_order_list').save(flush: true)
-        new Menu(name: '平台管理', code: 'platformManage', icon: 'fa-columns', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'platform_manage').save(flush: true)
-        new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'owner_check_record_list').save(flush: true)
-        new Menu(name: '业户信息', code: 'ownerIdentity', icon: 'fa-building', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'owner_identity_manage').save(flush: true)
-        new Menu(name: '车辆信息', code: 'carList', icon: 'fa-car', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'car_list').save(flush: true)
-        new Menu(name: '人员信息', code: 'peopleList', icon: 'fa-group', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'people_list').save(flush: true)
+        def msgManage = new Menu(name: '动态监管', code: 'root-msgmanage', icon: 'fa-indent', parent: null, position: 'SIDE_BAR',permissionCode: 'black_list_manage;white_list_manage;work_order_pending;work_order_list;work_order_feedback;hidden_rectification_order_list;hidden_rectification_order_pending;hidden_rectification_order_feedback;freight_waybill_list;freight_waybill_approve_list;owner_check_record_list').save(flush: true)
         new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'black_list_manage').save(flush: true)
         new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'white_list_manage').save(flush: true)
-        new Menu(name: '客运路线', code: 'passLineBusinessInfo', icon: 'fa-info', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'pass_line_business_basic_info_list').save(flush: true)
-        new Menu(name: '客运物理路线', code: 'passLinePhysicalInfo', icon: 'fa fa-road', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'pass_line_physical_basic_list').save(flush: true)
-        new Menu(name: '危货路线', code: 'waybillRoute', icon: 'fa-map-signs', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_router_list').save(flush: true)
+        new Menu(name: '监管工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'work_order_list').save(flush: true)
+        new Menu(name: '监管工单审批/研判', code: 'pendingWorkOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'work_order_pending').save(flush: true)
+        new Menu(name: '监管工单反馈', code: 'feedbackWorkOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'work_order_feedback').save(flush: true)
+        new Menu(name: '隐患整改单列表', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_list').save(flush: true)
+        new Menu(name: '隐患整改单审核', code: 'orderExamine', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_pending').save(flush: true)
+        new Menu(name: '隐患整改单反馈', code: 'enterpriseFeedback', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_feedback').save(flush: true)
         new Menu(name: '危货电子路单', code: 'freightWaybill', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_waybill_list').save(flush: true)
         new Menu(name: '危货电子路单审核', code: 'freightWaybillApprove', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_waybill_approve_list').save(flush: true)
-        new Menu(name: '隐患整改单', code: 'hiddenDanger', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_list').save(flush: true)
-        new Menu(name: '整改单审核', code: 'orderExamine', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_pending').save(flush: true)
-        new Menu(name: '整改单反馈', code: 'enterpriseFeedback', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'hidden_rectification_order_feedback').save(flush: true)
-        new Menu(name: '信息发布', code: 'infoPublish', icon: 'fa-bullhorn', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'info_publish').save(flush: true)
-        new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'info_check').save(flush: true)
-        new Menu(name: '发布信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'info-list').save(flush: true)
-        new Menu(name: '管理制度', code: 'companyRegulation', icon: 'fa-book', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'company_regulation_list').save(flush: true)
-        new Menu(name: '工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'work_order_list').save(flush: true)
-        new Menu(name: '工单审批/研判', code: 'pendingWorkOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'work_order_pending').save(flush: true)
-        new Menu(name: '企业工单反馈', code: 'feedbackWorkOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'work_order_feedback').save(flush: true)
+        new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'owner_check_record_list').save(flush: true)
 
-        def statisticMenu = new Menu(name: '统计', code: 'root-statistic', icon: 'fa-pie-chart', parent: null, position: 'SIDE_BAR',permissionCode: 'work_order_statistic').save(flush: true)
-        new Menu(name: '查岗统计', code: 'checkStatistic', icon: 'fa-odnoklassniki', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'check_statistic').save(flush: true)
-        new Menu(name: '工单统计', code: 'workOrderStatistic', icon: 'fa-file-text', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'work_order_statistic').save(flush: true)
-        new Menu(name: '企业统计', code: 'companyReport', icon: 'fa-line-chart', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'company_statistic').save(flush: true)
-        new Menu(name: '班线客运车辆统计', code: 'passengerStatistic', icon: 'fa-bus', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'passenger_statistic').save(flush: true)
-        new Menu(name: '旅游包车车辆统计', code: 'travelStatistic', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'travel_statistic').save(flush: true)
+        def statisticMenu = new Menu(name: '统计分析', code: 'root-statistic', icon: 'fa-pie-chart', parent: null, position: 'SIDE_BAR',permissionCode: 'work_order_statistic').save(flush: true)
+        new Menu(name: '业户信息统计', code: 'companyReport', icon: 'fa-line-chart', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'company_statistic').save(flush: true)
+        new Menu(name: '客运车辆统计', code: 'passengerStatistic', icon: 'fa-bus', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'passenger_statistic').save(flush: true)
+        new Menu(name: '旅游包车统计', code: 'travelStatistic', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'travel_statistic').save(flush: true)
         new Menu(name: '危险品车辆统计', code: 'dangerousStatistic', icon: 'fa-exclamation-triangle', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'dangerous_statistic').save(flush: true)
-        new Menu(name: '运营商统计', code: 'carBasicStatistics', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'car_basic_statistic').save(flush: true)
+        new Menu(name: '运营商信息统计', code: 'carBasicStatistics', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'car_basic_statistic').save(flush: true)
+        new Menu(name: '查岗信息统计', code: 'checkStatistic', icon: 'fa-odnoklassniki', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'check_statistic').save(flush: true)
+        new Menu(name: '监管工单统计', code: 'workOrderStatistic', icon: 'fa-file-text', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'work_order_statistic').save(flush: true)
         new Menu(name: '报警信息统计', code: 'alarmInfoStatistics', icon: 'fa-list', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'alarm_info_statistic').save(flush: true)
-        new Menu(name: '考核统计', code: 'ownerIdentityStatistics', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'owner_identity_statistic').save(flush: true)
-        new Menu(name: '平台统计', code: 'platformStatisticComponent', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'platform_statistic').save(flush: true)
+        new Menu(name: '考核信息统计', code: 'ownerIdentityStatistics', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'owner_identity_statistic').save(flush: true)
+        new Menu(name: '平台信息统计', code: 'platformStatisticComponent', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'platform_statistic').save(flush: true)
+
+        def systemManage = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-cogs', parent: null, position: 'SIDE_BAR', permissionCode: 'organization_manage;role_manage;permission_manage;sysuser_manage;log_manage;menu_manage;electric_fence').save(flush: true)
+        new Menu(name: '组织结构管理', code: 'organization', icon: 'fa-sitemap', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'organization_manage').save(flush: true)
+        new Menu(name: '用户账号管理', code: 'user', icon: 'fa-user', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'sysuser_manage').save(flush: true)
+        new Menu(name: '角色管理', code: 'role', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'role_manage').save(flush: true)
+        new Menu(name: '权限管理', code: 'permission', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'permission_manage').save(flush: true)
+        new Menu(name: '菜单管理', code: 'menu', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'menu_manage').save(flush: true)
+        new Menu(name: '操作日志管理', code: 'operationLog', icon: 'fa-table', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'log_manage').save(flush: true)
+        new Menu(name: '路标管理', code: 'mapSign', icon: 'fa-map-marker', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'map_sign_manage').save(flush: true)
+        new Menu(name: '数据字典管理', code: 'systemcode', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'system_code_manage').save(flush: true)
+        new Menu(name: '系统配置管理', code: 'configure', icon: 'fa-cogs', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'configure_manage').save(flush: true)
+        new Menu(name: '工单工作流管理', code: 'workOrderFlow', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
+        new Menu(name: '电子围栏', code: 'electricFence', icon: 'fa-map', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'electric_fence').save(flush: true)
     }
 
     private initWorkOrder() {
@@ -1093,4 +1096,26 @@ class InitService {
     private initConfigure() {
         new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值',note: '单位：%').save(flush: true)
     }
+//    发布信息--法律法规
+    private initInfoaudit(){
+        new Infoaudit(type:'政策法律法规',publisher:1,receiver:1,auditor:1,title:'《机动车驾驶证申领和使用规定》',content:'  第一条  根据《中华人民共和国道路交通安全法》及其实施条例、《中华人民共和国行政许可法》，制定本规定。\n' +
+                '    第二条  本规定由公安机关交通管理部门负责实施。\n' +
+                '    省级公安机关交通管理部门负责本省（自治区、直辖市）机动车驾驶证业务工作的指导、检查和监督。直辖市公安机关交通管理部门车辆管理所、设区的市或者相当于同级的公安机关交通管理部门车辆管理所负责办理本行政辖区内机动车驾驶证业务。\n' +
+                '    县级公安机关交通管理部门车辆管理所可以办理本行政辖区内低速载货汽车、三轮汽车、摩托车驾驶证业务，以及其他机动车驾驶证换发、补发、审验、提交身体条件证明等业务。条件具备的，可以办理小型汽车、小型自动挡汽车、残疾人专用小型自动挡载客汽车驾驶证业务，以及其他机动车驾驶证的道路交通安全法律、法规和相关知识考试业务。具体业务范围和办理条件由省级公安机关交通管理部门确定。\n' +
+                '第三条  车辆管理所办理机动车驾驶证业务，应当遵循严格、公开、公正、便民的原则。\n' +
+                '车辆管理所办理机动车驾驶证业务，应当依法受理申请人的申请，审核申请人提交的材料。对符合条件的，按照规定的标准、程序和期限办理机动车驾驶证。对申请材料不齐全或者不符合法定形式的，应当一次书面告知申请人需要补正的全部内容。对不符合条件的，应当书面告知理由。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
+        new Infoaudit(type:'政策法律法规',publisher:2,receiver:2,auditor:2,title:'《道路交通安全违法行为处理程序规定》',content:'修订后的《道路交通安全违法行为处理程序规定》已经2008年11月17日公安部部长办公会议通过，现予发布，自2009年4月1日起施行<br>第一条 为了规范道路交通安全违法行为处理程序，保障公安机关交通管理部门正确履行职责，保护公民、法人和其他组织的合法权益，根据《中华人民共和国道路交通安全法》及其实施条例等法律、行政法规制定本规定。\n' +
+                '　　第二条 公安机关交通管理部门及其交通警察对道路交通安全违法行为（以下简称违法行为）的处理程序，在法定职权范围内依照本规定实施。\n' +
+                '　　第三条 对违法行为的处理应当遵循合法、公正、文明、公开、及时的原则，尊重和保障人权，保护公民的人格尊严。\n' +
+                '　　对违法行为的处理应当坚持教育与处罚相结合的原则，教育公民、法人和其他组织自觉遵守道路交通安全法律法规。\n' +
+                '　　对违法行为的处理，应当以事实为依据，与违法行为的事实、性质、情节以及社会危害程度相当。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
+        new Infoaudit(type:'政策法律法规',publisher:3,receiver:3,auditor:3,title:'《道路交通事故处理程序规定》',content:'第一条 为了规范道路交通事故处理程序，保障公安机关交通管理部门依法履行职责，保护道路交通事故当事人的合法权益，根据《中华人民共和国道路交通安全法》及其实施条例等有关法律、法规，制定本规定。\n' +
+                '第二条 公安机关交通管理部门处理道路交通事故，应当遵循公正、公开、便民、效率的原则。\n' +
+                '第三条 交通警察处理道路交通事故，应当取得相应等级的处理道路交通事故资格。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
+        new Infoaudit(type:'政策法律法规',publisher:4,receiver:4,auditor:4,title:'《中华人民共和国道路交通安全法实施条例》',content:'第一章　总　则编辑\n' +
+                '第一条　根据《中华人民共和国道路交通安全法》（以下简称道路交通安全法）的规定，制定本条例。\n' +
+                '第二条　中华人民共和国境内的车辆驾驶人、行人、乘车人以及与道路交通活动有关的单位和个人，应当遵守道路交通安全法和本条例。\n' +
+                '第三条　县级以上地方各级人民政府应当建立、健全道路交通安全工作协调机制，组织有关部门对城市建设项目进行交通影响评价，制定道路交通安全管理规划，确定管理目标，制定实施方案。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
+    }
+
 }
