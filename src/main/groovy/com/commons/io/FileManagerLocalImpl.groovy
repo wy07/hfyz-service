@@ -12,9 +12,9 @@ class FileManagerLocalImpl implements IFileManager{
         this.grailsApplication = grailsApplication
     }
     @Override
-    String saveCompanyRegulationFile(MultipartFile file, String companyCode) {
+    String saveFile(MultipartFile file, String category, String companyCode = null) {
         if(!file.empty) {
-            String fileRealPath = getCompanyRegulationFileRealPath(file, companyCode)
+            String fileRealPath = getFileRealPath(file, category, companyCode)
             File newFile = new File(fileRealPath)
             file.transferTo(newFile)
         }
@@ -31,10 +31,13 @@ class FileManagerLocalImpl implements IFileManager{
         }
     }
 
-    String getCompanyRegulationFileRealPath(MultipartFile file, String companyCode) {
+    String getFileRealPath(MultipartFile file, String category, String companyCode = null) {
         if(!file.empty) {
             FileHandler.checkoutFile(file)
-            String directory = "${grailsApplication.config.getProperty("uploadFilePath")}${File.separator}companyRegulation${File.separator}${companyCode}"
+            String directory = "${grailsApplication.config.getProperty("uploadFilePath")}${File.separator}${category}"
+            if(companyCode) {
+                directory += "${File.separator}${companyCode}"
+            }
             String fileName = "${FileHandler.getMD5Code(file.inputStream)}"
             FileHandler.findOrCreateDirectory(directory)
 

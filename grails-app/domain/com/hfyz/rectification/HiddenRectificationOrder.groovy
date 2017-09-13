@@ -1,5 +1,7 @@
 package com.hfyz.rectification
 
+import com.hfyz.document.Document
+
 
 class HiddenRectificationOrder {
 
@@ -18,6 +20,7 @@ class HiddenRectificationOrder {
     String replyDesc            //企业反馈
     String rectifiResult        //整改结果
     Date lastUpdated            //更改时间
+    Document document           //附件
     HiddenRectificationOrderStatus status   //状态
 
 
@@ -34,5 +37,6 @@ class HiddenRectificationOrder {
         replyDesc nullable: true, blank: true
         status nullable:false
         rectifiResult nullable: true
+        document nullable: true
     }
 }
