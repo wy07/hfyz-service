@@ -43,6 +43,8 @@ import com.hfyz.rectification.HiddenRectificationOrderStatus
 @Transactional
 class InitService {
 
+    def springSecurityService
+
     User centerUser = null
     def companys=["安徽省合肥汽车客运有限公司"
                   ,"合肥新亚汽车客运公司"
@@ -501,6 +503,8 @@ class InitService {
         new PermissionGroup(url: '/alarm-info-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "报警信息统计", category: "统计", code: 'alarm_info_statistic').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/owner-identity-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "考核统计", category: "统计", code: 'owner_identity_statistic').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/platform-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "平台统计", category: "统计", code: 'platform_statistic').save(failOnError: true, flush: true)
+
+        springSecurityService.clearCachedRequestmaps()
     }
 
     private initMenu() {
