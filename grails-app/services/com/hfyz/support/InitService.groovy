@@ -3,6 +3,7 @@ package com.hfyz.support
 import com.commons.utils.NumberUtils
 import com.commons.utils.ValidationUtils
 import com.hfyz.cases.RegisterReport
+import com.hfyz.document.Document
 import com.hfyz.infoManage.Infoaudit
 import com.hfyz.owner.CompanyRegulation
 

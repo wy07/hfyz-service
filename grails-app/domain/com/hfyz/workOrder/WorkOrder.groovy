@@ -53,10 +53,29 @@ class WorkOrder {
         passed nullable: true
     }
     static mapping = {
+        comment '工单信息表'
         id generator: 'native', params: [sequence: 'work_order_seq'], defaultValue: "nextval('work_order_seq')"
-        flows type: JsonbListType, sqlType: 'jsonb'
+        sn comment:'工单编号'
+        alarmType comment:'报警类型'
+        alarmLevel comment:'报警等级'
+        companyCode comment:'业户编码'
+        ownerName comment:'业户名称'
+        operateManager comment:'经营负责人'
+        phone comment:'电话'
+        frameNo comment:'车架号'
+        userID comment:'从业人员身份证号'
+        flows type: JsonbListType, sqlType: 'jsonb', comment:'工作流'
+        flowStep comment:'工作流执行步骤'
+        todoRole comment:'需执行角色名称'
+        dateCreated comment:'创建时间'
+        lastUpdated comment:'最后更新时间'
+        checkTime comment:'检查时间'
+        rectificationTime comment:'整改时间'
+        note comment:'备注'
+        status comment:'工单状态'
+        passed comment:'是否通过研判'
+        parent comment:'父级工单'
         workOrderRecords sort: 'dateCreated', order: 'asc'
-
     }
 
 

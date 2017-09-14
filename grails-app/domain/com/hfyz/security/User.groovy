@@ -33,8 +33,19 @@ class User implements Serializable {
 	boolean passwordExpired
 
 	static mapping = {
+		comment '用户信息表'
 		table 'sys_user'
 		id generator:'native', params:[sequence:'user_seq'], defaultValue: "nextval('user_seq')"
+		username comment: '用户名'
+		name comment: '真实姓名'
+		tel comment: '电话'
+		email comment: '电子邮箱'
+		passwordHash comment: '加密后的密码'
+		salt comment: '随机盐'
+		dateCreated comment: '创建时间'
+		lastUpdated comment: '最后更新时间'
+		org comment: '所属组织结构'
+		companyCode comment: '所属业户编码'
 	}
 
 	static constraints = {

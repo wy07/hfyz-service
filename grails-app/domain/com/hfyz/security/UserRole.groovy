@@ -103,7 +103,10 @@ class UserRole implements Serializable {
 	}
 
 	static mapping = {
+		comment '用户角色表'
 		id composite: ['user', 'role']
 		version false
+		user comment: '用户'
+		role comment: '所属角色'
 	}
 }

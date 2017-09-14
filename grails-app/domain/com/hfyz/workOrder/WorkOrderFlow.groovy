@@ -18,6 +18,13 @@ class WorkOrderFlow {
     }
 
     static mapping = {
-        flows type: JsonbListType, sqlType: 'jsonb'
+        comment '工单流信息表'
+        id generator:'native', params:[sequence:'work_order_flow_seq'], defaultValue: "nextval('work_order_flow_seq')"
+        alarmType comment:'告警类型'
+        flowVersion comment:'工作流版本'
+        flows type: JsonbListType, sqlType: 'jsonb', comment:'元素流'
+        enabled comment:'是否生效'
+        dateCreated comment:'创建时间'
+        lastUpdated comment:'最后更新时间'
     }
 }

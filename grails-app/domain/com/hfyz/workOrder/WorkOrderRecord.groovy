@@ -18,6 +18,18 @@ class WorkOrderRecord {
         workOrderStatus nullable: true
     }
 
+    static mapping = {
+        comment '工单记录表'
+        id generator:'native', params:[sequence:'work_order_record_seq'], defaultValue: "nextval('work_order_record_seq')"
+        workOrder comment:'工单源'
+        user comment:'操作人'
+        note comment:'备注'
+        workOrderStatus comment:'工单状态'
+        dateCreated comment:'创建时间'
+        operate comment:'操作结果'
+    }
+
+
     Object asType(Class clazz) {
 
         if (clazz == Map.class) {

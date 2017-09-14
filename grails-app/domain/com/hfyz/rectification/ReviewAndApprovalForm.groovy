@@ -14,4 +14,15 @@ class ReviewAndApprovalForm {
         approver         nullable: false
         billId           nullable: false
     }
+
+    static mapping = {
+        comment '隐患整改单审批表'
+        id generator:'native', params:[sequence:'review_approval_form_seq'], defaultValue: "nextval('review_approval_form_seq')"
+        billId comment: '被审批的隐患整改单'
+        approver comment: '审批人'
+        approveTime comment: '审批时间'
+        approveDesc comment: '审批意见'
+        approvalResult comment: '审批结果'
+
+    }
 }
