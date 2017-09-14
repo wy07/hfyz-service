@@ -77,7 +77,7 @@ class CompanyRegulationController implements ControllerHelper {
         }
         def upload = request.getFile('upload')
         def originalFilename = upload.originalFilename
-        String fileRealPath = fileManager.getCompanyRegulationFileRealPath(upload, getCurrentUser().companyCode)
+        String fileRealPath = fileManager.getFileRealPath(upload, 'companyRegulation', getCurrentUser().companyCode)
 
         CompanyRegulation companyRegulation = new CompanyRegulation()
         companyRegulation.ownerName = OwnerIdentity.findByCompanyCode(getCurrentUser()?.companyCode).ownerName
@@ -88,8 +88,8 @@ class CompanyRegulationController implements ControllerHelper {
         companyRegulation.fileType = originalFilename.substring(originalFilename.lastIndexOf('.') + 1, originalFilename.length())
         companyRegulation.fileSize = (upload.getSize() / 1024).setScale(2, BigDecimal.ROUND_HALF_UP)
         companyRegulation.fileRealPath = fileRealPath
+        fileManager.saveFile(upload, 'companyRegulation', getCurrentUser().companyCode)
         companyRegulation.save(flush: true, failOnError: true)
-        fileManager.saveCompanyRegulationFile(upload, getCurrentUser().companyCode)
         renderSuccess()
     }
 
