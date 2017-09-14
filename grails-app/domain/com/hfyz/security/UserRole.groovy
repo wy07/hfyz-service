@@ -104,7 +104,7 @@ class UserRole implements Serializable {
 
 	static mapping = {
 		comment '用户角色表'
-		id composite: ['user', 'role'], generator:'native', params:[sequence:'user_role_seq'], defaultValue: "nextval('user_role_seq')"
+		id composite: ['user', 'role']
 		version false
 		user comment: '用户'
 		role comment: '所属角色'
