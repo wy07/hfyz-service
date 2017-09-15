@@ -30,6 +30,17 @@ class OwnerCheckRecord {
     }
 
     static mapping = {
+        comment '查岗信息表'
         id generator:'native', params:[sequence:'owner_check_record_seq'], defaultValue: "nextval('owner_check_record_seq')"
+        auto comment: '查岗类型'
+        companyCode comment: '业户编码'
+        dateCreated comment: '查岗时间'
+        question comment: '查岗内容'
+        answer comment: '问题答案'
+        responsed comment: '信息状态'
+        operator comment: '查岗人'
+        responseDate comment: '应答时间'
+        responseContent comment: '应答内容'
+        responseTime comment: '响应时间(秒)'
     }
 }

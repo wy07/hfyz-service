@@ -4,12 +4,14 @@ import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
 import com.hfyz.infoCenter.SourceType
 import com.hfyz.owner.OwnerIdentity
+import grails.converters.JSON
 
 class HiddenRectificationOrderController implements ControllerHelper {
 
     def hiddenRectificationOrderService
     def ownerIdentityService
     def infoCenterService
+    def documentService
     def reviewApprovalList(){
         def hiddenRectificationOrder = HiddenRectificationOrder.get(params.long('id'))
         renderSuccessesWithMap(hiddenRectificationOrderService.getReviewAndApprovalList(hiddenRectificationOrder))
@@ -40,12 +42,16 @@ class HiddenRectificationOrderController implements ControllerHelper {
     }
 
     def save(){
-        HiddenRectificationOrder hiddenDanger = new HiddenRectificationOrder(request.JSON)
-        hiddenDanger.inspectionDate = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.inspection)
-        hiddenDanger.dealineDate = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.dealine)
+        def upload = request.getFile('upload')
+        def json = JSON.parse(params.hiddenRectificationOrder)
+
+        HiddenRectificationOrder hiddenDanger = new HiddenRectificationOrder(json)
+        hiddenDanger.inspectionDate = new Date().parse('yyyy-MM-dd HH:mm', json.inspection)
+        hiddenDanger.dealineDate = new Date().parse('yyyy-MM-dd HH:mm', json.dealine)
         hiddenDanger.billNo = System.currentTimeMillis()+""+new Random().nextInt(100000).toString().padLeft(5, '0')
         hiddenDanger.status = HiddenRectificationOrderStatus.QC
-        hiddenDanger.enterprise = findOwnerIdentityByOrgCode(request.JSON.companyCode).name
+        hiddenDanger.enterprise = findOwnerIdentityByOrgCode(json.companyCode).name
+        hiddenDanger.document = documentService.save(upload)
         hiddenDanger.save(flush: true,failOnError: true)
         renderSuccess()
 
@@ -73,6 +79,8 @@ class HiddenRectificationOrderController implements ControllerHelper {
                         return
                     }
                 }
+
+                def fileName = hiddenRectificationOrderIn.document?hiddenRectificationOrderIn.document.fileName+ '.' + hiddenRectificationOrderIn.document.fileType:null
                 renderSuccessesWithMap([hiddenRectificationOrder:[
                         id : hiddenRectificationOrderIn.id,
                         area : hiddenRectificationOrderIn.area,
@@ -88,7 +96,8 @@ class HiddenRectificationOrderController implements ControllerHelper {
                         proPosal : hiddenRectificationOrderIn.proPosal,
                         replyDate : hiddenRectificationOrderIn.replyDate?.format('yyyy-MM-dd HH:mm:ss'),
                         replyDesc : hiddenRectificationOrderIn.replyDesc,
-                        status : hiddenRectificationOrderIn.status.type
+                        status : hiddenRectificationOrderIn.status.type,
+                        fileName: fileName
                 ]])
                         }
     }
@@ -96,21 +105,32 @@ class HiddenRectificationOrderController implements ControllerHelper {
     def delete(){
         withHiddenRectificationOrder(params.long('id')) {
             hiddenDanger ->
+                def document = hiddenDanger.document
+                hiddenDanger.document = null
+                documentService.delete(document)
                 hiddenDanger.delete(flush: true)
                 renderSuccess()
         }
     }
 
     def update(){
+        def upload = request.getFile('upload')
+        def json = JSON.parse(params.hiddenRectificationOrder)
         withHiddenRectificationOrder(params.long('id')){
             hiddenRectificationOrderIns ->
-                hiddenRectificationOrderIns.properties = request.JSON
-                hiddenRectificationOrderIns.inspectionDate = request.JSON.inspection ? new Date()
-                        .parse('yyyy-MM-dd HH:mm', request.JSON.inspection) : null
-                hiddenRectificationOrderIns.dealineDate = request.JSON.dealine ? new Date()
-                        .parse('yyyy-MM-dd HH:mm', request.JSON.dealine) : null
+                hiddenRectificationOrderIns.properties = json
+                hiddenRectificationOrderIns.inspectionDate = json.inspection ? new Date()
+                        .parse('yyyy-MM-dd HH:mm', json.inspection) : null
+                hiddenRectificationOrderIns.dealineDate = json.dealine ? new Date()
+                        .parse('yyyy-MM-dd HH:mm', json.dealine) : null
                 hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.QC
-                hiddenRectificationOrderIns.enterprise = findOwnerIdentityByOrgCode(request.JSON.companyCode).name
+                hiddenRectificationOrderIns.enterprise = findOwnerIdentityByOrgCode(json.companyCode).name
+                if(upload) {
+                    def document = hiddenRectificationOrderIns.document
+                    hiddenRectificationOrderIns.document = null
+                    documentService.delete(document)
+                    hiddenRectificationOrderIns.document = documentService.save(upload)
+                }
                 hiddenRectificationOrderIns.save(flush: true,failOnError: true)
                 renderSuccess()
         }

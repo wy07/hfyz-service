@@ -17,4 +17,16 @@ class PlatformManage {
         contactPhone blank: false, maxSize: 11
     }
 
+    static mapping = {
+        comment '平台管理表'
+        id generator:'native', params:[sequence:'platform_manage_seq'], defaultValue: "nextval('platform_manage_seq')"
+        ip comment: '平台IP地址'
+        port comment: '端口号'
+        name comment: '平台名称'
+        code comment: '平台代码'
+        contactName comment: '平台联系人'
+        contactPhone comment: '平台联系电话'
+
+    }
+
 }

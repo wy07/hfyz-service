@@ -3,6 +3,7 @@ package com.hfyz.support
 import com.commons.utils.NumberUtils
 import com.commons.utils.ValidationUtils
 import com.hfyz.cases.RegisterReport
+import com.hfyz.document.Document
 import com.hfyz.infoManage.Infoaudit
 import com.hfyz.owner.CompanyRegulation
 
@@ -41,6 +42,8 @@ import com.hfyz.rectification.HiddenRectificationOrderStatus
 
 @Transactional
 class InitService {
+
+    def springSecurityService
 
     User centerUser = null
     def companys = ["安徽省合肥汽车客运有限公司"
@@ -447,7 +450,8 @@ class InitService {
 
         //基础信息
         new PermissionGroup(url: '/map-signs/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "路标管理", category: "基础信息", code: 'map_sign_manage').save(failOnError: true, flush: true)
-        new PermissionGroup(url: '/emergency-plans/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "应急预案", category: "基础信息", code: 'emergency_plan_manage').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/electric_fences/**/**', configAttribute: 'ROLE_ROOT, ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "电子围栏", category: "基础信息", code: 'electric_fence').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/emergency_plans/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "应急预案", category: "基础信息", code: 'emergency_plan_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/system-codes/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "数据字典管理", category: "基础信息", code: 'system_code_manage').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/configures/**/**', configAttribute: 'ROLE_ROOT', httpMethod: null, name: "系统配置管理", category: "基础信息", code: 'configure_manage').save(failOnError: true, flush: true)
 
@@ -500,6 +504,8 @@ class InitService {
         new PermissionGroup(url: '/alarm-info-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "报警信息统计", category: "统计", code: 'alarm_info_statistic').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/owner-identity-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "考核统计", category: "统计", code: 'owner_identity_statistic').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/platform-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "平台统计", category: "统计", code: 'platform_statistic').save(failOnError: true, flush: true)
+
+        springSecurityService.clearCachedRequestmaps()
     }
 
     private initMenu() {
@@ -510,7 +516,6 @@ class InitService {
         new Menu(name: '退出', code: 'logout', position: 'TOP_BAR', parent: null).save(flush: true)
 
         new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR', permissionCode: 'home').save(flush: true)
-
 
         def monitorMenu = new Menu(name: '联网联控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR', permissionCode: 'car_real_time_monitor;car_real_time_control;car_history;warning;platform_manage').save(flush: true)
         new Menu(name: '企业运营商平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'platform_manage').save(flush: true)
@@ -558,8 +563,7 @@ class InitService {
         new Menu(name: '考核信息统计', code: 'ownerIdentityStatistics', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'owner_identity_statistic').save(flush: true)
         new Menu(name: '平台信息统计', code: 'platformStatisticComponent', icon: 'fa-list-alt', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'platform_statistic').save(flush: true)
 
-
-        def systemManage = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-cogs', parent: null, position: 'SIDE_BAR', permissionCode: 'organization_manage;role_manage;permission_manage;sysuser_manage;log_manage;menu_manage').save(flush: true)
+        def systemManage = new Menu(name: '系统管理', code: 'root-syscode', icon: 'fa-cogs', parent: null, position: 'SIDE_BAR', permissionCode: 'organization_manage;role_manage;permission_manage;sysuser_manage;log_manage;menu_manage;electric_fence').save(flush: true)
         new Menu(name: '组织结构管理', code: 'organization', icon: 'fa-sitemap', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'organization_manage').save(flush: true)
         new Menu(name: '用户账号管理', code: 'user', icon: 'fa-user', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'sysuser_manage').save(flush: true)
         new Menu(name: '角色管理', code: 'role', icon: 'fa-users', parent: systemManage, position: 'SIDE_BAR', permissionCode: 'role_manage').save(flush: true)
@@ -570,8 +574,7 @@ class InitService {
         new Menu(name: '数据字典管理', code: 'systemcode', icon: 'fa-book', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'system_code_manage').save(flush: true)
         new Menu(name: '系统配置管理', code: 'configure', icon: 'fa-cogs', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'configure_manage').save(flush: true)
         new Menu(name: '工单工作流管理', code: 'workOrderFlow', icon: 'fa-list', parent: systemManage, position: 'SIDE_BAR').save(flush: true)
-
-
+        new Menu(name: '电子围栏', code: 'electricFence', icon: 'fa-map', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'electric_fence').save(flush: true)
     }
 
     private initWorkOrder() {

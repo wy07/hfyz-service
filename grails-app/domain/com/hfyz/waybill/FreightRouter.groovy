@@ -35,6 +35,26 @@ class FreightRouter {
         companyCode nullable: false, blank: false
     }
 
+    static mapping = {
+        comment '危货路线表'
+        id generator: 'native', params: [sequence: 'freight_router_seq'], defaultValue: "nextval('freight_router_seq')"
+        routerName comment:'路线名称'
+        startProvince comment:'起始地省市名称'
+        startProvinceCode comment:'起始地省市编码'
+        startCity comment:'起始地城市名称'
+        startCityCode comment:'起始地城市编码'
+        startDistrict comment:'起始地区域名称'
+        startDistrictCode comment:'起始地区域编码'
+        endProvince comment:'目的地省市名称'
+        endProvinceCode comment:'目的地省市编码'
+        endCity comment:'目的地城市名称'
+        endCityCode comment:'目的地城市编码'
+        endDistrict comment:'目的地区域名称'
+        endDistrictCode comment:'目的地区域编码'
+        viaLand comment:'途经地名称'
+        companyCode comment:'业户编码'
+    }
+
     Object asType(Class clazz) {
 
         if (clazz == Map.class) {

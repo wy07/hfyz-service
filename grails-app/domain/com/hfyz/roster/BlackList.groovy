@@ -19,4 +19,21 @@ class BlackList {
         controlBegin nullable: false
         controlEnd nullable: false
     }
+
+    static mapping = {
+        comment '黑名单信息表'
+        id generator:'native', params:[sequence:'black_list_seq'], defaultValue: "nextval('black_list_seq')"
+        vehicleNo comment: '车牌号'
+        frameNo comment: '车架号'
+        blackType comment: '黑名单类型'
+        controlBegin comment: '布控开始时间'
+        controlEnd comment: '布控结束时间'
+        controlBehavior comment: '布控行为'
+        scheme comment: '报警方案'
+        controlRange comment: '布控范围'
+        controlOrg comment: '布控单位'
+        executor comment: '布控人'
+        status comment: '布控状态'
+    }
+
 }

@@ -25,4 +25,17 @@ class Menu {
         position nullable: false, blank: false, inList: ['TOP_BAR', 'SIDE_BAR']
         display nullable: false
     }
+
+    static mapping = {
+        comment '菜单信息表'
+        id generator:'native', params:[sequence:'menu_seq'], defaultValue: "nextval('menu_seq')"
+        name comment: '菜单名称'
+        code comment: '菜单编码'
+        style comment: '菜单样式'
+        icon comment: '菜单图片FontAwesome编码'
+        parent comment: '父级菜单'
+        position comment: '菜单显示位置'
+        permissionCode comment: '菜单权限编码'
+        display comment: '是否显示'
+    }
 }

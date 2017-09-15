@@ -23,7 +23,16 @@ class Alarm {
     }
 
     static mapping = {
+        comment '告警信息表'
         id generator:'native', params:[sequence:'alarm_seq'], defaultValue: "nextval('alarm_seq')"
+        alarmType comment: '告警类型'
+        alarmLevel comment: '告警级别'
+        sourceType comment: '告警对象类型 人员/业户/车辆'
+        sourceCode comment: '告警对象 人员-身份证 业户-业户编码 车辆-车架号'
+        alarmTime comment: '告警时间'
+        updateTime comment: '告警更新时间'
+        dateCreated comment: '创建时间'
+        note comment: '备注'
     }
 
 }
