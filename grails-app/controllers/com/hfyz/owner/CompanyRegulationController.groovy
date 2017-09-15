@@ -80,7 +80,7 @@ class CompanyRegulationController implements ControllerHelper {
         String fileRealPath = fileManager.getCompanyRegulationFileRealPath(upload, getCurrentUser().companyCode)
 
         CompanyRegulation companyRegulation = new CompanyRegulation()
-        companyRegulation.ownerName = OwnerIdentity.findByCompanyCode(getCurrentUser()?.companyCode).ownerName
+        companyRegulation.ownerName = OwnerIdentity.findByOrgCode(getCurrentUser()?.companyCode).name
         companyRegulation.companyCode = getCurrentUser()?.companyCode
         companyRegulation.regulationName = params.regulationName.substring(1, params.regulationName.lastIndexOf('"'))
         companyRegulation.systemType = SystemType.get(params.systemTypeId)

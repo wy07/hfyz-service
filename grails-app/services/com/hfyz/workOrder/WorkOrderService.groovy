@@ -326,16 +326,16 @@ class WorkOrderService {
         def companys = {
             String sql = """
                 select company.id
-                    ,company.owner_name company_name
-                    ,company.company_code
+                    ,company.name company_name
+                    ,company.org_code company_code
                 from owner_basicinfo_owneridentity company
                 where 1=1
             """
 
             if (companyCode) {
-                sql += " and company.company_code=:companyCode"
+                sql += " and company.org_code=:companyCode"
             } else if (companyName) {
-                sql += " and company.owner_name like :companyName"
+                sql += " and company.name like :companyName%"
             }
 
             sql += """

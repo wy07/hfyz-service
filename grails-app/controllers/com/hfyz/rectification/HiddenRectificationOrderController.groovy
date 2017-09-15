@@ -2,11 +2,8 @@ package com.hfyz.rectification
 
 import com.commons.utils.ControllerHelper
 import com.commons.utils.PageUtils
-import com.commons.utils.NumberUtils
 import com.hfyz.infoCenter.SourceType
 import com.hfyz.owner.OwnerIdentity
-import grails.converters.JSON
-import com.hfyz.owner.OwnerIdentityService
 
 class HiddenRectificationOrderController implements ControllerHelper {
 
@@ -48,7 +45,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
         hiddenDanger.dealineDate = new Date().parse('yyyy-MM-dd HH:mm', request.JSON.dealine)
         hiddenDanger.billNo = System.currentTimeMillis()+""+new Random().nextInt(100000).toString().padLeft(5, '0')
         hiddenDanger.status = HiddenRectificationOrderStatus.QC
-        hiddenDanger.enterprise = findCompangCodeByOwnerCode(request.JSON.companyCode).ownerName
+        hiddenDanger.enterprise = findOwnerIdentityByOrgCode(request.JSON.companyCode).name
         hiddenDanger.save(flush: true,failOnError: true)
         renderSuccess()
 
@@ -58,15 +55,11 @@ class HiddenRectificationOrderController implements ControllerHelper {
         renderSuccessesWithMap(ownerIdentityService.getCompanyListByChar(request.JSON.enterpirse))
     }
 
-    def findCompanyNameByOwnerName(String name){
-        return OwnerIdentity.findByOwnerName(name)
+    OwnerIdentity findOwnerIdentityByOrgCode(String code){
+        return OwnerIdentity.findByOrgCode(code)
     }
 
-    def findCompangCodeByOwnerCode(String code){
-        return OwnerIdentity.findByCompanyCode(code)
-    }
-
-    def findReviewAndApprovalByBillId(def obj){
+    ReviewAndApprovalForm findReviewAndApprovalByBillId(def obj){
         return ReviewAndApprovalForm.findByBillId(obj)
 
     }
@@ -117,7 +110,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
                 hiddenRectificationOrderIns.dealineDate = request.JSON.dealine ? new Date()
                         .parse('yyyy-MM-dd HH:mm', request.JSON.dealine) : null
                 hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.QC
-                hiddenRectificationOrderIns.enterprise = findCompangCodeByOwnerCode(request.JSON.companyCode).ownerName
+                hiddenRectificationOrderIns.enterprise = findOwnerIdentityByOrgCode(request.JSON.companyCode).name
                 hiddenRectificationOrderIns.save(flush: true,failOnError: true)
                 renderSuccess()
         }

@@ -31,7 +31,7 @@ class CarService {
         }
 
         if (user.isCompanyUser()) {
-            sqlParams.ownerCode = user.companyCode
+            sqlParams.orgCode = user.companyCode
         }
 
         Promise carList = task {
@@ -128,7 +128,7 @@ class CarService {
 
         if (currentUser.isCompanyUser()) {
             CarBasicOperate carOperateInstance = CarBasicOperate.createCriteria().get {
-                eq('ownerCode', currentUser.companyCode)
+                eq('orgCode', currentUser.companyCode)
                 eq('frameNo', carInstance.frameNo)
                 le('beginTime', new Date())
                 ge('endTime', new Date())
@@ -154,7 +154,7 @@ class CarService {
 
         if (currentUser.isCompanyUser()) {
             CarBasicOperate carOperateInstance = CarBasicOperate.createCriteria().get {
-                eq('ownerCode', currentUser.companyCode)
+                eq('orgCode', currentUser.companyCode)
                 eq('frameNo', carInstance.frameNo)
                 le('beginTime', new Date())
                 ge('endTime', new Date())
@@ -276,7 +276,7 @@ class CarService {
             sqlStr += " and operate.end_time between to_timestamp(:dateBegin,'YYYY-MM-DD HH24:MI:SS') and to_timestamp(:dateEnd,'YYYY-MM-DD HH24:MI:SS') "
         }
         if (isCompanyUser) {
-            sqlStr += " and operate.owner_code=:ownerCode"
+            sqlStr += " and operate.org_code=:orgCode"
         }
 
         sqlStr += """
@@ -307,7 +307,7 @@ class CarService {
             sqlStr += " and operate.end_time between to_timestamp(:dateBegin,'YYYY-MM-DD HH24:MI:SS') and to_timestamp(:dateEnd,'YYYY-MM-DD HH24:MI:SS')"
         }
         if (isCompanyUser) {
-            sqlStr += " and operate.owner_code=:ownerCode"
+            sqlStr += " and operate.org_code=:orgCode"
         }
         return sqlStr
     }

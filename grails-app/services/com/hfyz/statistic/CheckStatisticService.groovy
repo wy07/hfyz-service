@@ -50,14 +50,14 @@ class CheckStatisticService {
                     select
                     count(t1.company_code) as total , 
                     (select 
-                         t2.owner_name
+                         t2.name
                     from 
                          owner_basicinfo_owneridentity t2,
                          owner_check_record t
                     where 
-                         t2.company_code = t1.company_code
+                         t2.org_code = t1.company_code
                     group by 
-                         t2.owner_name
+                         t2.name
                         ) as enterprise,
                         (select 
                                 count(t.company_code) 
@@ -83,7 +83,7 @@ class CheckStatisticService {
                     owner_check_record t1 ,
                     owner_basicinfo_owneridentity t3
                     where 
-                        t3.company_code= t1.company_code
+                        t3.org_code= t1.company_code
                     """
         if(startDate){
             strSql += " and t1.date_created >= :sd::timestamp"
@@ -100,7 +100,7 @@ class CheckStatisticService {
             }
         }
         if(company){
-            strSql += " and t3.owner_name like :company "
+            strSql += " and t3.name like :company% "
         }
         strSql += """
                 group by t1.company_code 
@@ -115,14 +115,14 @@ class CheckStatisticService {
                 from 
                     ( select count(t1.company_code) as total , 
                         (select 
-                             t2.owner_name
+                             t2.name
                         from 
                              owner_basicinfo_owneridentity t2,
                              owner_check_record t
                         where 
-                             t2.company_code = t1.company_code
+                             t2.org_code = t1.company_code
                         group by 
-                             t2.owner_name
+                             t2.name
                             ) as enterprise,
                             (select 
                                     count(t.company_code) 
@@ -148,7 +148,7 @@ class CheckStatisticService {
                         owner_check_record t1 ,
                         owner_basicinfo_owneridentity t3
                         where 
-                             t3.company_code= t1.company_code
+                             t3.org_code= t1.company_code
                     """
         if(startDate){
             strSql += " and t1.date_created >=  :sd::timestamp"
@@ -165,7 +165,7 @@ class CheckStatisticService {
             }
         }
         if(company){
-            strSql += " and t3.owner_name like :company "
+            strSql += " and t3.name like :company% "
         }
         strSql += """
                 group by t1.company_code) view1

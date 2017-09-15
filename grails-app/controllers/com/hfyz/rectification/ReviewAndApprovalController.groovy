@@ -2,8 +2,6 @@ package com.hfyz.rectification
 
 import com.commons.utils.ControllerHelper
 import com.hfyz.infoCenter.SourceType
-import com.hfyz.owner.OwnerIdentity
-import grails.converters.JSON
 
 class ReviewAndApprovalController implements ControllerHelper {
 
