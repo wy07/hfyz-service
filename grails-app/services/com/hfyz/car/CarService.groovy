@@ -226,7 +226,7 @@ class CarService {
             ,carinfo.car_color carColor
         FROM runcar_basic_carinfo carinfo
         JOIN runcar_basicoperate operate on carinfo.frame_no=operate.frame_no
-        WHERE operate.owner_code=:companyCode
+        WHERE operate.org_code=:companyCode
     """
 
     private static String getNetworkRateListSql() {

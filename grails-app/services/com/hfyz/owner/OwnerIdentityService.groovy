@@ -82,7 +82,7 @@ class OwnerIdentityService {
         String listSql = """
           SELECT
             bas.id id,
-            bas.name name,
+            bas.name,
             bas.org_code orgCode,
             bas.economic_type economicType,
             bas.legal_representative legalRepresentative,
