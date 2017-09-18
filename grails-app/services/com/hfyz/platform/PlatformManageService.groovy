@@ -7,7 +7,7 @@ import grails.transaction.Transactional
 class PlatformManageService {
 
     def getPlatformList(def max, def offset, String name, String code) {
-        def platformList = PlatformManage.createCriteria().list([max: max, offset: offset]) {
+        def platformList = PlatformManage.createCriteria().list([max: max, offset: offset, sort: 'code']) {
             if (name) {
                 like("name", "${name}%")
             }
