@@ -184,6 +184,72 @@ class FreightWaybillController implements ControllerHelper {
 
     }
 
+    def export() {
+        def begin = request.JSON.dateBegin ? Date.parse('yyyy-MM-dd HH:mm:ss', request.JSON.dateBegin) : ''
+        def end = request.JSON.dateEnd ? Date.parse('yyyy-MM-dd HH:mm:ss', request.JSON.dateEnd) : ''
+        def freightWaybillList = FreightWaybill.createCriteria().list(){
+            if (getCurrentUser().isCompanyUser()) {
+                eq('companyCode', getCurrentUser().companyCode)
+            } else if (request.JSON.ownerName) {
+                like('ownerName', "${request.JSON.ownerName}%")
+            }
+            if (request.JSON.vehicleNo) {
+                like('vehicleNo', "${request.JSON.vehicleNo}%")
+            }
+            if (begin && end) {
+                between('departTime', begin, end)
+            }
+        }?.collect {FreightWaybill obj ->
+            [
+               车牌号: obj.vehicleNo,
+               车架号: obj.frameNo,
+               业户编码: obj.companyCode,
+               业户名称: obj.ownerName,
+               危险品名称: obj.dangerousName,
+               危险品分类: obj.dangerousType?.name,
+               状态: obj.status == 'CG'? '未审核':(obj.status == 'SHZ'?'审核中':(obj.status == 'YJJ'?'审核拒绝':'审核通过')),
+               应急预案: obj.emergencyPlan?.name,
+               车辆颜色: obj.carPlateColor,
+               车辆类型: obj.carType,
+               车辆尺寸: obj.carSize,
+               挂车车牌号: obj.licenseNo,
+               '核定载重质量(kg)': obj.ratifiedPayload,
+               '运输价格(元/车)': obj.price,
+               是否经营性运输: obj.operatedType,
+               '装载/卸载': obj.loadedType,
+               是否满载: obj.fullLoaded,
+               装载量: obj.amount,
+               运输距离: obj.mile,
+               运输出场时间: obj.departTime?.format('yyyy-MM-dd HH:mm'),
+               驾驶员姓名: obj.driverName,
+               驾驶员从业资格证号: obj.driverWokeLicenseNo,
+               驾驶员联系电话:  obj.driverPhone,
+               押运员姓名: obj.supercargoName,
+               押运员从业资格证号: obj.supercargoWokeLicenseNo,
+               押运员联系电话: obj.supercargoPhone,
+               托运单位: obj.consignCompany,
+               托运回场时间: obj.backTime?.format('yyyy-MM-dd HH:mm'),
+               出发地: obj.departArea,
+               目的地: obj.arriveArea,
+               路线名称: obj.routerName,
+               起始地省市名称: obj.startProvince,
+               起始地省市编码: obj.startProvinceCode,
+               起始地城市名称: obj.startCity,
+               起始地城市编码: obj.startCityCode,
+               起始地区域名称: obj.startDistrict,
+               起始地区域编码: obj.startDistrictCode,
+               目的地省市名称: obj.endProvince,
+               目的地省市编码: obj.endProvinceCode,
+               目的地城市名称: obj.endCity,
+               目的地城市编码: obj.endCityCode,
+               目的地区域名称: obj.endDistrict,
+               目的地区域编码: obj.endDistrictCode,
+               途经地名称: obj.viaLand
+            ]
+        }
+        renderSuccessesWithMap([freightWaybillList: freightWaybillList])
+    }
+
     private withFreightWaybill(Long id, Closure c) {
         FreightWaybill freightWaybillInstance = id ? FreightWaybill.get(id) : null
         if (freightWaybillInstance) {
