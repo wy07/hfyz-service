@@ -3,7 +3,6 @@ package com.hfyz.security
 import com.commons.utils.ControllerHelper
 import com.commons.utils.LogUtils
 import com.hfyz.owner.OwnerIdentity
-import grails.converters.JSON
 import org.springframework.security.authentication.*
 import org.springframework.security.core.userdetails.UserDetails
 
@@ -23,7 +22,7 @@ class AuthController implements ControllerHelper {
                 UserDetails userDetails = loginService.signIn(username, password)
 
                 def rights = springSecurityService.findRequestmapsByRoles(userDetails.authorities.role).code.join(';')
-                def companyName = OwnerIdentity.findByCompanyCode(userDetails.companyCode)?.ownerName
+                def companyName = OwnerIdentity.findByOrgCode(userDetails.companyCode)?.name
                 def orgId =  User.get(userDetails.id).org?.id
                 renderSuccessesWithMap([sub:userDetails.username
                                         ,role:userDetails.authorities.authority.join(",")

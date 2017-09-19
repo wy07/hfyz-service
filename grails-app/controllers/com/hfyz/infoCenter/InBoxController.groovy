@@ -25,7 +25,7 @@ class InBoxController implements ControllerHelper{
             [id           : inBox.id
              , sourceId   : inBox.sourceId
              , sourceType : inBox.sourceType.name()
-             , title      : inBox.title
+             , content      : inBox.content
              , isRead     : inBox.isRead
              , dateCreated: inBox.dateCreated.format('yyyy-MM-dd HH:mm:ss ')
              , action     : action

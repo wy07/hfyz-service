@@ -46,24 +46,26 @@ class InitService {
     def springSecurityService
 
     User centerUser = null
-    def companys=["安徽省合肥汽车客运有限公司"
-                  ,"合肥新亚汽车客运公司"
-                  ,"合肥长丰县宏业汽车客运有限公司"
-                  ,"合肥客运旅游汽车公司"
-                  ,"锐致货运公司"
-                  ,"合肥齐力货运公司"
-                  ,"合肥铂达货运公司"
-                  ,"合肥远征货运公司"
-                  ,"合肥聚贤货运有限责任公司"]
-    def cars=["皖A36638","皖NB7016","皖D76035","皖A5D042","浙HC8891","皖AB3736","皖AA7553","皖A7J666","皖M53742","皖A67433","冀BR3616","皖A48925","苏AE8130","苏AJ3211","皖A6E498","苏AB8985","皖A7R673","皖A84778","皖A76060","皖A31799","皖M56445","皖HB1389","皖A7J511","皖M58341","皖A84471","苏G55965","皖E18021","皖A58082","皖AB0586","皖AA5471","皖A41986","皖RAN988","皖A33483","皖Q07443","皖A84908","皖M98172","皖A81442","皖N28683","皖A83301","皖G11612","皖A02658","皖A32177","皖A7Q020","皖A7K515","皖A7P266","皖QSQ868","豫QA8295","皖A37202","皖A38870","皖A58076","皖K16738","皖A84719","皖LB4982","皖A7L230","皖AB2133","苏BG5682","皖A6A046","皖D60429","浙E17157","苏G50093","皖NA1665","沪D52068","浙A7L255","皖E18021","皖A5F271","皖A69649","皖A40091","皖A7Q197","浙A5L030","皖A82218","皖A5F227","皖A84335","皖AB3997","皖A45549","皖A42406","皖AA5780","苏C31328","皖HB1847","京ACB259","皖AA5053","皖AB0636","皖A38883","皖A85077","皖AA1388","皖M17210","皖A6D300","皖A57602","皖A58228","皖NB5523","皖A83429","皖A45565","皖AB0586","皖A23288","皖A7P972","皖A7D666","皖A47119","苏AJ90T0","皖AA9680","皖A58290","皖A58202","皖A41967","皖M16487","豫QA8179","皖AB3997","皖A6D301","皖A37312"]
+    def companys = ["安徽省合肥汽车客运有限公司"
+                    , "合肥新亚汽车客运公司"
+                    , "合肥长丰县宏业汽车客运有限公司"
+                    , "合肥客运旅游汽车公司"
+                    , "锐致货运公司"
+                    , "合肥齐力货运公司"
+                    , "合肥铂达货运公司"
+                    , "合肥远征货运公司"
+                    , "合肥聚贤货运有限责任公司"]
+    def cars = ["皖A36638", "皖NB7016", "皖D76035", "皖A5D042", "浙HC8891", "皖AB3736", "皖AA7553", "皖A7J666", "皖M53742", "皖A67433", "冀BR3616", "皖A48925", "苏AE8130", "苏AJ3211", "皖A6E498", "苏AB8985", "皖A7R673", "皖A84778", "皖A76060", "皖A31799", "皖M56445", "皖HB1389", "皖A7J511", "皖M58341", "皖A84471", "苏G55965", "皖E18021", "皖A58082", "皖AB0586", "皖AA5471", "皖A41986", "皖RAN988", "皖A33483", "皖Q07443", "皖A84908", "皖M98172", "皖A81442", "皖N28683", "皖A83301", "皖G11612", "皖A02658", "皖A32177", "皖A7Q020", "皖A7K515", "皖A7P266", "皖QSQ868", "豫QA8295", "皖A37202", "皖A38870", "皖A58076", "皖K16738", "皖A84719", "皖LB4982", "皖A7L230", "皖AB2133", "苏BG5682", "皖A6A046", "皖D60429", "浙E17157", "苏G50093", "皖NA1665", "沪D52068", "浙A7L255", "皖E18021", "皖A5F271", "皖A69649", "皖A40091", "皖A7Q197", "浙A5L030", "皖A82218", "皖A5F227", "皖A84335", "皖AB3997", "皖A45549", "皖A42406", "皖AA5780", "苏C31328", "皖HB1847", "京ACB259", "皖AA5053", "皖AB0636", "皖A38883", "皖A85077", "皖AA1388", "皖M17210", "皖A6D300", "皖A57602", "皖A58228", "皖NB5523", "皖A83429", "皖A45565", "皖AB0586", "皖A23288", "皖A7P972", "皖A7D666", "皖A47119", "苏AJ90T0", "皖AA9680", "皖A58290", "皖A58202", "皖A41967", "皖M16487", "豫QA8179", "皖AB3997", "皖A6D301", "皖A37312"]
 
-    private static final xing=['赵','钱','孙','李','周','吴','郑','王','冯','陈','楚','魏','蒋','沈','韩','杨','武','仵','吕','雒','张']
-    private static final ming=['超','三','一','键','平','丽萍','妙娟','伟','立群','建国','建业','卫国','萌','哲','江涛','辉','建新','海峰','新春','家伟','冰','云景','秦岭','钟楼','鼓楼','雁塔','新城','未央','琴','彪','江']
-    private static final xingSize=xing.size()-1
-    private static final mingSize=ming.size()-1
+    private static
+    final xing = ['赵', '钱', '孙', '李', '周', '吴', '郑', '王', '冯', '陈', '楚', '魏', '蒋', '沈', '韩', '杨', '武', '仵', '吕', '雒', '张']
+    private static
+    final ming = ['超', '三', '一', '键', '平', '丽萍', '妙娟', '伟', '立群', '建国', '建业', '卫国', '萌', '哲', '江涛', '辉', '建新', '海峰', '新春', '家伟', '冰', '云景', '秦岭', '钟楼', '鼓楼', '雁塔', '新城', '未央', '琴', '彪', '江']
+    private static final xingSize = xing.size() - 1
+    private static final mingSize = ming.size() - 1
 
-    String mockUsername(){
-        "${xing[NumberUtils.getRandom(0,xingSize)]}${ming[NumberUtils.getRandom(0,mingSize)]}"
+    String mockUsername() {
+        "${xing[NumberUtils.getRandom(0, xingSize)]}${ming[NumberUtils.getRandom(0, mingSize)]}"
     }
 
 
@@ -158,7 +160,7 @@ class InitService {
         new DangerousType(name: '危险货物运输（8类）', codeNum: '03111', parent: null).save(flush: true)
         new DangerousType(name: '危险货物运输（9类）', codeNum: '03111', parent: null).save(flush: true)
 
-        def a = new SystemType(name: '行政法规', codeNum: '01', parent: null).save(flush: true)
+        new SystemType(name: '行政法规', codeNum: '01', parent: null).save(flush: true)
         new SystemType(name: '章程', codeNum: '02', parent: null).save(flush: true)
         new SystemType(name: '制度', codeNum: '03', parent: null).save(flush: true)
         new SystemType(name: '公约', codeNum: '04', parent: null).save(flush: true)
@@ -198,9 +200,9 @@ class InitService {
     }
 
     private initEmergencyPlan() {
-        new EmergencyPlan(name:'危货(1类1项)应急预案', describe: '沙土', dangerousType:DangerousType.findByCodeNum('03111')).save(flush: true)
-        new EmergencyPlan(name:'危货(1类2项)应急预案', describe: '沙土2', dangerousType:DangerousType.findByCodeNum('03112')).save(flush: true)
-        new EmergencyPlan(name:'危货(1类3项)应急预案', describe: '沙土3', dangerousType:DangerousType.findByCodeNum('03113')).save(flush: true)
+        new EmergencyPlan(name: '危货(1类1项)应急预案', describe: '沙土', dangerousType: DangerousType.findByCodeNum('03111')).save(flush: true)
+        new EmergencyPlan(name: '危货(1类2项)应急预案', describe: '沙土2', dangerousType: DangerousType.findByCodeNum('03112')).save(flush: true)
+        new EmergencyPlan(name: '危货(1类3项)应急预案', describe: '沙土3', dangerousType: DangerousType.findByCodeNum('03113')).save(flush: true)
     }
 
     private initWaybill() {
@@ -349,7 +351,7 @@ class InitService {
         5.times { val ->
             new PassLineBusinessBasicInfo(
                     lineCode: '1',
-                    ownerName: companys[val%4],
+                    ownerName: companys[val % 4],
                     companyCode: "C00000000${val % 4}",
                     licenseCharacter: "${val}",
                     licenseNo: "${val}",
@@ -403,7 +405,6 @@ class InitService {
         new Organization(name: '经开道路运输管理所', code: '23', parent: null).save(flush: true)
         new Organization(name: '业户', code: '24', parent: null).save(flush: true)
 
-
 //        (1..100).each {
 //            new Role(authority: "ROLE_AAA${it}", name: "角色${it}", org: null).save(failOnError: true, flush: true)
 //        }
@@ -412,7 +413,7 @@ class InitService {
         new Role(authority: 'ROLE_COMPANY_DIRVER', name: '驾驶员', org: Organization.findByCode('24')).save(failOnError: true, flush: true)
 
         (1..100).each {
-            def aaa = new User(username: "user${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: mockUsername(), org: Organization.findByCode('24'),companyCode: "C00000000${it%9}").save(failOnError: true, flush: true)
+            def aaa = new User(username: "user${it}", passwordHash: '666666', salt: ValidationUtils.getSecureRandomSalt(), name: mockUsername(), org: Organization.findByCode('24'), companyCode: "C00000000${it % 9}").save(failOnError: true, flush: true)
             UserRole.create aaa, companyRole, true
         }
 
@@ -516,7 +517,7 @@ class InitService {
 
         new Menu(name: '首页', code: 'home', icon: 'fa-home', parent: null, position: 'SIDE_BAR', permissionCode: 'home').save(flush: true)
 
-        def monitorMenu = new Menu(name: '联网联控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR',permissionCode: 'car_real_time_monitor;car_real_time_control;car_history;warning;platform_manage').save(flush: true)
+        def monitorMenu = new Menu(name: '联网联控', code: 'root-monitor', icon: 'fa-eercast', parent: null, position: 'SIDE_BAR', permissionCode: 'car_real_time_monitor;car_real_time_control;car_history;warning;platform_manage').save(flush: true)
         new Menu(name: '企业运营商平台管理', code: 'platformManage', icon: 'fa-columns', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'platform_manage').save(flush: true)
         new Menu(name: '车辆实时监控', code: 'realTimeMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'car_real_time_monitor').save(flush: true)
         new Menu(name: '车辆实时控制', code: 'realTimeMonitorMap', icon: 'fa-map-o', parent: monitorMenu, position: 'SIDE_BAR', permissionCode: 'car_real_time_control').save(flush: true)
@@ -536,7 +537,8 @@ class InitService {
         new Menu(name: '信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'info-list').save(flush: true)
         new Menu(name: '应急预案', code: 'emergencyPlan', icon: 'fa-file-powerpoint-o', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'emergency_plan_manage').save(flush: true)
 
-        def msgManage = new Menu(name: '动态监管', code: 'root-msgmanage', icon: 'fa-indent', parent: null, position: 'SIDE_BAR',permissionCode: 'black_list_manage;white_list_manage;work_order_pending;work_order_list;work_order_feedback;hidden_rectification_order_list;hidden_rectification_order_pending;hidden_rectification_order_feedback;freight_waybill_list;freight_waybill_approve_list;owner_check_record_list').save(flush: true)
+
+        def msgManage = new Menu(name: '动态监管', code: 'root-msgmanage', icon: 'fa-indent', parent: null, position: 'SIDE_BAR', permissionCode: 'black_list_manage;white_list_manage;work_order_pending;work_order_list;work_order_feedback;hidden_rectification_order_list;hidden_rectification_order_pending;hidden_rectification_order_feedback;freight_waybill_list;freight_waybill_approve_list;owner_check_record_list').save(flush: true)
         new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'black_list_manage').save(flush: true)
         new Menu(name: '白名单', code: 'whiteList', icon: 'fa-file-text-o', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'white_list_manage').save(flush: true)
         new Menu(name: '监管工单列表', code: 'workOrder', icon: 'fa-sticky-note-o', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'work_order_list').save(flush: true)
@@ -549,7 +551,7 @@ class InitService {
         new Menu(name: '危货电子路单审核', code: 'freightWaybillApprove', icon: 'fa-list-alt', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'freight_waybill_approve_list').save(flush: true)
         new Menu(name: '查岗信息', code: 'ownerCheckRecord', icon: 'fa-hand-o-right', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'owner_check_record_list').save(flush: true)
 
-        def statisticMenu = new Menu(name: '统计分析', code: 'root-statistic', icon: 'fa-pie-chart', parent: null, position: 'SIDE_BAR',permissionCode: 'work_order_statistic').save(flush: true)
+        def statisticMenu = new Menu(name: '统计分析', code: 'root-statistic', icon: 'fa-pie-chart', parent: null, position: 'SIDE_BAR', permissionCode: 'work_order_statistic').save(flush: true)
         new Menu(name: '业户信息统计', code: 'companyReport', icon: 'fa-line-chart', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'company_statistic').save(flush: true)
         new Menu(name: '客运车辆统计', code: 'passengerStatistic', icon: 'fa-bus', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'passenger_statistic').save(flush: true)
         new Menu(name: '旅游包车统计', code: 'travelStatistic', icon: 'fa-car', parent: statisticMenu, position: 'SIDE_BAR', permissionCode: 'travel_statistic').save(flush: true)
@@ -632,7 +634,7 @@ class InitService {
             saveOrder(flow11, 1, '20170730001', it, 1)
 //            saveOrder(flow21, 2, '20170730005', it, 1)
         }
-        9.times {it->
+        9.times { it ->
             saveOrder(flow11, 3, '20170730002', it, it)
 //            saveOrder(flow21, 2, '20170730003', it, it)
             saveOrder(flow11, 3, '20170730004', it, 1)
@@ -721,13 +723,13 @@ class InitService {
     private initCar() {
         def carType = ['班线客车', '旅游包车', '危险品运输车']
         Date date = new Date()
-        cars.eachWithIndex{ String entry, int i ->
+        cars.eachWithIndex { String entry, int i ->
             new CarBasicInfo(modifyTime: date - i
                     , licenseNo: entry
                     , carPlateColor: '黄色'
                     , brand: '比亚迪'
                     , model: 'SS'
-                    , carType: carType[i%3]
+                    , carType: carType[i % 3]
                     , passengerLevel: '一级'
                     , carColor: '白色'
                     , engNo: "eng${i}"
@@ -749,14 +751,18 @@ class InitService {
                     , carSmokeNo: 4
                     , leafSpringNo: 8
                     , tractionTonnage: 80
-                    , picture: "11111").save(flush: true)
+                    , picture: "11111"
+                    , totalTonnage: 100
+                    , curbWeight: 15
+                    , drivingWay: '1'
+                    , transformLicenseNo: '111').save(flush: true)
 
             new CarBasicOperate(
                     frameNo: getFrameNo(i)
                     , modifyTime: date - i
                     , carfileRecordNo: "${i}".padLeft(10, '0')
-                    , ownerName: companys[i%9]
-                    , ownerCode: "C00000000${i%9}"
+                    , ownerName: companys[i % 9]
+                    , orgCode: "C00000000${i % 9}"
                     , businessLicenseCharacter: "JYXKZ字${i}"
                     , businessLicenseNo: "JYXKZ号${i}"
                     , transformLicenseCharacter: "DLYSZ字${i}"
@@ -789,7 +795,17 @@ class InitService {
                     , locator: 1
                     , driveRecorderSituation: '01'
                     , locatorSituation: '01'
-                    ,).save(flush: true)
+                    , tankExamTime: date - 30
+                    , fuelExamTime: date - 10
+                    , firstGrantTime: date - 200
+                    , licensePlate: entry
+                    , carColor: '白色'
+                    , anchored: '1'
+                    , anchoredName: '张三'
+                    , anchoredAddress: '1'
+                    , anchoredPhone: '88888888'
+                    , administrativeDivisionCode: '029'
+                    , lineType: '1').save(flush: true)
         }
     }
 
@@ -880,7 +896,7 @@ class InitService {
     }
 
     private initRegistrationInformationCarinfo() {
-        cars.eachWithIndex{ String entry, int i ->
+        cars.eachWithIndex { String entry, int i ->
             new RegistrationInformationCarinfo(
                     vehicleNo: entry
                     , vehicleColor: '白色'
@@ -893,14 +909,14 @@ class InitService {
         }
     }
 
-    private getFrameNo(int i){
-        "frameNo"+"${i}".padLeft(5, '0')
+    private getFrameNo(int i) {
+        "frameNo" + "${i}".padLeft(5, '0')
     }
 
     private initCompanyAndRegulation() {
-        new OwnerIdentity(ownerName: "安徽省合肥汽车客运有限公司"
-                , companyCode: "C000000000"
-                , ownerCode: "C000000000"
+        new OwnerIdentity(name: "安徽省合肥汽车客运有限公司"
+                , modifyTime: new Date()
+                , orgCode: "C000000000"
                 , ownerAddress: "明光路168号"
                 , postCode: 230000
                 , administrativeDivisionName: '蜀山区'
@@ -914,10 +930,10 @@ class InitService {
                 , telephone: "15387673452"
                 , email: "wushan@163.com"
                 , website: "http://www.xiaojukeji.com"
-                , shortName: '合肥汽运').save(flush: true)
-        new OwnerIdentity(ownerName: "合肥新亚汽车客运公司"
-                , companyCode: "C000000001"
-                , ownerCode: "C000000001"
+                , ownerAbbreviation: '合肥汽运').save(flush: true)
+        new OwnerIdentity(name: "合肥新亚汽车客运公司"
+                , modifyTime: new Date()
+                , orgCode: "C000000001"
                 , ownerAddress: "胜利路大窑湾1号附近"
                 , postCode: 230000
                 , administrativeDivisionName: '蜀山区'
@@ -931,10 +947,10 @@ class InitService {
                 , telephone: "15387676253"
                 , email: "xinya@163.com"
                 , website: "http://www.xinya.com"
-                , shortName: '新亚汽运').save(flush: true)
-        new OwnerIdentity(ownerName: "合肥长丰县宏业汽车客运有限公司"
-                , companyCode: "C000000002"
-                , ownerCode: "C000000002"
+                , ownerAbbreviation: '新亚汽运').save(flush: true)
+        new OwnerIdentity(name: "合肥长丰县宏业汽车客运有限公司"
+                , modifyTime: new Date()
+                , orgCode: "C000000002"
                 , ownerAddress: "濉溪东路9号嘉华中心A座15层"
                 , postCode: 230000
                 , administrativeDivisionName: '长丰县'
@@ -948,10 +964,10 @@ class InitService {
                 , telephone: "13387673452"
                 , email: "hongye@163.com"
                 , website: "http://www.hongye.com"
-                , shortName: '宏业客运').save(flush: true)
-        new OwnerIdentity(ownerName: "合肥客运旅游汽车公司"
-                , companyCode: "C000000003"
-                , ownerCode: "C000000003"
+                , ownerAbbreviation: '宏业客运').save(flush: true)
+        new OwnerIdentity(name: "合肥客运旅游汽车公司"
+                , modifyTime: new Date()
+                , orgCode: "C000000003"
                 , ownerAddress: "安徽省合肥市瑶海区大窑湾路5号"
                 , postCode: 230000
                 , administrativeDivisionName: '瑶海区'
@@ -965,10 +981,10 @@ class InitService {
                 , telephone: "15387673452"
                 , email: "hk@163.com"
                 , website: "http://www.hk.com"
-                , shortName: '合肥客运').save(flush: true)
-        new OwnerIdentity(ownerName: "锐致货运公司"
-                , companyCode: "C000000004"
-                , ownerCode: "C000000004"
+                , ownerAbbreviation: '合肥客运').save(flush: true)
+        new OwnerIdentity(name: "锐致货运公司"
+                , modifyTime: new Date()
+                , orgCode: "C000000004"
                 , ownerAddress: "锐致货运公司(合肥总部)"
                 , postCode: 230000
                 , administrativeDivisionName: '蜀山区'
@@ -982,10 +998,10 @@ class InitService {
                 , telephone: "15387673452"
                 , email: "wushan@163.com"
                 , website: "http://www.xiaojukeji.com"
-                , shortName: '合肥汽运').save(flush: true)
-        new OwnerIdentity(ownerName: "合肥齐力货运公司"
-                , companyCode: "C000000005"
-                , ownerCode: "C000000005"
+                , ownerAbbreviation: '合肥汽运').save(flush: true)
+        new OwnerIdentity(name: "合肥齐力货运公司"
+                , modifyTime: new Date()
+                , orgCode: "C000000005"
                 , ownerAddress: "莱茵河畔花园10幢"
                 , postCode: 230000
                 , administrativeDivisionName: '蜀山区'
@@ -999,10 +1015,10 @@ class InitService {
                 , telephone: "15387673452"
                 , email: "wushan@163.com"
                 , website: "http://www.xiaojukeji.com"
-                , shortName: '合肥汽运').save(flush: true)
-        new OwnerIdentity(ownerName: "合肥铂达货运公司"
-                , companyCode: "C000000006"
-                , ownerCode: "C000000006"
+                , ownerAbbreviation: '合肥汽运').save(flush: true)
+        new OwnerIdentity(name: "合肥铂达货运公司"
+                , modifyTime: new Date()
+                , orgCode: "C000000006"
                 , ownerAddress: "石台路118号附近"
                 , postCode: 230000
                 , administrativeDivisionName: '蜀山区'
@@ -1016,10 +1032,10 @@ class InitService {
                 , telephone: "15387673452"
                 , email: "wushan@163.com"
                 , website: "http://www.xiaojukeji.com"
-                , shortName: '合肥汽运').save(flush: true)
-        new OwnerIdentity(ownerName: "合肥远征货运公司"
-                , companyCode: "C000000007"
-                , ownerCode: "C000000007"
+                , ownerAbbreviation: '合肥汽运').save(flush: true)
+        new OwnerIdentity(name: "合肥远征货运公司"
+                , modifyTime: new Date()
+                , orgCode: "C000000007"
                 , ownerAddress: "047县道附近"
                 , postCode: 230000
                 , administrativeDivisionName: '蜀山区'
@@ -1033,10 +1049,10 @@ class InitService {
                 , telephone: "15387673452"
                 , email: "wushan@163.com"
                 , website: "http://www.xiaojukeji.com"
-                , shortName: '合肥汽运').save(flush: true)
-        new OwnerIdentity(ownerName: "合肥聚贤货运有限责任公司"
-                , companyCode: "C000000008"
-                , ownerCode: "C000000008"
+                , ownerAbbreviation: '合肥汽运').save(flush: true)
+        new OwnerIdentity(name: "合肥聚贤货运有限责任公司"
+                , modifyTime: new Date()
+                , orgCode: "C000000008"
                 , ownerAddress: "新安江路漕冲物流园南门"
                 , postCode: 230000
                 , administrativeDivisionName: '蜀山区'
@@ -1050,23 +1066,34 @@ class InitService {
                 , telephone: "15387673452"
                 , email: "wushan@163.com"
                 , website: "http://www.xiaojukeji.com"
-                , shortName: '合肥汽运').save(flush: true)
+                , ownerAbbreviation: '合肥汽运').save(flush: true)
 
+        Date date = new Date()
 
-        companys.eachWithIndex{val,index->
+        companys.eachWithIndex { val, index ->
             new OwnerManageInfo(
-                    companyCode: "C00000000${index}",
+                    orgCode: "C00000000${index}",
                     licenseCharacter: "字:00000${index}",
                     licenseNo: "3795${index}",
-                    beginTime: new Date()-index*100,
+                    beginTime: new Date() - index * 100,
                     endTime: new Date(117, 8 + index, 10 + index),
                     grantOrganization: "合肥市道路运输管理处",
-                    checkTime: new Date()-2*index,
+                    checkTime: new Date() - 2 * index,
                     domicileOperateName: "蜀山区户籍所",
                     domicileOperateNo: "0001",
                     paymentSituation: "1",
-                    licenseChangeTimes: "${index+1}",
-                    inspectTreatmentSituation: "2"
+                    licenseChangeTimes: "${index + 1}",
+                    inspectTreatmentSituation: "2",
+                    firstGrantTime:date-100,
+                    openTime:date-95,
+                    manageScope:'1',
+                    ownerStatius:'1',
+                    examYear: '2017',
+                    examTime: date-10,
+                    creditLevel: '1',
+                    fileNumber: "20170101${index}",
+                    cityAbbreviation: '合肥',
+                    branchOrgAddress: '**-**-**'
             ).save(flush: true)
 
             new CompanyRegulation(
@@ -1099,28 +1126,28 @@ class InitService {
     }
 
     private initConfigure() {
-        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值',note: '单位：%').save(flush: true)
+        new Configure(configKey: 'carRateAlarm', configValue: '100', name: '车辆入网率告警阈值', note: '单位：%').save(flush: true)
     }
 //    发布信息--法律法规
-    private initInfoaudit(){
-        new Infoaudit(type:'政策法律法规',publisher:1,receiver:1,auditor:1,title:'《机动车驾驶证申领和使用规定》',content:'  第一条  根据《中华人民共和国道路交通安全法》及其实施条例、《中华人民共和国行政许可法》，制定本规定。\n' +
+    private initInfoaudit() {
+        new Infoaudit(type: '政策法律法规', publisher: 1, receiver: 1, auditor: 1, title: '《机动车驾驶证申领和使用规定》', content: '  第一条  根据《中华人民共和国道路交通安全法》及其实施条例、《中华人民共和国行政许可法》，制定本规定。\n' +
                 '    第二条  本规定由公安机关交通管理部门负责实施。\n' +
                 '    省级公安机关交通管理部门负责本省（自治区、直辖市）机动车驾驶证业务工作的指导、检查和监督。直辖市公安机关交通管理部门车辆管理所、设区的市或者相当于同级的公安机关交通管理部门车辆管理所负责办理本行政辖区内机动车驾驶证业务。\n' +
                 '    县级公安机关交通管理部门车辆管理所可以办理本行政辖区内低速载货汽车、三轮汽车、摩托车驾驶证业务，以及其他机动车驾驶证换发、补发、审验、提交身体条件证明等业务。条件具备的，可以办理小型汽车、小型自动挡汽车、残疾人专用小型自动挡载客汽车驾驶证业务，以及其他机动车驾驶证的道路交通安全法律、法规和相关知识考试业务。具体业务范围和办理条件由省级公安机关交通管理部门确定。\n' +
                 '第三条  车辆管理所办理机动车驾驶证业务，应当遵循严格、公开、公正、便民的原则。\n' +
-                '车辆管理所办理机动车驾驶证业务，应当依法受理申请人的申请，审核申请人提交的材料。对符合条件的，按照规定的标准、程序和期限办理机动车驾驶证。对申请材料不齐全或者不符合法定形式的，应当一次书面告知申请人需要补正的全部内容。对不符合条件的，应当书面告知理由。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
-        new Infoaudit(type:'政策法律法规',publisher:2,receiver:2,auditor:2,title:'《道路交通安全违法行为处理程序规定》',content:'修订后的《道路交通安全违法行为处理程序规定》已经2008年11月17日公安部部长办公会议通过，现予发布，自2009年4月1日起施行<br>第一条 为了规范道路交通安全违法行为处理程序，保障公安机关交通管理部门正确履行职责，保护公民、法人和其他组织的合法权益，根据《中华人民共和国道路交通安全法》及其实施条例等法律、行政法规制定本规定。\n' +
+                '车辆管理所办理机动车驾驶证业务，应当依法受理申请人的申请，审核申请人提交的材料。对符合条件的，按照规定的标准、程序和期限办理机动车驾驶证。对申请材料不齐全或者不符合法定形式的，应当一次书面告知申请人需要补正的全部内容。对不符合条件的，应当书面告知理由。', status: 2, dateCreated: new Date(), vimTime: new Date(), auditTime: new Date()).save(flush: true)
+        new Infoaudit(type: '政策法律法规', publisher: 2, receiver: 2, auditor: 2, title: '《道路交通安全违法行为处理程序规定》', content: '修订后的《道路交通安全违法行为处理程序规定》已经2008年11月17日公安部部长办公会议通过，现予发布，自2009年4月1日起施行<br>第一条 为了规范道路交通安全违法行为处理程序，保障公安机关交通管理部门正确履行职责，保护公民、法人和其他组织的合法权益，根据《中华人民共和国道路交通安全法》及其实施条例等法律、行政法规制定本规定。\n' +
                 '　　第二条 公安机关交通管理部门及其交通警察对道路交通安全违法行为（以下简称违法行为）的处理程序，在法定职权范围内依照本规定实施。\n' +
                 '　　第三条 对违法行为的处理应当遵循合法、公正、文明、公开、及时的原则，尊重和保障人权，保护公民的人格尊严。\n' +
                 '　　对违法行为的处理应当坚持教育与处罚相结合的原则，教育公民、法人和其他组织自觉遵守道路交通安全法律法规。\n' +
-                '　　对违法行为的处理，应当以事实为依据，与违法行为的事实、性质、情节以及社会危害程度相当。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
-        new Infoaudit(type:'政策法律法规',publisher:3,receiver:3,auditor:3,title:'《道路交通事故处理程序规定》',content:'第一条 为了规范道路交通事故处理程序，保障公安机关交通管理部门依法履行职责，保护道路交通事故当事人的合法权益，根据《中华人民共和国道路交通安全法》及其实施条例等有关法律、法规，制定本规定。\n' +
+                '　　对违法行为的处理，应当以事实为依据，与违法行为的事实、性质、情节以及社会危害程度相当。', status: 2, dateCreated: new Date(), vimTime: new Date(), auditTime: new Date()).save(flush: true)
+        new Infoaudit(type: '政策法律法规', publisher: 3, receiver: 3, auditor: 3, title: '《道路交通事故处理程序规定》', content: '第一条 为了规范道路交通事故处理程序，保障公安机关交通管理部门依法履行职责，保护道路交通事故当事人的合法权益，根据《中华人民共和国道路交通安全法》及其实施条例等有关法律、法规，制定本规定。\n' +
                 '第二条 公安机关交通管理部门处理道路交通事故，应当遵循公正、公开、便民、效率的原则。\n' +
-                '第三条 交通警察处理道路交通事故，应当取得相应等级的处理道路交通事故资格。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
-        new Infoaudit(type:'政策法律法规',publisher:4,receiver:4,auditor:4,title:'《中华人民共和国道路交通安全法实施条例》',content:'第一章　总　则编辑\n' +
+                '第三条 交通警察处理道路交通事故，应当取得相应等级的处理道路交通事故资格。', status: 2, dateCreated: new Date(), vimTime: new Date(), auditTime: new Date()).save(flush: true)
+        new Infoaudit(type: '政策法律法规', publisher: 4, receiver: 4, auditor: 4, title: '《中华人民共和国道路交通安全法实施条例》', content: '第一章　总　则编辑\n' +
                 '第一条　根据《中华人民共和国道路交通安全法》（以下简称道路交通安全法）的规定，制定本条例。\n' +
                 '第二条　中华人民共和国境内的车辆驾驶人、行人、乘车人以及与道路交通活动有关的单位和个人，应当遵守道路交通安全法和本条例。\n' +
-                '第三条　县级以上地方各级人民政府应当建立、健全道路交通安全工作协调机制，组织有关部门对城市建设项目进行交通影响评价，制定道路交通安全管理规划，确定管理目标，制定实施方案。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
+                '第三条　县级以上地方各级人民政府应当建立、健全道路交通安全工作协调机制，组织有关部门对城市建设项目进行交通影响评价，制定道路交通安全管理规划，确定管理目标，制定实施方案。', status: 2, dateCreated: new Date(), vimTime: new Date(), auditTime: new Date()).save(flush: true)
     }
 
 }

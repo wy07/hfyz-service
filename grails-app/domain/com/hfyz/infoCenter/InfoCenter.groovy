@@ -4,15 +4,20 @@ class InfoCenter {
 
     Long sourceId
     SourceType sourceType
-    String title
+    String content
     Date dateCreated
     static constraints = {
         sourceId nullable: false
         sourceType nullable: false
-        title blank: false, nullable: false
+        content blank: false, nullable: false
     }
 
     static mapping = {
-        id generator:'native', params:[sequence:'infoCenter_seq'], defaultValue: "nextval('infoCenter_seq')"
+        comment '消息基础表'
+        id generator:'native', params:[sequence:'infocenter_seq'], defaultValue: "nextval('infocenter_seq')"
+        sourceId comment:'消息源'
+        sourceType comment:'消息类型'
+        content comment:'消息体'
+        dateCreated comment:'创建时间'
     }
 }

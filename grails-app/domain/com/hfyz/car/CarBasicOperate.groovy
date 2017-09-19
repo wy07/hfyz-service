@@ -5,7 +5,7 @@ class CarBasicOperate {  //营运车辆_基本信息_营运信息
     Date modifyTime                 //更新时间
     String carfileRecordNo          //车辆档案号
     String ownerName                //业户名称
-    String ownerCode                //业户编码(组织机构代码）*
+    String orgCode                  //组织机构代码
     String businessLicenseCharacter //经营许可证字
     String businessLicenseNo        //经营许可证号
     String transformLicenseCharacter//道路运输证字
@@ -38,6 +38,17 @@ class CarBasicOperate {  //营运车辆_基本信息_营运信息
     Integer locator                 //是否安装定位系统
     String driveRecorderSituation   //行车记录仪安装状态
     String locatorSituation         //定位系统安装状态
+    Date tankExamTime               //罐体检测日期
+    Date fuelExamTime               //燃油核查日期
+    Date firstGrantTime             //首次发证日期
+    String licensePlate             //车牌号码
+    String carColor                 //车辆颜色
+    String anchored                 //挂靠
+    String anchoredName             //挂靠车主姓名
+    String anchoredAddress          //挂靠车主地址
+    String anchoredPhone            //挂靠车主电话
+    String administrativeDivisionCode //行政区划代码
+    String lineType                 //班线类型
     String frameNo                  //车架号
 
     static constraints = {

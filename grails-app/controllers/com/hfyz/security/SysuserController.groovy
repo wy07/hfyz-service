@@ -69,7 +69,7 @@ class SysuserController implements ControllerHelper {
                                                , companyCode: user.companyCode
                                                , orgId      : user.org?.id
                                                , orgCode    : user.org?.code
-                                               , enterpirse : OwnerIdentity.findByCompanyCode(user.companyCode)?.ownerName
+                                               , enterpirse : OwnerIdentity.findByOrgCode(user.companyCode)?.name
             ]])
         }
 

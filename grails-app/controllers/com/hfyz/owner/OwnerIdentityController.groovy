@@ -24,12 +24,12 @@ class OwnerIdentityController implements ControllerHelper {
     }
 
     def view() {
-        withOwner(params.long('id')) { owner ->
+        withOwner(params.long('id')) { OwnerIdentity owner ->
             renderSuccessesWithMap([owner: [id                          : owner.id
-                                            , ownerName                 : owner.ownerName     //业户名称*
-                                            , shortName                 : owner.shortName     //业户简称
-                                            , companyCode               : owner.companyCode   //业户编码(组织机构代码）*
-                                            , ownerCode                 : owner.ownerCode     //企业单位代码
+                                            , ownerName                 : owner.name     //业户名称*
+                                            , shortName                 : owner.ownerAbbreviation     //业户简称
+                                            , companyCode               : owner.orgCode   //业户编码(组织机构代码）*
+                                            , ownerCode                 : owner.orgCode     //企业单位代码
                                             , ownerAddress              : owner.ownerAddress
                                             , postCode                  : owner.postCode
                                             , administrativeDivisionName: owner.administrativeDivisionName

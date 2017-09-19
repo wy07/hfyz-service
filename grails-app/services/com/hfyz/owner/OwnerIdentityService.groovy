@@ -17,14 +17,14 @@ class OwnerIdentityService {
 
     def getOwnerList(
             def max,
-            def offset, String ownerName, String companyCode, String dateBegin, String dateEnd, String userCompanyCode) {
+            def offset, String ownerName, String orgCode, String dateBegin, String dateEnd, String userCompanyCode) {
         def params = [:]
         def type = dateBegin && dateEnd
         if (ownerName) {
-            params.ownerName = ownerName
+            params.name = ownerName
         }
-        if (companyCode) {
-            params.companyCode = companyCode
+        if (orgCode) {
+            params.orgCode = orgCode
         }
         if (type) {
             params.dateBegin = dateBegin
@@ -35,19 +35,19 @@ class OwnerIdentityService {
         }
         Promise ownerCount = Promises.task {
             SQLHelper.withDataSource(dataSource) { sql ->
-                sql.firstRow(getCountSql(type, ownerName, companyCode, userCompanyCode), params).count ?: 0
+                sql.firstRow(getCountSql(type, ownerName, orgCode, userCompanyCode), params).count ?: 0
             }
 
         }
 
         Promise ownerList = Promises.task {
             SQLHelper.withDataSource(dataSource) { sql ->
-                sql.rows(getListSql(type, ownerName, companyCode, userCompanyCode), params + [max: max, offset: offset])
+                sql.rows(getListSql(type, ownerName, orgCode, userCompanyCode), params + [max: max, offset: offset])
             }?.collect { obj ->
                 [id                 : obj.id,
-                 ownerName          : obj.ownerName,
-                 companyCode        : obj.companyCode,
-                 ownerCode          : obj.ownerCode,
+                 ownerName          : obj.name,
+                 companyCode        : obj.orgCode,
+                 ownerCode          : obj.orgCode,
                  economicType       : obj.economicType,
                  legalRepresentative: obj.legalRepresentative,
                  operateManager     : obj.operateManager,
@@ -61,12 +61,12 @@ class OwnerIdentityService {
     def getAll(User user) {
         def resultList = OwnerIdentity.createCriteria().list() {
             if (user.isCompanyUser()) {
-                eq('companyCode', user.companyCode)
+                eq('orgCode', user.companyCode)
             }
         }?.collect({ OwnerIdentity info ->
             [
-                    code: info.companyCode,
-                    name: info.ownerName
+                    code: info.orgCode,
+                    name: info.name
             ]
         })
         return resultList
@@ -78,50 +78,49 @@ class OwnerIdentityService {
      * @param ownerName 业户名称
      * @param companyCode 业户编码
      */
-    private static getListSql(boolean type, String ownerName, String companyCode, String userCompanyCode) {
+    private static getListSql(boolean type, String ownerName, String orgCode, String userCompanyCode) {
         String listSql = """
           SELECT
             bas.id id,
-            bas.owner_name ownerName,
-            bas.company_code companyCode,
-            bas.owner_code ownerCode,
+            bas.name,
+            bas.org_code orgCode,
             bas.economic_type economicType,
             bas.legal_representative legalRepresentative,
             bas.operate_manager operateManager,
             bas.phone phone,
             mag.end_time endTime
-          FROM owner_basicinfo_owneridentity bas 
-          LEFT JOIN owner_basicinfo_manageinfo mag ON bas.company_code = mag.company_code
+          FROM owner_basicinfo_owneridentity bas
+          LEFT JOIN owner_basicinfo_manageinfo mag ON bas.org_code = mag.org_code
           WHERE 1=1 """
         if (type) {
             listSql += " AND mag.end_time  BETWEEN to_timestamp(:dateBegin,'YYYY-MM-DD HH24:MI:SS') and to_timestamp(:dateEnd,'YYYY-MM-DD HH24:MI:SS') "
         }
         if (ownerName) {
-            listSql += " AND bas.owner_name=:ownerName "
+            listSql += " AND bas.name=:name "
         }
-        if (companyCode) {
-            listSql += " AND bas.company_code=:companyCode "
+        if (orgCode) {
+            listSql += " AND bas.org_code=:orgCode "
         }
         if (userCompanyCode) {
-            listSql += " and bas.company_code=:userCompanyCode"
+            listSql += " and bas.org_code=:userCompanyCode"
         }
         listSql += " limit :max offset :offset "
         return listSql
     }
 
-    private static getCountSql(boolean type, String ownerName, String companyCode, String userCompanyCode) {
-        String countSql = "SELECT count(*) FROM owner_basicinfo_owneridentity bas  LEFT JOIN owner_basicinfo_manageinfo mag ON bas.company_code = mag.company_code WHERE 1=1 "
+    private static getCountSql(boolean type, String ownerName, String orgCode, String userCompanyCode) {
+        String countSql = "SELECT count(*) FROM owner_basicinfo_owneridentity bas  LEFT JOIN owner_basicinfo_manageinfo mag ON bas.org_code = mag.org_code WHERE 1=1 "
         if (type) {
             countSql += " AND mag.end_time  BETWEEN to_timestamp(:dateBegin,'YYYY-MM-DD HH24:MI:SS') and to_timestamp(:dateEnd,'YYYY-MM-DD HH24:MI:SS') "
         }
         if (ownerName) {
-            countSql += " AND bas.owner_name=:ownerName "
+            countSql += " AND bas.name=:name "
         }
-        if (companyCode) {
-            countSql += " AND bas.company_code=:companyCode "
+        if (orgCode) {
+            countSql += " AND bas.org_code=:orgCode "
         }
         if (userCompanyCode) {
-            countSql += " AND bas.company_code=:userCompanyCode "
+            countSql += " AND bas.org_code=:userCompanyCode "
         }
         return countSql
     }
@@ -129,12 +128,12 @@ class OwnerIdentityService {
     def getCompanyListByChar(String companyName) {
         def companyList = OwnerIdentity.createCriteria().list() {
             if (companyName) {
-                like("ownerName", "${companyName}%")
+                like("name", "${companyName}%")
             }
         }?.collect {
             OwnerIdentity obj ->
-                [ownerName  : obj.ownerName,
-                 companyCode: obj.companyCode]
+                [ownerName  : obj.name,
+                 companyCode: obj.orgCode]
         }
         return [companyList: companyList]
     }
@@ -144,20 +143,20 @@ class OwnerIdentityService {
             sql.rows(getAppraiseStatisticSql(ownerName))
         }?.collect { obj ->
             [ownerName  : obj.ownername,
-             companyCode: obj.companycode,
+             companyCode: obj.orgCode,
              total      : obj.total]
         }
         return result
     }
 
     private static getAppraiseStatisticSql(String ownerName) {
-        String sql = "select ownid.owner_name ownerName,ownid.company_code companyCode, count(cr.company_code) total from owner_basicinfo_owneridentity ownid " +
+        String sql = "select ownid.name ownerName,ownid.org_code orgCode, count(cr.company_code) total from owner_basicinfo_owneridentity ownid " +
                 " left join company_regulation cr on cr.company_code = ownid.company_code "
         if (ownerName) {
-            sql += " where ownid.owner_name like '${ownerName}%' "
+            sql += " where ownid.name like '${ownerName}%' "
         }
-        sql += " group by ownid.company_code, ownid.owner_name " +
-                " order by ownid.owner_name asc;"
+        sql += " group by ownid.org_code, ownid.name " +
+                " order by ownid.name asc;"
         return sql
     }
 }

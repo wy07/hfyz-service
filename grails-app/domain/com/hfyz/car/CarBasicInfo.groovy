@@ -12,7 +12,7 @@ class CarBasicInfo {        //营运车辆_基本信息_车辆信息
     String engNo       //发动机号
     String frameNo     //车架号
     String carIdentityCode //车辆识别VIP码
-    Integer seatNo     //核定载客位
+    BigDecimal seatNo     //核定载客位
     BigDecimal carTonnage  //车辆（挂车）吨位
     Integer carBoxNo   //车辆箱位
     BigDecimal volume  //罐体容积
@@ -28,7 +28,12 @@ class CarBasicInfo {        //营运车辆_基本信息_车辆信息
     Integer carWidth  //车宽
     Integer carSmokeNo //车轴数
     Integer leafSpringNo //后轴钢板弹簧片数
-    Integer tractionTonnage //准牵引总质量
+    BigDecimal tractionTonnage //准牵引总质量
+    BigDecimal totalTonnage //总质量
+    BigDecimal curbWeight //整备质量
+    String drivingWay//驱动方式
+    String transformLicenseNo //道路运输证号
+
     static constraints = {
     }
     static mapping = {

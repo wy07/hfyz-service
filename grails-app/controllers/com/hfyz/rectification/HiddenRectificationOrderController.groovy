@@ -50,7 +50,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
         hiddenDanger.dealineDate = new Date().parse('yyyy-MM-dd HH:mm', json.dealine)
         hiddenDanger.billNo = System.currentTimeMillis()+""+new Random().nextInt(100000).toString().padLeft(5, '0')
         hiddenDanger.status = HiddenRectificationOrderStatus.QC
-        hiddenDanger.enterprise = findCompangCodeByOwnerCode(json.companyCode).ownerName
+        hiddenDanger.enterprise = findOwnerIdentityByOrgCode(json.companyCode).name
         hiddenDanger.document = documentService.save(upload)
         hiddenDanger.save(flush: true,failOnError: true)
         renderSuccess()
@@ -61,15 +61,11 @@ class HiddenRectificationOrderController implements ControllerHelper {
         renderSuccessesWithMap(ownerIdentityService.getCompanyListByChar(request.JSON.enterpirse))
     }
 
-    def findCompanyNameByOwnerName(String name){
-        return OwnerIdentity.findByOwnerName(name)
+    OwnerIdentity findOwnerIdentityByOrgCode(String code){
+        return OwnerIdentity.findByOrgCode(code)
     }
 
-    def findCompangCodeByOwnerCode(String code){
-        return OwnerIdentity.findByCompanyCode(code)
-    }
-
-    def findReviewAndApprovalByBillId(def obj){
+    ReviewAndApprovalForm findReviewAndApprovalByBillId(def obj){
         return ReviewAndApprovalForm.findByBillId(obj)
 
     }
@@ -128,7 +124,7 @@ class HiddenRectificationOrderController implements ControllerHelper {
                 hiddenRectificationOrderIns.dealineDate = json.dealine ? new Date()
                         .parse('yyyy-MM-dd HH:mm', json.dealine) : null
                 hiddenRectificationOrderIns.status = HiddenRectificationOrderStatus.QC
-                hiddenRectificationOrderIns.enterprise = findCompangCodeByOwnerCode(json.companyCode).ownerName
+                hiddenRectificationOrderIns.enterprise = findOwnerIdentityByOrgCode(json.companyCode).name
                 if(upload) {
                     def document = hiddenRectificationOrderIns.document
                     hiddenRectificationOrderIns.document = null
