@@ -97,8 +97,8 @@ class InBoxService {
                 on menu.permission_code = permission_group.code 
                 where menu.code = :menuCode)
                 
-                insert into in_box(version, date_created,info_center_id, accepter_id, source_id, source_type, title, is_read, action)
-                select distinct 0, current_timestamp, info.id, user_id, info.source_id, info.source_type, info.title, false, :action
+                insert into in_box(version, date_created,info_center_id, accepter_id, source_id, source_type, content, is_read, action)
+                select distinct 0, current_timestamp, info.id, user_id, info.source_id, info.source_type, info.content, false, :action
                 from role, user_role, info_center info, sys_user, t
                 where role.authority = t.permission and user_role.role_id = role.id and info.id= :id
                 """
@@ -113,8 +113,8 @@ class InBoxService {
 
     private static String saveWorkOrderInBoxSql(nextIsCompany) {
         String sqlStr = """     
-               insert into in_box(version, date_created,info_center_id, accepter_id, source_id, source_type, title, is_read, action)
-               select distinct 0, current_timestamp, info.id, user_id, info.source_id, info.source_type, info.title, false, t_order.status
+               insert into in_box(version, date_created,info_center_id, accepter_id, source_id, source_type, content, is_read, action)
+               select distinct 0, current_timestamp, info.id, user_id, info.source_id, info.source_type, info.content, false, t_order.status
                from role, user_role, info_center info, work_order t_order, sys_user
                where role.authority = :role and user_role.role_id = role.id and info.id= :id and t_order.id = info.source_id
                 """

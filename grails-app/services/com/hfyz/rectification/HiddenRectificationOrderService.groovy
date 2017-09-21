@@ -73,10 +73,10 @@ class HiddenRectificationOrderService {
                             ,table1.dealine_date  dealineDate
                         FROM hidden_rectification_order table1 
                             , OWNER_BASICINFO_OWNERIDENTITY table2 
-                        WHERE table2.company_code = table1.company_code
+                        WHERE table2.org_code = table1.company_code
                      """
         if(company){
-            sql += " and table2.owner_name like :company "
+            sql += " and table2.name like :company%"
         }
         if(startDate){
             sql += " and table1.inspection_date >= :sd::timestamp "
@@ -111,10 +111,10 @@ class HiddenRectificationOrderService {
                         SELECT count(table1.id)
                         FROM hidden_rectification_order table1 
                             , OWNER_BASICINFO_OWNERIDENTITY table2 
-                        WHERE table2.company_code = table1.company_code
+                        WHERE table2.org_code = table1.company_code
                      """
         if(company){
-            sql += " and table2.owner_name like :company "
+            sql += " and table2.name like :company%"
         }
         if(startDate){
             sql += " and table1.inspection_date >= :sd::timestamp "

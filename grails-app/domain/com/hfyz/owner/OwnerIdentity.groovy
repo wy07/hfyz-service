@@ -7,8 +7,9 @@ import java.sql.Blob
  */
 
 class OwnerIdentity {
-    String ownerName                  //业户名称*
-    String companyCode                //业户编码(组织机构代码）*
+    Date modifyTime                   //更新时间
+    String name                       //业户名称
+    String orgCode                    //业户编码(组织机构代码）
     String parentCompanyName          //上级企业名称
     String ownerAddress               //业户地址
     Number postCode                   //邮政编码
@@ -25,13 +26,15 @@ class OwnerIdentity {
     String telephone                  //手机号码
     String email                      //电子邮箱
     String website                    //网址
-    String parentOwner                //母公司
-    String shortName                  //业户简称
-    String ownerCode                  //企业单位代码
+    String licenseNo
+    String motherCompany              //母公司
+    String ownerType                  //业户类型
+    String ownerAbbreviation          //业户简称
+//    String companyCode                //企业单位代码（金桥字段，与数据中心确认，无用）
 
     static constraints = {
-        ownerName unique: true, blank: false, maxSize: 100                   //业户名称
-        companyCode unique: true, blank: false, maxSize: 10                    //业户编码(组织机构代码）
+        name unique: true, blank: false, maxSize: 100                   //业户名称
+        orgCode unique: true, blank: false, maxSize: 30                    //业户编码(组织机构代码）
         parentCompanyName nullable: true, blank: false, maxSize: 100         //上级企业名称
         ownerAddress nullable: true, blank: false, maxSize: 100              //业户地址
         postCode nullable: true, maxSize: 6                                     //邮政编码
@@ -48,10 +51,11 @@ class OwnerIdentity {
         telephone nullable: true, blank: false, maxSize: 11                  //手机号码
         email nullable: true, blank: false, maxSize: 50                      //电子邮箱
         website nullable: true, blank: false, maxSize: 50                    //网址
-        parentOwner nullable: true, blank: false                             //母公司
-        shortName nullable: true, blank: false                             //业户简称
-        ownerCode nullable: true, blank: false                             //企业单位代码
-
+        motherCompany nullable: true, blank: false                             //母公司
+        ownerAbbreviation nullable: true, blank: false                             //业户简称
+//        companyCode nullable: true, blank: false                             //企业单位代码
+        ownerType nullable: true, blank: false
+        licenseNo nullable: true, blank: false
     }
 
     static mapping = {
