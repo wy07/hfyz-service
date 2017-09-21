@@ -3,7 +3,6 @@ package com.hfyz.support
 import com.commons.utils.NumberUtils
 import com.commons.utils.ValidationUtils
 import com.hfyz.cases.RegisterReport
-import com.hfyz.document.Document
 import com.hfyz.infoManage.Infoaudit
 import com.hfyz.owner.CompanyRegulation
 
@@ -26,6 +25,7 @@ import com.hfyz.roster.WhiteList
 import com.hfyz.warning.AlarmLevel
 import com.hfyz.warning.Warning
 import com.hfyz.waybill.EmergencyPlan
+import com.hfyz.waybill.FreightStation
 import com.hfyz.workOrder.WorkOrder
 import com.hfyz.workOrder.WorkOrderFlow
 import com.hfyz.workOrder.WorkOrderFlowAction
@@ -95,6 +95,7 @@ class InitService {
         initConfigure()
         initCar()
         initInfoaudit()
+        initFreightStation()
     }
 
     private initSystemCode() {
@@ -137,32 +138,46 @@ class InitService {
         new UnitNature(name: "事业单位", codeNum: "30", parent: unitNatureP).save(flush: true)
         new UnitNature(name: "社会团体", codeNum: "40", parent: unitNatureP).save(flush: true)
 
-        def dangerousType = new DangerousType(name: '经营性道路危险货物运输', codeNum: '03100', parent: null).save(flush: true)
-        new DangerousType(name: '危险货物运输（1类1项）', codeNum: '03111', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（1类2项）', codeNum: '03112', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（1类3项）', codeNum: '03113', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（1类4项）', codeNum: '03114', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（1类5项）', codeNum: '03115', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（1类6项）', codeNum: '03116', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（2类1项）', codeNum: '03121', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（2类2项）', codeNum: '03122', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（2类3项）', codeNum: '03123', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（3类）', codeNum: '03131', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（4类1项）', codeNum: '03141', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（4类2项）', codeNum: '03142', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（4类3项）', codeNum: '03143', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（5类1项）', codeNum: '03151', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（5类2项）', codeNum: '03152', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（6类1项）', codeNum: '03161', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（6类2项）', codeNum: '03162', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（7类）', codeNum: '03170', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（8类）', codeNum: '03181', parent: dangerousType).save(flush: true)
-        new DangerousType(name: '危险货物运输（9类）', codeNum: '03191', parent: dangerousType).save(flush: true)
+        new DangerousType(name: '危险货物运输（1类1项）', codeNum: '03111', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（1类2项）', codeNum: '03112', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（1类3项）', codeNum: '03113', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（1类4项）', codeNum: '03114', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（1类5项）', codeNum: '03115', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（1类6项）', codeNum: '03116', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（2类1项）', codeNum: '03121', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（2类2项）', codeNum: '03122', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（2类3项）', codeNum: '03123', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（3类）', codeNum: '03131', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（4类1项）', codeNum: '03141', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（4类2项）', codeNum: '03142', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（4类3项）', codeNum: '03143', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（5类1项）', codeNum: '03151', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（5类2项）', codeNum: '03152', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（6类1项）', codeNum: '03161', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（6类2项）', codeNum: '03162', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（7类）', codeNum: '03170', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（8类）', codeNum: '03181', parent: null).save(flush: true)
+        new DangerousType(name: '危险货物运输（9类）', codeNum: '03191', parent: null).save(flush: true)
 
         def a = new SystemType(name: '行政法规', codeNum: '01', parent: null).save(flush: true)
         new SystemType(name: '章程', codeNum: '02', parent: null).save(flush: true)
         new SystemType(name: '制度', codeNum: '03', parent: null).save(flush: true)
         new SystemType(name: '公约', codeNum: '04', parent: null).save(flush: true)
+
+        new ManageStatus(name: '营业', codeNum:'1', parent: null).save(flush: true)
+        new ManageStatus(name: '停业', codeNum:'2', parent: null).save(flush: true)
+        new ManageStatus(name: '整改', codeNum:'3', parent: null).save(flush: true)
+        new ManageStatus(name: '停业整顿', codeNum:'4', parent: null).save(flush: true)
+        new ManageStatus(name: '歇业', codeNum:'5', parent: null).save(flush: true)
+        new ManageStatus(name: '注销', codeNum:'6', parent: null).save(flush: true)
+        new ManageStatus(name: '其他', codeNum:'9', parent: null).save(flush: true)
+
+        new FreightStationLevel(name: '一级站', codeNum: '1', parent: null).save(flush: true)
+        new FreightStationLevel(name: '二级站', codeNum: '2', parent: null).save(flush: true)
+        new FreightStationLevel(name: '三级站', codeNum: '3', parent: null).save(flush: true)
+        new FreightStationLevel(name: '四级站', codeNum: '4', parent: null).save(flush: true)
+        new FreightStationLevel(name: '未评定', codeNum: '5', parent: null).save(flush: true)
+
     }
 
     private initAlarmType() {
@@ -492,6 +507,7 @@ class InitService {
         new PermissionGroup(url: '/info-publish/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "信息发布", category: "信息管理", code: 'info_publish').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/info-check/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "信息审核", category: "信息管理", code: 'info_check').save(failOnError: true, flush: true)
         new PermissionGroup(url: '/info-list/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "信息查询", category: "信息管理", code: 'info-list').save(failOnError: true, flush: true)
+        new PermissionGroup(url: '/freight-stations/**/**', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT,ROLE_PASSENGER_SECTION_ROOT,ROLE_COMPANY_ROOT', httpMethod: null, name: "货运站管理", category: "基础信息", code: 'freight_station_manage').save(failOnError: true, flush: true)
 
         //统计
         new PermissionGroup(url: '/check-statistic', configAttribute: 'ROLE_ROOT,ROLE_CONTROL_CENTER_ROOT', httpMethod: null, name: "查岗统计", category: "统计", code: 'check_statistic').save(failOnError: true, flush: true)
@@ -536,6 +552,7 @@ class InitService {
         new Menu(name: '信息审核', code: 'infoCheck', icon: 'fa-check-square', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'info_check').save(flush: true)
         new Menu(name: '信息查询', code: 'infoList', icon: 'fa-envelope-square', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'info-list').save(flush: true)
         new Menu(name: '应急预案', code: 'emergencyPlan', icon: 'fa-file-powerpoint-o', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'emergency_plan_manage').save(flush: true)
+        new Menu(name: '货运站管理', code: 'freightStation', icon: 'fa-truck', parent: basicInfo, position: 'SIDE_BAR', permissionCode: 'freight_station_manage').save(flush: true)
 
         def msgManage = new Menu(name: '动态监管', code: 'root-msgmanage', icon: 'fa-indent', parent: null, position: 'SIDE_BAR',permissionCode: 'black_list_manage;white_list_manage;work_order_pending;work_order_list;work_order_feedback;hidden_rectification_order_list;hidden_rectification_order_pending;hidden_rectification_order_feedback;freight_waybill_list;freight_waybill_approve_list;owner_check_record_list').save(flush: true)
         new Menu(name: '黑名单', code: 'blackList', icon: 'fa-file-text', parent: msgManage, position: 'SIDE_BAR', permissionCode: 'black_list_manage').save(flush: true)
@@ -1124,4 +1141,14 @@ class InitService {
                 '第三条　县级以上地方各级人民政府应当建立、健全道路交通安全工作协调机制，组织有关部门对城市建设项目进行交通影响评价，制定道路交通安全管理规划，确定管理目标，制定实施方案。',status:2,dateCreated:new Date(),vimTime:new Date(),auditTime:new Date()).save(flush:true)
     }
 
+    private initFreightStation() {
+        new FreightStation(orgCode: "C000000000", name: "长丰货运站", cn: '102895001', manageRange: [DangerousType.findByCodeNum('03111')], manageStatus: ManageStatus.findByCodeNum('1'), buildDate: new Date(),
+                completedDate: new Date(), checkDate: new Date(),  operateDate: new Date(), scale: 105, approvalNumber: '0568', districtName: '长安区',
+                districtCode: '610001', level: FreightStationLevel.findByCodeNum('1'), address: '安徽省合肥市包河区长丰货运站', frontPhoto: 'hfyz/web-app/C000000000/photo1',
+                sidePhoto: 'hfyz/web-app/C000000000/photo2', coverArea: 307.2, buildArea: 215.59, height: 3.5).save(flush: true)
+        new FreightStation(orgCode: "C000000001", name: "速飞货运站", cn: '610002001', manageRange: [DangerousType.findByCodeNum('03111'),DangerousType.findByCodeNum('03112')], manageStatus: ManageStatus.findByCodeNum('1'), buildDate: new Date(),
+                completedDate: new Date(), checkDate: new Date(),  operateDate: new Date(), scale: 105, approvalNumber: '0565', districtName: '高新区',
+                districtCode: '610002', level: FreightStationLevel.findByCodeNum('2'), address: '安徽省合肥市庐阳区速飞货运站', frontPhoto: 'hfyz/web-app/C000000000/photo1',
+                sidePhoto: 'hfyz/web-app/C000000000/photo2', coverArea: 298.8, buildArea: 195.4, height: 3.2).save(flush: true)
+    }
 }
