@@ -10,7 +10,7 @@ import com.hfyz.support.ManageStatus
 class FreightStation {
     String orgCode              //组织机构代码
     String name                 //货运站名称
-    String cn                   //货运站编号
+    String sn                   //货运站编号
     ManageStatus manageStatus   //经营状态
     Date buildDate              //建站日期
     Date completedDate          //竣工日期
@@ -31,6 +31,25 @@ class FreightStation {
     static hasMany = [manageRange: DangerousType]  //经营范围
 
     static constraints = {
-        cn unique: 'orgCode', nullable: false, blank: false
+        sn unique: 'orgCode', nullable: false, blank: false
+        orgCode nullable: false, blank: false
+        name nullable: false, blank: false
+        sn nullable: false, blank: false
+        manageStatus nullable: false
+        buildDate nullable: false
+        completedDate nullable: false
+        checkDate nullable: false
+        operateDate nullable: false
+        scale nullable: false
+        approvalNumber nullable: false, blank: false
+        districtName nullable: false, blank: false
+        districtCode nullable: false, blank: false
+        level nullable: false
+        address nullable: false, blank: false
+        frontPhoto nullable: false, blank: false
+        sidePhoto nullable: false, blank: false
+        coverArea nullable: false
+        buildArea nullable: false
+        height nullable: false
     }
 }
