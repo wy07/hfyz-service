@@ -13,7 +13,7 @@ class FreightStationService {
             [ id: obj.id
               ,orgCode: obj.orgCode
               ,name: obj.name
-              ,cn: obj.cn
+              ,sn: obj.sn
               ,manageStatus: obj.manageStatus?.name
               ,approvalNumber: obj.approvalNumber
               ,districtName: obj.districtName

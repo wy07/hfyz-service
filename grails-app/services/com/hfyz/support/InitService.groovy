@@ -1169,11 +1169,11 @@ class InitService {
     }
 
     private initFreightStation() {
-        new FreightStation(orgCode: "C000000000", name: "长丰货运站", cn: '102895001', manageRange: [DangerousType.findByCodeNum('03111')], manageStatus: ManageStatus.findByCodeNum('1'), buildDate: new Date(),
+        new FreightStation(orgCode: "C000000000", name: "长丰货运站", sn: '102895001', manageRange: [DangerousType.findByCodeNum('03111')], manageStatus: ManageStatus.findByCodeNum('1'), buildDate: new Date(),
                 completedDate: new Date(), checkDate: new Date(),  operateDate: new Date(), scale: 105, approvalNumber: '0568', districtName: '长安区',
                 districtCode: '610001', level: FreightStationLevel.findByCodeNum('1'), address: '安徽省合肥市包河区长丰货运站', frontPhoto: 'hfyz/web-app/C000000000/photo1',
                 sidePhoto: 'hfyz/web-app/C000000000/photo2', coverArea: 307.2, buildArea: 215.59, height: 3.5).save(flush: true)
-        new FreightStation(orgCode: "C000000001", name: "速飞货运站", cn: '610002001', manageRange: [DangerousType.findByCodeNum('03111'),DangerousType.findByCodeNum('03112')], manageStatus: ManageStatus.findByCodeNum('1'), buildDate: new Date(),
+        new FreightStation(orgCode: "C000000001", name: "速飞货运站", sn: '610002001', manageRange: [DangerousType.findByCodeNum('03111'),DangerousType.findByCodeNum('03112')], manageStatus: ManageStatus.findByCodeNum('1'), buildDate: new Date(),
                 completedDate: new Date(), checkDate: new Date(),  operateDate: new Date(), scale: 105, approvalNumber: '0565', districtName: '高新区',
                 districtCode: '610002', level: FreightStationLevel.findByCodeNum('2'), address: '安徽省合肥市庐阳区速飞货运站', frontPhoto: 'hfyz/web-app/C000000000/photo1',
                 sidePhoto: 'hfyz/web-app/C000000000/photo2', coverArea: 298.8, buildArea: 195.4, height: 3.2).save(flush: true)

@@ -43,7 +43,7 @@ class FreightStationController implements ControllerHelper {
             renderSuccessesWithMap([freightStation: [id: obj.id
                                                      ,orgCode: obj.orgCode
                                                      ,name: obj.name
-                                                     ,cn: obj.cn
+                                                     ,sn: obj.sn
                                                      ,manageRange: obj.manageRange.collect{ it.id }
                                                      ,manageRangeList: obj.manageRange.collect{ it.name }
                                                      ,manageStatus: obj.manageStatus?.id
