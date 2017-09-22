@@ -31,21 +31,20 @@ class FreightStation {
     static hasMany = [manageRange: DangerousType]  //经营范围
 
     static constraints = {
-        sn unique: 'orgCode', nullable: false, blank: false
-        orgCode nullable: false, blank: false
-        name nullable: false, blank: false
-        sn nullable: false, blank: false
+        sn unique: 'orgCode', nullable: false, blank: false, maxSize: 9
+        orgCode nullable: false, blank: false, maxSize: 50
+        name nullable: false, blank: false, maxSize: 50
         manageStatus nullable: false
         buildDate nullable: false
         completedDate nullable: false
         checkDate nullable: false
         operateDate nullable: false
         scale nullable: false
-        approvalNumber nullable: false, blank: false
-        districtName nullable: false, blank: false
-        districtCode nullable: false, blank: false
+        approvalNumber nullable: false, blank: false, maxSize: 50
+        districtName nullable: false, blank: false, maxSize: 50
+        districtCode nullable: false, blank: false, maxSize: 50
         level nullable: false
-        address nullable: false, blank: false
+        address nullable: false, blank: false, maxSize: 200
         frontPhoto nullable: false, blank: false
         sidePhoto nullable: false, blank: false
         coverArea nullable: false
