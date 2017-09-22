@@ -22,19 +22,7 @@ class FreightStationController implements ControllerHelper {
         def frontPhoto = request.getFile('frontPhoto')
         def sidePhoto = request.getFile('sidePhoto')
         def json = JSON.parse(params.freightStation)
-
-        FreightStation freightStation = new FreightStation(json)
-        freightStation.orgCode = getCurrentUser().companyCode
-        freightStation.buildDate = new Date().parse('yyyy-MM-dd HH:mm',  json.build)
-        freightStation.checkDate = new Date().parse('yyyy-MM-dd HH:mm',  json.check)
-        freightStation.completedDate = new Date().parse('yyyy-MM-dd HH:mm',  json.completed)
-        freightStation.operateDate = new Date().parse('yyyy-MM-dd HH:mm',  json.operate)
-
-        freightStation.frontPhoto = fileManager.getFileRealPath(frontPhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-        freightStation.sidePhoto = fileManager.getFileRealPath(sidePhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-        fileManager.saveFile(frontPhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-        fileManager.saveFile(sidePhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-        freightStation.save(flush: true, failOnError: true)
+        freightStationService.saveFreightStation(json, getCurrentUser(), frontPhoto, sidePhoto)
         renderSuccess()
     }
 
@@ -81,23 +69,7 @@ class FreightStationController implements ControllerHelper {
             json.remove('completedDate')
             json.remove('operateDate')
 
-            freightStation.properties = json
-            if(frontPhoto) {
-                fileManager.deleteFile(freightStation.frontPhoto)
-                freightStation.frontPhoto = fileManager.getFileRealPath(frontPhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-                fileManager.saveFile(frontPhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-            }
-            if(sidePhoto) {
-                fileManager.deleteFile(freightStation.sidePhoto)
-                freightStation.sidePhoto = fileManager.getFileRealPath(sidePhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-                fileManager.saveFile(sidePhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-            }
-            freightStation.orgCode = getCurrentUser().companyCode
-            freightStation.buildDate = new Date().parse('yyyy-MM-dd HH:mm',  json.build)
-            freightStation.checkDate = new Date().parse('yyyy-MM-dd HH:mm',  json.check)
-            freightStation.completedDate = new Date().parse('yyyy-MM-dd HH:mm',  json.completed)
-            freightStation.operateDate = new Date().parse('yyyy-MM-dd HH:mm',  json.operate)
-            freightStation.save(flush: true, failOnError: true)
+            freightStationService.updateFreightStation(freightStation, json, getCurrentUser(), frontPhoto, sidePhoto)
             renderSuccess()
         }
     }
