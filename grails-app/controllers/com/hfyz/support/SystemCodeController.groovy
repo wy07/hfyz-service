@@ -142,6 +142,19 @@ class SystemCodeController implements ControllerHelper {
         renderSuccessesWithMap([dangerousTypeList: dangerousTypeList])
     }
 
+    def getManageStatusList() {
+        def manageStatusList = ManageStatus.list().collect{obj ->
+            [id: obj.id, name: obj.name]
+        }
+        renderSuccessesWithMap([manageStatusList: manageStatusList])
+    }
+
+    def getFreightStationLevelList() {
+        def freightStationLevelList = FreightStationLevel.list().collect{obj ->
+            [id: obj.id, name: obj.name]
+        }
+        renderSuccessesWithMap([freightStationLevelList: freightStationLevelList])
+    }
     private withSystemCode(Long id, String type, Closure c) {
         def clazz = getClazzObj(type)?.clazz
         if (!clazz) {
