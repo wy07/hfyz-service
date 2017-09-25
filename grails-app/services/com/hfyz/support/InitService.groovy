@@ -213,6 +213,8 @@ class InitService {
         new AlarmType(name: "超速车辆处理率不达标", codeNum: "225", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶车辆率不达标", codeNum: "226", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶处理率不达标", codeNum: "227", parent: null).save(flush: true)
+        new AlarmType(name: "企业违法案件未处理", codeNum: "228", parent: null).save(flush: true)
+        new AlarmType(name: "车辆违法案件未处理", codeNum: "228", parent: null).save(flush: true)
     }
 
     private initEmergencyPlan() {
@@ -623,6 +625,15 @@ class InitService {
             flow21.flows << it
         }
         flow21.save(flush: true)
+
+        def flow22 = new WorkOrderFlow(alarmType: AlarmType.findByCodeNum('228'), flowVersion: 1, enabled: true, flows: [])
+        [[role: 'ROLE_CONTROL_CENTER_ROOT', name: '初审', action: 'SP']
+         , [role: 'ROLE_PASSENGER_SECTION_ROOT', name: '复审', action: 'SP']
+         , [role: 'ROLE_COMPANY_ROOT', name: '企业反馈', action: 'FK']
+         , [role: 'ROLE_CONTROL_CENTER_ROOT', name: '研判', action: 'YP']].each {
+            flow22.flows << it
+        }
+        flow22.save(flush: true)
 
 
         def saveOrder = { flow, flowStep, snTitle, snIndex, companyIndex ->
@@ -1090,6 +1101,7 @@ class InitService {
 
         companys.eachWithIndex { val, index ->
             new OwnerManageInfo(
+                    modifyTime: new Date(),
                     orgCode: "C00000000${index}",
                     licenseCharacter: "字:00000${index}",
                     licenseNo: "3795${index}",
@@ -1112,7 +1124,7 @@ class InitService {
                     fileNumber: "20170101${index}",
                     cityAbbreviation: '合肥',
                     branchOrgAddress: '**-**-**'
-            ).save(flush: true)
+            ).save(flush: true,failOnError: true)
 
             new CompanyRegulation(
                     companyCode: "C00000000${index}",
