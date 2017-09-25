@@ -97,7 +97,6 @@ class InitService {
         initConfigure()
         initCar()
         initInfoaudit()
-        initFreightStation()
     }
 
     private initSystemCode() {
@@ -1166,16 +1165,5 @@ class InitService {
                 '第一条　根据《中华人民共和国道路交通安全法》（以下简称道路交通安全法）的规定，制定本条例。\n' +
                 '第二条　中华人民共和国境内的车辆驾驶人、行人、乘车人以及与道路交通活动有关的单位和个人，应当遵守道路交通安全法和本条例。\n' +
                 '第三条　县级以上地方各级人民政府应当建立、健全道路交通安全工作协调机制，组织有关部门对城市建设项目进行交通影响评价，制定道路交通安全管理规划，确定管理目标，制定实施方案。', status: 2, dateCreated: new Date(), vimTime: new Date(), auditTime: new Date()).save(flush: true)
-    }
-
-    private initFreightStation() {
-        new FreightStation(orgCode: "C000000000", name: "长丰货运站", sn: '102895001', manageRange: [DangerousType.findByCodeNum('03111')], manageStatus: ManageStatus.findByCodeNum('1'), buildDate: new Date(),
-                completedDate: new Date(), checkDate: new Date(),  operateDate: new Date(), scale: 105, approvalNumber: '0568', districtName: '长安区',
-                districtCode: '610001', level: FreightStationLevel.findByCodeNum('1'), address: '安徽省合肥市包河区长丰货运站', frontPhoto: 'hfyz/web-app/C000000000/photo1',
-                sidePhoto: 'hfyz/web-app/C000000000/photo2', coverArea: 307.2, buildArea: 215.59, height: 3.5).save(flush: true)
-        new FreightStation(orgCode: "C000000001", name: "速飞货运站", sn: '610002001', manageRange: [DangerousType.findByCodeNum('03111'),DangerousType.findByCodeNum('03112')], manageStatus: ManageStatus.findByCodeNum('1'), buildDate: new Date(),
-                completedDate: new Date(), checkDate: new Date(),  operateDate: new Date(), scale: 105, approvalNumber: '0565', districtName: '高新区',
-                districtCode: '610002', level: FreightStationLevel.findByCodeNum('2'), address: '安徽省合肥市庐阳区速飞货运站', frontPhoto: 'hfyz/web-app/C000000000/photo1',
-                sidePhoto: 'hfyz/web-app/C000000000/photo2', coverArea: 298.8, buildArea: 195.4, height: 3.2).save(flush: true)
     }
 }

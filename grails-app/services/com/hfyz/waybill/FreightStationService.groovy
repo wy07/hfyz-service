@@ -44,11 +44,12 @@ class FreightStationService {
         freightStation.operateDate = new Date().parse('yyyy-MM-dd HH:mm',  json.operate)
 
         freightStation.frontPhoto = fileManager.getFileRealPath(frontPhoto, 'freightStationPhoto', user.companyCode)
+        fileManager.saveFile(frontPhoto, 'freightStationPhoto', user.companyCode)
         freightStation.sidePhoto = fileManager.getFileRealPath(sidePhoto, 'freightStationPhoto', user.companyCode)
+        fileManager.saveFile(sidePhoto, 'freightStationPhoto', user.companyCode)
         freightStation.save(flush: true, failOnError: true)
 
-        fileManager.saveFile(frontPhoto, 'freightStationPhoto', user.companyCode)
-        fileManager.saveFile(sidePhoto, 'freightStationPhoto', user.companyCode)
+
     }
 
     def updateFreightStation(freightStation, json, user, frontPhoto, sidePhoto) {
@@ -58,21 +59,18 @@ class FreightStationService {
         freightStation.checkDate = new Date().parse('yyyy-MM-dd HH:mm',  json.check)
         freightStation.completedDate = new Date().parse('yyyy-MM-dd HH:mm',  json.completed)
         freightStation.operateDate = new Date().parse('yyyy-MM-dd HH:mm',  json.operate)
-        if(frontPhoto) {
-            freightStation.frontPhoto = fileManager.getFileRealPath(frontPhoto, 'freightStationPhoto', user.companyCode)
-        }
-        if(sidePhoto) {
-            freightStation.sidePhoto = fileManager.getFileRealPath(sidePhoto, 'freightStationPhoto', user.companyCode)
-        }
-        freightStation.save(flush: true, failOnError: true)
+
         if(frontPhoto) {
             fileManager.deleteFile(freightStation.frontPhoto)
+            freightStation.frontPhoto = fileManager.getFileRealPath(frontPhoto, 'freightStationPhoto', user.companyCode)
             fileManager.saveFile(frontPhoto, 'freightStationPhoto', user.companyCode)
         }
         if(sidePhoto) {
             fileManager.deleteFile(freightStation.sidePhoto)
+            freightStation.sidePhoto = fileManager.getFileRealPath(sidePhoto, 'freightStationPhoto', user.companyCode)
             fileManager.saveFile(sidePhoto, 'freightStationPhoto', user.companyCode)
         }
+        freightStation.save(flush: true, failOnError: true)
     }
 
 }
