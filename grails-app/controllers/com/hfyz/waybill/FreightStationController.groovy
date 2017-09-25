@@ -28,6 +28,11 @@ class FreightStationController implements ControllerHelper {
 
     def edit() {
         withFreightStation(params.long('id')) {FreightStation obj ->
+
+            File frontPhoto = new File(obj.frontPhoto)
+            def frontPhotobase64String = getImgBase64Code(frontPhoto)
+            File sidePhoto = new File(obj.sidePhoto)
+            def sidePhotobase64String = getImgBase64Code(sidePhoto)
             renderSuccessesWithMap([freightStation: [id: obj.id
                                                      ,orgCode: obj.orgCode
                                                      ,name: obj.name
@@ -50,6 +55,8 @@ class FreightStationController implements ControllerHelper {
                                                      ,coverArea: obj.coverArea
                                                      ,buildArea: obj.buildArea
                                                      ,height: obj.height
+                                                     ,frontPhotobase64String: frontPhotobase64String
+                                                     ,sidePhotobase64String: sidePhotobase64String
             ]])
         }
     }
@@ -94,5 +101,27 @@ class FreightStationController implements ControllerHelper {
         } else {
             renderNoTFoundError()
         }
+    }
+
+    private getImgBase64Code(file) {
+
+        String base64String = null
+        FileInputStream fileInputStreamReader
+        try {
+            fileInputStreamReader = new FileInputStream(file)
+            byte[] bytes = new byte[(int)file.length()]
+            fileInputStreamReader.read(bytes)
+            base64String = Base64.getEncoder().encodeToString(bytes)
+            fileInputStreamReader.close()
+        } catch (FileNotFoundException e) {
+            renderNoTFoundError()
+        } catch (IOException e) {
+            e.printStackTrace()
+        }finally {
+            if (fileInputStreamReader != null) {
+                fileInputStreamReader.close()
+            }
+        }
+        return base64String
     }
 }
