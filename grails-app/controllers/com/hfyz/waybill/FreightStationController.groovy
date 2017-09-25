@@ -22,28 +22,21 @@ class FreightStationController implements ControllerHelper {
         def frontPhoto = request.getFile('frontPhoto')
         def sidePhoto = request.getFile('sidePhoto')
         def json = JSON.parse(params.freightStation)
-
-        FreightStation freightStation = new FreightStation(json)
-        freightStation.orgCode = getCurrentUser().companyCode
-        freightStation.buildDate = new Date().parse('yyyy-MM-dd HH:mm',  json.build)
-        freightStation.checkDate = new Date().parse('yyyy-MM-dd HH:mm',  json.check)
-        freightStation.completedDate = new Date().parse('yyyy-MM-dd HH:mm',  json.completed)
-        freightStation.operateDate = new Date().parse('yyyy-MM-dd HH:mm',  json.operate)
-
-        freightStation.frontPhoto = fileManager.getFileRealPath(frontPhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-        freightStation.sidePhoto = fileManager.getFileRealPath(sidePhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-        fileManager.saveFile(frontPhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-        fileManager.saveFile(sidePhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-        freightStation.save(flush: true, failOnError: true)
+        freightStationService.saveFreightStation(json, getCurrentUser(), frontPhoto, sidePhoto)
         renderSuccess()
     }
 
     def edit() {
         withFreightStation(params.long('id')) {FreightStation obj ->
+
+            File frontPhoto = new File(obj.frontPhoto)
+            def frontPhotobase64String = getImgBase64Code(frontPhoto)
+            File sidePhoto = new File(obj.sidePhoto)
+            def sidePhotobase64String = getImgBase64Code(sidePhoto)
             renderSuccessesWithMap([freightStation: [id: obj.id
                                                      ,orgCode: obj.orgCode
                                                      ,name: obj.name
-                                                     ,cn: obj.cn
+                                                     ,sn: obj.sn
                                                      ,manageRange: obj.manageRange.collect{ it.id }
                                                      ,manageRangeList: obj.manageRange.collect{ it.name }
                                                      ,manageStatus: obj.manageStatus?.id
@@ -62,6 +55,8 @@ class FreightStationController implements ControllerHelper {
                                                      ,coverArea: obj.coverArea
                                                      ,buildArea: obj.buildArea
                                                      ,height: obj.height
+                                                     ,frontPhotobase64String: frontPhotobase64String
+                                                     ,sidePhotobase64String: sidePhotobase64String
             ]])
         }
     }
@@ -81,23 +76,7 @@ class FreightStationController implements ControllerHelper {
             json.remove('completedDate')
             json.remove('operateDate')
 
-            freightStation.properties = json
-            if(frontPhoto) {
-                fileManager.deleteFile(freightStation.frontPhoto)
-                freightStation.frontPhoto = fileManager.getFileRealPath(frontPhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-                fileManager.saveFile(frontPhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-            }
-            if(sidePhoto) {
-                fileManager.deleteFile(freightStation.sidePhoto)
-                freightStation.sidePhoto = fileManager.getFileRealPath(sidePhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-                fileManager.saveFile(sidePhoto, 'freightStationPhoto', getCurrentUser().companyCode)
-            }
-            freightStation.orgCode = getCurrentUser().companyCode
-            freightStation.buildDate = new Date().parse('yyyy-MM-dd HH:mm',  json.build)
-            freightStation.checkDate = new Date().parse('yyyy-MM-dd HH:mm',  json.check)
-            freightStation.completedDate = new Date().parse('yyyy-MM-dd HH:mm',  json.completed)
-            freightStation.operateDate = new Date().parse('yyyy-MM-dd HH:mm',  json.operate)
-            freightStation.save(flush: true, failOnError: true)
+            freightStationService.updateFreightStation(freightStation, json, getCurrentUser(), frontPhoto, sidePhoto)
             renderSuccess()
         }
     }
@@ -122,5 +101,27 @@ class FreightStationController implements ControllerHelper {
         } else {
             renderNoTFoundError()
         }
+    }
+
+    private getImgBase64Code(file) {
+
+        String base64String = null
+        FileInputStream fileInputStreamReader
+        try {
+            fileInputStreamReader = new FileInputStream(file)
+            byte[] bytes = new byte[(int)file.length()]
+            fileInputStreamReader.read(bytes)
+            base64String = Base64.getEncoder().encodeToString(bytes)
+            fileInputStreamReader.close()
+        } catch (FileNotFoundException e) {
+            renderNoTFoundError()
+        } catch (IOException e) {
+            e.printStackTrace()
+        }finally {
+            if (fileInputStreamReader != null) {
+                fileInputStreamReader.close()
+            }
+        }
+        return base64String
     }
 }
