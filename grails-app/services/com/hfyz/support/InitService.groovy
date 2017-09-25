@@ -214,7 +214,7 @@ class InitService {
         new AlarmType(name: "疲劳驾驶车辆率不达标", codeNum: "226", parent: null).save(flush: true)
         new AlarmType(name: "疲劳驾驶处理率不达标", codeNum: "227", parent: null).save(flush: true)
         new AlarmType(name: "企业违法案件未处理", codeNum: "228", parent: null).save(flush: true)
-        new AlarmType(name: "车辆违法案件未处理", codeNum: "228", parent: null).save(flush: true)
+        new AlarmType(name: "车辆违法案件未处理", codeNum: "229", parent: null).save(flush: true)
     }
 
     private initEmergencyPlan() {
